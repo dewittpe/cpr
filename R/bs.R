@@ -15,7 +15,7 @@
 #'
 
 #' @export
-bs <- function(x, iknots = numeric(0), bknots = range(x), order = 4) { 
+bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4) { 
   B <- .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
   out <- B$Bmat
   attr(out, "order")   <- B$order
@@ -49,6 +49,5 @@ plot.cpr_bs <- function(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
     matplot(x, y, ...)
   }
 }
-
 
 
