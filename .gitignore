@@ -3,3 +3,6 @@
 *.swp
 *.o
 *.so
+.Rproj.user
+.Rhistory
+.RData
