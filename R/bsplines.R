@@ -13,7 +13,6 @@
 #' @param bknots boundary knot locations
 #' @param order order of the piecewise polynomials
 #'
-
 #' @export
 bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4) { 
   B <- .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
@@ -28,13 +27,11 @@ bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4) {
   out
 }
 
-#'
 print.cpr_bs <- function(x, n = 6, ...) { 
   cat("Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
   print(x[seq(1, min(nrow(x), n), by = 1L), ])
 }
 
-#'
 plot.cpr_bs <- function(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
   if (ggplot2) { 
     list("basis" = ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "value", color = "key"),

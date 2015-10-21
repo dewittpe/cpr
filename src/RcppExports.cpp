@@ -6,17 +6,17 @@
 
 using namespace Rcpp;
 
-// generate_bsplines
-Rcpp::List generate_bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int k);
-RcppExport SEXP cpr_generate_bsplines(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP kSEXP) {
+// bsplines_impl
+Rcpp::List bsplines_impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
+RcppExport SEXP cpr_bsplines_impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(generate_bsplines(x, iknots, bknots, k));
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    __result = Rcpp::wrap(bsplines_impl(x, iknots, bknots, order));
     return __result;
 END_RCPP
 }
