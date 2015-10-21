@@ -25,14 +25,17 @@ class bsplines {
 
     arma::mat get_Bmat();
     arma::vec get_xi();
+    arma::vec get_xi_star();
 
   private:
-    unsigned int order;          // order of the ploynomials
-    arma::vec data;       // data and unique data values
+    unsigned int order; // order of the ploynomials
+    arma::vec data; // data and unique data values
     arma::mat Bmat; // Bspline basis matrix and unique rows
     arma::vec xi;   // knot vector 
+    arma::vec xi_star; // knot averages
 
     // B spline recurance relationship.  B will call w
+    // See page 90 of de Boor (2001)
     double B(double x, unsigned int j, unsigned int k);  
     double w(double x, unsigned int j, unsigned int k);
 };
@@ -75,6 +78,12 @@ bsplines::bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int
       }
     }
   }
+
+  // set the knot averages
+  xi_star.set_size(order + iknots.n_elem);
+  for(j = 0; j < xi_star.n_elem; ++j) { 
+    xi_star(j) = arma::sum(xi.subvec(j + 1, j + order - 1)) / (order - 1);
+  }
 }
 
 arma::mat bsplines::get_Bmat() { 
@@ -83,6 +92,10 @@ arma::mat bsplines::get_Bmat() {
 
 arma::vec bsplines::get_xi() { 
   return xi;
+}
+
+arma::vec bsplines::get_xi_star() { 
+  return xi_star;
 }
 
 double bsplines::w(double x, unsigned int j, unsigned int k) { 
@@ -117,25 +130,16 @@ double bsplines::B(double x, unsigned int j, unsigned int k) {
 /******************************************************************************/ 
 
 // [[Rcpp::export]]
-arma::mat generate_bsplines(arma::vec x, 
+Rcpp::List generate_bsplines(arma::vec x, 
                             arma::vec iknots, 
                             arma::vec bknots, 
                             unsigned int k) { 
   bsplines B(x, iknots, bknots, k);
 
-  return B.get_Bmat();
+  return Rcpp::List::create(
+      Rcpp::Named("Bmat") = B.get_Bmat(),
+      Rcpp::Named("xi_start") = B.get_xi_star());
 }
-
-// Rcpp::List generate_bsplines(arma::vec x, 
-//                             arma::vec iknots, 
-//                             arma::vec bknots, 
-//                             unsigned int k) { 
-//   bsplines B(x, iknots, bknots, k);
-// 
-//   return Rcpp::List::create(
-//       Rcpp::Named("Bmat") = B.get_Bmat(),
-//       Rcpp::Named("xi")   = B.get_xi());
-// }
 
 /******************************************************************************/
 /* end of file                                                                */
