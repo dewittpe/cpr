@@ -28,7 +28,9 @@ is.cpr_bspline <- function(form) {
       TRUE
     } else if (is.recursive(x)) { 
       lapply(as.list(x), rr)
-    } 
+    } else {
+      NULL
+    }
   }
 
   z <- lapply(as.list(form), rr)
