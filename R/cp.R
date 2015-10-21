@@ -15,19 +15,23 @@
 #'
 #' @export
 cp <- function(formula, data = parent.env(), method = lm, ...) { 
-  # test that cpr::bs is in the formula
-  if (!isTRUE(is.cpr_bspline(formula))) {
-    stop("cpr::bspline() must be part of the right hand side of the formula.")
-  }
  
+  # check for some formula specification issues
   fterms <- terms(formula)
+  if (sum(grepl("bsplines", attr(fterms, "term.labels"))) != 1) {
+    stop("cpr::bspline() must apear once, with no effect modifiers, on the right hand side of the formula.")
+  }
+
   if (attr(fterms, "intercept")) {
     warning("Adjusting model formula; removing intercept.")
     formula <- stats::update(formula, . ~ . - 1)
   }
 
   regression <- match.fun(method)
-  regression(formula, data = data, ...)
+  fit <- regression(formula, data = data, ...)
+
+  # extract bspline
+  eval(extract_cpr_bspline(formula), data)
 }
 
 is.cpr_bspline <- function(form) { 
@@ -43,4 +47,21 @@ is.cpr_bspline <- function(form) {
 
   z <- lapply(as.list(form), rr)
   unlist(z)
+}
+
+extract_cpr_bspline <- function(form) { 
+  B <- NULL
+  rr <- function(x) { 
+    if (is.call(x) && grepl("bsplines", deparse(x[[1]]))) { 
+      # assign(B, value = as.call(x), inherits = TRUE)
+      B <<- x
+    } else if (is.recursive(x)) { 
+      as.call(lapply(as.list(x), rr))
+    } else {
+      x
+    }
+  }
+
+  z <- lapply(as.list(form), rr)
+  B
 }
