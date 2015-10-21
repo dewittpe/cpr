@@ -17,9 +17,17 @@
 cp <- function(formula, data = parent.env(), method = lm, ...) { 
   # test that cpr::bs is in the formula
   if (!isTRUE(is.cpr_bspline(formula))) {
-    stop("cpr::bspline() must be part of the right hand side of the formula")
+    stop("cpr::bspline() must be part of the right hand side of the formula.")
   }
-  formula
+ 
+  fterms <- terms(formula)
+  if (attr(fterms, "intercept")) {
+    warning("Adjusting model formula; removing intercept.")
+    formula <- stats::update(formula, . ~ . - 1)
+  }
+
+  regression <- match.fun(method)
+  regression(formula, data = data, ...)
 }
 
 is.cpr_bspline <- function(form) { 
