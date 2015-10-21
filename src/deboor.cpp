@@ -134,10 +134,11 @@ Rcpp::List bsplines_impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsign
   bsplines Bspline(x, iknots, bknots, order);
 
   return Rcpp::List::create(
-      Rcpp::Named("Bmat") = Bspline.get_Bmat(),
-      Rcpp::Named("order") = order,
-      Rcpp::Named("iknots") = iknots,
-      Rcpp::Named("bknots") = bknots,
+      Rcpp::Named("Bmat")    = Bspline.get_Bmat(),
+      Rcpp::Named("order")   = order,
+      Rcpp::Named("iknots")  = iknots,
+      Rcpp::Named("bknots")  = bknots,
+      Rcpp::Named("xi")      = Bspline.get_xi(),
       Rcpp::Named("xi_star") = Bspline.get_xi_star());
 }
 

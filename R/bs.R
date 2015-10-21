@@ -16,7 +16,23 @@
 
 #' @export
 bs <- function(x, iknots, bknots, order = 4) { 
-  out <- .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
+  B <- .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
+  out <- B$Bmat
+  attr(out, "order")   <- B$order
+  attr(out, "iknots")  <- B$iknots
+  attr(out, "bknots")  <- B$bknots
+  attr(out, "xi")      <- B$xi
+  attr(out, "xi_star") <- B$xi_star
+  attr(out, "class")   <- c("cpr_bs", "bs", "basis", "matrix")
   out
 }
+
+#'
+print.cpr_bs <- function(x, n = 6, ...) { 
+  cat("Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
+  print(x[seq(1, min(nrow(x), n), by = 1L), ])
+}
+
+
+
 
