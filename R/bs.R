@@ -8,7 +8,10 @@
 #' \code{cpr::bs} call is intended to simplify the work needed with respect to
 #' the control polygon reduction.
 #'
-#' @param
+#' @param x data
+#' @param iknots internal knots
+#' @param bknots boundary knot locations
+#' @param order order of the piecewise polynomials
 #'
 
 #' @export
