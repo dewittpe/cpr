@@ -15,7 +15,7 @@
 #'
 
 #' @export
-bs <- function(x, iknots, bknots, order = 4) { 
+bs <- function(x, iknots = numeric(0), bknots = range(x), order = 4) { 
   B <- .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
   out <- B$Bmat
   attr(out, "order")   <- B$order
@@ -23,6 +23,7 @@ bs <- function(x, iknots, bknots, order = 4) {
   attr(out, "bknots")  <- B$bknots
   attr(out, "xi")      <- B$xi
   attr(out, "xi_star") <- B$xi_star
+  attr(out, "x")       <- x
   attr(out, "class")   <- c("cpr_bs", "bs", "basis", "matrix")
   out
 }
@@ -33,6 +34,21 @@ print.cpr_bs <- function(x, n = 6, ...) {
   print(x[seq(1, min(nrow(x), n), by = 1L), ])
 }
 
+#'
+plot.cpr_bs <- function(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
+  if (ggplot2) { 
+    list("basis" = ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "value", color = "key"),
+                            data    = tidyr::gather_(cbind(as.data.frame(x), "x" = attr(x, "x")), 
+                                                     key_col = "key", 
+                                                     value_col = "value", 
+                                                     gather_cols = paste0("V", seq(1, ncol(x), by = 1L))
+                                                     )), 
+         "knots" = ggplot2::geom_vline(data = data.frame(xi = attr(x, "xi")), 
+                                       mapping = ggplot2::aes_string(x = "1", y = "1", xintercept = "xi")))
+  } else {
+    matplot(x, y, ...)
+  }
+}
 
 
 
