@@ -13,8 +13,6 @@
 #'        \code{\link{glm}}, \code{\link{lmer}}, \code{\link{geeglm}}, ...
 #' @param ... arguments passed to the regression method
 #'
-
-
 #' @export
 cp <- function(formula, data = parent.env(), method = lm, ...) { 
   # test that cpr::bs is in the formula
@@ -26,7 +24,7 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
 
 is.cpr_bspline <- function(form) { 
   rr <- function(x) { 
-    if (is.call(x) && deparse(x[[1]]) %in% paste0(c("", "cpr::"), "bsplines")) {
+    if (is.call(x) && grepl("bsplines$", deparse(x[[1]]))) { 
       TRUE
     } else if (is.recursive(x)) { 
       lapply(as.list(x), rr)
