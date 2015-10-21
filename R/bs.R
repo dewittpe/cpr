@@ -15,7 +15,8 @@
 #'
 
 #' @export
-bs <- function(x, ikntos, bknots, order = 4) { 
-  cat('hi\n')
+bs <- function(x, iknots, bknots, order = 4) { 
+  out <- .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
+  out
 }
 
