@@ -4,7 +4,7 @@
 #' MY TO BE PUBLISHED paper(s).
 #'
 #' @useDynLib cpr
-#' @importForm Rcpp sourceCpp
+#' @importFrom Rcpp sourceCpp
 #'
 #' @docType package
 #' @name cpr
