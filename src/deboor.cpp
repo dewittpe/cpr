@@ -14,27 +14,32 @@
 class bsplines { 
   public:
     // constructor and deconstructor
-    // x is the data, xi the knot vector, order of the polynomial
-    bsplines(arma::vec x, 
-             arma::vec iknots, 
-             arma::vec bknots, 
-             unsigned int ord); 
+    // x is the x, xi the knot vector, order of the polynomial
+    bsplines(arma::vec x_, arma::vec iknots_, arma::vec bknots_, unsigned int order_); 
 
     //implicit deconstructor will be sufficient ?
     //~bsplines();  
 
-    arma::mat get_Bmat();
-    arma::vec get_xi();
-    arma::vec get_xi_star();
+    unsigned int get_order() { return order; }
+    void         set_order(unsigned int order_) { order = order_; }
+
+    arma::mat get_Bmat() { return Bmat; }
+    void      set_Bmat(arma::mat Bmat_) { Bmat = Bmat_; }
+
+    arma::vec get_xi() { return xi; }
+    void      set_xi(arma::vec xi_) { xi = xi_; }
+
+    arma::vec get_xi_star() { return xi_star; }
+    void      set_xi_star(arma::vec xi_star_) { xi_star = xi_star_; }
 
   private:
-    unsigned int order; // order of the ploynomials
-    arma::vec data; // data and unique data values
+    unsigned int order; // order of the polynomials
+    arma::vec x; // x and unique x values (x is a synonym data)
     arma::mat Bmat; // Bspline basis matrix and unique rows
     arma::vec xi;   // knot vector 
     arma::vec xi_star; // knot averages
 
-    // B spline recurance relationship.  B will call w
+    // B spline recusance relationship.  B will call w
     // See page 90 of de Boor (2001)
     double B(double x, unsigned int j, unsigned int k);  
     double w(double x, unsigned int j, unsigned int k);
@@ -43,15 +48,15 @@ class bsplines {
 /******************************************************************************/
 /* Function Definitions                                                       */
 /******************************************************************************/
-bsplines::bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int ord) {
+bsplines::bsplines(arma::vec x_, arma::vec iknots, arma::vec bknots, unsigned int order_) {
   // counters
   unsigned int i, j; 
 
   // set the order of the B-splines
-  order = ord;
+  order = order_;
 
-  // set the data values
-  data  = x;
+  // set the x values
+  x = x_;
 
   // create the full knot vector
   xi.set_size(order * 2 + iknots.n_elem);
@@ -86,17 +91,6 @@ bsplines::bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int
   }
 }
 
-arma::mat bsplines::get_Bmat() { 
-  return Bmat;
-}
-
-arma::vec bsplines::get_xi() { 
-  return xi;
-}
-
-arma::vec bsplines::get_xi_star() { 
-  return xi_star;
-}
 
 double bsplines::w(double x, unsigned int j, unsigned int k) { 
 
@@ -130,16 +124,25 @@ double bsplines::B(double x, unsigned int j, unsigned int k) {
 /******************************************************************************/ 
 
 // [[Rcpp::export]]
-Rcpp::List generate_bsplines(arma::vec x, 
-                            arma::vec iknots, 
-                            arma::vec bknots, 
-                            unsigned int k) { 
-  bsplines B(x, iknots, bknots, k);
+Rcpp::List bsplines_impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) { 
+
+  if (!iknots.is_sorted()) { 
+    Rcpp::warning("Sorting iknots");
+    iknots = arma::sort(iknots);
+  }
+
+  bsplines Bspline(x, iknots, bknots, order);
 
   return Rcpp::List::create(
-      Rcpp::Named("Bmat") = B.get_Bmat(),
-      Rcpp::Named("xi_start") = B.get_xi_star());
+      Rcpp::Named("Bmat") = Bspline.get_Bmat(),
+      Rcpp::Named("order") = order,
+      Rcpp::Named("iknots") = iknots,
+      Rcpp::Named("bknots") = bknots,
+      Rcpp::Named("xi_star") = Bspline.get_xi_star());
 }
+
+
+
 
 /******************************************************************************/
 /* end of file                                                                */
