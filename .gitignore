@@ -1,3 +1,5 @@
-.Rproj.user
-.Rhistory
-.RData
+*.sh
+*.tar.gz
+*.swp
+*.o
+*.so
