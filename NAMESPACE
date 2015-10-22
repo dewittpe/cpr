@@ -2,5 +2,7 @@
 
 export(bsplines)
 export(cp)
+export(cpr)
+export(trimmed_quantile)
 importFrom(Rcpp,sourceCpp)
 useDynLib(cpr)

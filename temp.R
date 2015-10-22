@@ -1,6 +1,39 @@
 library(devtools)
 document()
-#library(ggplot2)
+load_all()
+
+set.seed(42)
+
+xvec <- seq(-2 * pi, 2 * pi, length = 10000)
+test_data <- data.frame(x = xvec, y = cos(xvec), age = runif(length(xvec)), sex = rbinom(length(xvec), 1, 0.5))
+
+load_all()
+
+rik <- sort(runif(25, -1.8 * pi, 1.8 * pi))
+cp(newknots(y ~ age + bsplines(x, iknots = iknots_) + sex + 0, nk = rik), data = test_data)
+cpr(newknots(y ~ age + bsplines(x, iknots = iknots_) + sex + 0, nk = rik), data = test_data, K = 13)
+
+
+iknots_ <- runif(rpois(1, lambda = 4), -1.9 * pi, 1.9 * pi)
+cp(y ~ age + bsplines(x, iknots = iknots_) + sex + 0, data = test_data)
+
+ggplot2::ggplot() + plot(.Last.value)
+
+# cp(y ~ age + bs(x) + sex, data = test_data)
+# cp(y ~ age + bsplines(x) + sex, data = test_data)
+# cp(y ~ cpr::bsplines(x) + age + sex + 0, data = test_data)
+# cp(y ~ age + cpr::bsplines(x, iknots = c(2, 4)) + sex + 0, data = test_data)
+# cp(y ~ age * cpr::bsplines(x, iknots = c(2, 4)) + sex + 0, data = test_data)
+
+
+
+
+
+
+
+
+
+
 load_all()
 
 ggplot2::ggplot() + plot(this_basis, ggplot2 = T) 
@@ -42,14 +75,6 @@ eval(extract.cpr_bspline(y ~ age + bsplines(x, iknots = c(2, 4)) + sex + 0)
 
 ?as.call
 
-xvec <- seq(-2 * pi, 2 * pi, length = 10000)
-test_data <- data.frame(x = xvec, y = cos(xvec), age = runif(length(xvec)), sex = rbinom(length(xvec), 1, 0.5))
-cp(y ~ age + bs(x) + sex, data = test_data)
-cp(y ~ age + bsplines(x) + sex, data = test_data)
-cp(y ~ age + bsplines(x) + sex + 0, data = test_data)
-cp(y ~ cpr::bsplines(x) + age + sex + 0, data = test_data)
-cp(y ~ age + cpr::bsplines(x, iknots = c(2, 4)) + sex + 0, data = test_data)
-cp(y ~ age * cpr::bsplines(x, iknots = c(2, 4)) + sex + 0, data = test_data)
 
 
 terms( y ~ x + x1 * x - 1)
