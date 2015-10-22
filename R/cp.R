@@ -80,7 +80,6 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
 #' fewer internal knots are left.
 cpr <- function(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 165, K = 0, ...) { 
   control_polygon <- cp(formula, data, method, ...) 
-  # print(control_polygon$cp)
 
   if (attr(control_polygon$Bmat, "order") != 4) {
     stop("Reduction method only implimented for cubic (degree = 3, order = 4) splines.")
@@ -96,9 +95,6 @@ cpr <- function(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 
       rm_xi <- dplyr::filter(kill, psi > psi_f)$rm_xi
     }
   } 
-  print(control_polygon$cp) 
-  print(kill)
-  print(rm_xi)
 
   if (length(rm_xi) < 1) { 
     control_polygon
