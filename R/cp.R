@@ -38,6 +38,7 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
                    convexity = NA, 
                    fair      = NA,
                    psi       = NA,
+                   rm_xi     = c(NA, min(attr(Bmat, "iknots")), attr(Bmat, "iknots"), max(attr(Bmat, "iknots")), NA),
                    row.names = seq(1, ncol(Bmat), by = 1))
 
   for(i in 2:(nrow(cp) - 1)) { 
@@ -71,6 +72,44 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
   out 
 }
 
+#' @export
+#' @rdname cp
+#' @param psi_f the limit for effective colinear fair points
+#' @param psi_n the limit for effective colinear non-fair points
+#' @param K reduce the control polygon, regardels of psi_f and psi_n untill K or
+#' fewer internal knots are left.
+cpr <- function(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 165, K = 0, ...) { 
+  control_polygon <- cp(formula, data, method, ...) 
+  # print(control_polygon$cp)
+
+  if (attr(control_polygon$Bmat, "order") != 4) {
+    stop("Reduction method only implimented for cubic (degree = 3, order = 4) splines.")
+  }
+
+  kill <- dplyr::ungroup(dplyr::filter(dplyr::group_by(control_polygon$cp, fair), psi == max(psi)))
+  rm_xi <- dplyr::filter(kill, !fair, psi > psi_n)$rm_xi
+
+  if (length(rm_xi) < 1) {
+    if (length(attr(control_polygon$Bmat, "iknots")) > K) { 
+      rm_xi <- dplyr::filter(kill, psi == max(psi))$rm_xi
+    } else { 
+      rm_xi <- dplyr::filter(kill, psi > psi_f)$rm_xi
+    }
+  } 
+  print(control_polygon$cp) 
+  print(kill)
+  print(rm_xi)
+
+  if (length(rm_xi) < 1) { 
+    control_polygon
+  } else { 
+    new_iknots <- attr(control_polygon$Bmat, "iknots")
+    new_iknots <- new_iknots[-which(new_iknots == rm_xi)] 
+    cpr(newknots(formula, new_iknots), data = data, method = method, psi_f = psi_f, psi_n = psi_n, K = K, ...) 
+  }
+}
+
+
 plot.cpr_cp <- function(x, y, ...) { 
   list(
        ggplot2::geom_point(data = x$cp, mapping = ggplot2::aes_string(x = "xi_star", y = "theta")),
@@ -79,6 +118,24 @@ plot.cpr_cp <- function(x, y, ...) {
                                             y = as.numeric(x$Bmat %*% x$cp$theta)), 
                           mapping = ggplot2::aes_string(x = "x", y = "y")) 
        )
+}
+
+newknots <- function(form, nk) { 
+  rr <- function(x, nk, calls) {
+      if(is.call(x) && grepl("bsplines", deparse(x[[1]]))) {
+          x$iknots <- nk
+          x
+      } else if (is.recursive(x)) {
+          as.call(lapply(as.list(x), rr, nk, calls))
+      } else {
+          x
+      }
+  }
+
+  z <- lapply(as.list(form), rr, nk, calls)   
+  z <- eval(as.call(z))
+  environment(z) <- environment(form)
+  z
 }
 
 is.cpr_bspline <- function(form) { 
