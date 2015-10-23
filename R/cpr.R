@@ -7,5 +7,5 @@
 #' @importFrom Rcpp sourceCpp
 #'
 #' @docType package
-#' @name cpr
+#' @name cpr-package
 NULL
