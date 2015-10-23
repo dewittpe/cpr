@@ -8,9 +8,9 @@
 #'
 #' @param formula a formula that is appropriate for regression method being
 #'        used.
-#' @param data see documentation in \code{\link{lm}}
-#' @param method the regression method such as \code{\link{lm}},
-#'        \code{\link{glm}}, \code{\link{lmer}}, \code{\link{geeglm}}, ...
+#' @param data see documentation in \code{\link[stats]{lm}}
+#' @param method the regression method such as \code{\link[stats]{lm}},
+#'        \code{\link[glm]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
 #' @param ... arguments passed to the regression method
 #'
 #' @export

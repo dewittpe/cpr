@@ -14,10 +14,10 @@ cpr(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 165,
 \item{formula}{a formula that is appropriate for regression method being
 used.}
 
-\item{data}{see documentation in \code{\link{lm}}}
+\item{data}{see documentation in \code{\link[stats]{lm}}}
 
-\item{method}{the regression method such as \code{\link{lm}},
-\code{\link{glm}}, \code{\link{lmer}}, \code{\link{geeglm}}, ...}
+\item{method}{the regression method such as \code{\link[stats]{lm}},
+\code{\link[glm]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
 
 \item{...}{arguments passed to the regression method}
 
