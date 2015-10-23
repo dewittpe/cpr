@@ -5,15 +5,18 @@ Authors@R: person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut
 Description: Implementation of the Control Polygon Reduction methods described
   in PAPER TO BE PUBLISHED.
 Depends: R (>= 3.0.2)
-License: What license is it under?
+License: GPL (>= 2)
 LazyData: true
 Imports: 
-  dplyr,
+  dplyr, 
   ggplot2,
   Rcpp,
-  RcppArmadillo,
   tidyr
 LinkingTo: 
   Rcpp,
   RcppArmadillo
-Suggests: testthat
+Suggests: 
+  geepack,
+  lme4,
+  testthat
+
