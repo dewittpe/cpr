@@ -181,7 +181,7 @@ theta.glm <- function(fit) {
 }
 
 theta.lmerMod <- function(fit) { 
-  out <- fixef(fit)
+  out <- lme4::fixef(fit)
   out[grepl("bspline", names(out))]
 }
 
