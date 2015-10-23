@@ -22,12 +22,12 @@ the quantiles for a trimmed data set, e.g., X \ {x(1), x(r)} (trim = 1), or
 X \ {x(1), x(2), x(r-1), x(r)} (trim = 2).
 }
 \examples{
-trimmed_quantile(1:100, prob = 1:23 / 24, name = F)
+trimmed_quantile(1:100, prob = 1:23 / 24, name = FALSE)
 
 # Warning
-# trimmed_quantile(1:100, trim = .3, prob = 1:23 / 24, name = F)
+# trimmed_quantile(1:100, trim = .3, prob = 1:23 / 24, name = FALSE)
 
 # no warning
-trimmed_quantile(1:100, trim = 3, prob = 1:23 / 24, name = F)
+trimmed_quantile(1:100, trim = 3, prob = 1:23 / 24, name = FALSE)
 }
 

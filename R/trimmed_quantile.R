@@ -12,13 +12,13 @@
 #'
 #'
 #' @examples
-#' trimmed_quantile(1:100, prob = 1:23 / 24, name = F)
+#' trimmed_quantile(1:100, prob = 1:23 / 24, name = FALSE)
 #'
 #' # Warning
-#' # trimmed_quantile(1:100, trim = .3, prob = 1:23 / 24, name = F)
+#' # trimmed_quantile(1:100, trim = .3, prob = 1:23 / 24, name = FALSE)
 #'
 #' # no warning
-#' trimmed_quantile(1:100, trim = 3, prob = 1:23 / 24, name = F)
+#' trimmed_quantile(1:100, trim = 3, prob = 1:23 / 24, name = FALSE)
 #'
 #' @export
 trimmed_quantile <- function(x, trim = 1L, use_unique = FALSE, ...) { 
