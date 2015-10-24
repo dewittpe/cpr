@@ -10,10 +10,10 @@ LazyData: true
 Imports: 
   dplyr, 
   ggplot2,
-  Rcpp (>= 0.11),
+  Rcpp (>= 0.11.0),
   tidyr
 LinkingTo: 
-  Rcpp,
+  Rcpp (>= 0.11.0),
   RcppArmadillo
 Suggests: 
   geepack,
