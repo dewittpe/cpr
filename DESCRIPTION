@@ -10,7 +10,7 @@ LazyData: true
 Imports: 
   dplyr, 
   ggplot2,
-  Rcpp,
+  Rcpp (>= 0.11),
   tidyr
 LinkingTo: 
   Rcpp,
