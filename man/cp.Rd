@@ -17,7 +17,7 @@ used.}
 \item{data}{see documentation in \code{\link[stats]{lm}}}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
-\code{\link[glm]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
+\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
 
 \item{...}{arguments passed to the regression method}
 
