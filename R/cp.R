@@ -85,14 +85,14 @@ cpr <- function(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 
     stop("Reduction method only implimented for cubic (degree = 3, order = 4) splines.")
   }
 
-  kill <- dplyr::ungroup(dplyr::filter(dplyr::group_by(control_polygon$cp, fair), psi == max(psi)))
-  rm_xi <- dplyr::filter(kill, !fair, psi > psi_n)$rm_xi
+  kill <- dplyr::ungroup(dplyr::filter_(dplyr::group_by_(control_polygon$cp, ~ fair), ~ psi == max(psi)))
+  rm_xi <- dplyr::filter_(kill, ~ !fair, ~ psi > psi_n)$rm_xi
 
   if (length(rm_xi) < 1) {
     if (length(attr(control_polygon$Bmat, "iknots")) > K) { 
-      rm_xi <- dplyr::filter(kill, psi == max(psi))$rm_xi
+      rm_xi <- dplyr::filter_(kill, ~ psi == max(psi))$rm_xi
     } else { 
-      rm_xi <- dplyr::filter(kill, psi > psi_f)$rm_xi
+      rm_xi <- dplyr::filter_(kill, ~ psi > psi_f)$rm_xi
     }
   } 
 
@@ -116,19 +116,20 @@ plot.cpr_cp <- function(x, y, ...) {
        )
 }
 
+
 newknots <- function(form, nk) { 
-  rr <- function(x, nk, calls) {
+  rr <- function(x, nk) {
       if(is.call(x) && grepl("bsplines", deparse(x[[1]]))) {
           x$iknots <- nk
           x
       } else if (is.recursive(x)) {
-          as.call(lapply(as.list(x), rr, nk, calls))
+          as.call(lapply(as.list(x), rr, nk))
       } else {
           x
       }
   }
 
-  z <- lapply(as.list(form), rr, nk, calls)   
+  z <- lapply(as.list(form), rr, nk)   
   z <- eval(as.call(z))
   environment(z) <- environment(form)
   z
