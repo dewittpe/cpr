@@ -106,6 +106,8 @@ cpr <- function(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 
 }
 
 
+#' @export
+#' @rdname cp
 plot.cpr_cp <- function(x, y, ...) { 
   list(
        ggplot2::geom_point(data = x$cp, mapping = ggplot2::aes_string(x = "xi_star", y = "theta")),

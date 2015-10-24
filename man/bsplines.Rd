@@ -2,9 +2,15 @@
 % Please edit documentation in R/bsplines.R
 \name{bsplines}
 \alias{bsplines}
+\alias{plot.cpr_bs}
+\alias{print.cpr_bs}
 \title{B-Splines}
 \usage{
 bsplines(x, iknots = numeric(0), bknots = range(x), order = 4)
+
+\method{print}{cpr_bs}(x, n = 6, ...)
+
+\method{plot}{cpr_bs}(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...)
 }
 \arguments{
 \item{x}{data}

@@ -3,12 +3,15 @@
 \name{cp}
 \alias{cp}
 \alias{cpr}
+\alias{plot.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(formula, data = parent.env(), method = lm, ...)
 
 cpr(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 165,
   K = 0, ...)
+
+\method{plot}{cpr_cp}(x, y, ...)
 }
 \arguments{
 \item{formula}{a formula that is appropriate for regression method being
