@@ -31,7 +31,7 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
   fit <- regression(formula, data = data, ...)
 
   # extract bspline
-  Bmat <- eval(extract_cpr_bspline(formula), data)
+  Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
 
   cp <- data.frame(xi_star   = attr(Bmat, "xi_star"), 
                    theta     = theta(fit), 
