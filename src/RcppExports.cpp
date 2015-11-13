@@ -6,6 +6,32 @@
 
 using namespace Rcpp;
 
+// W
+arma::mat W(double x, unsigned int k, arma::vec xi);
+RcppExport SEXP cpr_W(SEXP xSEXP, SEXP kSEXP, SEXP xiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    __result = Rcpp::wrap(W(x, k, xi));
+    return __result;
+END_RCPP
+}
+// W_hat
+arma::mat W_hat(double x, unsigned int k, arma::vec xi);
+RcppExport SEXP cpr_W_hat(SEXP xSEXP, SEXP kSEXP, SEXP xiSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    __result = Rcpp::wrap(W_hat(x, k, xi));
+    return __result;
+END_RCPP
+}
 // bsplines_impl
 Rcpp::List bsplines_impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
 RcppExport SEXP cpr_bsplines_impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
