@@ -9,6 +9,18 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 
+// greville sites
+// [[Rcpp::export]]
+arma::vec greville_sites(arma::vec xi, unsigned int k) {
+  arma::vec xi_star(xi.n_elem - k);
+
+  for (int i=0; i < xi_star.n_elem; ++i) {
+    xi_star(i) = arma::sum(xi(arma::span(i + 1, i + k - 1))) / double (k - 1);
+  }
+
+  return(xi_star);
+}
+
 
 // class definition for bsplines
 class bsplines { 
