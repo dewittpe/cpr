@@ -9,6 +9,10 @@ W_hat <- function(x, k, xi) {
     .Call('cpr_W_hat', PACKAGE = 'cpr', x, k, xi)
 }
 
+greville_sites <- function(xi, k) {
+    .Call('cpr_greville_sites', PACKAGE = 'cpr', xi, k)
+}
+
 bsplines_impl <- function(x, iknots, bknots, order) {
     .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order)
 }

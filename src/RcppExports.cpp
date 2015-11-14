@@ -32,6 +32,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// greville_sites
+arma::vec greville_sites(arma::vec xi, unsigned int k);
+RcppExport SEXP cpr_greville_sites(SEXP xiSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    __result = Rcpp::wrap(greville_sites(xi, k));
+    return __result;
+END_RCPP
+}
 // bsplines_impl
 Rcpp::List bsplines_impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
 RcppExport SEXP cpr_bsplines_impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
