@@ -10,7 +10,7 @@
 #'
 #' @param x data
 #' @param iknots internal knots
-#' @param bknots boundary knot locations
+#' @param bknots boundary knot locations, defaults to \code{range(x)}.
 #' @param order order of the piecewise polynomials
 #'
 #' @export

@@ -21,7 +21,7 @@
  *   a double between 0 and 1 inclusive
  */
 
-double omega(double x, unsigned int j, unsigned int k, arma::vec xi) {
+double omega(double x, unsigned int j, arma::vec xi, unsigned int k = 4) {
   if (x <= xi(j)) { 
     return(0);
   } 
@@ -45,7 +45,7 @@ double omega(double x, unsigned int j, unsigned int k, arma::vec xi) {
  */
 
 // [[Rcpp::export]]
-arma::mat W(double x, unsigned int k, arma::vec xi) { 
+arma::mat W(double x, arma::vec xi, unsigned int k = 4) { 
   double w;
   int r = xi.n_elem - k;
 
@@ -54,7 +54,7 @@ arma::mat W(double x, unsigned int k, arma::vec xi) {
   kim(0, 0) = 1.0;
   kim(r, r - 1) = 1.0;
   for (int i = 1; i < r; ++i) { 
-    w = omega(x, i, k, xi);
+    w = omega(x, i, xi, k);
     kim(i, i - 1) = 1.0 - w;
     kim(i, i)     = w;
   }
@@ -63,10 +63,40 @@ arma::mat W(double x, unsigned int k, arma::vec xi) {
 
 // W_hat is the "hat" matrix built from a W matrix
 // [[Rcpp::export]]
-arma::mat W_hat(double x, unsigned int k, arma::vec xi) { 
-  arma::mat kim = W(x, k, xi);
+arma::mat W_hat(double x, arma::vec xi, unsigned int k = 4) { 
+  arma::mat kim = W(x, xi, k);
   
  return(kim * (kim.t() * kim).i() * kim.t());
+}
+
+// Function for returning the 'weight of importance' for each interior knot
+// [[Rcpp::export]]
+arma::vec iknot_weights(arma::vec xi, arma::vec theta, unsigned int k = 4, unsigned int p = 2) {
+
+  int iknots = xi.n_elem - 2 * k;
+
+  arma::mat xi_mat(xi.n_elem - 1, iknots);
+  arma::vec xi_to_insert = xi(arma::span(k, k + iknots - 1));
+
+  arma::vec w_vec(iknots);
+
+  int i,j,l;
+
+  for(j = 0; j < iknots; ++j) { 
+    l = 0; 
+    for(i = 0; i < xi_mat.n_rows; ++i) { 
+      if (i == k + j) {
+        ++l;
+      } 
+      xi_mat(i, j) = xi(i + l);
+    }
+  }
+
+  for(j = 0; j < iknots; ++j) { 
+    w_vec(j) = arma::norm(theta - W_hat(xi_to_insert(j), xi_mat.col(j), k) * theta, p);
+  }
+
+  return(w_vec); 
 }
 
 /******************************************************************************/

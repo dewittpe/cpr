@@ -7,28 +7,42 @@
 using namespace Rcpp;
 
 // W
-arma::mat W(double x, unsigned int k, arma::vec xi);
-RcppExport SEXP cpr_W(SEXP xSEXP, SEXP kSEXP, SEXP xiSEXP) {
+arma::mat W(double x, arma::vec xi, unsigned int k);
+RcppExport SEXP cpr_W(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    __result = Rcpp::wrap(W(x, k, xi));
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    __result = Rcpp::wrap(W(x, xi, k));
     return __result;
 END_RCPP
 }
 // W_hat
-arma::mat W_hat(double x, unsigned int k, arma::vec xi);
-RcppExport SEXP cpr_W_hat(SEXP xSEXP, SEXP kSEXP, SEXP xiSEXP) {
+arma::mat W_hat(double x, arma::vec xi, unsigned int k);
+RcppExport SEXP cpr_W_hat(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    __result = Rcpp::wrap(W_hat(x, k, xi));
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    __result = Rcpp::wrap(W_hat(x, xi, k));
+    return __result;
+END_RCPP
+}
+// iknot_weights
+arma::vec iknot_weights(arma::vec xi, arma::vec theta, unsigned int k, unsigned int p);
+RcppExport SEXP cpr_iknot_weights(SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type p(pSEXP);
+    __result = Rcpp::wrap(iknot_weights(xi, theta, k, p));
     return __result;
 END_RCPP
 }
