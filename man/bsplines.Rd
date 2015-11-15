@@ -17,7 +17,7 @@ bsplines(x, iknots = numeric(0), bknots = range(x), order = 4)
 
 \item{iknots}{internal knots}
 
-\item{bknots}{boundary knot locations}
+\item{bknots}{boundary knot locations, defaults to \code{range(x)}.}
 
 \item{order}{order of the piecewise polynomials}
 }
