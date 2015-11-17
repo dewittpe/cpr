@@ -15,7 +15,7 @@
 #'
 #' @export
 bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4) { 
-  B <- .Call('cpr_bsplines_impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
+  B <- .Call('cpr_bsplines__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
   out <- B$Bmat
   attr(out, "order")   <- B$order
   attr(out, "iknots")  <- B$iknots

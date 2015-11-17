@@ -11,7 +11,7 @@
 
 // greville sites
 // [[Rcpp::export]]
-arma::vec greville_sites(arma::vec xi, unsigned int k) {
+arma::vec greville_sites__impl(arma::vec xi, unsigned int k) {
   arma::vec xi_star(xi.n_elem - k);
 
   for (int i=0; i < xi_star.n_elem; ++i) {
@@ -136,7 +136,7 @@ double bsplines::B(double x, unsigned int j, unsigned int k) {
 /******************************************************************************/ 
 
 // [[Rcpp::export]]
-Rcpp::List bsplines_impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) { 
+Rcpp::List bsplines__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) { 
 
   if (!iknots.is_sorted()) { 
     Rcpp::warning("Sorting iknots");
