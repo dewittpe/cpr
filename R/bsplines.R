@@ -8,13 +8,15 @@
 #' \code{cpr::bs} call is intended to simplify the work needed with respect to
 #' the control polygon reduction.
 #'
+#' \code{greville_sites} returns the knot averages.
+#'
 #' @param x data
 #' @param iknots internal knots
 #' @param bknots boundary knot locations, defaults to \code{range(x)}.
 #' @param order order of the piecewise polynomials
 #'
 #' @export
-bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4) { 
+bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) { 
   B <- .Call('cpr_bsplines__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
   out <- B$Bmat
   attr(out, "order")   <- B$order
@@ -49,4 +51,9 @@ plot.cpr_bs <- function(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
   }
 }
 
-
+#' @export
+#' @param xi full knot vector, 
+#' @rdname bsplines
+greville_sites <- function(xi, order = 4L) {
+    .Call('cpr_greville_sites__impl', PACKAGE = 'cpr', xi, order)
+}

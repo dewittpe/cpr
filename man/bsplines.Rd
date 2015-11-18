@@ -2,15 +2,18 @@
 % Please edit documentation in R/bsplines.R
 \name{bsplines}
 \alias{bsplines}
+\alias{greville_sites}
 \alias{plot.cpr_bs}
 \alias{print.cpr_bs}
 \title{B-Splines}
 \usage{
-bsplines(x, iknots = numeric(0), bknots = range(x), order = 4)
+bsplines(x, iknots = numeric(0), bknots = range(x), order = 4L)
 
 \method{print}{cpr_bs}(x, n = 6, ...)
 
 \method{plot}{cpr_bs}(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...)
+
+greville_sites(xi, order = 4L)
 }
 \arguments{
 \item{x}{data}
@@ -20,6 +23,8 @@ bsplines(x, iknots = numeric(0), bknots = range(x), order = 4)
 \item{bknots}{boundary knot locations, defaults to \code{range(x)}.}
 
 \item{order}{order of the piecewise polynomials}
+
+\item{xi}{full knot vector,}
 }
 \description{
 An implimentation of Carl de Boor's recursive algorimthm for building
@@ -30,5 +35,7 @@ The difference between this function and \code{splines::bs} come in the
 attributes associated with the output and default options.  The
 \code{cpr::bs} call is intended to simplify the work needed with respect to
 the control polygon reduction.
+
+\code{greville_sites} returns the knot averages.
 }
 
