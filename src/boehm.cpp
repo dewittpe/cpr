@@ -98,6 +98,26 @@ arma::vec iknot_weights__impl(arma::vec xi, arma::vec theta, unsigned int k = 4,
   return(w_vec); 
 }
 
+
+//' Knot Insertion, Removal, and Reinsertion
+//' 
+//' Functions for the insertion, removal, and reinsertion of internal knots for
+//' B-splines.
+//'
+//' @param x the value of the knot to be inserted into the knot vector
+//' @param xi the (whole) knot vector, including the repeated boundary knots
+//' @param theta the ordinates of the control polygon vertices
+//' @param order the order of the B-spline, defaults to 4 for cubic splines
+//'
+//' @return numeric vectors
+//'
+//' @export
+//' @rdname boehm
+// [[Rcpp::export]]
+arma::vec refine_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k = 4) { 
+  return(knot_insertion_matrix__impl(x, xi, k) * theta);
+}
+
 /******************************************************************************/
 /* End of file                                                                */
 /******************************************************************************/

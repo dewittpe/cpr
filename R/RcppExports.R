@@ -13,6 +13,24 @@ iknot_weights__impl <- function(xi, theta, k = 4L, p = 2L) {
     .Call('cpr_iknot_weights__impl', PACKAGE = 'cpr', xi, theta, k, p)
 }
 
+#' Knot Insertion, Removal, and Reinsertion
+#' 
+#' Functions for the insertion, removal, and reinsertion of internal knots for
+#' B-splines.
+#'
+#' @param x the value of the knot to be inserted into the knot vector
+#' @param xi the (whole) knot vector, including the repeated boundary knots
+#' @param theta the ordinates of the control polygon vertices
+#' @param order the order of the B-spline, defaults to 4 for cubic splines
+#'
+#' @return numeric vectors
+#'
+#' @export
+#' @rdname boehm
+refine_ordinate <- function(x, xi, theta, k = 4L) {
+    .Call('cpr_refine_ordinate', PACKAGE = 'cpr', x, xi, theta, k)
+}
+
 greville_sites__impl <- function(xi, k) {
     .Call('cpr_greville_sites__impl', PACKAGE = 'cpr', xi, k)
 }
