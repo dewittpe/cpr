@@ -3,8 +3,8 @@
 \name{refine_ordinate}
 \alias{coarsen_ordinate}
 \alias{hat_ordinate}
-\alias{iknot_weights}
 \alias{refine_ordinate}
+\alias{weigh_iknot}
 \title{Knot Insertion, Removal, and Reinsertion}
 \usage{
 refine_ordinate(x, xi, theta, k = 4L)
@@ -13,7 +13,7 @@ coarsen_ordinate(x, xi, theta, k = 4L)
 
 hat_ordinate(x, xi, theta, k = 4L)
 
-iknot_weights(xi, theta, k = 4L, p = 2L)
+weigh_iknot(xi, theta, k = 4L, p = 2L)
 }
 \arguments{
 \item{x}{the value of the knot to be inserted into the knot vector}

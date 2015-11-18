@@ -75,8 +75,8 @@ hat_ordinate <- function(x, xi, theta, k = 4L) {
 
 #' @export
 #' @rdname boehm
-iknot_weights <- function(xi, theta, k = 4L, p = 2L) {
-    .Call('cpr_iknot_weights', PACKAGE = 'cpr', xi, theta, k, p)
+weigh_iknot <- function(xi, theta, k = 4L, p = 2L) {
+    .Call('cpr_weigh_iknot', PACKAGE = 'cpr', xi, theta, k, p)
 }
 
 greville_sites__impl <- function(xi, k) {
