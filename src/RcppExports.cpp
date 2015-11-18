@@ -19,6 +19,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// knot_coarsen_matrix__impl
+arma::mat knot_coarsen_matrix__impl(double x, arma::vec xi, unsigned int k);
+RcppExport SEXP cpr_knot_coarsen_matrix__impl(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    __result = Rcpp::wrap(knot_coarsen_matrix__impl(x, xi, k));
+    return __result;
+END_RCPP
+}
 // knot_insertion_hat_matrix__impl
 arma::mat knot_insertion_hat_matrix__impl(double x, arma::vec xi, unsigned int k);
 RcppExport SEXP cpr_knot_insertion_hat_matrix__impl(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
@@ -29,20 +42,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
     __result = Rcpp::wrap(knot_insertion_hat_matrix__impl(x, xi, k));
-    return __result;
-END_RCPP
-}
-// iknot_weights__impl
-arma::vec iknot_weights__impl(arma::vec xi, arma::vec theta, unsigned int k, unsigned int p);
-RcppExport SEXP cpr_iknot_weights__impl(SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP, SEXP pSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type p(pSEXP);
-    __result = Rcpp::wrap(iknot_weights__impl(xi, theta, k, p));
     return __result;
 END_RCPP
 }
@@ -57,6 +56,48 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
     __result = Rcpp::wrap(refine_ordinate(x, xi, theta, k));
+    return __result;
+END_RCPP
+}
+// coarsen_ordinate
+arma::vec coarsen_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k);
+RcppExport SEXP cpr_coarsen_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    __result = Rcpp::wrap(coarsen_ordinate(x, xi, theta, k));
+    return __result;
+END_RCPP
+}
+// hat_ordinate
+arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k);
+RcppExport SEXP cpr_hat_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    __result = Rcpp::wrap(hat_ordinate(x, xi, theta, k));
+    return __result;
+END_RCPP
+}
+// iknot_weights
+arma::vec iknot_weights(arma::vec xi, arma::vec theta, unsigned int k, unsigned int p);
+RcppExport SEXP cpr_iknot_weights(SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP, SEXP pSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type p(pSEXP);
+    __result = Rcpp::wrap(iknot_weights(xi, theta, k, p));
     return __result;
 END_RCPP
 }

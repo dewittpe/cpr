@@ -5,12 +5,12 @@ knot_insertion_matrix__impl <- function(x, xi, k = 4L) {
     .Call('cpr_knot_insertion_matrix__impl', PACKAGE = 'cpr', x, xi, k)
 }
 
-knot_insertion_hat_matrix__impl <- function(x, xi, k = 4L) {
-    .Call('cpr_knot_insertion_hat_matrix__impl', PACKAGE = 'cpr', x, xi, k)
+knot_coarsen_matrix__impl <- function(x, xi, k = 4L) {
+    .Call('cpr_knot_coarsen_matrix__impl', PACKAGE = 'cpr', x, xi, k)
 }
 
-iknot_weights__impl <- function(xi, theta, k = 4L, p = 2L) {
-    .Call('cpr_iknot_weights__impl', PACKAGE = 'cpr', xi, theta, k, p)
+knot_insertion_hat_matrix__impl <- function(x, xi, k = 4L) {
+    .Call('cpr_knot_insertion_hat_matrix__impl', PACKAGE = 'cpr', x, xi, k)
 }
 
 #' Knot Insertion, Removal, and Reinsertion
@@ -18,10 +18,40 @@ iknot_weights__impl <- function(xi, theta, k = 4L, p = 2L) {
 #' Functions for the insertion, removal, and reinsertion of internal knots for
 #' B-splines.
 #'
+#' \code{refine_ordinate} provides the estimated ordinates of the control
+#' polygon's vertex sequence after inserting the value \code{x} into the knot
+#' vector \code{xi}.
+#'
+#' \code{coarsen_ordinate} provides the estimated ordinates of the control
+#' polygon's vertex sequence after the removal of the the value \code{x} from the
+#' knot vector \code{xi}.  The expected input for this function is the value
+#' \code{x} to insert into \code{xi}.  That is, to find the estimate of the
+#' coarsened ordinates by removing the value 2 from the vector (0, 0, 0, 0, 1,
+#' 2, 3, 4, 4, 4, 4) (the knot vector for a cubic B-spline with boundary knots
+#' at zero and four and internal knots 1, 2, 3) should be specified by
+#' \code{coarsen_ordinate(x = 2, xi = c(0, 0, 0, 0, 1, 3, 4, 4, 4, 4), theta)}.
+#' See examples.
+#'
+#' This was done intentionall such that the overall coding would be similar to
+#' the primary reference (SEE MY TO BE PUBLISHED PAPER) where 
+#' \eqn{\boldsymbol{W}_{k, \xi} (x)}{W<sub>k, &xi;</sub>(x)} is the knot
+#' insertion matrix for inserting \eqn{x} into \eqn{\xi}{&xi;}.
+#'
+#' The function \code{hat_ordinate} is the coarsen-then-refine estimate of the
+#' ordinate vector.  The name comes from the the use of a hat matrix based on the
+#' in knot insertion matrix.
+#'
+#' \code{iknot_weights} returns a vector with the 'importance weight' of each
+#' of the internal knots in \code{xi}.
+#'
 #' @param x the value of the knot to be inserted into the knot vector
-#' @param xi the (whole) knot vector, including the repeated boundary knots
+#' @param xi the (whole) knot vector, including the repeated boundary knots.
+#'   Regardless of refinement or coarsening, this vector should be the
+#'   'reduced' vector such that x will be added to it.  See details and
+#'   examples.
 #' @param theta the ordinates of the control polygon vertices
 #' @param order the order of the B-spline, defaults to 4 for cubic splines
+#' @param p defaults to 2 for the l^p norm.
 #'
 #' @return numeric vectors
 #'
@@ -29,6 +59,24 @@ iknot_weights__impl <- function(xi, theta, k = 4L, p = 2L) {
 #' @rdname boehm
 refine_ordinate <- function(x, xi, theta, k = 4L) {
     .Call('cpr_refine_ordinate', PACKAGE = 'cpr', x, xi, theta, k)
+}
+
+#' @export
+#' @rdname boehm
+coarsen_ordinate <- function(x, xi, theta, k = 4L) {
+    .Call('cpr_coarsen_ordinate', PACKAGE = 'cpr', x, xi, theta, k)
+}
+
+#' @export
+#' @rdname boehm
+hat_ordinate <- function(x, xi, theta, k = 4L) {
+    .Call('cpr_hat_ordinate', PACKAGE = 'cpr', x, xi, theta, k)
+}
+
+#' @export
+#' @rdname boehm
+iknot_weights <- function(xi, theta, k = 4L, p = 2L) {
+    .Call('cpr_iknot_weights', PACKAGE = 'cpr', xi, theta, k, p)
 }
 
 greville_sites__impl <- function(xi, k) {
