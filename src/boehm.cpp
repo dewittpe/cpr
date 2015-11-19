@@ -140,7 +140,7 @@ arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k =
 //' @export
 //' @rdname boehm
 // [[Rcpp::export]]
-arma::vec weigh_iknot(arma::vec xi, arma::vec theta, unsigned int k = 4, unsigned int p = 2) {
+arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int k = 4, unsigned int p = 2) {
 
   int iknots = xi.n_elem - 2 * k;
 

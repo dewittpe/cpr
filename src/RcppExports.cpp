@@ -87,9 +87,9 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// weigh_iknot
-arma::vec weigh_iknot(arma::vec xi, arma::vec theta, unsigned int k, unsigned int p);
-RcppExport SEXP cpr_weigh_iknot(SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP, SEXP pSEXP) {
+// weigh_iknots
+arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int k, unsigned int p);
+RcppExport SEXP cpr_weigh_iknots(SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -97,7 +97,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type p(pSEXP);
-    __result = Rcpp::wrap(weigh_iknot(xi, theta, k, p));
+    __result = Rcpp::wrap(weigh_iknots(xi, theta, k, p));
     return __result;
 END_RCPP
 }

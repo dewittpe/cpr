@@ -34,80 +34,54 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
   Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
 
   cp <- data.frame(xi_star   = attr(Bmat, "xi_star"), 
-                   theta     = theta(fit), 
-                   convexity = NA, 
-                   fair      = NA,
-                   psi       = NA,
-                   rm_xi     = c(NA, min(attr(Bmat, "iknots")), attr(Bmat, "iknots"), max(attr(Bmat, "iknots")), NA),
-                   row.names = seq(1, ncol(Bmat), by = 1))
-
-  for(i in 2:(nrow(cp) - 1)) { 
-    cp$convexity[i] <-
-      sign((
-            diff(cp$theta[i + c(-1, 1)]) / 
-            diff(cp$xi_star[i + c(-1, 1)]) * 
-            diff(cp$xi_star[i + c(-1, 0)]) + 
-            cp$theta[i - 1]
-           ) - 
-           cp$theta[i] 
-    ) 
-  }
-
-  cp$fair <- (cp$convexity == dplyr::lag(cp$convexity, 1L) | cp$convexity == dplyr::lead(cp$convexity, 1L))
-  cp$fair[c(1, 2, nrow(cp) - c(0, 1))] <- NA
-
-  cp$psi <- c(NA, 
-      sapply(2:(nrow(cp) - 1L), 
-             function(i) { 
-               x1 <- diff(cp[i + c(0, -1), "xi_star"])
-               y1 <- diff(cp[i + c(0, -1), "theta"])
-               x2 <- diff(cp[i + c(0, 1),  "xi_star"])
-               y2 <- diff(cp[i + c(0, 1),  "theta"]) 
-               acos(((x1 * x2) + (y1 * y2)) / (sqrt(x1**2 + y1**2) * sqrt(x2**2 + y2**2))) * 180 / pi
-             }), NA) 
-
-
-  out <- list(cp = cp, Bmat = Bmat)
-  class(out) <- "cpr_cp"
+                   theta     = theta(fit)) 
+  out <- list(cp = cp, Bmat = Bmat, fit = fit)
+  class(out) <- c("cpr_cp", class(out))
   out 
 }
 
 #' @export
 #' @rdname cp
-#' @param psi_f the limit for effective colinear fair points
-#' @param psi_n the limit for effective colinear non-fair points
-#' @param K reduce the control polygon, regardels of psi_f and psi_n untill K or
-#' fewer internal knots are left.
-cpr <- function(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 165, K = 0, ...) { 
+cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) { 
   control_polygon <- cp(formula, data, method, ...) 
+  iknots <- attr(control_polygon$Bmat, "iknots") 
+  results <- vector("list", length = length(iknots))
+  
+  for(i in 1:length(results)) { 
+    xi     <- attr(control_polygon$Bmat, "xi") 
+    iknots <- attr(control_polygon$Bmat, "iknots") 
+    w      <- weigh_iknots(xi, control_polygon$cp$theta, attr(control_polygon$Bmat, "order"), p)
 
-  if (attr(control_polygon$Bmat, "order") != 4) {
-    stop("Reduction method only implimented for cubic (degree = 3, order = 4) splines.")
+    results[[i]] <- list(iknots = iknots, 
+                         wts = w,
+                         removed = iknots[which.min(w)],
+                         fit = control_polygon$fit)
+
+    
+    control_polygon <- cp(newknots(formula, iknots[-which.min(w)]), data = data, method = method, ...) 
   }
-
-  kill <- dplyr::ungroup(dplyr::filter_(dplyr::group_by_(control_polygon$cp, ~ fair), ~ psi == max(psi)))
-  rm_xi <- dplyr::filter_(kill, ~ !fair, ~ psi > psi_n)$rm_xi
-
-  if (length(rm_xi) < 1) {
-    if (length(attr(control_polygon$Bmat, "iknots")) > K) { 
-      rm_xi <- dplyr::filter_(kill, ~ psi == max(psi))$rm_xi
-    } else { 
-      rm_xi <- dplyr::filter_(kill, ~ psi > psi_f)$rm_xi
-    }
-  } 
-
-  if (length(rm_xi) < 1) { 
-    control_polygon
-  } else { 
-    new_iknots <- attr(control_polygon$Bmat, "iknots")
-    new_iknots <- new_iknots[-which(new_iknots == rm_xi)] 
-    cpr(newknots(formula, new_iknots), data = data, method = method, psi_f = psi_f, psi_n = psi_n, K = K, ...) 
-  }
+  return(results)
 }
 
 
-#' @export
-#' @rdname cp
+
+# cbind(iknots, w)
+
+
+
+  # if (length(rm_xi) < 1) { 
+  #   control_polygon
+  # } else { 
+  #   new_iknots <- attr(control_polygon$Bmat, "iknots")
+  #   new_iknots <- new_iknots[-which(new_iknots == rm_xi)] 
+  #   cpr(newknots(formula, new_iknots), data = data, method = method, psi_f = psi_f, psi_n = psi_n, K = K, ...) 
+  # }
+# }
+
+print.cpr_cp <- function(x, ...) { 
+  x$cp
+}
+
 plot.cpr_cp <- function(x, y, ...) { 
   list(
        ggplot2::geom_point(data = x$cp, mapping = ggplot2::aes_string(x = "xi_star", y = "theta")),
@@ -156,7 +130,6 @@ extract_cpr_bspline <- function(form) {
   B <- NULL
   rr <- function(x) { 
     if (is.call(x) && grepl("bsplines", deparse(x[[1]]))) { 
-      # assign(B, value = as.call(x), inherits = TRUE)
       B <<- x
     } else if (is.recursive(x)) { 
       as.call(lapply(as.list(x), rr))

@@ -3,15 +3,11 @@
 \name{cp}
 \alias{cp}
 \alias{cpr}
-\alias{plot.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(formula, data = parent.env(), method = lm, ...)
 
-cpr(formula, data = parent.env(), method = lm, psi_f = 170, psi_n = 165,
-  K = 0, ...)
-
-\method{plot}{cpr_cp}(x, y, ...)
+cpr(formula, data = parent.env(), method = lm, p = 2L, ...)
 }
 \arguments{
 \item{formula}{a formula that is appropriate for regression method being
@@ -23,13 +19,6 @@ used.}
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
 
 \item{...}{arguments passed to the regression method}
-
-\item{psi_f}{the limit for effective colinear fair points}
-
-\item{psi_n}{the limit for effective colinear non-fair points}
-
-\item{K}{reduce the control polygon, regardels of psi_f and psi_n untill K or
-fewer internal knots are left.}
 }
 \description{
 Generate the control polygon for a univariable B-spline
