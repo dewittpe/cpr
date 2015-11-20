@@ -122,30 +122,30 @@ arma::mat knot_insertion_hat_matrix__impl(double x, arma::vec xi, unsigned int k
 //' @export
 //' @rdname boehm
 // [[Rcpp::export]]
-arma::vec refine_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k = 4) { 
-  return(knot_insertion_matrix__impl(x, xi, k) * theta);
+arma::vec refine_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order = 4) { 
+  return(knot_insertion_matrix__impl(x, xi, order) * theta);
 }
 //' @export
 //' @rdname boehm
 // [[Rcpp::export]]
-arma::vec coarsen_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k = 4) { 
-  return(knot_coarsen_matrix__impl(x, xi, k) * theta);
+arma::vec coarsen_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order = 4) { 
+  return(knot_coarsen_matrix__impl(x, xi, order) * theta);
 }
 //' @export
 //' @rdname boehm
 // [[Rcpp::export]]
-arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k = 4) { 
-  return(knot_insertion_hat_matrix__impl(x, xi, k) * theta);
+arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order = 4) { 
+  return(knot_insertion_hat_matrix__impl(x, xi, order) * theta);
 }
 //' @export
 //' @rdname boehm
 // [[Rcpp::export]]
-arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int k = 4, unsigned int p = 2) {
+arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int order = 4, unsigned int p = 2) {
 
-  int iknots = xi.n_elem - 2 * k;
+  int iknots = xi.n_elem - 2 * order;
 
   arma::mat xi_mat(xi.n_elem - 1, iknots);
-  arma::vec xi_to_insert = xi(arma::span(k, k + iknots - 1));
+  arma::vec xi_to_insert = xi(arma::span(order, order + iknots - 1));
 
   arma::vec w_vec(iknots);
 
@@ -154,7 +154,7 @@ arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int k = 4, unsign
   for(j = 0; j < iknots; ++j) { 
     l = 0; 
     for(i = 0; i < xi_mat.n_rows; ++i) { 
-      if (i == k + j) {
+      if (i == order + j) {
         ++l;
       } 
       xi_mat(i, j) = xi(i + l);
@@ -162,7 +162,7 @@ arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int k = 4, unsign
   }
 
   for(j = 0; j < iknots; ++j) { 
-    w_vec(j) = arma::norm(theta - knot_insertion_hat_matrix__impl(xi_to_insert(j), xi_mat.col(j), k) * theta, p);
+    w_vec(j) = arma::norm(theta - knot_insertion_hat_matrix__impl(xi_to_insert(j), xi_mat.col(j), order) * theta, p);
   }
 
   return(w_vec); 

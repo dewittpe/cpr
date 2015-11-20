@@ -30,13 +30,18 @@ bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) {
 }
 
 #' @rdname bsplines
-print.cpr_bs <- function(x, n = 6, ...) { 
+#' @param n, number of rows of the B-spline basis matrix to display, defaults to
+#' 6L.
+print.cpr_bs <- function(x, n = 6L, ...) { 
   cat("Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
   print(x[seq(1, min(nrow(x), n), by = 1L), ])
 }
 
 #' @rdname bsplines
-plot.cpr_bs <- function(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
+#' @param ggplot2 boolean, if TRUE, return a list of layers to plot with
+#' ggplot(), if false, pass x and ... to matplot
+#' @param ... passed to \code{graphics::matplot}
+plot.cpr_bs <- function(x, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
   if (ggplot2) { 
     list("basis" = ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "value", color = "key"),
                             data    = tidyr::gather_(cbind(as.data.frame(x), "x" = attr(x, "x")), 
@@ -47,7 +52,7 @@ plot.cpr_bs <- function(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
          "knots" = ggplot2::geom_vline(data = data.frame(xi = attr(x, "xi")), 
                                        mapping = ggplot2::aes_string(x = "1", y = "1", xintercept = "xi")))
   } else {
-    matplot(x, y, ...)
+    graphics::matplot(x, ...)
   }
 }
 

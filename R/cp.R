@@ -42,6 +42,8 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
 
 #' @export
 #' @rdname cp
+#' @param p defaults to 2L, the L^p norm used in determining the 'weight of
+#' importance' of each internal knot.
 cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) { 
   control_polygon <- cp(formula, data, method, ...) 
   iknots <- attr(control_polygon$Bmat, "iknots") 
