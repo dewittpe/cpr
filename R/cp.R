@@ -54,31 +54,31 @@ cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) {
     iknots <- attr(control_polygon$Bmat, "iknots") 
     w      <- weigh_iknots(xi, control_polygon$cp$theta, attr(control_polygon$Bmat, "order"), p)
 
-    results[[i]] <- list(iknots = iknots, 
-                         wts = w,
-                         removed = iknots[which.min(w)],
-                         fit = control_polygon$fit)
+    results[[i]] <- c(list(wts = w,
+                           removed = iknots[which.min(w)]),
+                      control_polygon)
+
+                         # fit = control_polygon$fit)
 
     
     control_polygon <- cp(newknots(formula, iknots[-which.min(w)]), data = data, method = method, ...) 
   }
+  class(results) <- c("cpr_cpr", class(results))
   return(results)
 }
 
+#' @export
+#' @rdname cp
+#' @param obj a cpr_cpr object
+cpr_select <- function(obj) { 
+  all_weights <- lapply(obj, function(x) x$wts)
+  aw <- do.call(c, all_weights)
+  lmt  <- mean(aw) + 3 * sd(aw)
+  pick <- sapply(lapply(all_weights, function(x) x > lmt), all)
+  min(which(pick))
+}
 
 
-# cbind(iknots, w)
-
-
-
-  # if (length(rm_xi) < 1) { 
-  #   control_polygon
-  # } else { 
-  #   new_iknots <- attr(control_polygon$Bmat, "iknots")
-  #   new_iknots <- new_iknots[-which(new_iknots == rm_xi)] 
-  #   cpr(newknots(formula, new_iknots), data = data, method = method, psi_f = psi_f, psi_n = psi_n, K = K, ...) 
-  # }
-# }
 
 print.cpr_cp <- function(x, ...) { 
   x$cp
