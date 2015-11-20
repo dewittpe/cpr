@@ -1,3 +1,8 @@
+# versino 0.0.1.9000
+
+First usable version with the method based on the 'importance weight' of
+internal knots based on reversing the methods presented by Boehm (1980).
+
 # version 0.0.1
 This version was based on the idea that using an angle to reduce the control
 polygon was a good idea.  Further literature review and simulations showed
