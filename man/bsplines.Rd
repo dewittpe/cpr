@@ -9,9 +9,9 @@
 \usage{
 bsplines(x, iknots = numeric(0), bknots = range(x), order = 4L)
 
-\method{print}{cpr_bs}(x, n = 6, ...)
+\method{print}{cpr_bs}(x, n = 6L, ...)
 
-\method{plot}{cpr_bs}(x, y, ggplot2 = getOption("cpr_ggplot2", FALSE), ...)
+\method{plot}{cpr_bs}(x, ggplot2 = getOption("cpr_ggplot2", FALSE), ...)
 
 greville_sites(xi, order = 4L)
 }
@@ -23,6 +23,14 @@ greville_sites(xi, order = 4L)
 \item{bknots}{boundary knot locations, defaults to \code{range(x)}.}
 
 \item{order}{order of the piecewise polynomials}
+
+\item{n, }{number of rows of the B-spline basis matrix to display, defaults to
+6L.}
+
+\item{...}{passed to \code{graphics::matplot}}
+
+\item{ggplot2}{boolean, if TRUE, return a list of layers to plot with
+ggplot(), if false, pass x and ... to matplot}
 
 \item{xi}{full knot vector,}
 }

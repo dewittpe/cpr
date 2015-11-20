@@ -7,13 +7,13 @@
 \alias{weigh_iknots}
 \title{Knot Insertion, Removal, and Reinsertion}
 \usage{
-refine_ordinate(x, xi, theta, k = 4L)
+refine_ordinate(x, xi, theta, order = 4L)
 
-coarsen_ordinate(x, xi, theta, k = 4L)
+coarsen_ordinate(x, xi, theta, order = 4L)
 
-hat_ordinate(x, xi, theta, k = 4L)
+hat_ordinate(x, xi, theta, order = 4L)
 
-weigh_iknots(xi, theta, k = 4L, p = 2L)
+weigh_iknots(xi, theta, order = 4L, p = 2L)
 }
 \arguments{
 \item{x}{the value of the knot to be inserted into the knot vector}
@@ -25,9 +25,9 @@ examples.}
 
 \item{theta}{the ordinates of the control polygon vertices}
 
-\item{p}{defaults to 2 for the l^p norm.}
-
 \item{order}{the order of the B-spline, defaults to 4 for cubic splines}
+
+\item{p}{defaults to 2 for the l^p norm.}
 }
 \value{
 numeric vectors

@@ -46,58 +46,58 @@ BEGIN_RCPP
 END_RCPP
 }
 // refine_ordinate
-arma::vec refine_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k);
-RcppExport SEXP cpr_refine_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP) {
+arma::vec refine_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order);
+RcppExport SEXP cpr_refine_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< double >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(refine_ordinate(x, xi, theta, k));
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    __result = Rcpp::wrap(refine_ordinate(x, xi, theta, order));
     return __result;
 END_RCPP
 }
 // coarsen_ordinate
-arma::vec coarsen_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k);
-RcppExport SEXP cpr_coarsen_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP) {
+arma::vec coarsen_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order);
+RcppExport SEXP cpr_coarsen_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< double >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(coarsen_ordinate(x, xi, theta, k));
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    __result = Rcpp::wrap(coarsen_ordinate(x, xi, theta, order));
     return __result;
 END_RCPP
 }
 // hat_ordinate
-arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int k);
-RcppExport SEXP cpr_hat_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP) {
+arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order);
+RcppExport SEXP cpr_hat_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< double >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(hat_ordinate(x, xi, theta, k));
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    __result = Rcpp::wrap(hat_ordinate(x, xi, theta, order));
     return __result;
 END_RCPP
 }
 // weigh_iknots
-arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int k, unsigned int p);
-RcppExport SEXP cpr_weigh_iknots(SEXP xiSEXP, SEXP thetaSEXP, SEXP kSEXP, SEXP pSEXP) {
+arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int order, unsigned int p);
+RcppExport SEXP cpr_weigh_iknots(SEXP xiSEXP, SEXP thetaSEXP, SEXP orderSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type p(pSEXP);
-    __result = Rcpp::wrap(weigh_iknots(xi, theta, k, p));
+    __result = Rcpp::wrap(weigh_iknots(xi, theta, order, p));
     return __result;
 END_RCPP
 }

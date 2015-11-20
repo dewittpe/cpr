@@ -57,26 +57,26 @@ knot_insertion_hat_matrix__impl <- function(x, xi, k = 4L) {
 #'
 #' @export
 #' @rdname boehm
-refine_ordinate <- function(x, xi, theta, k = 4L) {
-    .Call('cpr_refine_ordinate', PACKAGE = 'cpr', x, xi, theta, k)
+refine_ordinate <- function(x, xi, theta, order = 4L) {
+    .Call('cpr_refine_ordinate', PACKAGE = 'cpr', x, xi, theta, order)
 }
 
 #' @export
 #' @rdname boehm
-coarsen_ordinate <- function(x, xi, theta, k = 4L) {
-    .Call('cpr_coarsen_ordinate', PACKAGE = 'cpr', x, xi, theta, k)
+coarsen_ordinate <- function(x, xi, theta, order = 4L) {
+    .Call('cpr_coarsen_ordinate', PACKAGE = 'cpr', x, xi, theta, order)
 }
 
 #' @export
 #' @rdname boehm
-hat_ordinate <- function(x, xi, theta, k = 4L) {
-    .Call('cpr_hat_ordinate', PACKAGE = 'cpr', x, xi, theta, k)
+hat_ordinate <- function(x, xi, theta, order = 4L) {
+    .Call('cpr_hat_ordinate', PACKAGE = 'cpr', x, xi, theta, order)
 }
 
 #' @export
 #' @rdname boehm
-weigh_iknots <- function(xi, theta, k = 4L, p = 2L) {
-    .Call('cpr_weigh_iknots', PACKAGE = 'cpr', xi, theta, k, p)
+weigh_iknots <- function(xi, theta, order = 4L, p = 2L) {
+    .Call('cpr_weigh_iknots', PACKAGE = 'cpr', xi, theta, order, p)
 }
 
 greville_sites__impl <- function(xi, k) {

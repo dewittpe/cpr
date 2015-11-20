@@ -19,6 +19,9 @@ used.}
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
 
 \item{...}{arguments passed to the regression method}
+
+\item{p}{defaults to 2L, the L^p norm used in determining the 'weight of
+importance' of each internal knot.}
 }
 \description{
 Generate the control polygon for a univariable B-spline
