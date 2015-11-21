@@ -67,37 +67,6 @@ cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) {
   return(results)
 }
 
-#' @export
-#' @rdname cp
-#' @param obj a cpr_cp object
-cp_value <- function(x, obj) { 
-  xi_star <- obj$cp[[1]]
-  theta   <- obj$cp[[2]]
-  
-  idx <- min(which(xi_star >= x)) + as.numeric(x == min(xi_star))
-
-  (theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx] 
-}
-
-#' @export
-#' @rdname cp
-cp_diff <- function(cp1, cp2) { 
-  (sapply(cp1$xi_star, cp_values, this_cp = cp2) - cp1$theta) / (diff(range(cp2$theta)))
-}
-
-#' @export
-#' @rdname cp
-#' @param obj a cpr_cpr object
-#' @param err max difference/error between the vertices of cp1 to cp2
-cpr_select <- function(obj, err = 0.01) { 
-  diffs <- mapply(function(x1, x2) { cp_diff(x1$cp, x2$cp) }, 
-                  x1 = obj[-length(obj)],
-                  x2 = obj[-1])
-  min(which(!sapply(diffs, function(x) { all(x < err) })))
-}
-
-
-
 print.cpr_cp <- function(x, ...) { 
   x$cp
 }
