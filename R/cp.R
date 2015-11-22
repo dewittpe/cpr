@@ -33,9 +33,15 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
   # extract bspline
   Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
 
-  cp <- data.frame(xi_star   = attr(Bmat, "xi_star"), 
-                   theta     = theta(fit)) 
-  out <- list(cp = cp, Bmat = Bmat, fit = fit)
+  out <- dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
+                           theta   = theta(fit)) 
+  # names(attributes(bmat))
+  # out <- list(cp = cp, Bmat = Bmat, fit = fit)
+  attr(out, "iknots") <- attr(Bmat, "iknots")
+  attr(out, "bknots") <- attr(Bmat, "bknots")
+  attr(out, "xi")     <- attr(Bmat, "xi")
+  attr(out, "order")  <- attr(Bmat, "order")
+
   class(out) <- c("cpr_cp", class(out))
   out 
 }
@@ -46,41 +52,76 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
 #' importance' of each internal knot.
 cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) { 
   control_polygon <- cp(formula, data, method, ...) 
-  iknots <- attr(control_polygon$Bmat, "iknots") 
-  results <- vector("list", length = length(iknots))
+  iknots <- attr(control_polygon, "iknots") 
+  results <- vector("list", length = length(iknots) + 1L)
   
-  for(i in 1:length(results)) { 
-    xi     <- attr(control_polygon$Bmat, "xi") 
-    iknots <- attr(control_polygon$Bmat, "iknots") 
-    w      <- weigh_iknots(xi, control_polygon$cp$theta, attr(control_polygon$Bmat, "order"), p)
+  for(i in seq_along(results)) { 
+    xi     <- attr(control_polygon, "xi") 
+    iknots <- attr(control_polygon, "iknots") 
 
-    results[[i]] <- c(list(wts = w,
-                           removed = iknots[which.min(w)]),
-                      control_polygon)
+    if (length(iknots) > 0) { 
+      w <- weigh_iknots(xi, control_polygon$theta, attr(control_polygon, "order"), p) 
+    } else {
+      w <- NA
+    }
 
-                         # fit = control_polygon$fit)
+    attr(control_polygon, "weights") = w
+    attr(control_polygon, "removed") = if (length(iknots) > 0) { c(index = which.min(w), value = iknots[which.min(w)]) } else {NA}
 
-    
-    control_polygon <- cp(newknots(formula, iknots[-which.min(w)]), data = data, method = method, ...) 
+    results[[i]] <- control_polygon
+
+    if (length(iknots) > 0) { 
+      control_polygon <- cp(newknots(formula, iknots[-which.min(w)]), data = data, method = method, ...) 
+    }
   }
+
+  results <- results[rev(seq_along(results))]
   class(results) <- c("cpr_cpr", class(results))
   return(results)
 }
 
+#' @method print cpr_cp
 print.cpr_cp <- function(x, ...) { 
-  x$cp
+  dplyr:::print.tbl_df(x, ...)
 }
 
-plot.cpr_cp <- function(x, y, ...) { 
+#' @method print cpr_cpr
+print.cpr_cpr <- function(x, ...) { 
+  cat("A list of control polygons\n")
+  str(reduction, max.level = 0)
+}
+
+
+#' @method plot cpr_cp
+plot.cpr_cp <- function(x, show_spline = FALSE, n = 500, ...) { 
+  plot(x$xi_star, x$theta, type = "b", xlab = "xi_star", ylab = "theta", ...)
+  
+  if (show_spline) { 
+    b <- attr(x, "bknots")
+    bmat <- bsplines(seq(b[1], b[2], length = n), 
+                     iknots = attr(x, "iknots"), 
+                     bknots = b, 
+                     order  = attr(x, "order"))
+    points(attr(bmat, "x"), as.numeric(bmat %*% x$theta), type = "l", ...) 
+  }
+}
+
+#' @export 
+#' @param x a cpr_cp object
+cp_layers <- function(x, n = 500, ...) { 
+  b <- attr(x, "bknots")
+  bmat <- bsplines(seq(b[1], b[2], length = n), 
+                   iknots = attr(x, "iknots"), 
+                   bknots = b, 
+                   order  = attr(x, "order"))
   list(
-       ggplot2::geom_point(data = x$cp, mapping = ggplot2::aes_string(x = "xi_star", y = "theta")),
-       ggplot2::geom_line(data = x$cp, mapping = ggplot2::aes_string(x = "xi_star", y = "theta")),
-       ggplot2::geom_line(data = data.frame(x = attr(x$Bmat, "x"), 
-                                            y = as.numeric(x$Bmat %*% x$cp$theta)), 
-                          mapping = ggplot2::aes_string(x = "x", y = "y")) 
+       ggplot2::geom_point(data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
+       ggplot2::geom_line( data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
+       ggplot2::geom_line( data = data.frame(x = attr(bmat, "x"), 
+                                             y = as.numeric(bmat %*% x$theta)), 
+                          mapping = ggplot2::aes_string(x = "x", y = "y"), ...) 
        )
 }
-
 
 newknots <- function(form, nk) { 
   rr <- function(x, nk) {

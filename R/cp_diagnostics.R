@@ -15,14 +15,28 @@
 #' @export
 #' @rdname cp_diagnosstics
 #' @param x absicissa at which to determine the ordinate on control polygon cp
-#' @param obj a cpr_cp object
-cp_value <- function(x, obj) { 
-  xi_star <- obj$cp[[1]]
-  theta   <- obj$cp[[2]]
+#' @param obj a cpr_cp object or \code{data.frame} where the first column is the
+#' abscissa and the second column is the ordinate for the control polygon vertices.
+cp_value <- function(obj, x) { 
+  UseMethod("cp_value")
+}
+
+cp_value.cpr_cp <- function(obj, x) { 
+  xi_star <- obj$xi_star
+  theta   <- obj$theta
   
   idx <- min(which(xi_star >= x)) + as.numeric(x == min(xi_star))
 
-  (theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx] 
+  unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
+}
+
+cp_value.default <- function(obj, x) { 
+  xi_star <- obj[[1]]
+  theta   <- obj[[2]]
+  
+  idx <- min(which(xi_star >= x)) + as.numeric(x == min(xi_star))
+
+  unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
 }
 
 #' @export
@@ -31,6 +45,6 @@ cp_value <- function(x, obj) {
 #' vertices of cp1 to control polygon cp2.  setting \code{denom = 1} will return
 #' the absolute distance.  The default \code{diff(range(cp2$theta))} scales the 
 cp_diff <- function(cp1, cp2, denom = diff(range(cp2$theta))) { 
-  abs(sapply(cp1$xi_star, cp_values, this_cp = cp2) - cp1$theta) / denom
+  unname(abs(sapply(cp1$xi_star, function(x) {cp_value(obj = cp2, x)}) - cp1$theta) / denom)
 }
 

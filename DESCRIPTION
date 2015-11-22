@@ -9,6 +9,7 @@ Depends:
 License: GPL (>= 2)
 LazyData: true
 Imports:
+    dplyr,
     ggplot2,
     Rcpp (>= 0.11.0),
     tidyr
