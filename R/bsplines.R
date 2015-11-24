@@ -29,6 +29,8 @@ bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) {
   out
 }
 
+#' @method print cpr_bs
+#' @export
 #' @rdname bsplines
 #' @param n, number of rows of the B-spline basis matrix to display, defaults to
 #' 6L.
@@ -37,6 +39,8 @@ print.cpr_bs <- function(x, n = 6L, ...) {
   print(x[seq(1, min(nrow(x), n), by = 1L), ])
 }
 
+#' @method plot cpr_bs
+#' @export
 #' @rdname bsplines
 #' @param ggplot2 boolean, if TRUE, return a list of layers to plot with
 #' ggplot(), if false, pass x and ... to matplot
