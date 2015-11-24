@@ -11,8 +11,8 @@
 \setcounter{tocdepth}{2}
 
 
-\title{Control Polygons}
-\author{Peter DeWitt}
+\title{B-splines and Control Polygons}
+\author{Peter E.\ DeWitt}
 
 <<include=FALSE>>=
 library(knitr)
@@ -28,24 +28,40 @@ library(knitr)
 \newpage
 
 \section{Introduction}
-Blah blah blah
+Many statisticians have some experience with B-splines.  Many have relied on
+B-splines for fitting semi-parametric regression models.  However, what appears
+to be less common is the use of the associated control polygon.  The \pkg{cpr}
+package provides methods for building parsimonious regression modeles based on
+{\bf} c}ontrol {\bf p}olygon {\bf r}eductions.  Several vignettes are provided
+in this package to help the use get upto speed on B-splines, control polygons,
+and the modeling approach posed by the author.  
 
 <<>>=
-library(cpr) 
+library(cpr)
+@
+
+\section{B-splines}
+{\tt R} ships out with the \pkg{splines} package with includes the function
+\code{bs} for generating the basis matrix for B-splines.  The \pkg{cpr} package
+provides another function \code{bsplines} to generate similar matrices, but with
+different \code{attributes} which are key in the control polygon reduction
+methods.
+
+<<>>=
+bmat_splines <- splines::bs(1:100, knots = c(10, 20, 70))
+bmat_cpr     <- cpr::bsplines(1:100, iknots = c(10, 20, 70))
 @
 
 <<>>=
-2 + 2
+cpr:::print.cpr_bs(bmat_cpr)
 @
-
-
 
 \section{Acknowledgements}
 Thank someone
 
 \section{Session information}
-<<results='asis'>>=
-toLatex(sessionInfo())
+<<>>=
+sessionInfo()
 @
 
 \end{document}
