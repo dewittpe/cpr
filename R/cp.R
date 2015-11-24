@@ -107,6 +107,7 @@ plot.cpr_cp <- function(x, show_spline = FALSE, n = 500, ...) {
 }
 
 #' @export 
+#' @rdname cp
 #' @param x a cpr_cp object
 cp_layers <- function(x, n = 500, ...) { 
   b <- attr(x, "bknots")

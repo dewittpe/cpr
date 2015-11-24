@@ -2,12 +2,15 @@
 % Please edit documentation in R/cp.R
 \name{cp}
 \alias{cp}
+\alias{cp_layers}
 \alias{cpr}
 \title{Control Polygons}
 \usage{
 cp(formula, data = parent.env(), method = lm, ...)
 
 cpr(formula, data = parent.env(), method = lm, p = 2L, ...)
+
+cp_layers(x, n = 500, ...)
 }
 \arguments{
 \item{formula}{a formula that is appropriate for regression method being
@@ -22,6 +25,8 @@ used.}
 
 \item{p}{defaults to 2L, the L^p norm used in determining the 'weight of
 importance' of each internal knot.}
+
+\item{x}{a cpr_cp object}
 }
 \description{
 Generate the control polygon for a univariable B-spline
