@@ -1,0 +1,51 @@
+%\VignetteIndexEntry{cpr control_polygons}
+%\VignetteDepends{cpr}
+%\VignetteKeywords{control polygons, B-splines}
+%\VignettePackage{cpr}
+%\VignetteEngine{knitr::knitr}
+%**************************************************************************
+\documentclass{article}
+
+\newcommand\code[1]{\texttt{#1}}
+\newcommand\pkg[1]{\textbf{#1}}
+\setcounter{tocdepth}{2}
+
+
+\title{Control Polygons}
+\author{Peter DeWitt}
+
+<<include=FALSE>>=
+library(knitr)
+# opts_chunk$set(fig.path='figdir/fig', debug=TRUE, echo=TRUE)
+@
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+Blah blah blah
+
+<<>>=
+library(cpr) 
+@
+
+<<>>=
+2 + 2
+@
+
+
+
+\section{Acknowledgements}
+Thank someone
+
+\section{Session information}
+<<results='asis'>>=
+toLatex(sessionInfo())
+@
+
+\end{document}

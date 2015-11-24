@@ -18,5 +18,7 @@ LinkingTo: Rcpp (>= 0.11.0),
 Suggests:
     geepack,
     lme4,
-    testthat
+    testthat,
+    knitr
 RoxygenNote: 5.0.1
+VignetteBuilder: knitr
