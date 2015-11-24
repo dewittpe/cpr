@@ -32,7 +32,7 @@ Many statisticians have some experience with B-splines.  Many have relied on
 B-splines for fitting semi-parametric regression models.  However, what appears
 to be less common is the use of the associated control polygon.  The \pkg{cpr}
 package provides methods for building parsimonious regression modeles based on
-{\bf} c}ontrol {\bf p}olygon {\bf r}eductions.  Several vignettes are provided
+{\bf c}ontrol {\bf p}olygon {\bf r}eductions.  Several vignettes are provided
 in this package to help the use get upto speed on B-splines, control polygons,
 and the modeling approach posed by the author.  
 
