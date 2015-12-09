@@ -21,6 +21,7 @@ cp_value <- function(obj, x) {
   UseMethod("cp_value")
 }
 
+#' @method cp_value cpr_cp
 cp_value.cpr_cp <- function(obj, x) { 
   xi_star <- obj$xi_star
   theta   <- obj$theta
@@ -30,6 +31,7 @@ cp_value.cpr_cp <- function(obj, x) {
   unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
 }
 
+#' @method cp_value default
 cp_value.default <- function(obj, x) { 
   xi_star <- obj[[1]]
   theta   <- obj[[2]]
@@ -39,12 +41,10 @@ cp_value.default <- function(obj, x) {
   unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
 }
 
+
 #' @export
 #' @rdname cp_diagnosstics
-#' @param denom the denominator used for relative distance between the control
-#' vertices of cp1 to control polygon cp2.  setting \code{denom = 1} will return
-#' the absolute distance.  The default \code{diff(range(cp2$theta))} scales the 
-cp_diff <- function(cp1, cp2, denom = diff(range(cp2$theta))) { 
-  unname(abs(sapply(cp1$xi_star, function(x) {cp_value(obj = cp2, x)}) - cp1$theta) / denom)
+cp_diff <- function(cp1, cp2) { 
+  unname(abs(sapply(cp1$xi_star, function(x) {cp_value(obj = cp2, x)}) - cp1$theta))
 }
 

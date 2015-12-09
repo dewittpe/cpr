@@ -7,21 +7,23 @@
 #' @export
 #' @rdname cpr_diagnostics
 #' @param obj a cpr_cpr object
-#' @param err max difference/error between the vertices of cp1 to cp2
-cpr_select <- function(obj, err = 0.01) { 
+#' @param tol max difference/error between the vertices of cp1 to cp2
+cpr_select <- function(obj, tol = 0.01) { 
   UseMethod("cpr_select")
 }
 
-cpr_select.cpr_cpr <- function(obj, err = 0.01) { 
+#' @method cpr_select cpr_cpr
+#' @rdname cpr_diagnostics
+cpr_select.cpr_cpr <- function(obj, tol = 0.01) { 
   diffs <- mapply(function(x1, x2) { cp_diff(x2, x1) }, 
                   x1 = obj[-length(obj)],
                   x2 = obj[-1])
+  mxdif <- sapply(diffs, max)
   mwt <- sapply(obj, function(x) { unname(min(attr(x, "weights"))) })
 
-  # min(which(!sapply(diffs, function(x) { all(x < err) })))
   dplyr::data_frame(n_iknots      = seq(0, length(obj) - 1L, by = 1), 
                     min_weight    = mwt, 
-                    all_diffs_under_err = c(sapply(diffs, function(x) { all(x < err) }), NA),
+                    max_diff      = mxdf, 
                     diffs         = c(diffs, NA))
 }
 
