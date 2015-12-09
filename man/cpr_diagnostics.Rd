@@ -3,16 +3,19 @@
 \name{cpr_select}
 \alias{cpr_layers}
 \alias{cpr_select}
+\alias{cpr_select.cpr_cpr}
 \title{Control Polygon Reduction Diagnoses}
 \usage{
-cpr_select(obj, err = 0.01)
+cpr_select(obj, tol = 0.01)
+
+\method{cpr_select}{cpr_cpr}(obj, tol = 0.01)
 
 cpr_layers(obj, start = 1L, end = 6L)
 }
 \arguments{
 \item{obj}{a cpr_cpr object}
 
-\item{err}{max difference/error between the vertices of cp1 to cp2}
+\item{tol}{max difference/error between the vertices of cp1 to cp2}
 
 \item{start}{index of the first control polygon to plot}
 

@@ -7,17 +7,13 @@
 \usage{
 cp_value(obj, x)
 
-cp_diff(cp1, cp2, denom = diff(range(cp2$theta)))
+cp_diff(cp1, cp2)
 }
 \arguments{
 \item{obj}{a cpr_cp object or \code{data.frame} where the first column is the
 abscissa and the second column is the ordinate for the control polygon vertices.}
 
 \item{x}{absicissa at which to determine the ordinate on control polygon cp}
-
-\item{denom}{the denominator used for relative distance between the control
-vertices of cp1 to control polygon cp2.  setting \code{denom = 1} will return
-the absolute distance.  The default \code{diff(range(cp2$theta))} scales the}
 }
 \value{
 \code{cp_value} returns the ordinate on the control polygon line segment for
