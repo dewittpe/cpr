@@ -3,12 +3,9 @@
 \name{cpr_select}
 \alias{cpr_layers}
 \alias{cpr_select}
-\alias{cpr_select.cpr_cpr}
 \title{Control Polygon Reduction Diagnoses}
 \usage{
 cpr_select(obj, tol = 0.01)
-
-\method{cpr_select}{cpr_cpr}(obj, tol = 0.01)
 
 cpr_layers(obj, start = 1L, end = 6L)
 }

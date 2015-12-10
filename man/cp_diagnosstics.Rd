@@ -14,6 +14,10 @@ cp_diff(cp1, cp2)
 abscissa and the second column is the ordinate for the control polygon vertices.}
 
 \item{x}{absicissa at which to determine the ordinate on control polygon cp}
+
+\item{cp1}{a cpr_cp object}
+
+\item{cp2}{a cpr_cp object}
 }
 \value{
 \code{cp_value} returns the ordinate on the control polygon line segment for
@@ -21,8 +25,8 @@ the absicissa \code{x} given.  \code{x} could be a control vertex or on a
 line segement defined by two control vertices of the control polygon
 provided.
 
-\code{cp_diff} returns the (relative) distance between the control vertices
-of cp1 to the control polygons cp2.
+\code{cp_diff} returns the vertical distance between the control vertices
+of cp1 to the control polygon cp2.
 }
 \description{
 Collection of functions for insepction and analysis of the control polygons

@@ -8,8 +8,8 @@
 #' line segement defined by two control vertices of the control polygon
 #' provided.
 #'
-#' \code{cp_diff} returns the (relative) distance between the control vertices
-#' of cp1 to the control polygons cp2.
+#' \code{cp_diff} returns the vertical distance between the control vertices
+#' of cp1 to the control polygon cp2.
 
 
 #' @export
@@ -44,6 +44,8 @@ cp_value.default <- function(obj, x) {
 
 #' @export
 #' @rdname cp_diagnosstics
+#' @param cp1 a cpr_cp object
+#' @param cp2 a cpr_cp object
 cp_diff <- function(cp1, cp2) { 
   unname(abs(sapply(cp1$xi_star, function(x) {cp_value(obj = cp2, x)}) - cp1$theta))
 }
