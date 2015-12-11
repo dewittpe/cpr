@@ -60,16 +60,3 @@ plot.cpr_cpr <- function(x, from = 0, to = 9, show_spline = FALSE, n = 500) {
 
 }
 
-#' @export 
-#' @rdname cpr_diagnostics
-#' @param start index of the first control polygon to plot
-#' @param end index of the last control polygon to plot
-cpr_layers <- function(obj, start = 1L, end = 6L) { 
-  dat <- lapply(seq(start, end, by = 1L), function(i) { dplyr::mutate(obj[[i]]$cp, index = as.character(i)) })
-  dat <- do.call(rbind, dat)
-
-  list(ggplot2::geom_point(data = dat, mapping = ggplot2::aes_string(x = "xi_star", y = "theta", color = "index")),
-       ggplot2::geom_line(data = dat, mapping = ggplot2::aes_string(x = "xi_star", y = "theta", color = "index")))
-}
-
-
