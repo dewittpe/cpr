@@ -1,7 +1,11 @@
-# version 0.0.1.9001
+# version 0.0.1.9003
 
 First usable version with the method based on the 'importance weight' of
 internal knots based on reversing the methods presented by Boehm (1980).
+Development of metrics and methods for parsing out the preferable models.
+
+Version 0.0.1.9003 was the first stable version for fitting the exact data
+model.
 
 ## Vignettes
 

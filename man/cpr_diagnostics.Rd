@@ -5,7 +5,7 @@
 \alias{cpr_select}
 \title{Control Polygon Reduction Diagnoses}
 \usage{
-cpr_select(obj, tol = 0.01)
+cpr_select(obj, tol = 3)
 
 cpr_layers(obj, start = 1L, end = 6L)
 }

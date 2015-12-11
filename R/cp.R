@@ -37,10 +37,16 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
                            theta   = theta(fit)) 
   # names(attributes(bmat))
   # out <- list(cp = cp, Bmat = Bmat, fit = fit)
-  attr(out, "iknots") <- attr(Bmat, "iknots")
-  attr(out, "bknots") <- attr(Bmat, "bknots")
-  attr(out, "xi")     <- attr(Bmat, "xi")
-  attr(out, "order")  <- attr(Bmat, "order")
+  attr(out, "iknots") <- c(attr(Bmat, "iknots"))
+  attr(out, "bknots") <- c(attr(Bmat, "bknots"))
+  attr(out, "xi")     <- c(attr(Bmat, "xi"))
+  attr(out, "order")  <- attr(Bmat, "order") 
+  attr(out, "call") <- match.call() 
+
+  attr(out, "method") <- regression
+  attr(out, "formula") <- formula
+  attr(out, "data")   <- data
+  attr(out, "dots")   <- list(...)
 
   class(out) <- c("cpr_cp", class(out))
   out 
@@ -81,29 +87,72 @@ cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) {
 }
 
 #' @method print cpr_cp
+#' @export
 print.cpr_cp <- function(x, ...) { 
   dplyr:::print.tbl_df(x, ...)
 }
 
 #' @method print cpr_cpr
+#' @export
 print.cpr_cpr <- function(x, ...) { 
   cat("A list of control polygons\n")
   str(reduction, max.level = 0)
 }
 
-
 #' @method plot cpr_cp
-plot.cpr_cp <- function(x, show_spline = FALSE, n = 500, ...) { 
-  plot(x$xi_star, x$theta, type = "b", xlab = "xi_star", ylab = "theta", ...)
-  
-  if (show_spline) { 
-    b <- attr(x, "bknots")
-    bmat <- bsplines(seq(b[1], b[2], length = n), 
-                     iknots = attr(x, "iknots"), 
-                     bknots = b, 
-                     order  = attr(x, "order"))
-    points(attr(bmat, "x"), as.numeric(bmat %*% x$theta), type = "l", ...) 
-  }
+#' @export
+plot.cpr_cp <- function(x, ..., show_spline = FALSE, n = 500) { 
+  # plot(x$xi_star, x$theta, type = "b", xlab = "xi_star", ylab = "theta", ...)
+  # 
+  # if (show_spline) { 
+  #   b <- attr(x, "bknots")
+  #   bmat <- bsplines(seq(b[1], b[2], length = n), 
+  #                    iknots = attr(x, "iknots"), 
+  #                    bknots = b, 
+  #                    order  = attr(x, "order"))
+  #   points(attr(bmat, "x"), as.numeric(bmat %*% x$theta), type = "l", ...) 
+  # }
+
+  .data <- bind_rows(list(x, ...), .id = "row") 
+
+  ggplot(.data) +
+  theme_bw() + 
+  aes(x = xi_star, y = theta, linetype = factor(row)) + 
+  geom_point() + geom_line() 
+
+  #   b <- attr(x, "bknots")
+  #   bmat <- bsplines(seq(b[1], b[2], length = n), 
+  #                    iknots = attr(x, "iknots"), 
+  #                    bknots = b, 
+  #                    order  = attr(x, "order"))
+  # 
+  #   ggplot2::ggplot() + 
+  #   list(
+  #        ggplot2::geom_point(data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
+  #        ggplot2::geom_line( data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
+  #        ggplot2::geom_line( data = data.frame(x = seq(b[1], b[2], length = n), 
+  #                                              y = as.numeric(bmat %*% x$theta)), 
+  #                           mapping = ggplot2::aes_string(x = "x", y = "y"), ...) 
+  #        )
+}
+
+
+#' @export
+model <- function(x) { 
+  UseMethod("model")
+}
+
+#' @export
+model.cpr_cp <- function(x) { 
+  do.call(attr(x, "method"), 
+          c(list(data = attr(x, "data"), formula = attr(x, "formula")),
+            attr(x, "dots"))
+          )
+}
+
+#' @export
+model.cpr_selected <- function(x) { 
+  model.cpr_cp(x$best_cp)
 }
 
 #' @export 
@@ -179,20 +228,20 @@ theta <- function(fit) {
 
 theta.lm <- function(fit) { 
   out <- coef(fit)
-  out[grepl("bspline", names(out))]
+  unname(out[grepl("bspline", names(out))])
 }
 
 theta.glm <- function(fit) { 
   out <- coef(fit)
-  out[grepl("bspline", names(out))]
+  unname(out[grepl("bspline", names(out))])
 }
 
 theta.lmerMod <- function(fit) { 
   out <- lme4::fixef(fit)
-  out[grepl("bspline", names(out))]
+  unname(out[grepl("bspline", names(out))])
 }
 
 theta.geeglm <- function(fit) { 
   out <- coef(fit)
-  out[grepl("bspline", names(out))]
+  unname(out[grepl("bspline", names(out))])
 }

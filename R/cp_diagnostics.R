@@ -8,8 +8,8 @@
 #' line segement defined by two control vertices of the control polygon
 #' provided.
 #'
-#' \code{cp_diff} returns the vertical distance between the control vertices
-#' of cp1 to the control polygon cp2.
+#' \code{cp_diff} returns the absolute vertical distance between the control
+#' vertices of cp1 to the control polygon cp2.
 
 
 #' @export
