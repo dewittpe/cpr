@@ -167,24 +167,6 @@ model.cpr_selected <- function(x) {
   model.cpr_cp(x$best_cp)
 }
 
-#' @export 
-#' @rdname cp
-#' @param x a cpr_cp object
-cp_layers <- function(x, n = 500, ...) { 
-  b <- attr(x, "bknots")
-  bmat <- bsplines(seq(b[1], b[2], length = n), 
-                   iknots = attr(x, "iknots"), 
-                   bknots = b, 
-                   order  = attr(x, "order"))
-  list(
-       ggplot2::geom_point(data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
-       ggplot2::geom_line( data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
-       ggplot2::geom_line( data = data.frame(x = seq(b[1], b[2], length = n), 
-                                             y = as.numeric(bmat %*% x$theta)), 
-                          mapping = ggplot2::aes_string(x = "x", y = "y"), ...) 
-       )
-}
-
 newknots <- function(form, nk) { 
   rr <- function(x, nk) {
       if(is.call(x) && grepl("bsplines", deparse(x[[1]]))) {
