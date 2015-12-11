@@ -102,40 +102,52 @@ print.cpr_cpr <- function(x, ...) {
 #' @method plot cpr_cp
 #' @export
 plot.cpr_cp <- function(x, ..., show_spline = FALSE, n = 500) { 
-  # plot(x$xi_star, x$theta, type = "b", xlab = "xi_star", ylab = "theta", ...)
-  # 
-  # if (show_spline) { 
-  #   b <- attr(x, "bknots")
-  #   bmat <- bsplines(seq(b[1], b[2], length = n), 
-  #                    iknots = attr(x, "iknots"), 
-  #                    bknots = b, 
-  #                    order  = attr(x, "order"))
-  #   points(attr(bmat, "x"), as.numeric(bmat %*% x$theta), type = "l", ...) 
-  # }
+  nms   <- sapply(match.call()[-1], deparse)
+  nms   <- nms[!(names(nms) %in% c("show_spline", "n"))]
+  cps   <- list(x, ...)
+  rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
+  .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
+                          .dots = setNames(list(rfctr), "row")) 
+                  
+  base_plot <- 
+    ggplot2::ggplot(.data) +
+    ggplot2::theme_bw() + 
+    ggplot2::geom_point() + 
+    ggplot2::geom_line() 
 
-  .data <- bind_rows(list(x, ...), .id = "row") 
+  if (length(cps) > 1) { 
+    base_plot <- 
+      base_plot + 
+      ggplot2::aes_string(x = "xi_star", y = "theta", linetype = "factor(row)") + 
+      ggplot2::scale_linetype(name = ggplot2::element_blank())
+  } else { 
+    base_plot <- 
+      base_plot + ggplot2::aes_string(x = "xi_star", y = "theta")
+  }
 
-  ggplot(.data) +
-  theme_bw() + 
-  aes(x = xi_star, y = theta, linetype = factor(row)) + 
-  geom_point() + geom_line() 
+  if (show_spline) { 
+    .data2 <- 
+      lapply(cps, function(x) { 
+           b <- attr(x, "bknots")
+           bmat <- bsplines(seq(b[1], b[2], length = n), 
+                            iknots = attr(x, "iknots"), 
+                            bknots = b, 
+                            order  = attr(x, "order"))
+           data.frame(x = seq(b[1], b[2], length = n), 
+                      y = as.numeric(bmat %*% x$theta))
+                             }) %>%
+      {
+        dplyr::mutate_(dplyr::bind_rows(., .id = "row"),
+                      .dots = setNames(list(rfctr), "row")) 
+      }
 
-  #   b <- attr(x, "bknots")
-  #   bmat <- bsplines(seq(b[1], b[2], length = n), 
-  #                    iknots = attr(x, "iknots"), 
-  #                    bknots = b, 
-  #                    order  = attr(x, "order"))
-  # 
-  #   ggplot2::ggplot() + 
-  #   list(
-  #        ggplot2::geom_point(data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
-  #        ggplot2::geom_line( data = x, mapping = ggplot2::aes_string(x = "xi_star", y = "theta"), ...),
-  #        ggplot2::geom_line( data = data.frame(x = seq(b[1], b[2], length = n), 
-  #                                              y = as.numeric(bmat %*% x$theta)), 
-  #                           mapping = ggplot2::aes_string(x = "x", y = "y"), ...) 
-  #        )
+      base_plot <- 
+        base_plot + 
+        ggplot2::geom_line(data = .data2, 
+                           mapping = ggplot2::aes_string(x = "x", y = "y"))
+  }
+  base_plot
 }
-
 
 #' @export
 model <- function(x) { 
