@@ -41,42 +41,23 @@ print.cpr_selected <- function(x, ...) {
   print(x$best_cp)
 }
 
-# @method plot cpr_cp
-# @export 
-# plot.cpr_cp <- function(x, ...) { 
-# 
-#   .data <- bind_rows(c(x, ...), .id = "row") 
-# 
-#   ggplot(.data) +
-#   theme_bw() + 
-#   aes(x = xi_star, y = theta, linetype = factor(row)) + 
-#   geom_point() + geom_line() 
-# }
-
 #' @method plot cpr_cpr
 #' @export 
-plot.cpr_cpr <- function(x, a = 0, b = 9) { 
+plot.cpr_cpr <- function(x, from = 0, to = 9, show_spline = FALSE, n = 500) { 
+  suppressMessages(
+  lapply(seq(from, to - 1L, by = 1L) + 1L,
+         function(idx, .data, sp, n) { 
+           plot.cpr_cp(.data[[idx]], .data[[idx + 1L]], show_spline = sp, n = n) + 
+           ggplot2::scale_linetype(name = "", labels = paste(idx + -1:0, "iknots")) + 
+           ggplot2::theme(legend.position = "top",
+                          axis.title = ggplot2::element_blank())
+         },
+         .data = x, 
+         sp = show_spline, 
+         n = n)) %>%
+  lapply(., ggplot2::ggplotGrob) %>%
+  gridExtra::grid.arrange(grobs = .)
 
-  cp_data <-
-    bind_rows(x[seq(a, b, by = 1L) + 1L], .id = "row") %>%
-    mutate(`row` = as.integer(`row`))
-
-  foo <- function(.data) { 
-    ggplot(.data) +
-    theme_bw() + 
-    aes(x = xi_star, y = theta, linetype = factor(`row`)) + 
-    geom_point() + geom_line()  + 
-    theme(legend.position = "none") 
-  }
-
-  mapply(function(aa, bb) { cp_data %>% filter(`row` %in% aa:bb) %>% 
-         {foo(.) + ggtitle(paste("Internal knots:\n", aa - 1, "(solid) to", 
-                                 bb - 1, "(dashed)", collapse = " "))}},
-         aa = seq(a, b - 1, by = 1) + 1, 
-         bb = seq(a + 1, b, by = 1) + 1, 
-         SIMPLIFY = FALSE)  %>%
-  lapply(., ggplotGrob) %>%
-  grid.arrange(grobs = .)
 }
 
 #' @export 
