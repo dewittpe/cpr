@@ -12,18 +12,15 @@ cpr_select <- function(obj, tol = 3) {
   diffs <- mapply(function(x1, x2) { cp_diff(x1, x2) }, 
                   x1 = obj[-length(obj)],
                   x2 = obj[-1])
-  # mxdif <- sapply(diffs, max)
-  # mndif <- sapply(diffs, mean)
-  mwt <- sapply(obj, function(x) { unname(min(attr(x, "weights"))) })
-
+  awt <- lapply(obj, function(x) { unname(attr(x, "weights"))})[-1]
+  mwt <- do.call(c, lapply(awt, min))
+  awt <- do.call(c, awt)
 
   dat <- 
-    dplyr::data_frame(n_iknots      = seq(0, length(obj) - 1L, by = 1), 
-                      min_weight    = mwt, 
-                      # max_diff      = c(mxdif, NA),
-                      # mean_diff     = c(mndif, NA), 
+    dplyr::data_frame(n_iknots      = seq(0, length(obj) - 1L, by = 1L), 
+                      min_weight    = c(NA, mwt), 
                       diffs         = c(diffs, NA)) 
-  best_cp_index <- max(which(mwt > median(mwt, na.rm = TRUE) + tol * IQR(mwt, na.rm = TRUE)))
+  best_cp_index <- max(which(mwt > median(awt) + tol * IQR(awt))) + 1L
 
   out <- list(best_cp = obj[[best_cp_index]], all_cps = dat)
   attr(out, "best_cp_index") <- best_cp_index 

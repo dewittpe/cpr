@@ -96,7 +96,7 @@ print.cpr_cp <- function(x, ...) {
 #' @export
 print.cpr_cpr <- function(x, ...) { 
   cat("A list of control polygons\n")
-  str(reduction, max.level = 0)
+  str(x, max.level = 0)
 }
 
 #' @method plot cpr_cp
