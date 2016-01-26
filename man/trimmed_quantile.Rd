@@ -11,8 +11,8 @@ trimmed_quantile(x, trim = 1L, use_unique = FALSE, ...)
 
 \item{trim}{defaults to 1, omitting the min and the max}
 
-\item{use_unique}{logical, if true, base the quantiles on unique evalues, if
-false (defualt) base the quantiles on all data, after trimming.}
+\item{use_unique}{logical, if true, base the quantiles on unique values, if
+false (default) base the quantiles on all data, after trimming.}
 
 \item{...}{other arguments to pass to stats::quantile}
 }
