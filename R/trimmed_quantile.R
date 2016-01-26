@@ -32,11 +32,13 @@ trimmed_quantile <- function(x, trim = 1L, use_unique = FALSE, ...) {
   }
 
   this_x <- x
+
   if (use_unique) { 
     this_x <- unique(this_x)
   }
+
   for(i in seq(from = 1L, to = trim, by = 1)) { 
-    this_x <- this_x[!(this_x %in% c(min(this_x), max(this_x)))]
+    this_x <- this_x[!(this_x %in% range(this_x))]
   }
 
   stats::quantile(this_x, ...) 

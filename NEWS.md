@@ -1,3 +1,8 @@
+# version 0.0.1.9005
+
+## Bug Fixes
+* trimmed quantile handles the `use_unique` option correctly
+
 # version 0.0.1.9003
 
 First usable version with the method based on the 'importance weight' of
