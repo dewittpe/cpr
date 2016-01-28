@@ -4,15 +4,15 @@
 \alias{trimmed_quantile}
 \title{Trimmed Quantiles}
 \usage{
-trimmed_quantile(x, trim = 1L, use_unique = FALSE, ...)
+trimmed_quantile(x, trim = 1L, use_unique = TRUE, ...)
 }
 \arguments{
 \item{x}{a numeric vector}
 
 \item{trim}{defaults to 1, omitting the min and the max}
 
-\item{use_unique}{logical, if true, base the quantiles on unique values, if
-false (default) base the quantiles on all data, after trimming.}
+\item{use_unique}{logical, if true (defaults), base the quantiles on unique
+values, if false, base the quantiles on all data, after trimming.}
 
 \item{...}{other arguments to pass to stats::quantile}
 }

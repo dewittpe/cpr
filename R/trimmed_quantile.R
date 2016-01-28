@@ -6,8 +6,8 @@
 #'
 #' @param x a numeric vector
 #' @param trim defaults to 1, omitting the min and the max
-#' @param use_unique logical, if true, base the quantiles on unique values, if
-#' false (default) base the quantiles on all data, after trimming.   
+#' @param use_unique logical, if true (defaults), base the quantiles on unique
+#' values, if false, base the quantiles on all data, after trimming.   
 #' @param ... other arguments to pass to stats::quantile
 #'
 #'
@@ -21,7 +21,7 @@
 #' trimmed_quantile(1:100, trim = 3, prob = 1:23 / 24, name = FALSE)
 #'
 #' @export
-trimmed_quantile <- function(x, trim = 1L, use_unique = FALSE, ...) { 
+trimmed_quantile <- function(x, trim = 1L, use_unique = TRUE, ...) { 
   if (trim < 1) {
     trim <- 1L
     warning("Overruling trim less than 1 with trim = 1L")
