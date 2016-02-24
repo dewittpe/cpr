@@ -1,7 +1,8 @@
-# version 0.0.1.9005
+# version 0.0.1.9006
 
 ## Bug Fixes
 * trimmed quantile handles the `use_unique` option correctly
+* better handeling of ... in `cp()` and `cpr()`
 
 # version 0.0.1.9003
 
