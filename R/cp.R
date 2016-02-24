@@ -28,25 +28,21 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
   }
 
   regression <- match.fun(method)
-  fit <- regression(formula, data = data, ...)
+  cl <- as.list(match.call())
+  cl <- cl[-c(1, which(names(cl) == "method"))]
+  fit <- do.call(regression, cl)
 
   # extract bspline
   Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
 
   out <- dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
                            theta   = theta(fit)) 
-  # names(attributes(bmat))
-  # out <- list(cp = cp, Bmat = Bmat, fit = fit)
+
   attr(out, "iknots") <- c(attr(Bmat, "iknots"))
   attr(out, "bknots") <- c(attr(Bmat, "bknots"))
   attr(out, "xi")     <- c(attr(Bmat, "xi"))
   attr(out, "order")  <- attr(Bmat, "order") 
   attr(out, "call") <- match.call() 
-
-  attr(out, "method") <- regression
-  attr(out, "formula") <- formula
-  attr(out, "data")   <- data
-  attr(out, "dots")   <- list(...)
 
   class(out) <- c("cpr_cp", class(out))
   out 
