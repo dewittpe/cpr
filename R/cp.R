@@ -53,9 +53,13 @@ cp <- function(formula, data = parent.env(), method = lm, ...) {
 #' @param p defaults to 2L, the L^p norm used in determining the 'weight of
 #' importance' of each internal knot.
 cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) { 
-  control_polygon <- cp(formula, data, method, ...) 
+
+  cl <- as.list(match.call())
+  cl <- cl[-c(1, which(names(cl) == "p"))]
+
+  control_polygon <- do.call(cp, cl)#cp(formula, data, method, ...) 
   iknots <- attr(control_polygon, "iknots") 
-  results <- vector("list", length = length(iknots) + 1L)
+  results <- vector("list", length = length(iknots) + 1L) 
   
   for(i in seq_along(results)) { 
     xi     <- attr(control_polygon, "xi") 
@@ -73,7 +77,9 @@ cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) {
     results[[i]] <- control_polygon
 
     if (length(iknots) > 0) { 
-      control_polygon <- cp(newknots(formula, iknots[-which.min(w)]), data = data, method = method, ...) 
+      cl$formula <- (newknots(cl$formula, iknots[-which.min(w)]))
+      class(cl$formula) <- NULL
+      control_polygon <- do.call(cp, cl)
     }
   }
 
