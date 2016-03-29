@@ -1,4 +1,7 @@
-# version 0.0.1.9006
+# version 0.0.1.9007
+
+## new features
+* Added the function `tensor` for building tensor products of `cpr::bsplines`.
 
 ## Bug Fixes
 * trimmed quantile handles the `use_unique` option correctly
