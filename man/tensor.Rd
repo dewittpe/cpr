@@ -49,6 +49,15 @@ tp <- with(mtcars,
 tp
 str(tp)
 
+## not run
+# The equivalent matrix is could be generated as follows
+tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) : 
+                       splines::bs(hp, knots = c(100, 150), intercept = TRUE) : 
+                       splines::bs(mpg, intercept = TRUE) + 0,
+                    data = mtcars)
+
+all.equal(tp2, unclass(tp), check.attributes = FALSE)
+
 
 }
 
