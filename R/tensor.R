@@ -90,6 +90,7 @@ tensor <- function(x, iknots, bknots, orders) {
 }
 
 #' @method print cpr_tensor
+#' @export
 print.cpr_tensor <- function(x, ...) { 
   cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "") 
   str(x, max.level = 1)
