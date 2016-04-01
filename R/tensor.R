@@ -70,22 +70,28 @@ tensor <- function(x, iknots, bknots, orders) {
                          bknots = bknots,
                          order = orders,
                          SIMPLIFY = FALSE) 
-  mats <- length(x)
-  cols <- unlist(lapply(bspline_list, ncol))
-  rows <- nrow(bspline_list[[1]])
-
-  indices <- do.call(expand.grid, lapply(cols, function(x) seq(1, x, by = 1)))
-
-  M <- lapply(1:mats, function(i) { bspline_list[[i]][, indices[, i]]})
-  M <- array(unlist(M), dim = c(rows, prod(cols), mats))
-  M <- apply(M, 1:2, prod)
+  M <- build_tensor(bspline_list)
 
   attr(M, "x")      = x
   attr(M, "iknots") = iknots
   attr(M, "bknots") = bknots 
   attr(M, "orders") = setNames(orders, names(x))
+  attr(M, "bspline_list") = bspline_list
 
   class(M) <- c("cpr_tensor", class(M))
+  M
+}
+
+build_tensor <- function(x) { 
+  mats <- length(x)
+  cols <- unlist(lapply(x, ncol))
+  rows <- nrow(x[[1]])
+
+  indices <- do.call(expand.grid, lapply(cols, function(x) seq(1, x, by = 1)))
+
+  M <- lapply(1:mats, function(i) { x[[i]][, indices[, i]]})
+  M <- array(unlist(M), dim = c(rows, prod(cols), mats))
+  M <- apply(M, 1:2, prod)
   M
 }
 
