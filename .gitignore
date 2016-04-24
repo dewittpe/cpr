@@ -7,3 +7,4 @@
 .Rhistory
 .RData
 inst/doc
+vignettes/figure

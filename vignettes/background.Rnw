@@ -70,6 +70,15 @@
 options(width = 60)
 options(cpr_ggplot2 = TRUE)
 library(knitr) 
+opts_chunk$set(fig.align = "center")
+
+# the following allows for LaTeX references in the R comments to work
+hook_source = knit_hooks$get('source')
+knit_hooks$set(source = function(x, options) {
+  txt = hook_source(x, options)
+  # extend the default source hook
+  gsub('\\\\textbackslash\\{\\}ref\\\\\\{(.+?)\\\\\\}', '\\\\ref{\\1}', txt)
+})
 @
 
 \begin{document}
@@ -279,11 +288,13 @@ iknots <- c(1, 1.5, 2.3, 4, 4.5)
 bmat <- bsplines(x = xvec, iknots = iknots)
 @
 
-<<background-basis-plot, fig.cap = "Cool">>=
+<<basis, fig.cap = "Cool", fig.width = 4, fig.height = 4>>=
+# generate the plot in Figure \ref{fig:basis}
+# If you do not like this plot, or you just want to get at
+# the data used to create it: plot_data <- plot(bmat)$data
 plot(bmat)
 @
 
-Note that
 
 
 <<>>=
