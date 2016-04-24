@@ -10,9 +10,11 @@
 \newcommand\pkg[1]{\textbf{#1}}
 \setcounter{tocdepth}{2}
 
+\usepackage[authoryear]{natbib}
+\usepackage{ctable}
 
-\title{Background for CPR: Control Polygon Reduction.  A Review of B-splines,
-Control Polygons, and Tensor Products.}
+\title{A Review of B-splines, Control Polygons, and Tensor Products.
+\\ {\normalsize Background for CPR: Control Polygon Reduction.} }
 \author{Peter E.\ DeWitt}
 
 <<setup, include=FALSE>>=
@@ -23,8 +25,7 @@ library(knitr)
 \begin{document}
 
 \maketitle
-
-% \tableofcontents
+\tableofcontents
 % \newpage
 
 \section{Introduction}
@@ -34,14 +35,16 @@ weight of knots.  Along with the mathematics, this vignette will show the user
 how the functionallity within \pkg{cpr} package addressing these concepts.  This
 vignette is the basis for the background chapter of my dissertation.
 
-We will start with a reivew of B-splines, de Boor's algorithm, and the
-connection to control polygons.
+We will start with a reivew of B-splines, de Boor's algorithm~\citep{deboor2001},
+and the connection to control polygons.  Methods for assessing knot influence on
+spline functions is built on the work of \citet{boehm1980} and is shown in
+Section~\ref{sec:knot-influence}.
 
 
 
 
 
-\section{B-splines}
+\section{B-splines and Control Polygons \label{sec:b-splines-cps}}
 Many statisticians have some experience with B-splines.  Many have relied on
 B-splines for fitting semi-parametric regression models.  However, what appears
 to be less common is the use of the associated control polygon.  The \pkg{cpr}
@@ -66,12 +69,22 @@ bmat_cpr     <- cpr::bsplines(1:100, iknots = c(10, 20, 70))
 cpr:::print.cpr_bs(bmat_cpr)
 @
 
-\section{Acknowledgements}
-Thank someone
+\section{Influence Weight of a Knot \label{sec:knot-influence}}
+What is the impact of a knot on the spline function?
 
+\section{Tensor Products \label{sec:tensor-products}}
+\subsection{Knot Influence \label{sec:tensor-products}}
+
+\appendix
 \section{Session information}
-<<>>=
-sessionInfo()
+This vignette was built via
+<<background-session-info>>=
+print(utils::sessionInfo(), locale = FALSE)
 @
+
+\renewcommand\bibname{References}
+
+\bibliographystyle{plainnat}
+\bibliography{references}
 
 \end{document}
