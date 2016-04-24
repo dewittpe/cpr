@@ -1,6 +1,6 @@
-%\VignetteIndexEntry{cpr control_polygons}
+%\VignetteIndexEntry{cpr background}
 %\VignetteDepends{cpr}
-%\VignetteKeywords{control polygons, B-splines}
+%\VignetteKeywords{control polygons, B-splines, influence weight, tensor products}
 %\VignettePackage{cpr}
 %\VignetteEngine{knitr::knitr}
 %**************************************************************************
@@ -11,23 +11,37 @@
 \setcounter{tocdepth}{2}
 
 
-\title{B-splines and Control Polygons}
+\title{Background for CPR: Control Polygon Reduction.  A Review of B-splines,
+Control Polygons, and Tensor Products.}
 \author{Peter E.\ DeWitt}
 
-<<include=FALSE>>=
-library(knitr)
-# opts_chunk$set(fig.path='figdir/fig', debug=TRUE, echo=TRUE)
+<<setup, include=FALSE>>=
+options(width = 60)
+library(knitr) 
 @
 
 \begin{document}
 
 \maketitle
 
-\tableofcontents
-
-\newpage
+% \tableofcontents
+% \newpage
 
 \section{Introduction}
+The purpose of this vignette is to provide the reader a review of B-splines,
+control polygons, tensor products, and the methods for assessing the influence
+weight of knots.  Along with the mathematics, this vignette will show the user
+how the functionallity within \pkg{cpr} package addressing these concepts.  This
+vignette is the basis for the background chapter of my dissertation.
+
+We will start with a reivew of B-splines, de Boor's algorithm, and the
+connection to control polygons.
+
+
+
+
+
+\section{B-splines}
 Many statisticians have some experience with B-splines.  Many have relied on
 B-splines for fitting semi-parametric regression models.  However, what appears
 to be less common is the use of the associated control polygon.  The \pkg{cpr}
@@ -36,11 +50,6 @@ package provides methods for building parsimonious regression modeles based on
 in this package to help the use get upto speed on B-splines, control polygons,
 and the modeling approach posed by the author.  
 
-<<>>=
-library(cpr)
-@
-
-\section{B-splines}
 {\tt R} ships out with the \pkg{splines} package with includes the function
 \code{bs} for generating the basis matrix for B-splines.  The \pkg{cpr} package
 provides another function \code{bsplines} to generate similar matrices, but with
@@ -48,6 +57,7 @@ different \code{attributes} which are key in the control polygon reduction
 methods.
 
 <<>>=
+library(cpr)
 bmat_splines <- splines::bs(1:100, knots = c(10, 20, 70))
 bmat_cpr     <- cpr::bsplines(1:100, iknots = c(10, 20, 70))
 @
