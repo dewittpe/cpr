@@ -68,6 +68,7 @@
 
 <<setup, include=FALSE>>=
 options(width = 60)
+options(cpr_ggplot2 = TRUE)
 library(knitr) 
 @
 
@@ -110,8 +111,7 @@ presented in \citet{deboor2001} and \citet{prautzsch2002}.  Special importance
 is placed on the method presented by \citet{boehm1980} for inserting knot(s)
 into a knot sequence without affecting the spline function itself.
 
-
-\subsection{B-spline Fundamentals \label{sec:b-spline-fundamentals}}
+\subsection{B-splines and Spline Functions \label{sec:b-splines-spline-functions}}
 
 We present here relevant background on B-splines for clarity and to define the
 notation used throughout this manuscript.  de Boor's algorithm for generating
@@ -147,39 +147,233 @@ B-splines is given in Definition~\ref{def:bsplines}.
   \end{equation}
 \end{Definition}
 
-B-splines form a partition of unity over the range of $\bs{\xi}.$  As such, it is
-advisable and common to set the, $k$-fold boundary knots at $\min x$ and $\max
-x$ respectively. Additional knots can placed within the range of $x.$
+B-splines form a partition of unity over the range of $\bs{\xi}.$  As such, it
+is advisable and common \citep[pg 99]{deboor2001} to set the, $k$-fold boundary
+knots at $\min x$ and $\max x$ respectively. An additional $l$ knots can be
+placed within the range of $x.$
 
-\begin{Definition}[Knot Sequence $\bs{\xi}$]
+\begin{Definition}[Knot Sequence]
   \label{def:knot_sequence}
   The knot sequence, $\bs{\xi} = \left\{ \xi_i \right\}_{i = 1}^{2k+l},$ is a
-  non-decreasing sequence with $l$ {\it interior knots} and $k$-fold boundary
+  non-decreasing sequence with $l$ interior knots and $k$-fold boundary
   knots.  
-  \[u_{(1)} = \xi_1 = \xi_2 = \cdots = \xi_k < \xi_{k + 1} < \xi_{k + 2} < 
-    \cdots < \xi_{k + l} < \xi_{k + l + 1} = \xi_{k + l + 2} = \cdots = 
-    \xi_{2k + l} = u_{(\card{\bs{u}})}.\] 
+  \[\min x = \underbrace{\xi_1 = \cdots = \xi_k}_{\text{boundary knots}} < 
+    \underbrace{\xi_{k + 1} < \cdots < \xi_{k + l}}_{\text{interior knots}} <
+  \underbrace{\xi_{k + l + 1} = \cdots = \xi_{2k + l}}_{\text{boundary knots}} = \max x.\] 
 \end{Definition}
 
+The B-splines, also called basis functions, create the foundation for a {\it
+spline space}.  Linear combinations of B-splines create {\itshape spline
+functions}.  For ease, the collection of B-splines are represented in matrix
+notation.
 
+\begin{Definition}[Spline Space]
+  \label{def:spline_space}
+  For a given knot sequence $\bs{\xi}$, the collection of all $k^{th}$ order
+  spline functions define a {\it spline space}
+  \begin{equation}
+    \label{eq:spline_space}
+    \mathbb{S}_{k, \bs{\xi}} = \text{span}\ \bs{B}_{k, \bs{\xi}}.
+  \end{equation}
+  $\bs{B}_{k, \bs{\xi}} \in \mathbb{R}^{\card{ \bs{x} } \times \left( k + l\right)}$ is defined as
+  \begin{equation}
+    \label{eq:b-matrix}
+    \bs{B}_{k, \bs{\xi}} \left( \bs{x} \right) = 
+    \begin{bmatrix}
+      B_{1,k, \bs{\xi}}\left( x_{1} \right) & B_{2,k, \bs{\xi}}\left( x_{1} \right) & \cdots & B_{k+l,k, \bs{\xi}}\left( x_{1} \right) \\
+      B_{1,k, \bs{\xi}}\left( x_{2} \right) & B_{2,k, \bs{\xi}}\left( x_{2} \right) & \cdots & B_{k+l,k, \bs{\xi}}\left( x_{2} \right) \\
+      \vdots & \vdots & \ddots & \vdots \\
+      B_{1,k, \bs{\xi}}\left( x_{\card{\bs{x}}} \right) & B_{2,k, \bs{\xi}}\left( x_{\card{\bs{x}}} \right) & \cdots & B_{k+l,k, \bs{\xi}}\left( x_{\card{\bs{x}}} \right) 
+    \end{bmatrix}
+  \end{equation}
+\end{Definition}
 
-
-
-
-{\tt R} ships out with the \pkg{splines} package with includes the function
+{\tt R} comes with the \pkg{splines} package with includes the function
 \code{bs} for generating the basis matrix for B-splines.  The \pkg{cpr} package
-provides another function \code{bsplines} to generate similar matrices, but with
+provides another function \code{bsplines} to generate B-splines, but with
 different \code{attributes} which are key in the control polygon reduction
 methods.
 
 <<>>=
-bmat_splines <- splines::bs(1:100, knots = c(10, 20, 70))
-bmat_cpr     <- cpr::bsplines(1:100, iknots = c(10, 20, 70))
+# Construct a B-spline Basis using the splines package.
+args(splines::bs)
+bmat_splines <- 
+  splines::bs(x = 1:100, knots = c(20, 70), intercept = TRUE)
+
+# Construct the same Basis using the cpr package.
+args(cpr::bsplines)
+bmat_cpr <- 
+  cpr::bsplines(x = 1:100, iknots = c(20, 70))
+
+# Same matrix, save attributes?
+all.equal(target           = unclass(bmat_cpr),
+          current          = unclass(bmat_splines),
+          check.attributes = FALSE)
 @
 
+The basis matrix is same from either function.  The \pkg{cpr} version has been
+built and provided for the following reasons:
+\begin{itemize}
+  \item To generate the full basis, \code{intercept = TRUE} must be specified in
+    the \code{splines::bs} call.  The default action is to omit the first
+    column of the basis.  This is done so that in regression models with a
+    global intercept the design matrix will be not be rank deficient.  The CPR
+    algorithm requires the use of the full basis and thus having
+    \code{cpr::bsplines} return the full basis be default is advantageous.
+
+  \item \code{cpr::bsplines} has, in my opinion, a consistent naming pattern for
+    the interior, \code{iknots}, and boundary, \code{bknots}, knots.
+
+  \item The algorithms to follow are based on the \emph{order} of the B-spline,
+    not the \emph{degree}.  B-splines returned by \code{cpr::bsplines} have the
+    order as an attribute, not the degree as with \code{splines::bs}.
+
+  \item The \code{cpr::bsplines} carries attributes for the full knot sequence
+    $\bs{\xi}$ and for the Greville sites $\bs{\xi}^{*}$ (see B-Spline
+    Property~\ref{Bsproperty:control_polygon}).
+\end{itemize}
+
 <<>>=
-cpr:::print.cpr_bs(bmat_cpr)
+# compare the structure of the two matrices.
+str(bmat_splines)
+str(bmat_cpr)
 @
+
+Now we need to use the basis functions to model data.  Assume you have data of
+the form
+\begin{equation}
+  \label{eq:general_data}
+  \bs{y} = f\left(x\right) + \bs{X}\bs{\beta} + \bs{Z} \bs{b} + \bs{\epsilon},
+\end{equation}
+where the response is a function of a continuous predictor $x$ and possible
+fixed effects, $\bs{X\beta},$ possible random effects $\bs{Zb},$ and measurement
+error $\bs{\epsilon}.$  We are interested in modeling $f$ via B-splines.  
+\begin{Definition}[Spline Functions]
+  \label{def:spline_function}
+  For a given knot sequence $\bs{\xi}$ a $k^{th}$ order {\it spline function}
+  is a linear combination of B-splines.  
+  \begin{equation}
+    \label{eq:spline-function}
+    \bs{B}_{k, \bs{\xi}}\left(x \right) \bs{\theta}
+  \end{equation} 
+  where
+  $\bs{\theta} \in \mathbb{R}^{\left(k + l \right) \times 1}$ is a vector of coefficients.
+\end{Definition}
+We will model the function $f$ with a spline function, i.e., 
+\[ f\left( x \right) \approx \bs{B}_{k, \bs{\xi}} \left(x \right) \bs{\theta}\].
+
+Let's illustrate a basis and a spline function.  We'll address the modeling
+issue later.  For this example we will work on a domain of $x \in [0, 6],$ work
+with cubic (order $k = 4,$ the default) B-splines, and
+set up an initial knot sequence with five internal knots as defined in the
+following {\tt R} chunk.
+
+<<>>=
+# Domain, five hundred observations between 0 and 6 inclusive.
+xvec <- seq(0, 6, length = 500)
+
+# Internal knots
+iknots <- c(1, 1.5, 2.3, 4, 4.5)
+
+# Define the basis matrix
+bmat <- bsplines(x = xvec, iknots = iknots)
+@
+
+<<background-basis-plot, fig.cap = "Cool">>=
+plot(bmat)
+@
+
+Note that
+
+
+<<>>=
+# xi <- c(rep(0, 4), iknots, rep(6, 4)) 
+# xi_star <- greville_sites(xi)
+# theta <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
+# 
+# xvec <- seq(0, 6, length = 500) 
+# bmat <- bsplines(x = xvec, iknots = iknots, bknots = c(0, 6), order = 4)
+# 
+# 
+# Bmat <- cpr::
+@
+
+
+
+
+
+
+\subsection{Control Polygons}
+
+
+The definitions above lead us to important properties of B-splines and spline
+functions.  First, we find that spline functions are contained within a convex
+hull.  
+
+\begin{Bsproperty}[Convex Hull]
+  \label{Bsproperty:convex_hull}
+  For $x \in \left(\xi_{j}, \xi_{j+1} \right)$ the value of $\bs{B}_{k,
+  \bs{\xi}}\left(x\right)
+  \bs{\theta}$  is a strictly convex combination of
+    $\left\{\theta_i\right\}_{j + 1 - k}^{j}.$  Further:
+    \[\min \left\{\left\{\theta_i\right\}_{j + 1 - k}^{j}  \right\} \leq 
+    \bs{B}_{k, \bs{\xi}}\left(x \right) \bs{\theta} 
+      \leq \max \left\{
+    \left\{\theta_i\right\}_{j + 1 - k}^{j} \right\}.\]
+  That is, spline functions are bounded by the $k$ ``nearby'' B-spline
+  coefficients, i.e., local support.
+  % See corollary XI(2) on page 131 of de Boor (2001)
+\end{Bsproperty}
+
+The convex hull property provides more than just
+bounds on $\bs{B}_{k, \bs{\xi}}\left(x\right) \bs{\theta}.$  The convex hull
+is also a control polygon.  There is a direct relationship between the knot
+sequence $\bs{\xi}$ and the abscissae of the control vertices of the control
+polygon.  The ordinates of each control vertex are the coefficients of the linear
+combination of B-splines generating the spline function.
+
+\begin{Bsproperty}[Control Vertices and the Control Polygon]
+  \label{Bsproperty:control_polygon}
+  For $\bs{B}_{k, \bs{\xi}}\left(x\right) \bs{\theta}$ the {\it control
+  point} sequence
+  \begin{equation}
+    \label{eq:control_points}
+    \left\{ P_j = \left( \xi_{j}^{*}, \theta_{j} \right)
+    \right\}_{1}^{\card{\bs{\theta} }}, \quad \text{where} \quad
+    \xi_{j}^{*} = \frac{1}{k-1} \sum\limits_{i = 1}^{k-1} \xi_{j + i}
+  \end{equation}
+  defines a {\it control polygon} which we denote as 
+  $\CP_{k, \bs{\xi}, \bs{\theta}}.$ 
+\end{Bsproperty}
+
+The abscissa of $P_j$ is called a Greville site, or knot average.
+The control polygon exaggerates the spline function, making it easier to
+identify features such as regions of positive or negative convexity.  
+The control polygon itself is a collection of piecewise linear segments which
+can be considered a continuous function in $x$ denoted as $\CP_{k,
+\bs{\xi}, \bs{\theta}}\left(x\right).$ 
+
+A result of B-spline Properties~\ref{Bsproperty:convex_hull}
+and~\ref{Bsproperty:control_polygon} is the strong convex hull property.  That
+is, since the $f_{s, k, \bs{\xi}, \bs{\theta}}$ is contained in convex hull and
+have local support, the strong convex hull is generated by the intersection of convex
+hulls generated by $k$ consecutive vertices, a hull with the potential for a
+smaller area than the simple convex hull generated by all control vertices.
+In the work to follow we will restrict ourselves to using simple, i.e.,
+multiplicity 1, interior knots.  Interior knots up to multiplicity $k$ are
+possible but come at a price.  
+
+
+The to-be-defined spline functions of order $k$ are
+discontinuous at knots of multiplicity $k,$ continuous but not necessarily
+differentiable at knots of multiplicity $k-1,$ only first order differentiable at
+knots of multiplicity $k-2,$ and so on.    % page 106
+
+
+
+
+
+
 
 \section{Influence Weight of a Knot \label{sec:knot-influence}}
 What is the impact of a knot on the spline function?

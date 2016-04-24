@@ -29,8 +29,8 @@ greville_sites(xi, order = 4L)
 
 \item{...}{passed to \code{graphics::matplot}}
 
-\item{ggplot2}{boolean, if TRUE, return a list of layers to plot with
-ggplot(), if false, pass x and ... to matplot}
+\item{ggplot2}{boolean, if TRUE, return a ggplot; if FALSE, pass \code{x} and
+... to \code{graphics::matplot}.}
 
 \item{xi}{full knot vector,}
 }
