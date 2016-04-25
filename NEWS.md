@@ -1,9 +1,11 @@
-# version 0.0.1.9008
+# version 0.0.1.9010
 
 ## new features
 * Added the function `tensor` for building tensor products of `cpr::bsplines`.
 * Added the function `influence_weights` to get the influence weights for each
   internal knot on each marginal of a tensor product.
+* `is.cpr_bs` added.
+* S3 methods for `cp`
 
 ## Bug Fixes
 * trimmed quantile handles the `use_unique` option correctly
