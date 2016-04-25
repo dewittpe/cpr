@@ -8,9 +8,7 @@
 #' package that will help with the reporting and plotting of results.
 #' 
 #' \itemize{
-#'    \item cpr_ggplot2: boolean, default is FALSE.  If set to TRUE the plotting
-#'    functions will return a list of layers to be added to a \code{ggplot}
-#'    object.  If FALSE, base R plots are returned.
+#'    \item Options...  Define them
 #' }
 #'
 #' @useDynLib cpr
