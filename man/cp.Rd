@@ -4,9 +4,16 @@
 \alias{cp}
 \title{Control Polygons}
 \usage{
-cp(formula, data = parent.env(), method = lm, ...)
+cp(x, ...)
 }
 \arguments{
+\item{x}{a \code{cpr_bs} object}
+
+\item{...}{arguments passed to the regression method}
+
+\item{theta}{a vector of (regression) coefficients, the ordinates of the
+control polygon.}
+
 \item{formula}{a formula that is appropriate for regression method being
 used.}
 
@@ -14,8 +21,6 @@ used.}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
-
-\item{...}{arguments passed to the regression method}
 }
 \description{
 Generate the control polygon for a uni-variable B-spline
@@ -24,5 +29,32 @@ Generate the control polygon for a uni-variable B-spline
 \code{cp} generates the control polygon for the given B-spline function.
 
 \code{cpr} runs the control polygon reduction algorithm
+}
+\examples{
+
+# Support
+xvec <- seq(0, 6, length = 500)
+
+# Define the basis matrix
+bmat1 <- cpr::bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
+bmat2 <- cpr::bsplines(x = xvec)
+
+# Define the control vertice ordinates
+theta1 <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
+theta2 <- c(1, 3.4, -2, 1.7)
+
+# build the two control polygons
+cp1 <- cp(bmat1, theta1)
+cp2 <- cp(bmat2, theta2)
+
+# black and white plot
+plot(cp1)
+plot(cp1, show_spline = TRUE)
+
+# multiple control polygons
+plot(cp1, cp2, show_spline = TRUE)
+plot(cp1, cp2, color = TRUE)
+plot(cp1, cp2, show_spline = TRUE, color = TRUE)
+
 }
 
