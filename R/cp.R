@@ -110,6 +110,15 @@ print.cpr_cp <- function(x, ...) {
 
 #' @method plot cpr_cp
 #' @export
+#' @param x a \code{cpr_cp} object
+#' @param show_spline boolean (default FALSE) to plot the spline function within
+#' its control polygon
+#' @param ... additional \code{cpr_cp} objects.
+#' @param color boolean (default FALSE) if more than one \code{cpr_cp} object is
+#' to be plotted, set this value to TRUE to have the graphic in color (linetypes
+#' will be used regardless of the color settting).
+#' @param n the number of data points to use for plotting the spline
+#'
 plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 500) { 
   nms   <- sapply(match.call()[-1], deparse)
   nms   <- nms[!(names(nms) %in% c("show_spline", "color", "n"))]

@@ -94,6 +94,7 @@ greville_sites <- function(xi, order = 4L) {
 }
 
 #' @export
+#' @param x an object to be tested.
 is.cpr_bs <- function(x, ...) { 
   inherits(x, "cpr_bs")
 }

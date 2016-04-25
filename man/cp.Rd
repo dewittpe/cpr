@@ -56,5 +56,14 @@ plot(cp1, cp2, show_spline = TRUE)
 plot(cp1, cp2, color = TRUE)
 plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 
+# via formula
+dat <- dplyr::data_frame(x = xvec, y = sin((x - 2)/pi) + 1.4 * cos(x/pi))
+cp3 <- cp(y ~ cpr::bsplines(x) + 0, data = dat)
+
+# plot the control polygon, spline and traget data.
+plot(cp3, show_spline = TRUE) + 
+  ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "y"), 
+                     data = dat, linetype = 2, color = "red")
+
 }
 
