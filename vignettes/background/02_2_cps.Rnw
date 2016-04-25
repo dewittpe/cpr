@@ -42,12 +42,15 @@ combination of B-splines generating the spline function.
   $\CP_{k, \bs{\xi}, \bs{\theta}}.$ 
 \end{Bsproperty}
 
-The abscissa of $P_j$ is called a Greville site, or knot average.
+The abscissa of $P_j$ is called a Greville sites, or knot averages.
 The control polygon exaggerates the spline function, making it easier to
 identify features such as regions of positive or negative convexity.  
 The control polygon itself is a collection of piecewise linear segments which
 can be considered a continuous function in $x$ denoted as $\CP_{k,
 \bs{\xi}, \bs{\theta}}\left(x\right).$ 
+Figure~\ref{fig:spline_in_cp} shows the spline function from
+Figure~\ref{fig:basis_and_spline_function_c} with out and within its control
+polygon.
 
 A result of B-spline Properties~\ref{Bsproperty:convex_hull}
 and~\ref{Bsproperty:control_polygon} is the strong convex hull property.  That
@@ -97,3 +100,12 @@ plotc +
     within its control polygon.
   \label{fig:spline_in_cp}}
 \end{figure}
+
+The difficultly in effective placements of knots for B-splines can be
+illustrated by inspection of Figure~\ref{fig:spline_in_cp_b}.  Movement of one
+of the interior knots, $\xi_j,$ $j = 5, \ldots, 9$ will impact the positioning
+of $k - 1 = 3$ control vertices.  Thus, each knot affects $k - 1$ regression
+coefficients and each regression coefficients is dependent on $k - 1$ knots.
+Consider the difficultly in maximizing a likelihood over $\bs{\xi}$ and
+$\bs{\theta}.$  Such a task is infeasible.  Hence the need for efficient methods
+to approximate the process.  We'll explore this idea more in the CPR vignette.
