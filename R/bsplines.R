@@ -50,6 +50,11 @@ plot.cpr_bs <- function(x, ...) {
                           key_col = "spline", 
                           value_col = "value", 
                           gather_cols = paste0("V", seq(1, ncol(x), by = 1L)))
+
+  lgnd <- sapply(1:dplyr::n_distinct(.data$spline), function(b) { 
+                 as.expression(paste0("italic(B)[list(", b, ", ", attr(x, "order"), ", bolditalic(xi))]")) })
+  lgnd <- scales::parse_format()(lgnd)
+
   .data <- dplyr::tbl_df(.data)
 
   xi <- attr(x, "xi")
@@ -77,6 +82,7 @@ plot.cpr_bs <- function(x, ...) {
   ggplot2::aes_string(x = "x", y = "value", color = "spline") + 
   ggplot2::geom_line() + 
   ggplot2::theme(axis.title = ggplot2::element_blank()) +
+  ggplot2::scale_color_hue(name = "B-spline", labels = lgnd) + 
   ggplot2::scale_x_continuous(breaks = unique(xi), labels = do.call(expression, expr)) 
 }
 
