@@ -5,7 +5,7 @@
 %\VignetteEngine{knitr::knitr}
 %**************************************************************************
 \documentclass[10pt]{article}
-\usepackage[letterpaper,margin=1.0in,showframe]{geometry}
+\usepackage[letterpaper,margin=1.0in]{geometry}
 
 \newcommand\code[1]{\texttt{#1}}
 \newcommand\pkg[1]{\textbf{#1}}
