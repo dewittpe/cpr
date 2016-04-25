@@ -39,24 +39,29 @@ sequences with common elements.
 \end{Bsproperty}
 
 Given that $\mathbb{S}_{k, \bs{\xi}} \subset \mathbb{S}_{k, \bs{\xi}_r}$ then,
-trivially, for $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}}$
-implies $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}_r}.$
+trivially, for $\bs{B}_{k, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}}$
+implies $\bs{B}_{k, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}_r}.$
 Thanks to the convexity of B-splines and control polygons we are able to refine
 $\bs{\xi}$ by the insertion of a single knot and explicitly define the
 coefficients $\bs{\theta}_r$ associated with the refined knot sequence
-$\bs{\xi}_r$ such that $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \left(x \right) = f_{s,
-k, \bs{\xi}_r, \bs{\theta}_r} \left( x \right).$
+$\bs{\xi}_r$ such that $\bs{B}_{k, \bs{\xi}} \left( x \right) \bs{\theta} =
+\bs{B}_{k, \bs{\xi}_r}\left( x\right) \bs{\theta}_r$ for $x \in \left[ \min
+\bs{\xi}, \max \bs{\xi} \right].$  
+When the refinement of $\bs{\xi}$ is achieved by
+the addition of one knot,
+the relationship between $\bs{\theta}$ and $\bs{\theta}_r$ is 
+defined by a lower bidiagonal matrix.
 
 \begin{Bsproperty}[Knot Sequence Refinement]
   \label{Bsproperty:knot_insertion}
   Construct a refined knot sequence $\bs{\xi}_r = \bs{\xi} \cup \zeta$ by
   the addition of one term, $\zeta,$ $\xi_{k} < \zeta < \xi_{k+l+1}.$ 
   Then, for any
-  $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k,
+  $\bs{B}_{k, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k,
   \bs{\xi}}$ there exists a $\bs{\theta}_r$ such that
-  $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \left( x \right) =
-  f_{s, k, \bs{\xi}_r, \bs{\theta}_r} \left( x \right), \ \forall x \in
-  \left[u_{(1)}, u_{\left(\card{\bs{u}}\right)}\right],$ where 
+  $\bs{B}_{k, \bs{\xi}} \left( x \right) \bs{\theta} =
+  \bs{B}_{k, \bs{\xi}_r} \left( x \right) \bs{\theta}_r$ $\forall x \in
+  \left[ \min \bs{\xi}, \max \bs{\xi} \right]$ where 
   \begin{equation}
     \label{eq:theta_refinement}
     \bs{\theta}_r = \bs{W}_{k, \bs{\xi}} \left(\zeta \right) \bs{\theta}.
@@ -70,7 +75,7 @@ k, \bs{\xi}_r, \bs{\theta}_r} \left( x \right).$
       1 - \omega_{1, k,\bs{\xi}} \left(\zeta \right) & \omega_{1, k, \bs{\xi}} \left(\zeta \right)    & 0                                          & 0      & \cdots                                                           & 0 \\
       0                                              & 1 - \omega_{2, k,\bs{\xi}} \left(\zeta \right) & \omega_{2, k, \bs{\xi}} \left(\zeta\right) & 0      & \cdots                                                           & 0 \\
       \vdots                                         & \vdots                                         & \vdots                                     & \ddots & \vdots                                                           & \vdots \\
-      0                                              & 0 & \cdots & 0      & 1 - \omega_{\card{\bs{\theta}}, k,\bs{\xi}} \left(\zeta \right) & \omega_{\card{\bs{\theta}}, k, \bs{\xi}} \left(\zeta\right) \\
+      0                                              & 0 & \cdots & 0      & 1 - \omega_{\card{\bs{\theta}} - 1, k,\bs{\xi}} \left(\zeta \right) & \omega_{\card{\bs{\theta}} - 1, k, \bs{\xi}} \left(\zeta\right) \\
       0                                              & 0                                              & \cdots                                     & 0      & 0                                                                & 1
     \end{bmatrix}
   \end{equation}
@@ -86,6 +91,19 @@ k, \bs{\xi}_r, \bs{\theta}_r} \left( x \right).$
   \end{equation} 
   and $\lambda_{j, k, \bs{\xi}}$ as defined in \eqref{eq:lambda}.
 \end{Bsproperty}
+
+The \pkg{cpr} package provides useful tools for finding the refined ordinates
+$\bs{\theta}_r.$  The matix $\bs{W}_{k,
+\bs{\xi}} \left( \zeta \right)$ can also be explicitly found, however, the need
+to do so is for examples and tutorials and so the function is not exported by
+the \pkg{cpr} namespace.  For the following illustration we will insert the
+one knot into the knot sequence we have used for the prior examples.
+<<background_w_matrix>>=
+# 
+zeta <- 3.14
+attr(bmat, "xi")
+cpr::refine_ordinate
+@
 
 % <<knot-operations-refine-xi, cache = TRUE, dependson = "b-spline-fundamentals-setup">>=
 % @
