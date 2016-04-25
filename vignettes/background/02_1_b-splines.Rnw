@@ -223,13 +223,15 @@ plotb
 # generate Figure \ref{fig:basis_and_spline_function_c}
 # remove the layers from `plotb`, this is a trick to keep the same axis text
 # from each plot when the class of the object to plot changes.
-plotb[[which(names(plotb) == "layers")]] <- NULL
+plotc <- plotb
+plotc[[which(names(plotb) == "layers")]] <- NULL
 
 # construct a data.frame for the spline function
 dat <- data.frame(x = xvec, y = (bmat %*% theta)[, 1])
 
 # plot the spline function
-plotb + geom_line(mapping = aes(x = x, y = y), data = dat, inherit.aes = FALSE)
+plotc <- plotc + geom_line(mapping = aes(x = x, y = y), data = dat, inherit.aes = FALSE)
+plotc
 @
 
 \begin{figure}
