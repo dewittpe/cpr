@@ -1,0 +1,295 @@
+\subsection{Operations on the Knot Sequence \label{sec:knot-operations}}
+What is the impact of a knot on the spline function?
+
+There are three operations we can perform on the knot sequence which are of
+interest to the Control Polygon Reduction method:
+\begin{enumerate}
+  \item Refining: that is inserting an additional knot into the knot sequence without
+    affecting the spline function, 
+  \item Coarsening: assessing the (approximate) changes in the spline function
+    resulting from the removal of a knot from $\bs{\xi},$ and 
+  \item Coarsening and re-insertion: assessing the affects on the spline
+    function resulting from removal of a knot and then re-inserting the knot
+    into the knot sequence.  This operation leads to a method of assessing a
+    relative influence weight of each internal knot of $\bs{B}_{k, \bs{\xi}}
+    \left( x \right) \bs{\theta}.$ 
+\end{enumerate} 
+Each of these processes are presented in the following subsubsections.  This
+foundation is used later to assess the influence weight of a knot on a spline
+function.
+
+\subsubsection{Refining the Knot Sequence}
+
+While the objective of the Control Polygons Reduction algorithm is to coarsen
+$\bs{\xi},$ i.e., reduced $\card{\bs{\xi}},$ the method by which the objective
+is achieved is based on method presented by~\citet{boehm1980} for refining
+$\bs{\xi},$ i.e., increasing $\card{\bs{\xi}},$ without affecting the spline
+function.  The existence of such a method is
+possible because of the relationship between spline spaces defined on knot
+sequences with common elements.
+
+\begin{Bsproperty}[Spline Space Refinement]
+  \label{Bsproperty:refinement}
+  The spline space $\mathbb{S}_{k, \bs{\xi}}$ is a subspace of a spline space
+  with a refined knot sequence, that is, for $\bs{\zeta} = \left\{ \zeta_i :
+  \xi_{k} < \zeta_i < \xi_{k+l+1} \right\}$ and $\bs{\xi}_r = \bs{\xi} \cup
+  \bs{\zeta},$ then, 
+  $\bs{\xi} \subset \bs{\xi}_r$ implies 
+  $ \mathbb{S}_{k, \bs{\xi}} \subset \mathbb{S}_{k, \bs{\xi}_r}.$
+\end{Bsproperty}
+
+Given that $\mathbb{S}_{k, \bs{\xi}} \subset \mathbb{S}_{k, \bs{\xi}_r}$ then,
+trivially, for $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}}$
+implies $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}_r}.$
+Thanks to the convexity of B-splines and control polygons we are able to refine
+$\bs{\xi}$ by the insertion of a single knot and explicitly define the
+coefficients $\bs{\theta}_r$ associated with the refined knot sequence
+$\bs{\xi}_r$ such that $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \left(x \right) = f_{s,
+k, \bs{\xi}_r, \bs{\theta}_r} \left( x \right).$
+
+\begin{Bsproperty}[Knot Sequence Refinement]
+  \label{Bsproperty:knot_insertion}
+  Construct a refined knot sequence $\bs{\xi}_r = \bs{\xi} \cup \zeta$ by
+  the addition of one term, $\zeta,$ $\xi_{k} < \zeta < \xi_{k+l+1}.$ 
+  Then, for any
+  $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k,
+  \bs{\xi}}$ there exists a $\bs{\theta}_r$ such that
+  $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \left( x \right) =
+  f_{s, k, \bs{\xi}_r, \bs{\theta}_r} \left( x \right), \ \forall x \in
+  \left[u_{(1)}, u_{\left(\card{\bs{u}}\right)}\right],$ where 
+  \begin{equation}
+    \label{eq:theta_refinement}
+    \bs{\theta}_r = \bs{W}_{k, \bs{\xi}} \left(\zeta \right) \bs{\theta}.
+  \end{equation}
+  The matrix $\bs{W}_{k, \bs{\xi}} \left(\zeta \right) \in \mathbb{R}^{ \card{\bs{\theta}_r } \times \card{
+  \bs{\theta} }}$ is defined as 
+  \begin{equation}
+    \label{eq:knot_insert_matrix}
+    \bs{W}_{k, \bs{\xi}} \left(\zeta \right) = \begin{bmatrix}
+      1                                              & 0                                              & 0                                          & 0      & \cdots                                                           & 0 \\
+      1 - \omega_{1, k,\bs{\xi}} \left(\zeta \right) & \omega_{1, k, \bs{\xi}} \left(\zeta \right)    & 0                                          & 0      & \cdots                                                           & 0 \\
+      0                                              & 1 - \omega_{2, k,\bs{\xi}} \left(\zeta \right) & \omega_{2, k, \bs{\xi}} \left(\zeta\right) & 0      & \cdots                                                           & 0 \\
+      \vdots                                         & \vdots                                         & \vdots                                     & \ddots & \vdots                                                           & \vdots \\
+      0                                              & 0 & \cdots & 0      & 1 - \omega_{\card{\bs{\theta}}, k,\bs{\xi}} \left(\zeta \right) & \omega_{\card{\bs{\theta}}, k, \bs{\xi}} \left(\zeta\right) \\
+      0                                              & 0                                              & \cdots                                     & 0      & 0                                                                & 1
+    \end{bmatrix}
+  \end{equation}
+  where
+  \begin{equation}
+    \label{eq:w}
+    \omega_{j,k,\bs{\xi}} \left(\zeta\right) = 
+    \begin{cases}
+      0 & \zeta \leq \xi_j \\
+      \lambda_{j, k, \bs{\xi}} \left(\zeta\right) & \xi_j < \zeta < \xi_{j+ k - 1} \\
+      1 & \xi_{j + k - 1} \leq \zeta.
+    \end{cases}
+  \end{equation} 
+  and $\lambda_{j, k, \bs{\xi}}$ as defined in \eqref{eq:lambda}.
+\end{Bsproperty}
+
+% <<knot-operations-refine-xi, cache = TRUE, dependson = "b-spline-fundamentals-setup">>=
+% @
+% 
+% <<knot-operations-refine-graphic, cache = TRUE, dependson = c("b-spline-fundamentals-setup", "knot-operations-refine-xi"), fig.scap = scap, fig.cap = cap, fig.width = 6, fig.height = 3, fig.out = "0.98\\textwidth">>=
+% @
+
+An important result of B-spline property~\ref{Bsproperty:knot_insertion} is the
+nesting of control polygons, that is, the vertices of the control polygon
+resulting from a refined knot sequence $\bs{\xi}_r$ are on the control polygon
+based on the original knot sequence $\bs{\xi}.$
+
+\begin{Bsproperty}[Control Polygon Nesting]
+  \label{Bsproperty:control_polygon_nesting}
+When $\bs{\xi}_r$ is obtained from $\bs{\xi}$ via the insertion of a single
+term, then the vertices of the control polygon $\CP f_{s, k, \bs{\xi},
+\bs{\theta}}$ lie on the $\CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}.$  Specifically 
+\begin{equation}
+  \label{eq:knot_refinement_control_polygon}
+  \CP f_{s, k, \bs{\xi}_r, \bs{\theta}_r} \left(\xi_{rj}^{*} \right) = 
+  \CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \left(\xi_{rj}^{*}\right) 
+  \quad \forall j.
+\end{equation}
+\end{Bsproperty}
+
+The relationship between control polygons presented in B-spline
+property~\ref{Bsproperty:control_polygon_nesting} is dependent on the insertion
+of only on knot.  The equality in \eqref{eq:knot_refinement_control_polygon}
+does not hold if $\card{\bs{\xi}_r} > \card{\bs{\xi}} + 1.$
+
+Figure~\ref{fig:knot-operations-refine-graphic} show the result of
+inserting $\zeta = Sexpr{zeta}$ in the knot sequence used in
+Figure~\ref{fig:b-spline-fundamentals-basis-plots}.  The refined knot sequence
+$\bs{\xi}_r = \bs{\xi} \cup \zeta$ produces a control polygon with vertices on
+the initial control polygon.  
+
+\begin{Bsproperty}[Distance Between Spline Functions and Control Polygons]
+  \label{Bsproperty:convergence}
+  A consequence of B-Spline Property \ref{Bsproperty:refinement} (and illustrated
+  in Figure~\ref{fig:knot-operations-refine-graphic}) is that as
+  $\card{ \bs{\xi} }$ increase the distance between the control polygon
+  and the spline function itself decreases.
+\end{Bsproperty}
+\citet[page 135]{deboor2001} presents B-Spline Property
+\ref{Bsproperty:convergence} with mathematical rigor.  The important information
+to understand is that for large $\card{\bs{\xi}}$ the control polygon itself
+is sufficient for estimation of $f,$ i.e., $\CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}
+\left( x \right) \approx f\left( x \right).$  Such a calculation is
+computationally more efficient than $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}
+\left(x\right)$ and thus has been used extensively in computer graphics and
+numeric approximations.
+
+
+
+\subsubsection{Coarsening the Knot Sequence}
+
+The work by \citet{boehm1980} provides a method for inserting knots into a
+control polygon without affecting the spline function,  however, reversing the
+action, coarsening the knot sequence, will almost certainly alter the spline
+function.  Denote the coarsened knot sequence $\bs{\xi}_c.$ 
+As noted in B-Spline Property \ref{Bsproperty:refinement},
+$\mathbb{S}_{k, \bs{\xi}_c} \subset \mathbb{S}_{k, \bs{\xi}}$ and thus, for
+$\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}}$ there is no
+guarantee that
+$\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \in \mathbb{S}_{k, \bs{\xi}_c}.$ 
+If $\xi_j$ is removed from $\bs{\xi},$ that is $\bs{\xi}_c = \bs{\xi} \backslash
+\xi_j,$ then the only way the
+spline function to be unaltered is if $P_{j-3}, P_{j-2}, P_{j-1}$ of $\CP
+\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}$ are on $\CP f_{s, k, \bs{\xi}_c, \bs{\theta}_c}.$
+That said, given $\bs{\xi}$ and $\bs{\theta}$  removing one of the internal
+knots, $\xi_j, j = k + 1, k + 2, \ldots, k + l,$ we approximate $\bs{\theta}_c$
+for $f_{s, k, \bs{\xi}_c, \bs{\theta}_c}$ based on the
+relationship between $\bs{\theta}$ and $\bs{\theta}_r$ described in
+\eqref{eq:theta_refinement}, specifically
+$\bs{\theta} = \bs{W}_{k, \bs{\xi}_c} \left( \xi_j \right)
+  \bs{\theta}_c.$
+Since $\bs{W}_{k, \bs{\xi} \backslash \xi_j} \left( \xi_j \right)$ has rank
+$\card{ \bs{\theta}_c }$ a left inverse exists, i.e.,
+%https://en.wikipedia.org/wiki/Inverse_element
+\[
+  \underbrace{
+  \left[\bs{W}_{k, \bs{\xi}_c}^{T} \left( \xi_j \right)
+  \bs{W}_{k, \bs{\xi}_c} \left( \xi_j \right) \right]^{-1}
+  \bs{W}_{k, \bs{\xi}_c}^{T} \left( \xi_j \right)}_{\bs{W}_{\text{left}}^{-1}} 
+  \bs{W}_{k, \bs{\xi}_c} \left( \xi_j \right) =
+  \bs{I}_{\card{\bs{\theta}_c}}.
+\]
+
+\begin{Bsproperty}{Coarsening $\bs{\xi}:$}
+  Given a spline function $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta},$ we can estimate the
+  spline function based on a coarsened knot sequence $\bs{\xi}_c = \bs{\xi}
+  \backslash \xi_j,$ 
+  $f_{s, k, \bs{\xi}_c, \bs{\theta}_c} \in \mathbb{S}_{k, \bs{\xi}_c},$ 
+  by estimating $\bs{\theta}_c$ via 
+  \begin{equation}
+    \label{eq:reduced_theta}
+    \bs{\theta}_c = 
+    \left[
+      \bs{W}_{k, \bs{\xi}_c}^{T} \left( \xi_j \right)
+      \bs{W}_{k, \bs{\xi}_c} \left( \xi_j \right) 
+    \right]^{-1}
+    \bs{W}_{k, \bs{\xi}_c}^{T} \left( \xi_j \right)
+    \bs{\theta}
+  \end{equation}
+\end{Bsproperty}
+
+An example of the control polygons after coarsening the knot sequence is provided
+in Figure~\ref{fig:knot-operations-coarsen-graphic}.  The initial control
+polygon and spline function are the same as in
+Figures~\ref{fig:b-spline-fundamentals-basis-plots}
+and~\ref{fig:knot-operations-refine-graphic} with two additional
+control polygons.  The control polygon labeled `coarsened' is the result of
+removing the value $1.5$ from the initial knot sequence.  Note that the change in
+the ordinates of the coarsened control polygon's vertices from the initial
+control polygon's vertices are limited to the $k = 4$ nearby control points
+about the knot removed.  While the estimation of $\bs{\theta}$ provided by
+\eqref{eq:reduced_theta} is not the same as the estimate generated by least
+squares.  The ordinates of the control vertices based on the least square
+estimate after removal of $1.5$ from the initial knot sequence are all unique
+compared to the ordinates of the initial and coarsened control polygons.
+
+% <<knot-operations-coarsen-xi, cache = TRUE, dependson = c("knot-operations-basis-setup")>>= 
+% @
+% 
+% <<knot-operations-coarsen-graphic, cache = TRUE, dependson = c("knot-operations-basis-setup", "knot-operations-coarsen-xi"), fig.scap = scap, fig.cap = cap, fig.width = 6, fig.height = 3, fig.out = "0.98\\textwidth">>=
+% @
+
+The control vertices of the control polygons presented in
+Figures~\ref{fig:knot-operations-refine-graphic}
+and~\ref{fig:knot-operations-coarsen-graphic} are explicitly reported in
+Table~\ref{tab:knot-operations-coarsen-refine}.
+
+% <<knot-operations-coarsen-reinsert-xi, cache = TRUE, dependson = c("knot-operations-basis-setup")>>= 
+% @
+% 
+% <<knot-operations-coarsen-refine-table, warning = FALSE, results = "asis">>=
+% @
+
+\subsubsection{Coarsen/Reinsert: Measuring the Influence of a Knot}
+
+The effect of coarsening the knot sequence $\bs{\xi}$ by removal of the value
+$\xi_j$ and then reinserting on the ordinates creates a unique control polygon.
+We denote the ordinates of the control polygon resulting from the coarsening and
+then re-refinement of $\bs{\xi}$ as $\bs{\theta}_{cr}.$ 
+The control polygons
+$\CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}$ and $\CP f_{s, k, \bs{\xi},
+\bs{\theta}_{cr}}$ will
+differ at $k + 1$ vertices.  
+A plot of the initial control polygon, the coarsened control polygon, and the
+control polygon after re-refinement is presented in
+Figure~\ref{fig:knot-operations-reinsertion-graphic} and the control
+vertices are reported in Table~\ref{tab:knot-operations-coarsen-refine}.
+The example is constructed by removal and insertion of $\xi_6 = 1.5.$
+\[
+  \bs{\theta}_{{cr}} = 
+  \bs{W}_{4, \bs{\xi} \backslash 1.5} \left( 1.5 \right)
+  \left(\bs{W}_{4, \bs{\xi} \backslash 1.5}^T \left( 1.5 \right) \bs{W}_{4, \bs{\xi} \backslash 1.5} \left( 1.5 \right) \right)^{-1}
+  \bs{W}_{4, \bs{\xi} \backslash 1.5}^{T} \left( 1.5 \right) 
+  \bs{\theta}.
+\]
+
+% <<knot-operations-reinsertion-graphic, cache = TRUE, dependson = c("knot-operations-coarsen-reinsert-xi"),  fig.scap = scap, fig.cap = cap, fig.width = 6, fig.height = 3, fig.out = "0.98\\textwidth">>=
+% @
+
+The difference in the ordinates between the initial control polygon and the
+control polygon generated after coarsening and refinement will be used in the
+CPR method for assessing the {\it influence weight} of any particular knot.  The
+influence weight is a measure of the difference in the control polygons $\CP
+\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}$ and $\CP f_{s, k, \bs{\xi}, \bs{\theta}_{cr}}.$
+
+\begin{Definition}[Influence Weight of Internal Knots]
+  \label{def:influence_weight} 
+  Given a spline function $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}$ with $\card{
+  \bs{\xi} } > 2k,$ the influence weight of an internal knot $\xi_j$ with
+  $j = k + 1, \ldots, k + l.$  For brevity and clarity let
+  $\bs{W} = \bs{W}_{k, \bs{\xi}_r \backslash \xi_j } \left( \xi_j \right).$  The
+  influence weight for $\xi_j$ is $w_j:$ 
+  \begin{equation}
+    \label{eq:influence_weight}
+    w_j = \left\lVert \bs{\theta} - 
+    \bs{W} \left[ \bs{W}^{T} \bs{W} \right]^{-1} \bs{W}^{T} \bs{\theta}
+    \right\rVert_{p}
+  \end{equation} 
+\end{Definition}
+
+If the $\xi_j \in \bs{\xi}$ was inserted into $\bs{\xi}$ via the method of
+\citet{boehm1980} then the influence weight, $w_j,$ would be zero.  For a given
+$\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}$ the set $\bs{w} = \left\{ w_{j} \right\}_{j =
+k + 1}^{k + l}$ provides a relative measure of the influcence of each knot.
+
+Examples of changes in the control polygon and the influence weight
+associated with each of the internal knots from $\bs{\xi}$ are in
+Figure~\ref{fig:knot-operations-influence-weights}.  Note that the
+difference in the control polygons and the spline functions when $\xi_{4+4}$ is
+removed and reinserted into the knot sequence is very small.  While we can see
+that the ordinates of the CPs differ, the differences in the spline functions
+themselves are difficult to see. The minimal influence weight in this example is
+associated with $\xi_{4+4}.$  Compared to the second least influential knot,
+$\xi_{4+2},$ where we can see change in both the control polygon and the spline
+function.  The most influential knot is $\xi_{4+1},$ the largest influence
+weight and the visual differences in the control polygon and spline function is
+obvious.
+
+% <<knot-operations-influence-weights, cache = TRUE, dependson = "knot-operations-basis-setup", fig.scap = scap, fig.cap = cap, fig.width = 8, fig.height = 10, out.width = "0.90\\textwidth">>=
+% @
+
+The influence weight metric is critical part of the CPR algorithm.  

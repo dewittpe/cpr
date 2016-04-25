@@ -108,7 +108,7 @@ knit_hooks$set(source = function(x, options) {
 <<child = "background/02_2_cps.Rnw">>=
 @
 
-<<child = "background/02_3_knot_influence.Rnw">>=
+<<child = "background/02_3_knot_operations.Rnw">>=
 @
 
 \section{Tensor Products \label{sec:tensor-products}}

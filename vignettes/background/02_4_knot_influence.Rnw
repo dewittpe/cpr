@@ -1,0 +1,69 @@
+\subsection{Influence Weight of a Knot \label{sec:knot-influence}}
+
+The effect of coarsening the knot sequence $\bs{\xi}$ by removal of the value
+$\xi_j$ and then reinserting on the ordinates creates a unique control polygon.
+We denote the ordinates of the control polygon resulting from the coarsening and
+then re-refinement of $\bs{\xi}$ as $\bs{\theta}_{cr}.$ 
+The control polygons
+$\CP f_{s, k, \bs{\xi}, \bs{\theta}}$ and $\CP f_{s, k, \bs{\xi},
+\bs{\theta}_{cr}}$ will
+differ at $k + 1$ vertices.  
+A plot of the initial control polygon, the coarsened control polygon, and the
+control polygon after re-refinement is presented in
+Figure~\ref{fig:knot-operations-reinsertion-graphic} and the control
+vertices are reported in Table~\ref{tab:knot-operations-coarsen-refine}.
+The example is constructed by removal and insertion of $\xi_6 = 1.5.$
+\[
+  \bs{\theta}_{{cr}} = 
+  \bs{W}_{4, \bs{\xi} \backslash 1.5} \left( 1.5 \right)
+  \left(\bs{W}_{4, \bs{\xi} \backslash 1.5}^T \left( 1.5 \right) \bs{W}_{4, \bs{\xi} \backslash 1.5} \left( 1.5 \right) \right)^{-1}
+  \bs{W}_{4, \bs{\xi} \backslash 1.5}^{T} \left( 1.5 \right) 
+  \bs{\theta}.
+\]
+
+<<knot-operations-reinsertion-graphic, cache = TRUE, dependson = c("knot-operations-coarsen-reinsert-xi"),  fig.scap = scap, fig.cap = cap, fig.width = 6, fig.height = 3, fig.out = "0.98\\textwidth">>=
+@
+
+The difference in the ordinates between the initial control polygon and the
+control polygon generated after coarsening and refinement will be used in the
+CPR method for assessing the {\it influence weight} of any particular knot.  The
+influence weight is a measure of the difference in the control polygons $\CP
+f_{s, k, \bs{\xi}, \bs{\theta}}$ and $\CP f_{s, k, \bs{\xi}, \bs{\theta}_{cr}}.$
+
+\begin{Definition}[Influence Weight of Internal Knots]
+  \label{def:influence_weight} 
+  Given a spline function $f_{s, k, \bs{\xi}, \bs{\theta}}$ with $\card{
+  \bs{\xi} } > 2k,$ the influence weight of an internal knot $\xi_j$ with
+  $j = k + 1, \ldots, k + l.$  For brevity and clarity let
+  $\bs{W} = \bs{W}_{k, \bs{\xi}_r \backslash \xi_j } \left( \xi_j \right).$  The
+  influence weight for $\xi_j$ is $w_j:$ 
+  \begin{equation}
+    \label{eq:influence_weight}
+    w_j = \left\lVert \bs{\theta} - 
+    \bs{W} \left[ \bs{W}^{T} \bs{W} \right]^{-1} \bs{W}^{T} \bs{\theta}
+    \right\rVert_{p}
+  \end{equation} 
+\end{Definition}
+
+If the $\xi_j \in \bs{\xi}$ was inserted into $\bs{\xi}$ via the method of
+\citet{boehm1980} then the influence weight, $w_j,$ would be zero.  For a given
+$f_{s, k, \bs{\xi}, \bs{\theta}}$ the set $\bs{w} = \left\{ w_{j} \right\}_{j =
+k + 1}^{k + l}$ provides a relative measure of the influcence of each knot.
+
+Examples of changes in the control polygon and the influence weight
+associated with each of the internal knots from $\bs{\xi}$ are in
+Figure~\ref{fig:knot-operations-influence-weights}.  Note that the
+difference in the control polygons and the spline functions when $\xi_{4+4}$ is
+removed and reinserted into the knot sequence is very small.  While we can see
+that the ordinates of the CPs differ, the differences in the spline functions
+themselves are difficult to see. The minimal influence weight in this example is
+associated with $\xi_{4+4}.$  Compared to the second least influential knot,
+$\xi_{4+2},$ where we can see change in both the control polygon and the spline
+function.  The most influential knot is $\xi_{4+1},$ the largest influence
+weight and the visual differences in the control polygon and spline function is
+obvious.
+
+<<knot-operations-influence-weights, cache = TRUE, dependson = "knot-operations-basis-setup", fig.scap = scap, fig.cap = cap, fig.width = 8, fig.height = 10, out.width = "0.90\\textwidth">>=
+@
+
+The influence weight metric is critical part of the CPR algorithm.  

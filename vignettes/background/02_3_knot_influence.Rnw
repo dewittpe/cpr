@@ -1,2 +1,0 @@
-\subsection{Influence Weight of a Knot \label{sec:knot-influence}}
-What is the impact of a knot on the spline function?
