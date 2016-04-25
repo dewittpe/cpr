@@ -1,6 +1,6 @@
 #' Control Polygons
 #'
-#' Generate the control polygon for a univariable B-spline
+#' Generate the control polygon for a uni-variable B-spline
 #'
 #' \code{cp} generates the control polygon for the given B-spline function.  
 #'

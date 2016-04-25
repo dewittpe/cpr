@@ -99,10 +99,11 @@ to do so is for examples and tutorials and so the function is not exported by
 the \pkg{cpr} namespace.  For the following illustration we will insert the
 one knot into the knot sequence we have used for the prior examples.
 <<background_w_matrix>>=
-# 
+# Insert a knot at 3.14 into the knot sequence
 zeta <- 3.14
-attr(bmat, "xi")
-cpr::refine_ordinate
+xi   <- attr(bmat, "xi")
+xi_r <- sort(c(xi, zeta))
+cpr::refine_ordinate(zeta, attr(bmat, "xi"), theta)
 @
 
 % <<knot-operations-refine-xi, cache = TRUE, dependson = "b-spline-fundamentals-setup">>=
