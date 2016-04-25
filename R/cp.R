@@ -91,7 +91,8 @@ cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) {
 #' @method print cpr_cp
 #' @export
 print.cpr_cp <- function(x, ...) { 
-  dplyr:::print.tbl_df(x, ...)
+  #dplyr::print(x, ...)
+  print(x, ...)
 }
 
 #' @method print cpr_cpr
@@ -137,11 +138,10 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, n = 500) {
                             order  = attr(x, "order"))
            data.frame(x = seq(b[1], b[2], length = n), 
                       y = as.numeric(bmat %*% x$theta))
-                             }) %>%
-      {
-        dplyr::mutate_(dplyr::bind_rows(., .id = "row"),
+                             }) 
+    .data2 <- 
+        dplyr::mutate_(dplyr::bind_rows(.data2, .id = "row"),
                       .dots = setNames(list(rfctr), "row")) 
-      }
 
       base_plot <- 
         base_plot + 
@@ -151,23 +151,23 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, n = 500) {
   base_plot
 }
 
-#' @export
-model <- function(x) { 
-  UseMethod("model")
-}
-
-#' @export
-model.cpr_cp <- function(x) { 
-  do.call(attr(x, "method"), 
-          c(list(data = attr(x, "data"), formula = attr(x, "formula")),
-            attr(x, "dots"))
-          )
-}
-
-#' @export
-model.cpr_selected <- function(x) { 
-  model.cpr_cp(x$best_cp)
-}
+# #' @export
+# model <- function(x) { 
+#   UseMethod("model")
+# }
+# 
+# #' @export
+# model.cpr_cp <- function(x) { 
+#   do.call(attr(x, "method"), 
+#           c(list(data = attr(x, "data"), formula = attr(x, "formula")),
+#             attr(x, "dots"))
+#           )
+# }
+# 
+# #' @export
+# model.cpr_selected <- function(x) { 
+#   model.cpr_cp(x$best_cp)
+# }
 
 newknots <- function(form, nk) { 
   rr <- function(x, nk) {

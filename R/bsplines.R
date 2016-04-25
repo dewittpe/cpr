@@ -35,6 +35,7 @@ bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) {
 #' @rdname bsplines
 #' @param n, number of rows of the B-spline basis matrix to display, defaults to
 #' 6L.
+#' @param ... not currently used
 print.cpr_bs <- function(x, n = 6L, ...) { 
   print(attr(x, "call"))
   cat("Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
@@ -44,46 +45,39 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 #' @method plot cpr_bs
 #' @export
 #' @rdname bsplines
-#' @param ggplot2 boolean, if TRUE, return a ggplot; if FALSE, pass \code{x} and
-#' ... to \code{graphics::matplot}.
-#' @param ... passed to \code{graphics::matplot}
-plot.cpr_bs <- function(x, ggplot2 = getOption("cpr_ggplot2", FALSE), ...) {
-  if (ggplot2) { 
-    .data <- tidyr::gather_(cbind(as.data.frame(x), "x" = attr(x, "x")), 
-                            key_col = "spline", 
-                            value_col = "value", 
-                            gather_cols = paste0("V", seq(1, ncol(x), by = 1L)))
-    .data <- dplyr::tbl_df(.data)
+plot.cpr_bs <- function(x, ...) {
+  .data <- tidyr::gather_(cbind(as.data.frame(x), "x" = attr(x, "x")), 
+                          key_col = "spline", 
+                          value_col = "value", 
+                          gather_cols = paste0("V", seq(1, ncol(x), by = 1L)))
+  .data <- dplyr::tbl_df(.data)
 
-    xi <- attr(x, "xi")
-    k  <- attr(x, "order")
+  xi <- attr(x, "xi")
+  k  <- attr(x, "order")
 
-    xilb <- paste0("xi[", seq_along(xi), "] == ", "xi", "")
-    xilb <- c(paste(head(xilb, k), collapse = "\n"),
-              xilb[!(xi %in% range(xi))],
-              paste(tail(xilb, k), collapse = "\n")) 
-    xilb <- gsub("\\d\\n", "", xilb)
+  xilb <- paste0("xi[", seq_along(xi), "] == ", "xi", "")
+  xilb <- c(paste(head(xilb, k), collapse = "\n"),
+            xilb[!(xi %in% range(xi))],
+            paste(tail(xilb, k), collapse = "\n")) 
+  xilb <- gsub("\\d\\n", "", xilb)
 
 
-    expr <- list(bquote(group('{', xi[j], '}')[j == 1]^{.(k)} ))
+  expr <- list(bquote(group('{', xi[j], '}')[j == 1]^{.(k)} ))
 
-    if (length(xi) > 2 * k) { 
-      for(i in seq(k + 1, length(xi) - k, by = 1)) { 
-        expr <- c(expr, bquote(xi[.(i)]))
-      }
+  if (length(xi) > 2 * k) { 
+    for(i in seq(k + 1, length(xi) - k, by = 1)) { 
+      expr <- c(expr, bquote(xi[.(i)]))
     }
-
-    expr <- c(expr, bquote(group('{', xi[j], '}')[j == .(length(xi) - k)]^{.(length(xi))}))
-
-    ggplot2::ggplot(.data) + 
-    ggplot2::theme_bw() + 
-    ggplot2::aes_string(x = "x", y = "value", color = "spline") + 
-    ggplot2::geom_line() + 
-    ggplot2::theme(axis.title = ggplot2::element_blank()) +
-    ggplot2::scale_x_continuous(breaks = unique(xi), labels = do.call(expression, expr)) 
-  } else {
-    graphics::matplot(x, ...)
   }
+
+  expr <- c(expr, bquote(group('{', xi[j], '}')[j == .(length(xi) - k)]^{.(length(xi))}))
+
+  ggplot2::ggplot(.data) + 
+  ggplot2::theme_bw() + 
+  ggplot2::aes_string(x = "x", y = "value", color = "spline") + 
+  ggplot2::geom_line() + 
+  ggplot2::theme(axis.title = ggplot2::element_blank()) +
+  ggplot2::scale_x_continuous(breaks = unique(xi), labels = do.call(expression, expr)) 
 }
 
 #' @export

@@ -40,20 +40,19 @@ print.cpr_selected <- function(x, ...) {
 
 #' @method plot cpr_cpr
 #' @export 
-plot.cpr_cpr <- function(x, from = 0, to = 9, show_spline = FALSE, n = 500) { 
-  suppressMessages(
-  lapply(seq(from, to - 1L, by = 1L) + 1L,
-         function(idx, .data, sp, n) { 
-           plot.cpr_cp(.data[[idx]], .data[[idx + 1L]], show_spline = sp, n = n) + 
-           ggplot2::scale_linetype(name = "", labels = paste(idx + -1:0, "iknots")) + 
-           ggplot2::theme(legend.position = "top",
-                          axis.title = ggplot2::element_blank())
-         },
-         .data = x, 
-         sp = show_spline, 
-         n = n)) %>%
-  lapply(., ggplot2::ggplotGrob) %>%
-  gridExtra::grid.arrange(grobs = .)
-
+plot.cpr_cpr <- function(x, from = 0, to = 9, show_spline = FALSE, n = 500, ...) { 
+  lp <- suppressMessages(
+                         lapply(seq(from, to - 1L, by = 1L) + 1L,
+                                function(idx, .data, sp, n) { 
+                                  plot.cpr_cp(.data[[idx]], .data[[idx + 1L]], show_spline = sp, n = n) + 
+                                  ggplot2::scale_linetype(name = "", labels = paste(idx + -1:0, "iknots")) + 
+                                  ggplot2::theme(legend.position = "top",
+                                                 axis.title = ggplot2::element_blank())
+                                },
+                                .data = x, 
+                                sp = show_spline, 
+                                n = n)) 
+  lp <- lapply(lp, ggplot2::ggplotGrob) 
+  gridExtra::grid.arrange(grobs = lp) 
 }
 

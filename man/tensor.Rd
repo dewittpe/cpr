@@ -18,7 +18,7 @@ contain the internal knots for all x.}
 omitted the default will be to use the range of each x.  If specificed, the
 use must specify the bknots for each x.}
 
-\item{order}{a list of the order for each x; defaults to 4L for all x.}
+\item{orders}{a list of the order for each x; defaults to 4L for all x.}
 }
 \value{
 A matrix with a class cpr_tensor

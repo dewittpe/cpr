@@ -24,7 +24,7 @@
 #' @param bknots a list of boundary knots for each x.  As with the iknots, if
 #' omitted the default will be to use the range of each x.  If specificed, the
 #' use must specify the bknots for each x.
-#' @param order  a list of the order for each x; defaults to 4L for all x.
+#' @param orders  a list of the order for each x; defaults to 4L for all x.
 #'
 #' @return
 #' A matrix with a class cpr_tensor

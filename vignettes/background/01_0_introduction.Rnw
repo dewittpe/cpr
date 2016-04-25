@@ -1,0 +1,17 @@
+\section{Introduction}
+The purpose of this vignette is to provide the reader a review of B-splines,
+control polygons, tensor products, and the methods for assessing the influence
+weight of knots.  Along with the mathematics, this vignette will show the user
+how the functionallity within \pkg{cpr} package addressing these concepts.  This
+vignette is the basis for the background chapter of my dissertation.
+
+We will start with a reivew of B-splines, de Boor's algorithm~\citep{deboor2001},
+and the connection to control polygons.  Methods for assessing knot influence on
+spline functions is built on the work of \citet{boehm1980} and is shown in
+Section~\ref{sec:knot-influence}.
+
+To recreate these examples the reader will need to have loaded and attached the
+\pkg{cpr} namespace.
+<<package-load-attach>>=
+library(cpr)
+@

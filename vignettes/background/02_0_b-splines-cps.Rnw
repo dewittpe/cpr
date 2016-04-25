@@ -1,0 +1,13 @@
+\section{B-splines and Control Polygons \label{sec:b-splines-cps}}
+
+Many statisticians have some experience with B-splines.  Many have relied on
+B-splines for fitting semi-parametric regression models.  However, what appears
+to be less common is the use of the associated control polygon.  The \pkg{cpr}
+package provides methods for building parsimonious regression modeles based on
+{\bf c}ontrol {\bf p}olygon {\bf r}eductions.  The CPR method relies on the
+fundamental definitions and properties of B-splines.  Within this section we
+define B-splines, spline functions, control polygons, and the relationships
+thereof.  We base our work on the definitions and properties of B-splines
+presented in \citet{deboor2001} and \citet{prautzsch2002}.  Special importance
+is placed on the method presented by \citet{boehm1980} for inserting knot(s)
+into a knot sequence without affecting the spline function itself.

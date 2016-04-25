@@ -20,18 +20,20 @@ Determine the influence weight of each iternal knot on each marginal of a
 tensor product.
 }
 \examples{
-## NOT RUN
-
+\dontrun{
 data("diamonds", package = "ggplot2")
 sub_diamonds <- diamonds[1:11000, ]
 
-tp_diamonds <- with(sub_diamonds, cpr::tensor(list(carat, depth, table), iknots = list(c(0.5, 1.5), numeric(0), numeric(0))))
+tp_diamonds <- 
+  with(sub_diamonds, 
+       cpr::tensor(list(carat, depth, table), 
+                   iknots = list(c(0.5, 1.5), numeric(0), numeric(0))))
 
 fit <- lm(price ~ tp_diamonds + 0, data = sub_diamonds)
 theta_diamonds <- unname(coef(fit))
 
 influence_weights(tp_diamonds, theta_diamonds)
-
+}
 
 }
 

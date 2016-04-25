@@ -1,6 +1,6 @@
 Package: cpr
 Title: Control Polygon Reduction
-Version: 0.0.1.9008
+Version: 0.0.1.9009
 Authors@R: person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre"))
 Description: Implementation of the Control Polygon Reduction methods described
     in PAPER TO BE PUBLISHED.
@@ -10,7 +10,7 @@ License: GPL (>= 2)
 LazyData: true
 Imports:
     dplyr,
-    ggplot2,
+    ggplot2 (>= 2.0.0),
     gridExtra,
     lazyeval,
     Rcpp (>= 0.11.0),
@@ -20,7 +20,6 @@ LinkingTo: Rcpp (>= 0.11.0),
 Suggests:
     geepack,
     lme4,
-    maggrittr,
     testthat,
     knitr
 RoxygenNote: 5.0.1
