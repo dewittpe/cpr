@@ -81,7 +81,7 @@ provides another function \code{bsplines} to generate B-splines, but with
 different \code{attributes} which are key in the control polygon reduction
 methods.
 
-<<>>=
+<<background_bsplines_vs_bs>>=
 # Construct a B-spline Basis using the splines package.
 args(splines::bs)
 bmat_splines <- 
@@ -120,7 +120,7 @@ built and provided for the following reasons:
     Property~\ref{Bsproperty:control_polygon}).
 \end{itemize}
 
-<<>>=
+<<background_bmat_structure>>=
 # compare the structure of the two matrices.
 str(bmat_splines)
 str(bmat_cpr)
@@ -147,16 +147,14 @@ error $\bs{\epsilon}.$  We are interested in modeling $f$ via B-splines.
   $\bs{\theta} \in \mathbb{R}^{\left(k + l \right) \times 1}$ is a vector of coefficients.
 \end{Definition}
 We will model the function $f$ with a spline function, i.e., 
-\[ f\left( x \right) \approx \bs{B}_{k, \bs{\xi}} \left(x \right) \bs{\theta}\].
+\[ f\left( x \right) \approx \bs{B}_{k, \bs{\xi}} \left(x \right) \bs{\theta}.\]
 
-Let's illustrate a basis and a spline function.  We'll address the modeling
-issue later.  For this example we will work on a domain of $x \in [0, 6],$ work
-with cubic (order $k = 4,$ the default) B-splines, and
-set up an initial knot sequence with five internal knots as defined in the
-following {\tt R} chunk.
-
-<<basis>>= 
-#cap = "Cool", fig.width = 4, fig.height = 4>>=
+\paragraph{Example}
+% The following R chunk is placed here with echo = FALSE so that the objects are
+% in the workspace for the paragraph to follow.  The chunk is recalled, eval =
+% FALSE below the paragraph so the user can see the code needed to continue the
+% vignette.
+<<background_example_setup, echo = FALSE>>= 
 # Domain, five hundred observations between 0 and 6 inclusive.
 xvec <- seq(0, 6, length = 500)
 
@@ -166,66 +164,107 @@ iknots <- c(1, 1.5, 2.3, 4, 4.5)
 # Define the basis matrix
 bmat <- bsplines(x = xvec, iknots = iknots)
 
-# generate the plot in Figure \ref{fig:basis} If you do not like this plot, or
-# you just want to get at the data used to create it: 
-# plot_data <- plot(bmat)$data
-# You could also use matplot
-# plot(bmat)
+# Define the 
+theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
 @
 
+Let's illustrate a basis and a spline function.  We'll address the modeling
+issue later.  For this example we will work on a domain of $x \in
+[\Sexpr{paste(range(xvec), collapse = ", ")}]$ work with cubic (order $k = 4,$
+the default) B-splines, and set up an initial knot sequence with five internal
+knots.  For this example we'll use the knot sequcence and coefficient vector
+\begin{equation}
+  \label{eq:background_example_setup}
+  \begin{array}{c}
+  \bs{\xi} = \left\{ \Sexpr{paste(formatC(attr(bmat, "xi"), digits = 1, format =
+"f"), collapse = ", ")} \right\} \\ \text{and} \\
+\bs{\theta} = \left(
+  \Sexpr{paste(formatC(theta, digits = 1, format = "f"), collapse = ", ")}
+\right)^T.
+\end{array}
+\end{equation}
 
-The plot in Figure~\ref{fig:basis} shows the \Sexpr{qwraps2::frmt(ncol(bmat))}
-B-splines and the the location of the \Sexpr{qwraps2::frmt(length(iknots))}
-internal knots.  This basis is used to generate the spline function in
-Figure~\ref{fig:splinefunction} using the coefficients $\bs{\theta} = \left(1,
-  0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5 \right)^T.$
+The plot in Figure~\ref{fig:basis_and_spline_function_a} shows the
+\Sexpr{ncol(bmat)} B-splines and the the location of the \Sexpr{length(iknots)}
+internal knots.  Multiplying each of the B-splines by its respective coefficient
+creates
+Figure~\ref{fig:basis_and_spline_function_b}.  Finally, 
+Figure~\ref{fig:basis_and_spline_function_c} shows the spline function
+$\bs{B}_{k = 4, \bs{\xi}} \left( x \right) \bs{\theta}.$  
 
-<<splinefunction>>=
-theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
+The following R chunks
+are provided to show the user how this example was set up and how the plots are
+created.  There is an S3 plotting method for \code{cpr\_bs} objects, i.e., the
+\code{bmat}.  That plotting function returns a \code{ggplot} and can be
+explotied as such.
+
+<<>>=
+<<background_example_setup, eval = FALSE>>=
+@
+
+<<background_basis, echo = TRUE, eval = FALSE>>=
+# generate Figure \ref{fig:basis_and_spline_function_a}
+plot(bmat) + 
+  ggplot2::theme(legend.position = c(0.7, 0.85)) + 
+  ggplot2::guides(col = ggplot2::guide_legend(nrow = 3))
+
+@ 
+<<background_multiplied_splines, echo = TRUE, eval = FALSE>>=
+# generate Figure \ref{fig:basis_and_spline_function_b}
+# multiple each spline (column of bmat) by its coef we store the plot as `plotb`
+# as it will be reused to build Figure \ref{fig:basis_and_spline_function_c}.
+bmat2 <- 
+  bmat * matrix(theta, byrow = TRUE, nrow  = length(xvec), ncol  = nrow(theta))
+
+plotb <- plot(bmat2) + ggplot2::theme(legend.position = "none") 
+plotb
+@ 
+<<background_spline_function, echo = TRUE, eval = FALSE>>=
+# generate Figure \ref{fig:basis_and_spline_function_c}
+# remove the layers from `plotb`, this is a trick to keep the same axis text
+# from each plot when the class of the object to plot changes.
+plotb[[which(names(plotb) == "layers")]] <- NULL
+
+# construct a data.frame for the spline function
+dat <- data.frame(x = xvec, y = (bmat %*% theta)[, 1])
+
+# plot the spline function
+plotb + geom_line(mapping = aes(x = x, y = y), data = dat, inherit.aes = FALSE)
 @
 
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.30\textwidth}
-<<background_basis, echo = TRUE, fig.width = 4, fig.height = 4>>=
-plot(bmat)
+<<>>=
+<<background_basis, echo = FALSE, fig.width = 4, fig.height = 4>>=
 @
-  \caption{A Basis \label{fig:basis}}
+  \caption{The B-splines, $B_{j, k, \bs{\xi}},$ forming a basis.\label{fig:basis_and_spline_function_a}}
   \end{subfigure}
   ~
   \begin{subfigure}[t]{0.30\textwidth}
+<<>>=
 <<background_multiplied_splines, echo = FALSE, fig.width = 4, fig.height = 4>>=
-temp <- plot(bmat * matrix(theta, byrow = TRUE, nrow = length(xvec), ncol = nrow(theta)))
-temp
 @
-  \caption{Each B-spline muliplied by its coefficient. \label{fig:basis2}}
+  \caption{Each B-spline muliplied by its coefficient, e.g, $\theta_1 B_{1, k,
+    \bs{\xi}} \left( x \right).$
+  \label{fig:basis_and_spline_function_b}}
   \end{subfigure}
   ~
   \begin{subfigure}[t]{0.30\textwidth}
-<<background_spline_function, echo = FALSE, fig.width = 3, fig.height = 4>>=
-temp[[2]] <- NULL
-dat <- data.frame(x = xvec, y = (bmat %*% theta)[, 1])
-temp + geom_line(mapping = aes(x = x, y = y), 
-                 data = dat, 
-                 inherit.aes = FALSE)
+<<>>=
+<<background_spline_function, echo = FALSE, fig.width = 4, fig.height = 4>>=
 @
-  \caption{Spline Function \label{fig:basis3}}
+  \caption{The spline function $\bs{B}_{k, \bs{\xi}}\left( x \right) \bs{\theta}.$ \label{fig:basis_and_spline_function_c}}
   \end{subfigure}
-  \caption{Basis, Element, Spline Function}
+  \caption{basis, elementwise multiplication, and the spline function.  These
+    graphics are for standard cubic (order $k = 4$) B-splines with knot sequence
+    $\bs{\xi}$ and coefficients $\bs{\theta}$ as defined in
+    \eqref{eq:background_example_setup}.
+  \label{fig:basis_and_spline_function}}
 \end{figure}
 
-
-<<>>=
-# xi <- c(rep(0, 4), iknots, rep(6, 4)) 
-# xi_star <- greville_sites(xi)
-# theta <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
-# 
-# xvec <- seq(0, 6, length = 500) 
-# bmat <- bsplines(x = xvec, iknots = iknots, bknots = c(0, 6), order = 4)
-# 
-# 
-# Bmat <- cpr::
-@
-
-
-
+The relationship between any particular knot, coefficient, and the
+resulting spline function is not, at least to me, evidient form the plots in
+Figure~\ref{fig:basis_and_spline_function}.  However, there is a meaningful
+relationship between the knot sequence, $\bs{\xi},$ and the coefficient vector
+$\bs{\theta}:$ the control polygon.  
