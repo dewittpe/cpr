@@ -247,7 +247,7 @@ plotc
 <<>>=
 <<background_multiplied_splines, echo = FALSE, fig.width = 4, fig.height = 4>>=
 @
-  \caption{Each B-spline muliplied by its coefficient, e.g, $\theta_1 B_{1, k,
+  \caption{Each B-spline multiplied by its coefficient, e.g, $\theta_1 B_{1, k,
     \bs{\xi}} \left( x \right).$
   \label{fig:basis_and_spline_function_b}}
   \end{subfigure}
@@ -258,15 +258,47 @@ plotc
 @
   \caption{The spline function $\bs{B}_{k, \bs{\xi}}\left( x \right) \bs{\theta}.$ \label{fig:basis_and_spline_function_c}}
   \end{subfigure}
-  \caption{basis, elementwise multiplication, and the spline function.  These
+  \caption{basis, element-wise multiplication, and the spline function.  These
     graphics are for standard cubic (order $k = 4$) B-splines with knot sequence
     $\bs{\xi}$ and coefficients $\bs{\theta}$ as defined in
     \eqref{eq:background_example_setup}.
   \label{fig:basis_and_spline_function}}
 \end{figure}
 
-The relationship between any particular knot, coefficient, and the
-resulting spline function is not, at least to me, evidient form the plots in
+Some notes about knots.
+In the work to follow we will restrict ourselves to using simple, i.e.,
+multiplicity 1, interior knots.  Interior knots up to multiplicity $k$ are
+possible but come at a price.  B-splines are $k$ order polynomials and thus the
+spline function $\bs{B}_{k, \bs{\xi}} \left(x \right) \bs{\theta}$ has
+$k$ continuity conditions (continuous, 1st order differentiable, 2nd order
+differentiable, \ldots $k - 1$ order differentiable) for $x \notin \bs{\xi}.$
+The spline function looses one order of continuity for at $x = \xi_j$ for each
+multiple of $\xi_j$ in $\bs{\xi}.$  Thus, a cubic (order $k = 4$) spline
+function is trice differentiable between interior knots, twice differentiable at
+simple (multiplicity one) knots, once differentiable at double knots,
+at least continuous at triple knots, and has no continuity condition at knots of
+multiple four.  By construction, spline functions built on B-splines have no
+continuity construction at the boundary.  
+
+In the above, and moving forward, we will restrict ourselves to simple interior
+knots.  While the methods to follow are applicable to splines with interior
+knots of higher multiplicity, we opt for this simple approach.  We base this on
+the comment from~\citet[page 106]{deboor2001}:
+\begin{quote}
+  \ldots a B-spline doesn't change much if one changes its $k + 1$ knots
+  a little bit.  Therefore, if one has multiple knots, then it is easy to find a
+  B-spline almost like it with simple knots: simply replace each knot of
+  multiplicity $r > 1$ by $r$ simple knots near by.
+\end{quote}
+Further, if we assume that the functions we are going to model are smooth, i.e.,
+multiply differentiable, we can maintain a smooth functions with simple knots
+that are nearly non-smooth due to knots placed near each other.
+
+When trying to determine how many and where to place knots for modeling the
+functional relationship between a response and single continuous predictor it
+would be helpful to understand how the knot sequence $\bs{\xi}$ and regression
+coefficients $\bs{\theta}$ relate to each other.  Such a relationship not not
+evident, at least not to me, form the plots in
 Figure~\ref{fig:basis_and_spline_function}.  However, there is a meaningful
 relationship between the knot sequence, $\bs{\xi},$ and the coefficient vector
 $\bs{\theta}:$ the control polygon.  

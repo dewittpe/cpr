@@ -108,11 +108,6 @@ knit_hooks$set(source = function(x, options) {
 <<child = "background/02_2_cps.Rnw">>=
 @
 
-The to-be-defined spline functions of order $k$ are
-discontinuous at knots of multiplicity $k,$ continuous but not necessarily
-differentiable at knots of multiplicity $k-1,$ only first order differentiable at
-knots of multiplicity $k-2,$ and so on.    % page 106
-
 \section{Influence Weight of a Knot \label{sec:knot-influence}}
 What is the impact of a knot on the spline function?
 
