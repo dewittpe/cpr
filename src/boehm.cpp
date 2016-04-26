@@ -138,7 +138,7 @@ arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int ord
 //' @rdname boehm
 // [[Rcpp::export]]
 arma::mat insertion_matrix(double x, arma::vec xi, unsigned int order = 4) { 
-  return(knot_insertion_hat_matrix(x, xi, order));
+  return(knot_insertion_matrix(x, xi, order));
 }
 //' @export
 //' @rdname boehm
