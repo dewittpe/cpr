@@ -10,10 +10,10 @@
 #'
 #' \code{greville_sites} returns the knot averages.
 #'
-#' @param x data
+#' @param x a numeric vector
 #' @param iknots internal knots
 #' @param bknots boundary knot locations, defaults to \code{range(x)}.
-#' @param order order of the piecewise polynomials
+#' @param order order of the piecewise polynomials, defualts to 4L.
 #'
 #' @export
 bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) { 
@@ -30,21 +30,26 @@ bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) {
   out
 }
 
+#' Print bsplines
+#'
 #' @method print cpr_bs
 #' @export
-#' @rdname bsplines
+#' @param x a \code{cpr_bs} object.
 #' @param n, number of rows of the B-spline basis matrix to display, defaults to
 #' 6L.
-#' @param ... not currently used
+#' @param \ldots not currently used.
 print.cpr_bs <- function(x, n = 6L, ...) { 
   print(attr(x, "call"))
   cat("Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
   print(x[seq(1, min(nrow(x), n), by = 1L), ])
 }
 
+#' Plot B-splines
+#'
 #' @method plot cpr_bs
 #' @export
-#' @rdname bsplines
+#' @param x a \code{cpr_bs} object
+#' @param \ldots not currently used
 plot.cpr_bs <- function(x, ...) {
   .data <- tidyr::gather_(cbind(as.data.frame(x), "x" = attr(x, "x")), 
                           key_col = "spline", 
@@ -94,7 +99,7 @@ greville_sites <- function(xi, order = 4L) {
 }
 
 #' @export
-#' @param x an object to be tested.
-is.cpr_bs <- function(x, ...) { 
+#' @rdname bsplines
+is.cpr_bs <- function(x) { 
   inherits(x, "cpr_bs")
 }

@@ -3,31 +3,23 @@
 \name{bsplines}
 \alias{bsplines}
 \alias{greville_sites}
-\alias{plot.cpr_bs}
-\alias{print.cpr_bs}
+\alias{is.cpr_bs}
 \title{B-Splines}
 \usage{
 bsplines(x, iknots = numeric(0), bknots = range(x), order = 4L)
 
-\method{print}{cpr_bs}(x, n = 6L, ...)
-
-\method{plot}{cpr_bs}(x, ...)
-
 greville_sites(xi, order = 4L)
+
+is.cpr_bs(x)
 }
 \arguments{
-\item{x}{data}
+\item{x}{a numeric vector}
 
 \item{iknots}{internal knots}
 
 \item{bknots}{boundary knot locations, defaults to \code{range(x)}.}
 
-\item{order}{order of the piecewise polynomials}
-
-\item{n, }{number of rows of the B-spline basis matrix to display, defaults to
-6L.}
-
-\item{...}{not currently used}
+\item{order}{order of the piecewise polynomials, defualts to 4L.}
 
 \item{xi}{full knot vector,}
 }

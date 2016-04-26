@@ -7,15 +7,7 @@
 #' \code{cpr} runs the control polygon reduction algorithm
 #'
 #' @param x a \code{cpr_bs} object 
-#' @param theta a vector of (regression) coefficients, the ordinates of the
-#'        control polygon.
-#' @param formula a formula that is appropriate for regression method being
-#'        used.
-#' @param data see documentation in \code{\link[stats]{lm}}
-#' @param method the regression method such as \code{\link[stats]{lm}},
-#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
 #' @param ... arguments passed to the regression method
-#'
 #'
 #' @examples
 #' 
@@ -53,11 +45,15 @@
 #'                      data = dat, linetype = 2, color = "red")
 #' 
 #' @export
+#' @rdname cp
 cp <- function(x, ...) { 
   UseMethod("cp")
 }
 
 #' @export
+#' @rdname cp
+#' @param theta a vector of (regression) coefficients, the ordinates of the
+#'        control polygon.
 cp.cpr_bs <- function(x, theta, ...) { 
   out <- dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
                            theta   = as.vector(theta))
@@ -67,6 +63,12 @@ cp.cpr_bs <- function(x, theta, ...) {
 }
 
 #' @export
+#' @rdname cp
+#' @param formula a formula that is appropriate for regression method being
+#'        used.
+#' @param data see documentation in \code{\link[stats]{lm}}
+#' @param method the regression method such as \code{\link[stats]{lm}},
+#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
 cp.formula <- function(formula, data = parent.env(), method = lm, ...) { 
  
   # check for some formula specification issues
@@ -104,16 +106,17 @@ cp.formula <- function(formula, data = parent.env(), method = lm, ...) {
 
 #' @method print cpr_cp
 #' @export
+#' @rdname cp
 print.cpr_cp <- function(x, ...) { 
   print.data.frame(x, ...)
 }
 
 #' @method plot cpr_cp
 #' @export
-#' @param x a \code{cpr_cp} object
+#' @rdname cp
+#' @inheritParams plot
 #' @param show_spline boolean (default FALSE) to plot the spline function within
 #' its control polygon
-#' @param ... additional \code{cpr_cp} objects.
 #' @param color boolean (default FALSE) if more than one \code{cpr_cp} object is
 #' to be plotted, set this value to TRUE to have the graphic in color (linetypes
 #' will be used regardless of the color settting).

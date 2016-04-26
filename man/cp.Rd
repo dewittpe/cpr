@@ -2,9 +2,21 @@
 % Please edit documentation in R/cp.R
 \name{cp}
 \alias{cp}
+\alias{cp.cpr_bs}
+\alias{cp.formula}
+\alias{plot.cpr_cp}
+\alias{print.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(x, ...)
+
+\method{cp}{cpr_bs}(x, theta, ...)
+
+\method{cp}{formula}(formula, data = parent.env(), method = lm, ...)
+
+\method{print}{cpr_cp}(x, ...)
+
+\method{plot}{cpr_cp}(x, ..., show_spline = FALSE, color = FALSE, n = 500)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
@@ -21,6 +33,15 @@ used.}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
+
+\item{show_spline}{boolean (default FALSE) to plot the spline function within
+its control polygon}
+
+\item{color}{boolean (default FALSE) if more than one \code{cpr_cp} object is
+to be plotted, set this value to TRUE to have the graphic in color (linetypes
+will be used regardless of the color settting).}
+
+\item{n}{the number of data points to use for plotting the spline}
 }
 \description{
 Generate the control polygon for a uni-variable B-spline
