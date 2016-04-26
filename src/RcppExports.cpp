@@ -6,45 +6,6 @@
 
 using namespace Rcpp;
 
-// knot_insertion_matrix__impl
-arma::mat knot_insertion_matrix__impl(double x, arma::vec xi, unsigned int k);
-RcppExport SEXP cpr_knot_insertion_matrix__impl(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(knot_insertion_matrix__impl(x, xi, k));
-    return __result;
-END_RCPP
-}
-// knot_coarsen_matrix__impl
-arma::mat knot_coarsen_matrix__impl(double x, arma::vec xi, unsigned int k);
-RcppExport SEXP cpr_knot_coarsen_matrix__impl(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(knot_coarsen_matrix__impl(x, xi, k));
-    return __result;
-END_RCPP
-}
-// knot_insertion_hat_matrix__impl
-arma::mat knot_insertion_hat_matrix__impl(double x, arma::vec xi, unsigned int k);
-RcppExport SEXP cpr_knot_insertion_hat_matrix__impl(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(knot_insertion_hat_matrix__impl(x, xi, k));
-    return __result;
-END_RCPP
-}
 // refine_ordinate
 arma::vec refine_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order);
 RcppExport SEXP cpr_refine_ordinate(SEXP xSEXP, SEXP xiSEXP, SEXP thetaSEXP, SEXP orderSEXP) {
@@ -84,6 +45,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
     __result = Rcpp::wrap(hat_ordinate(x, xi, theta, order));
+    return __result;
+END_RCPP
+}
+// insertion_matrix
+arma::mat insertion_matrix(double x, arma::vec xi, unsigned int order);
+RcppExport SEXP cpr_insertion_matrix(SEXP xSEXP, SEXP xiSEXP, SEXP orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    __result = Rcpp::wrap(insertion_matrix(x, xi, order));
     return __result;
 END_RCPP
 }

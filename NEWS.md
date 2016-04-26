@@ -1,4 +1,8 @@
-# version 0.0.2.9000
+# version 0.0.2.9001
+
+## End User Visible changes: 
+* The knot insertion matrix **W** is accessable to the end user in a new way.
+  Names of functions in `boehem.cpp` are cleaner.
 
 ## Vignettes
 * Extending the background vignette

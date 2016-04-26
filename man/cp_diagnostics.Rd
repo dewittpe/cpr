@@ -21,14 +21,14 @@ abscissa and the second column is the ordinate for the control polygon vertices.
 }
 \value{
 \code{cp_value} returns the ordinate on the control polygon line segment for
-the absicissa \code{x} given.  \code{x} could be a control vertex or on a
-line segement defined by two control vertices of the control polygon
+the abscissae \code{x} given.  \code{x} could be a control vertex or on a
+line segment defined by two control vertices of the control polygon
 provided.
 
 \code{cp_diff} returns the absolute vertical distance between the control
 vertices of cp1 to the control polygon cp2.
 }
 \description{
-Collection of functions for insepction and analysis of the control polygons
+Collection of functions for inspection and analysis of the control polygons
 }
 

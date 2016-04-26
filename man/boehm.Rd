@@ -3,6 +3,7 @@
 \name{refine_ordinate}
 \alias{coarsen_ordinate}
 \alias{hat_ordinate}
+\alias{insertion_matrix}
 \alias{refine_ordinate}
 \alias{weigh_iknots}
 \title{Knot Insertion, Removal, and Reinsertion}
@@ -12,6 +13,8 @@ refine_ordinate(x, xi, theta, order = 4L)
 coarsen_ordinate(x, xi, theta, order = 4L)
 
 hat_ordinate(x, xi, theta, order = 4L)
+
+insertion_matrix(x, xi, order = 4L)
 
 weigh_iknots(xi, theta, order = 4L, p = 2L)
 }
@@ -51,7 +54,7 @@ at zero and four and internal knots 1, 2, 3) should be specified by
 \code{coarsen_ordinate(x = 2, xi = c(0, 0, 0, 0, 1, 3, 4, 4, 4, 4), theta)}.
 See examples.
 
-This was done intentionall such that the overall coding would be similar to
+This was done intentionaly such that the overall coding would be similar to
 the primary reference (SEE MY TO BE PUBLISHED PAPER) where 
 \eqn{\boldsymbol{W}_{k, \xi} (x)}{W<sub>k, &xi;</sub>(x)} is the knot
 insertion matrix for inserting \eqn{x} into \eqn{\xi}{&xi;}.

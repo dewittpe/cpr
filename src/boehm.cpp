@@ -44,8 +44,7 @@ double omega(double x, unsigned int j, arma::vec xi, unsigned int k = 4) {
  *   a matrix
  */
 
-// [[Rcpp::export]]
-arma::mat knot_insertion_matrix__impl(double x, arma::vec xi, unsigned int k = 4) { 
+arma::mat knot_insertion_matrix(double x, arma::vec xi, unsigned int k = 4) { 
   double w;
   int r = xi.n_elem - k;
 
@@ -61,17 +60,15 @@ arma::mat knot_insertion_matrix__impl(double x, arma::vec xi, unsigned int k = 4
 }
 
 // knot_coarsen_matrix:  
-// [[Rcpp::export]]
-arma::mat knot_coarsen_matrix__impl(double x, arma::vec xi, unsigned int k = 4) { 
-  arma::mat kim = knot_insertion_matrix__impl(x, xi, k);
+arma::mat knot_coarsen_matrix(double x, arma::vec xi, unsigned int k = 4) { 
+  arma::mat kim = knot_insertion_matrix(x, xi, k);
   
  return((kim.t() * kim).i() * kim.t());
 }
 
-// knot_insertion_hat_matrix__impl is the "hat" matrix built from a W matrix
-// [[Rcpp::export]]
-arma::mat knot_insertion_hat_matrix__impl(double x, arma::vec xi, unsigned int k = 4) { 
-  arma::mat kim = knot_insertion_matrix__impl(x, xi, k);
+// knot_insertion_hat_matrix is the "hat" matrix built from a W matrix
+arma::mat knot_insertion_hat_matrix(double x, arma::vec xi, unsigned int k = 4) { 
+  arma::mat kim = knot_insertion_matrix(x, xi, k);
   
  return(kim * (kim.t() * kim).i() * kim.t());
 }
@@ -96,7 +93,7 @@ arma::mat knot_insertion_hat_matrix__impl(double x, arma::vec xi, unsigned int k
 //' \code{coarsen_ordinate(x = 2, xi = c(0, 0, 0, 0, 1, 3, 4, 4, 4, 4), theta)}.
 //' See examples.
 //'
-//' This was done intentionall such that the overall coding would be similar to
+//' This was done intentionaly such that the overall coding would be similar to
 //' the primary reference (SEE MY TO BE PUBLISHED PAPER) where 
 //' \eqn{\boldsymbol{W}_{k, \xi} (x)}{W<sub>k, &xi;</sub>(x)} is the knot
 //' insertion matrix for inserting \eqn{x} into \eqn{\xi}{&xi;}.
@@ -123,19 +120,25 @@ arma::mat knot_insertion_hat_matrix__impl(double x, arma::vec xi, unsigned int k
 //' @rdname boehm
 // [[Rcpp::export]]
 arma::vec refine_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order = 4) { 
-  return(knot_insertion_matrix__impl(x, xi, order) * theta);
+  return(knot_insertion_matrix(x, xi, order) * theta);
 }
 //' @export
 //' @rdname boehm
 // [[Rcpp::export]]
 arma::vec coarsen_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order = 4) { 
-  return(knot_coarsen_matrix__impl(x, xi, order) * theta);
+  return(knot_coarsen_matrix(x, xi, order) * theta);
 }
 //' @export
 //' @rdname boehm
 // [[Rcpp::export]]
 arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int order = 4) { 
-  return(knot_insertion_hat_matrix__impl(x, xi, order) * theta);
+  return(knot_insertion_hat_matrix(x, xi, order) * theta);
+}
+//' @export
+//' @rdname boehm
+// [[Rcpp::export]]
+arma::mat insertion_matrix(double x, arma::vec xi, unsigned int order = 4) { 
+  return(knot_insertion_hat_matrix(x, xi, order));
 }
 //' @export
 //' @rdname boehm
@@ -162,7 +165,7 @@ arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int order = 4, un
   }
 
   for(j = 0; j < iknots; ++j) { 
-    w_vec(j) = arma::norm(theta - knot_insertion_hat_matrix__impl(xi_to_insert(j), xi_mat.col(j), order) * theta, p);
+    w_vec(j) = arma::norm(theta - knot_insertion_hat_matrix(xi_to_insert(j), xi_mat.col(j), order) * theta, p);
   }
 
   return(w_vec); 
