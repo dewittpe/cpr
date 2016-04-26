@@ -108,9 +108,10 @@ xi_r <- sort(c(xi, zeta))
 theta_r <- cpr::refine_ordinate(zeta, attr(bmat, "xi"), theta)
 bmat_r <- cpr::bsplines(xvec, iknots = sort(c(iknots, zeta)))
 
-# if you really want the W matrix you'll need to use :::
-# BE CAREFUL!
-# round(cpr:::knot_insertion_matrix__impl(zeta, xi), 3)
+# if you really want the W matrix you can get it from
+# cpr::insertion_matrix()
+W <- cpr::insertion_matrix(zeta, xi)
+all.equal(target = W %*% theta, current = theta_r)
 
 # build the two control polygons.  
 # They will be plotted in Figure \ref{fig:background_refinement_plot}
@@ -259,7 +260,8 @@ theta_c <- cpr::coarsen_ordinate(1.5, xi_c, theta)
 cp_c <- cpr::cp(bmat_c, theta_c)
 
 # if you want to see the (W^T W)^(-1) W^T matrix use the following
-# round(cpr:::knot_coarsen_matrix__impl(1.5, xi_c), 3)
+W <- cpr::insertion_matrix(1.5, xi_c)
+all.equal(solve(t(W) %*% W) %*% t(W) %*% theta, theta_c)
 @
 
 \begin{figure}
@@ -312,7 +314,8 @@ theta_cr <- cpr::hat_ordinate(1.5, xi_c, theta)
 cp_cr <- cpr::cp(bmat, theta_cr)
 
 # To get at the W (W^T W)^(-1) W^T matrix
-# round(cpr:::knot_insertion_hat_matrix__impl(1.5, xi_c), 3)
+W <- cpr::insertion_matrix(1.5, xi_c)
+all.equal(W %*% solve(t(W) %*% W, tol = 0) %*% t(W) %*% theta, theta_cr)
 @
 
 \begin{figure}
