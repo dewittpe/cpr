@@ -99,34 +99,59 @@ to do so is for examples and tutorials and so the function is not exported by
 the \pkg{cpr} namespace.  For the following illustration we will insert the
 one knot into the knot sequence we have used for the prior examples.
 <<background_w_matrix>>=
-# Insert a knot at 3.14 into the knot sequence
-zeta <- 3.14
+# Insert a knot at 1.87 into the knot sequence
+zeta <- 1.87
 xi   <- attr(bmat, "xi")
 xi_r <- sort(c(xi, zeta))
-cpr::refine_ordinate(zeta, attr(bmat, "xi"), theta)
+
+# get the refined ordinates and the refined B-splines
+theta_r <- cpr::refine_ordinate(zeta, attr(bmat, "xi"), theta)
+bmat_r <- cpr::bsplines(xvec, iknots = sort(c(iknots, zeta)))
+
+# if you really want the W matrix you'll need to use :::
+# BE CAREFUL!
+cpr:::knot_insertion_matrix__impl(zeta, xi)
+
+# build the two control polygons.  
+# They will be plotted in Figure \ref{fig:background_refinement_plot}
+cp1 <- cpr::cp(bmat, theta)
+cp2 <- cpr::cp(bmat_r, theta_r)
 @
 
-% <<knot-operations-refine-xi, cache = TRUE, dependson = "b-spline-fundamentals-setup">>=
-% @
-% 
-% <<knot-operations-refine-graphic, cache = TRUE, dependson = c("b-spline-fundamentals-setup", "knot-operations-refine-xi"), fig.scap = scap, fig.cap = cap, fig.width = 6, fig.height = 3, fig.out = "0.98\\textwidth">>=
-% @
+<<background_refinement_plot, eval = FALSE>>=
+# Plot the two control polygons, see Figure \ref{fig:background_refinement_plot}
+plot(cp1, cp2, show_spline = TRUE, color = TRUE) + 
+ggplot2::theme(legend.position = "bottom")
+@
+
+\begin{figure}
+<<>>=
+<<background_refinement_plot, echo = FALSE, fig.width = 6, fig.height = 4>>=
+@
+\caption{Two control polygons.  The insertion of the value \Sexpr{zeta} into the
+  existing knot sequence $\bs{\xi}$ results in a change in the control polygon,
+  but not in the spline function.  
+  \label{fig:background_refinement_plot}}
+\end{figure}
 
 An important result of B-spline property~\ref{Bsproperty:knot_insertion} is the
 nesting of control polygons, that is, the vertices of the control polygon
 resulting from a refined knot sequence $\bs{\xi}_r$ are on the control polygon
-based on the original knot sequence $\bs{\xi}.$
+based on the original knot sequence $\bs{\xi}.$  This is easily seen in
+Figure~\ref{fig:background_refinement_plot} as the control vertices of
+\code{cp2} are either equivalent to the control vertices of \code{cp1}, or are
+on the line segments joining adjacent control vertices of \code{cp1}.
 
 \begin{Bsproperty}[Control Polygon Nesting]
-  \label{Bsproperty:control_polygon_nesting}
+\label{Bsproperty:control_polygon_nesting}
 When $\bs{\xi}_r$ is obtained from $\bs{\xi}$ via the insertion of a single
 term, then the vertices of the control polygon $\CP f_{s, k, \bs{\xi},
 \bs{\theta}}$ lie on the $\CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}.$  Specifically 
 \begin{equation}
-  \label{eq:knot_refinement_control_polygon}
-  \CP f_{s, k, \bs{\xi}_r, \bs{\theta}_r} \left(\xi_{rj}^{*} \right) = 
-  \CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \left(\xi_{rj}^{*}\right) 
-  \quad \forall j.
+\label{eq:knot_refinement_control_polygon}
+\CP f_{s, k, \bs{\xi}_r, \bs{\theta}_r} \left(\xi_{rj}^{*} \right) = 
+\CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta} \left(\xi_{rj}^{*}\right) 
+\quad \forall j.
 \end{equation}
 \end{Bsproperty}
 
@@ -135,26 +160,24 @@ property~\ref{Bsproperty:control_polygon_nesting} is dependent on the insertion
 of only on knot.  The equality in \eqref{eq:knot_refinement_control_polygon}
 does not hold if $\card{\bs{\xi}_r} > \card{\bs{\xi}} + 1.$
 
-Figure~\ref{fig:knot-operations-refine-graphic} show the result of
-inserting $\zeta = Sexpr{zeta}$ in the knot sequence used in
-Figure~\ref{fig:b-spline-fundamentals-basis-plots}.  The refined knot sequence
-$\bs{\xi}_r = \bs{\xi} \cup \zeta$ produces a control polygon with vertices on
-the initial control polygon.  
-
 \begin{Bsproperty}[Distance Between Spline Functions and Control Polygons]
   \label{Bsproperty:convergence}
   A consequence of B-Spline Property \ref{Bsproperty:refinement} (and illustrated
-  in Figure~\ref{fig:knot-operations-refine-graphic}) is that as
+  in Figure~\ref{fig:background_refinement_plot}) is that as
   $\card{ \bs{\xi} }$ increase the distance between the control polygon
   and the spline function itself decreases.
 \end{Bsproperty}
 \citet[page 135]{deboor2001} presents B-Spline Property
-\ref{Bsproperty:convergence} with mathematical rigor.  The important information
-to understand is that for large $\card{\bs{\xi}}$ the control polygon itself
-is sufficient for estimation of $f,$ i.e., $\CP \bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}
-\left( x \right) \approx f\left( x \right).$  Such a calculation is
-computationally more efficient than $\bs{B}_{, \bs{\xi}} \left( x \right) \bs{\theta}
-\left(x\right)$ and thus has been used extensively in computer graphics and
+\ref{Bsproperty:convergence} with mathematical rigor.  
+For $y = f\left( x \right)$ and we are modeling $f$ with B-splines, i.e.,
+$f\left( x \right) \approx \bs{B}_{k, \bs{\xi}} \left( x \right) \bs{\theta},$
+then for sufficiently large $\card{\bs{\xi}},$ the control polygon itself
+is sufficient for estimation of $f.$  
+That is, $f\left(x\right) \approx \CP_{k, \bs{\xi}, \bs{\theta}} \left(x
+\right).$
+Such a calculation is
+computationally more efficient than $\bs{B}_{k, \bs{\xi}} \left( x \right)
+\bs{\theta}$ and thus has been used extensively in computer graphics and
 numeric approximations.
 
 

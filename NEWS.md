@@ -1,4 +1,9 @@
-# version 0.0.1.9010
+# version 0.0.2.9000
+
+## Vignettes
+* Extending the background vignette
+
+# version 0.0.2
 
 ## new features
 * Added the function `tensor` for building tensor products of `cpr::bsplines`.
