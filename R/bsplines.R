@@ -92,13 +92,6 @@ plot.cpr_bs <- function(x, ...) {
 }
 
 #' @export
-#' @param xi full knot vector, 
-#' @rdname bsplines
-greville_sites <- function(xi, order = 4L) {
-    .Call('cpr_greville_sites__impl', PACKAGE = 'cpr', xi, order)
-}
-
-#' @export
 #' @rdname bsplines
 is.cpr_bs <- function(x) { 
   inherits(x, "cpr_bs")

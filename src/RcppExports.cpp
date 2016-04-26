@@ -75,15 +75,15 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// greville_sites__impl
-arma::vec greville_sites__impl(arma::vec xi, unsigned int k);
-RcppExport SEXP cpr_greville_sites__impl(SEXP xiSEXP, SEXP kSEXP) {
+// greville_sites
+arma::vec greville_sites(arma::vec xi, unsigned int order);
+RcppExport SEXP cpr_greville_sites(SEXP xiSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(greville_sites__impl(xi, k));
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    __result = Rcpp::wrap(greville_sites(xi, order));
     return __result;
 END_RCPP
 }

@@ -10,12 +10,15 @@
 #include <RcppArmadillo.h>
 
 // greville sites
+//' @export
+//' @param xi full knot vector
+//' @rdname bsplines
 // [[Rcpp::export]]
-arma::vec greville_sites__impl(arma::vec xi, unsigned int k) {
-  arma::vec xi_star(xi.n_elem - k);
+arma::vec greville_sites(arma::vec xi, unsigned int order) {
+  arma::vec xi_star(xi.n_elem - order);
 
   for (int i=0; i < xi_star.n_elem; ++i) {
-    xi_star(i) = arma::sum(xi(arma::span(i + 1, i + k - 1))) / double (k - 1);
+    xi_star(i) = arma::sum(xi(arma::span(i + 1, i + order - 1))) / double (order - 1);
   }
 
   return(xi_star);

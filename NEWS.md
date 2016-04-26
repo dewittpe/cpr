@@ -1,4 +1,4 @@
-# version 0.0.2.9001
+# version 0.0.2.9002
 
 ## End User Visible changes: 
 * The knot insertion matrix **W** is accessable to the end user in a new way.
@@ -6,6 +6,9 @@
 
 ## Vignettes
 * Extending the background vignette
+
+## End User non-visible changes:
+* Redundant definition of `greville_sites` removed.
 
 # version 0.0.2
 

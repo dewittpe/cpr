@@ -73,8 +73,11 @@ weigh_iknots <- function(xi, theta, order = 4L, p = 2L) {
     .Call('cpr_weigh_iknots', PACKAGE = 'cpr', xi, theta, order, p)
 }
 
-greville_sites__impl <- function(xi, k) {
-    .Call('cpr_greville_sites__impl', PACKAGE = 'cpr', xi, k)
+#' @export
+#' @param xi full knot vector
+#' @rdname bsplines
+greville_sites <- function(xi, order) {
+    .Call('cpr_greville_sites', PACKAGE = 'cpr', xi, order)
 }
 
 bsplines__impl <- function(x, iknots, bknots, order) {
