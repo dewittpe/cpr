@@ -1,4 +1,4 @@
-# version 0.0.2.9003
+# version 0.0.2.9004
 
 ## Bug Fixes
 * Corrected the attr calls within `cpr` after adjusting the attributes being set
@@ -7,6 +7,8 @@
 ## End User Visible changes: 
 * The knot insertion matrix **W** is accessable to the end user in a new way.
   Names of functions in `boehem.cpp` are cleaner.
+* `plot.cpr_cpr` allows user to select either control polygons or sums of
+  squared residuals to be plotted.
 
 ## Vignettes
 * Extending the background vignette
