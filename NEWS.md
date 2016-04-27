@@ -1,4 +1,8 @@
-# version 0.0.2.9002
+# version 0.0.2.9003
+
+## Bug Fixes
+* Corrected the attr calls within `cpr` after adjusting the attributes being set
+  on a `cpr_cp`.
 
 ## End User Visible changes: 
 * The knot insertion matrix **W** is accessable to the end user in a new way.

@@ -20,21 +20,24 @@ cpr <- function(formula, data = parent.env(), method = lm, p = 2L, ...) {
   cl <- cl[-c(1, which(names(cl) == "p"))]
 
   control_polygon <- do.call(cp, cl)#cp(formula, data, method, ...) 
-  iknots <- attr(control_polygon, "iknots") 
+  iknots <- attr(attr(control_polygon, "bmat"), "iknots")
+
+  # return(list(control_polygon, iknots))
+
   results <- vector("list", length = length(iknots) + 1L) 
   
   for(i in seq_along(results)) { 
-    xi     <- attr(control_polygon, "xi") 
-    iknots <- attr(control_polygon, "iknots") 
+    xi     <- attr(attr(control_polygon, "bmat"), "xi") 
+    iknots <- attr(attr(control_polygon, "bmat"), "iknots") 
 
     if (length(iknots) > 0) { 
-      w <- weigh_iknots(xi, control_polygon$theta, attr(control_polygon, "order"), p) 
+      w <- weigh_iknots(xi, control_polygon$theta, attr(attr(control_polygon, "bmat"), "order"), p) 
     } else {
       w <- NA
     }
 
-    attr(control_polygon, "weights") = w
-    attr(control_polygon, "removed") = if (length(iknots) > 0) { c(index = which.min(w), value = iknots[which.min(w)]) } else {NA}
+    # attr(control_polygon, "weights") = w
+    # attr(control_polygon, "removed") = if (length(iknots) > 0) { c(index = which.min(w), value = iknots[which.min(w)]) } else {NA}
 
     results[[i]] <- control_polygon
 
