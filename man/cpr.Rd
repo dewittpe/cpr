@@ -4,7 +4,7 @@
 \alias{cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(formula, data = parent.env(), method = lm, p = 2L, ...)
+cpr(formula, data = parent.env(), method = lm, p = 2L, keep = -1L, ...)
 }
 \arguments{
 \item{formula}{a formula that is appropriate for regression method being
@@ -15,8 +15,11 @@ used.}
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
 
-\item{p}{defaults to 2L, the L^p norm used in determining the 'weight of
-importance' of each internal knot.}
+\item{p}{defaults to 2L, the L^p norm used in determining the influence
+weight of each internal knot.}
+
+\item{keep}{an integer value (defaults to -1L), the number of regression fits
+to keep.  See Details.}
 
 \item{...}{arguments passed to the regression method}
 }
@@ -24,6 +27,13 @@ importance' of each internal knot.}
 Run the Control Polygon Reduction Algorithm.
 }
 \details{
-\code{cpr} runs the control polygon reduction algorithm
+\code{cpr} runs the control polygon reduction algorithm.
+
+\code{keep} will keep the regression fit as part of the \code{cpr\_cp} object
+for models with upto and including keep fits.  For example, if \code{keep =
+10} then the resulting \code{cpr\_cpr} object will have the regression fit
+stored in the first \code{keep + 1} (zero internal knots, one internal knot,
+\ldots, \code{keep} internal knots) \code{cpr\_cp} objects in the list.  The
+limit on the number of stored regression fits is to keep memory usage down.
 }
 

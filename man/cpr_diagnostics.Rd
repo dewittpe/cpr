@@ -2,14 +2,36 @@
 % Please edit documentation in R/cpr_diagnostics.R
 \name{cpr_select}
 \alias{cpr_select}
+\alias{plot.cpr_cpr}
+\alias{print.cpr_selected}
 \title{Control Polygon Reduction Diagnoses}
 \usage{
-cpr_select(obj, tol = 3)
+cpr_select(x, tol = 3)
+
+\method{print}{cpr_selected}(x, ...)
+
+\method{plot}{cpr_cpr}(x, type = "cp", from = 0, to = 9,
+  show_spline = FALSE, n = 500, ...)
 }
 \arguments{
-\item{obj}{a cpr_cpr object}
+\item{x}{a cpr_cpr object}
 
 \item{tol}{max difference/error between the vertices of cp1 to cp2}
+
+\item{...}{not currently used.}
+
+\item{type}{type of diagnostic plot.  \code{"cp"} for control polygons,
+\code{"ssr"} for sums of squared residuals by number of internal knots.}
+
+\item{from}{the minimum number of interior knots to display}
+
+\item{to}{the maximum number of interior knots to display}
+
+\item{show_spline}{(boolean, default \code{FALSE}) if \code{TRUE} show the
+spline function within the control polygons.  Ignored for \code{type = "ssr"}}
+
+\item{n}{number of points to interpolate the spline function with.  Ignored
+for \code{type = "ssr"}.}
 }
 \description{
 A collection of function for the inspection and evaluation of the control

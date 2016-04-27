@@ -58,6 +58,9 @@ cp.cpr_bs <- function(x, theta, ...) {
   out <- dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
                            theta   = as.vector(theta))
   attr(out, "bmat") <- x
+  attr(out, "call") <- match.call() 
+  attr(out, "fit")  <- NULL
+  attr(out, "ssr")  <- NULL
   class(out) <- c("cpr_cp", class(out))
   out
 }
@@ -99,6 +102,8 @@ cp.formula <- function(formula, data = parent.env(), method = lm, ...) {
   # attr(out, "order")  <- attr(Bmat, "order") 
   attr(out, "bmat") <- Bmat
   attr(out, "call") <- match.call() 
+  attr(out, "fit")  <- fit
+  attr(out, "ssr")  <- sum(residuals(fit)^2)
 
   class(out) <- c("cpr_cp", class(out))
   out 
