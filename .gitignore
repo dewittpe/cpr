@@ -8,3 +8,4 @@
 .RData
 inst/doc
 vignettes/figure
+vignettes/background.Rnw

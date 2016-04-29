@@ -1,0 +1,25 @@
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\appendix
+\section{Notation}
+\begin{itemize}
+  \item $x$ a scalar
+  \item $\bs{x}$ a vector or sequence
+  \item $\bs{X}$ a matrix
+  \item $\left| x \right|$ the absolute value of $x,$ e.g., $\left| -3 \right|
+    = 3.$
+  \item $\card{\bs{x}}$ the cardinality of $\bs{x},$ the number of elements in
+    $\bs{x},$ e.g., let $\bs{x} = \left\{ 1, 1, 1.2 \right\},$ then $\card{\bs{x}} = 3.$
+  \item $1_{A}\left(x\right)$  The indicator function.
+  \[1_{ A } \left(x\right) = \begin{cases} 1 & x \in A \\ 0 & x \notin A \end{cases}
+  \]
+\end{itemize}
+
+\section{Session information}
+This vignette was built via
+<<background-session-info>>=
+print(utils::sessionInfo(), locale = FALSE)
+@
+
+\end{document}

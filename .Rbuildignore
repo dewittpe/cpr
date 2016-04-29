@@ -4,3 +4,4 @@
 ^test.R$
 .gitignore
 vignettes/figure
+Makefile
