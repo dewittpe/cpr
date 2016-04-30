@@ -3,9 +3,7 @@
 PKG_VERSION=$(shell awk '/^Version:/{print $$2}' DESCRIPTION)
 PKG_NAME=$(shell awk '/^Package:/{print $$2}' DESCRIPTION)
 
-TEMP=newdir
-
-all: vignettes documents tarball
+all: document vignettes build
 
 background.Rnw:
 	cat vignettes/background/00_0_preamble.Rnw        >  vignettes/background.Rnw
@@ -20,11 +18,10 @@ background.Rnw:
 vignettes: background.Rnw
 	R -e "devtools::build_vignettes()"
 
-documents: 
+document: 
 	R -e "devtools::document()"
 
-
-tarball: $(PKG_NAME)_$(PKG_VERSION).tar.gz
+build: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 $(PKG_NAME)_$(PKG_VERSION).tar.gz: 
 	R CMD build .
 
