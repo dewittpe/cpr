@@ -33,8 +33,8 @@ measure of the influence of each knot.
 # Get the weight of each of the interior knots from cp_init
 
 # THE WEIGHTS DO NOT SEEM CORRECT
-iwghts <- cpr::weigh_iknots(xi, theta)
-iwghts
+iweights <- cpr::weigh_iknots(xi, theta)
+iweights
 
 # NEED TO BUILD AN S3 Method for weigh_knots and/or build the functionality into
 # the influence_weight() function designed currently for Tensor Products.
@@ -45,8 +45,14 @@ theta_cr <-
            cpr::hat_ordinate(xi_j, xi[-which(xi == xi_j)], theta)
          })
 
+# Sanity check for the inflence weights
+all.equal(sapply(theta_cr, function(x) sqrt(sum((x - theta)^2))), c(iweights))
+
+# build a list of the control polygons based on the the ordinates after removing
+# and reinserting an internal knot
 cr_cps <- lapply(theta_cr, function(x) cpr::cp(bmat, x))
 
+# create a list of plots, see Figure~\ref{fig:influence_weights}
 plots <- 
   lapply(cr_cps, 
          function(x) {
@@ -74,7 +80,7 @@ obvious.
 <<echo = FALSE, fig.width = 3, fig.height = 3>>=
 plots[[1]]
 @
-  \caption{Influence Weight of $\xi_5 = \Sexpr{iwghts[1, 1]}$
+  \caption{Influence Weight of $\xi_5 = \Sexpr{iweights[1, 1]}$
   \label{fig:influence-weights-a}}
   \end{subfigure}
   ~
@@ -82,7 +88,7 @@ plots[[1]]
 <<echo = FALSE, fig.width = 3, fig.height = 3>>=
 plots[[2]]
 @
-  \caption{Influence Weight of $\xi_6 = \Sexpr{iwghts[2, 1]}$
+  \caption{Influence Weight of $\xi_6 = \Sexpr{iweights[2, 1]}$
   \label{fig:influence-weights-b}}
   \end{subfigure}
   ~
@@ -90,7 +96,7 @@ plots[[2]]
 <<echo = FALSE, fig.width = 3, fig.height = 3>>=
 plots[[3]]
 @
-  \caption{Influence Weight of $\xi_7 = \Sexpr{iwghts[3, 1]}$
+  \caption{Influence Weight of $\xi_7 = \Sexpr{iweights[3, 1]}$
   \label{fig:influence-weights-c}}
   \end{subfigure}
   
@@ -98,7 +104,7 @@ plots[[3]]
 <<echo = FALSE, fig.width = 3, fig.height = 3>>=
 plots[[4]]
 @
-  \caption{Influence Weight of $\xi_8 = \Sexpr{iwghts[4, 1]}$
+  \caption{Influence Weight of $\xi_8 = \Sexpr{iweights[4, 1]}$
   \label{fig:influence-weights-d}}
   \end{subfigure}
   ~
@@ -106,7 +112,7 @@ plots[[4]]
 <<echo = FALSE, fig.width = 3, fig.height = 3>>=
 plots[[5]]
 @
-  \caption{Influence Weight of $\xi_8 = \Sexpr{iwghts[5, 1]}$
+  \caption{Influence Weight of $\xi_8 = \Sexpr{iweights[5, 1]}$
   \label{fig:influence-weights-e}}
   \end{subfigure}
 

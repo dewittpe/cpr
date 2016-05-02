@@ -12,8 +12,9 @@
   \item $\card{\bs{x}}$ the cardinality of $\bs{x},$ the number of elements in
     $\bs{x},$ e.g., let $\bs{x} = \left\{ 1, 1, 1.2 \right\},$ then $\card{\bs{x}} = 3.$
   \item $1_{A}\left(x\right)$  The indicator function.
-  \[1_{ A } \left(x\right) = \begin{cases} 1 & x \in A \\ 0 & x \notin A \end{cases}
-  \]
+  \[1_{ A } \left(x\right) = \begin{cases} 1 & x \in A \\ 0 & x \notin A \end{cases}\]
+  \item $\left\lVert \bs{x} \right\rVert_p:$ the $L^p$ norm, i.e.,
+    $\left(\sum_{i} x_i^p \right)^{\frac{1}{p}}$
 \end{itemize}
 
 \section{Session information}
