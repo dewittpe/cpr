@@ -45,6 +45,8 @@ cpr <- function(formula, data = parent.env(), method = stats::lm, p = 2L, keep =
       w <- NA
     }
 
+    attr(control_polygon, "weights") = w
+ 
     if (length(iknots) > keep) { 
       attr(control_polygon, "fit") <- NULL 
     }
