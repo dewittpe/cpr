@@ -4,7 +4,8 @@
 \alias{cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(formula, data = parent.env(), method = lm, p = 2L, keep = -1L, ...)
+cpr(formula, data = parent.env(), method = stats::lm, p = 2L,
+  keep = -1L, ...)
 }
 \arguments{
 \item{formula}{a formula that is appropriate for regression method being

@@ -47,7 +47,7 @@ tp <- with(mtcars,
                   iknots = list(numeric(0), c(100, 150), numeric(0))) 
            )
 tp
-str(tp)
+utils::str(tp)
 
 ## not run
 # The equivalent matrix is could be generated as follows

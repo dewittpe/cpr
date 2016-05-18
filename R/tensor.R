@@ -35,7 +35,7 @@
 #'                   iknots = list(numeric(0), c(100, 150), numeric(0))) 
 #'            )
 #' tp
-#' str(tp)
+#' utils::str(tp)
 #'
 #' ## not run
 #' # The equivalent matrix is could be generated as follows
@@ -75,7 +75,7 @@ tensor <- function(x, iknots, bknots, orders) {
   attr(M, "x")      = x
   attr(M, "iknots") = iknots
   attr(M, "bknots") = bknots 
-  attr(M, "orders") = setNames(orders, names(x))
+  attr(M, "orders") = stats::setNames(orders, names(x))
   attr(M, "bspline_list") = bspline_list
 
   class(M) <- c("cpr_tensor", class(M))
@@ -99,5 +99,5 @@ build_tensor <- function(x) {
 #' @export
 print.cpr_tensor <- function(x, ...) { 
   cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "") 
-  str(x, max.level = 1)
+  utils::str(x, max.level = 1)
 }

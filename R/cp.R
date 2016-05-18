@@ -72,10 +72,10 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @param data see documentation in \code{\link[stats]{lm}}
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
-cp.formula <- function(formula, data = parent.env(), method = lm, ...) { 
+cp.formula <- function(formula, data = parent.env(), method = stats::lm, ...) { 
  
   # check for some formula specification issues
-  fterms <- terms(formula)
+  fterms <- stats::terms(formula)
   if (sum(grepl("bsplines", attr(fterms, "term.labels"))) != 1) {
     stop("cpr::bspline() must apear once, with no effect modifiers, on the right hand side of the formula.")
   }
@@ -103,7 +103,7 @@ cp.formula <- function(formula, data = parent.env(), method = lm, ...) {
   attr(out, "bmat") <- Bmat
   attr(out, "call") <- match.call() 
   attr(out, "fit")  <- fit
-  attr(out, "ssr")  <- sum(residuals(fit)^2)
+  attr(out, "ssr")  <- sum(stats::residuals(fit)^2)
 
   class(out) <- c("cpr_cp", class(out))
   out 
@@ -133,7 +133,7 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 500) {
   cps   <- list(x, ...)
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
-                          .dots = setNames(list(rfctr), "row")) 
+                          .dots = stats::setNames(list(rfctr), "row")) 
                   
   base_plot <- 
     ggplot2::ggplot(.data) +
@@ -173,7 +173,7 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 500) {
                              }) 
     .data2 <- 
         dplyr::mutate_(dplyr::bind_rows(.data2, .id = "row"),
-                      .dots = setNames(list(rfctr), "row")) 
+                      .dots = stats::setNames(list(rfctr), "row")) 
 
       base_plot <- 
         base_plot + 
@@ -224,12 +224,12 @@ theta <- function(fit) {
 }
 
 theta.lm <- function(fit) { 
-  out <- coef(fit)
+  out <- stats::coef(fit)
   unname(out[grepl("bspline", names(out))])
 }
 
 theta.glm <- function(fit) { 
-  out <- coef(fit)
+  out <- stats::coef(fit)
   unname(out[grepl("bspline", names(out))])
 }
 
@@ -239,6 +239,6 @@ theta.lmerMod <- function(fit) {
 }
 
 theta.geeglm <- function(fit) { 
-  out <- coef(fit)
+  out <- stats::coef(fit)
   unname(out[grepl("bspline", names(out))])
 }

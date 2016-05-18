@@ -66,9 +66,9 @@ plot.cpr_bs <- function(x, ...) {
   k  <- attr(x, "order")
 
   xilb <- paste0("xi[", seq_along(xi), "] == ", "xi", "")
-  xilb <- c(paste(head(xilb, k), collapse = "\n"),
+  xilb <- c(paste(utils::head(xilb, k), collapse = "\n"),
             xilb[!(xi %in% range(xi))],
-            paste(tail(xilb, k), collapse = "\n")) 
+            paste(utils::tail(xilb, k), collapse = "\n")) 
   xilb <- gsub("\\d\\n", "", xilb)
 
 

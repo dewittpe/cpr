@@ -19,7 +19,7 @@ cpr_select <- function(x, tol = 3) {
     dplyr::data_frame(n_iknots      = seq(0, length(x) - 1L, by = 1L), 
                       min_weight    = c(NA, mwt), 
                       diffs         = c(diffs, NA)) 
-  best_cp_index <- max(which(mwt > median(awt) + tol * IQR(awt))) + 1L
+  best_cp_index <- max(which(mwt > stats::median(awt) + tol * stats::IQR(awt))) + 1L
 
   out <- list(best_cp = x[[best_cp_index]], all_cps = dat)
   attr(out, "best_cp_index") <- best_cp_index 

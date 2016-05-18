@@ -23,7 +23,7 @@
 #' @param ... arguments passed to the regression method
 #' 
 #' @export
-cpr <- function(formula, data = parent.env(), method = lm, p = 2L, keep = -1L, ...) { 
+cpr <- function(formula, data = parent.env(), method = stats::lm, p = 2L, keep = -1L, ...) { 
 
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("p", "keep")))]
@@ -67,7 +67,7 @@ cpr <- function(formula, data = parent.env(), method = lm, p = 2L, keep = -1L, .
 #' @export
 print.cpr_cpr <- function(x, ...) { 
   cat("A list of control polygons\n")
-  str(x, max.level = 0)
+  utils::str(x, max.level = 0)
 }
 
 newknots <- function(form, nk) { 
