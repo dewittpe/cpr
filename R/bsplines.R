@@ -80,7 +80,7 @@ plot.cpr_bs <- function(x, ...) {
     }
   }
 
-  expr <- c(expr, bquote(group('{', xi[j], '}')[j == .(length(xi) - k)]^{.(length(xi))}))
+  expr <- c(expr, bquote(group('{', xi[j], '}')[j == .(length(xi) - k + 1L)]^{.(length(xi))}))
 
   ggplot2::ggplot(.data) + 
   ggplot2::theme_bw() + 
