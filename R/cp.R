@@ -73,25 +73,28 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
 cp.formula <- function(formula, data = parent.env(), method = stats::lm, ...) { 
- 
   # check for some formula specification issues
   fterms <- stats::terms(formula)
+  fterms
   if (sum(grepl("bsplines", attr(fterms, "term.labels"))) != 1) {
     stop("cpr::bspline() must apear once, with no effect modifiers, on the right hand side of the formula.")
   }
+   
+  dat <- generate_cp_data(formula, data)
+  cp.cpr_cp_data(dat, method = method, ...)
+}
 
-  if (attr(fterms, "intercept")) {
-    warning("Adjusting model formula; removing intercept.")
-    formula <- stats::update(formula, . ~ . - 1)
-  }
+cp.cpr_cp_data <- function(x, method, ...) { 
 
   regression <- match.fun(method)
   cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) == "method"))]
+  cl <- cl[-c(1, which(names(cl) %in% c("x", "method")))]
+  cl$formula <- x$formula
+  cl$data <- x$data
   fit <- do.call(regression, cl)
 
   # extract bspline
-  Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
+  Bmat <- eval(extract_cpr_bspline(x$formula), x$data, environment(x$formula))
 
   out <- dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
                            theta   = theta(fit)) 
@@ -127,7 +130,7 @@ print.cpr_cp <- function(x, ...) {
 #' will be used regardless of the color settting).
 #' @param n the number of data points to use for plotting the spline
 #'
-plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 500) { 
+plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) { 
   nms   <- sapply(match.call()[-1], deparse)
   nms   <- nms[!(names(nms) %in% c("show_spline", "color", "n"))]
   cps   <- list(x, ...)
@@ -242,3 +245,4 @@ theta.geeglm <- function(fit) {
   out <- stats::coef(fit)
   unname(out[grepl("bspline", names(out))])
 }
+

@@ -4,10 +4,12 @@
 \alias{plot.cpr_bs}
 \title{Plot B-splines}
 \usage{
-\method{plot}{cpr_bs}(x, ...)
+\method{plot}{cpr_bs}(x, ..., n = 100)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
+
+\item{n}{number of values to use to plot the splines, defaults to 100}
 
 \item{\ldots}{not currently used}
 }

@@ -1,3 +1,14 @@
+# version 0.0.3.9000
+
+## New Features
+
+## Extended Documentation
+* Examples added to `bsplines`
+
+## End User non-visible changes:
+* Added the not-to-be-exported function `generate_cp_data`
+
+
 # version 0.0.3
 Version 0.0.3 is the version of the package used to run the analysis and
 simulations presented in the paper submitted to the 28th International
@@ -18,7 +29,8 @@ Biometric Society, Student paper competition.  The conference will be held 10 -
   squared residuals to be plotted.
 
 ## Vignettes
-* Extending the background vignette
+* Removed the background vignette... to much detail right now, too much time
+  required to build and install the package.
 
 ## End User non-visible changes:
 * Redundant definition of `greville_sites` removed.

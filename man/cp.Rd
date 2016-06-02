@@ -16,7 +16,7 @@ cp(x, ...)
 
 \method{print}{cpr_cp}(x, ...)
 
-\method{plot}{cpr_cp}(x, ..., show_spline = FALSE, color = FALSE, n = 500)
+\method{plot}{cpr_cp}(x, ..., show_spline = FALSE, color = FALSE, n = 100)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
