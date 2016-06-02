@@ -1,11 +1,18 @@
-# version 0.0.2.9004
+# version 0.0.3
+Version 0.0.3 is the version of the package used to run the analysis and
+simulations presented in the paper submitted to the 28th International
+Biometrics Conference, Western North American Region (WNAR) of the Internal
+Biometric Society, Student paper competition.  The conference will be held 10 -
+16 July 2016 in Victoria, British Columbia, Canada.
 
 ## Bug Fixes
 * Corrected the attr calls within `cpr` after adjusting the attributes being set
   on a `cpr_cp`.
 
+* `plot.cpr_bs` correctly displays the indices for the knot sequence.
+
 ## End User Visible changes: 
-* The knot insertion matrix **W** is accessable to the end user in a new way.
+* The knot insertion matrix **W** is accessible to the end user in a new way.
   Names of functions in `boehem.cpp` are cleaner.
 * `plot.cpr_cpr` allows user to select either control polygons or sums of
   squared residuals to be plotted.
@@ -27,7 +34,7 @@
 
 ## Bug Fixes
 * trimmed quantile handles the `use_unique` option correctly
-* better handeling of ... in `cp()` and `cpr()`
+* better handling of ... in `cp()` and `cpr()`
 
 # version 0.0.1.9003
 
