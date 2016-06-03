@@ -11,6 +11,7 @@
 #' \ldots, \code{keep} internal knots) \code{cpr\_cp} objects in the list.  The
 #' limit on the number of stored regression fits is to keep memory usage down.
 #'
+#' @param x a \code{cpr_cp} or \code{cpr_tensor} object
 #' @param formula a formula that is appropriate for regression method being
 #'        used.
 #' @param data see documentation in \code{\link[stats]{lm}}
@@ -23,7 +24,21 @@
 #' @param ... arguments passed to the regression method
 #' 
 #' @export
-cpr <- function(formula, data = parent.env(), method = stats::lm, p = 2L, keep = -1L, ...) { 
+cpr <- function(x, ...) { 
+  UseMethod("cpr")
+}
+
+#' @export
+cpr.cpr_cp <- function(x, ...) { 
+  w    <- influence_weights(x) 
+  nkts <- w$iknots[-which.min(w$w)]
+  
+  update(x, formula = newknots(x$call$formula, nkts))
+
+}
+
+#' @export
+cpr.default <- function(formula, data = parent.env(), method = stats::lm, p = 2L, keep = -1L, ...) { 
 
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("p", "keep")))]

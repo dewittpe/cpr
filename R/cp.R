@@ -55,12 +55,27 @@ cp <- function(x, ...) {
 #' @param theta a vector of (regression) coefficients, the ordinates of the
 #'        control polygon.
 cp.cpr_bs <- function(x, theta, ...) { 
-  out <- dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
-                           theta   = as.vector(theta))
-  attr(out, "bmat") <- x
-  attr(out, "call") <- match.call() 
-  attr(out, "fit")  <- NULL
-  attr(out, "ssr")  <- NULL
+  # out <- dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
+  #                          theta   = as.vector(theta))
+
+  out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
+                                     theta   = as.vector(theta)),
+              xi = c(attr(x, "xi")),
+              iknots = c(attr(x, "iknots")),
+              bknots = c(attr(x, "bknots")),
+              order  = attr(x, "order"),
+              call   = match.call(),
+              fit    = NA,
+              ssr    = NA)
+
+  # attr(out, "iknots") <- c(attr(x, "iknots"))
+  # attr(out, "bknots") <- c(attr(x, "bknots"))
+  # attr(out, "xi")     <- c(attr(x, "xi"))
+  # attr(out, "order")  <- attr(x, "order") 
+  # attr(out, "bmat") <- x
+  # attr(out, "call") <- match.call() 
+  # attr(out, "fit")  <- NULL
+  # attr(out, "ssr")  <- NULL
   class(out) <- c("cpr_cp", class(out))
   out
 }
@@ -80,33 +95,53 @@ cp.formula <- function(formula, data = parent.env(), method = stats::lm, ...) {
     stop("cpr::bspline() must apear once, with no effect modifiers, on the right hand side of the formula.")
   }
    
-  dat <- generate_cp_data(formula, data)
-  cp.cpr_cp_data(dat, method = method, ...)
+  dat <- generate_cp_formula_data(formula, data)
+
+  # out <- cp.cpr_formula(dat$formula, dat$data, method = method, ...)
+  out <- cp.cpr_formula(dat$formula, dat$data, method = method, ...)
+
+  out
 }
 
-cp.cpr_cp_data <- function(x, method, ...) { 
+cp.cpr_formula <- function(formula, data, method, ...) { 
 
   regression <- match.fun(method)
   cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("x", "method")))]
-  cl$formula <- x$formula
-  cl$data <- x$data
+  cl <- cl[-c(1, which(names(cl) %in% c("method")))]
+  cl$formula <- formula
+  cl$data <- data
+
   fit <- do.call(regression, cl)
 
   # extract bspline
-  Bmat <- eval(extract_cpr_bspline(x$formula), x$data, environment(x$formula))
+  Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
+  # return(Bmat)
 
-  out <- dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
-                           theta   = theta(fit)) 
+  # out <- dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
+  #                          theta   = theta(fit)) 
+  cl <- match.call()
+  cl$formula <- formula
+  cl$data <- data
+  cl$method <- regression
+
+  out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
+                                     theta   = as.vector(theta(fit))),
+              xi = c(attr(Bmat, "xi")),
+              iknots = c(attr(Bmat, "iknots")),
+              bknots = c(attr(Bmat, "bknots")),
+              order  = attr(Bmat, "order"),
+              call   = cl,
+              fit    = fit,
+              ssr    = sum(stats::residuals(fit)^2))
 
   # attr(out, "iknots") <- c(attr(Bmat, "iknots"))
   # attr(out, "bknots") <- c(attr(Bmat, "bknots"))
   # attr(out, "xi")     <- c(attr(Bmat, "xi"))
   # attr(out, "order")  <- attr(Bmat, "order") 
-  attr(out, "bmat") <- Bmat
-  attr(out, "call") <- match.call() 
-  attr(out, "fit")  <- fit
-  attr(out, "ssr")  <- sum(stats::residuals(fit)^2)
+  # attr(out, "bmat") <- Bmat
+  # attr(out, "call") <- match.call() 
+  # attr(out, "fit")  <- fit
+  # attr(out, "ssr")  <- sum(stats::residuals(fit)^2)
 
   class(out) <- c("cpr_cp", class(out))
   out 
@@ -116,7 +151,15 @@ cp.cpr_cp_data <- function(x, method, ...) {
 #' @export
 #' @rdname cp
 print.cpr_cp <- function(x, ...) { 
-  print.data.frame(x, ...)
+  dplyr:::print.tbl_df(x$cp, ...)
+}
+
+#' @method structure cpr_cp
+#' @param max.level default to 1
+#' @export
+#' @rdname cp
+str.cpr_cp <- function(object, max.level = 1, ...) { 
+  utils:::str.default(object, max.level = max.level, ...)
 }
 
 #' @method plot cpr_cp
@@ -133,7 +176,7 @@ print.cpr_cp <- function(x, ...) {
 plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) { 
   nms   <- sapply(match.call()[-1], deparse)
   nms   <- nms[!(names(nms) %in% c("show_spline", "color", "n"))]
-  cps   <- list(x, ...)
+  cps   <- lapply(list(x, ...), function(x) x$cp)
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
                           .dots = stats::setNames(list(rfctr), "row")) 
@@ -149,7 +192,6 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) {
     base_plot <- 
       base_plot + 
       ggplot2::aes_string(x = "xi_star", y = "theta", linetype = "factor(row)") + 
-      # ggplot2::scale_linetype(name = ggplot2::element_blank())
       ggplot2::theme(legend.title = ggplot2::element_blank())
   } else { 
     base_plot <- 
@@ -165,15 +207,15 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) {
 
   if (show_spline) { 
     .data2 <- 
-      lapply(cps, function(x) { 
-           b <- attr(attr(x, "bmat"), "bknots")
+      lapply(list(x, ...), function(xx) { 
+           b <- xx$bknots
            bmat <- cpr::bsplines(seq(b[1], b[2], length = n), 
-                            iknots = attr(attr(x, "bmat"), "iknots"), 
-                            bknots = b, 
-                            order  = attr(attr(x, "bmat"), "order"))
+                                 iknots = xx$iknots, 
+                                 bknots = b, 
+                                 order  = xx$order)
            data.frame(x = seq(b[1], b[2], length = n), 
-                      y = as.numeric(bmat %*% x$theta))
-                             }) 
+                      y = as.numeric(bmat %*% xx$cp$theta))
+                          }) 
     .data2 <- 
         dplyr::mutate_(dplyr::bind_rows(.data2, .id = "row"),
                       .dots = stats::setNames(list(rfctr), "row")) 

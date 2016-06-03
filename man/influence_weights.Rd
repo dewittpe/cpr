@@ -4,12 +4,12 @@
 \alias{influence_weights}
 \title{Influence Weights}
 \usage{
-influence_weights(tp, theta)
+influence_weights(x, p = 2)
 }
 \arguments{
-\item{tp}{a cpr_tensor object}
+\item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
 
-\item{theta}{corresponding ordinates for \code{x}}
+\item{p}{the order of the norm, default \code{p = 2}.}
 }
 \value{
 A list with each element a numeric vector of influence weights for the
@@ -20,20 +20,6 @@ Determine the influence weight of each iternal knot on each marginal of a
 tensor product.
 }
 \examples{
-\dontrun{
-data("diamonds", package = "ggplot2")
-sub_diamonds <- diamonds[1:11000, ]
-
-tp_diamonds <- 
-  with(sub_diamonds, 
-       cpr::tensor(list(carat, depth, table), 
-                   iknots = list(c(0.5, 1.5), numeric(0), numeric(0))))
-
-fit <- lm(price ~ tp_diamonds + 0, data = sub_diamonds)
-theta_diamonds <- unname(coef(fit))
-
-influence_weights(tp_diamonds, theta_diamonds)
-}
 
 }
 

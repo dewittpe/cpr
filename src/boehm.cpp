@@ -140,8 +140,7 @@ arma::vec hat_ordinate(double x, arma::vec xi, arma::vec theta, unsigned int ord
 arma::mat insertion_matrix(double x, arma::vec xi, unsigned int order = 4) { 
   return(knot_insertion_matrix(x, xi, order));
 }
-//' @export
-//' @rdname boehm
+
 // [[Rcpp::export]]
 arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int order = 4, unsigned int p = 2) {
 

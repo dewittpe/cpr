@@ -1,4 +1,4 @@
-#' Generate Control Polygon Data
+#' Generate Control Polygon Formula and Data
 #'
 #' Construct a \code{data.frame} and \code{formula} to be passed to the
 #' regression modeling tool to generate a control polygon.
@@ -23,8 +23,8 @@
 #' @param f a formula
 #' @param .data the data set containing the variables in the formula
 #' 
-#' @rdname generate_cp_data
-generate_cp_data <- function(f, .data) { 
+#' @rdname generate_cp_formula_data
+generate_cp_formula_data <- function(f, .data) { 
   # part the formula, version with no bspline, no bars
   f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline", attr(stats::terms(f), "term.labels"), value = TRUE)))
   f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
@@ -74,7 +74,9 @@ generate_cp_data <- function(f, .data) {
   }
 
   # return the formula and the data set
+  # class(f_for_use) <- c("cpr_formula", class(f_for_use))
+  # class(data_for_use) <- c("cpr_data", class(data_for_use))
   out <- list(formula = f_for_use, data = data_for_use)
-  class(out) <- c("cpr_cp_data", class(out))
+  # class(out) <- c("cpr_cp_data", class(out))
   out
 }

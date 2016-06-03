@@ -67,8 +67,6 @@ insertion_matrix <- function(x, xi, order = 4L) {
     .Call('cpr_insertion_matrix', PACKAGE = 'cpr', x, xi, order)
 }
 
-#' @export
-#' @rdname boehm
 weigh_iknots <- function(xi, theta, order = 4L, p = 2L) {
     .Call('cpr_weigh_iknots', PACKAGE = 'cpr', xi, theta, order, p)
 }
