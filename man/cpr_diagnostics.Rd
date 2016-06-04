@@ -10,8 +10,8 @@ cpr_select(x, tol = 3)
 
 \method{print}{cpr_selected}(x, ...)
 
-\method{plot}{cpr_cpr}(x, type = "cp", from = 0, to = 9,
-  show_spline = FALSE, n = 500, ...)
+\method{plot}{cpr_cpr}(x, type = "cp", from = 0, to = min(9, length(x) -
+  1L), show_spline = FALSE, color = FALSE, n = 100, ...)
 }
 \arguments{
 \item{x}{a cpr_cpr object}
@@ -29,6 +29,8 @@ cpr_select(x, tol = 3)
 
 \item{show_spline}{(boolean, default \code{FALSE}) if \code{TRUE} show the
 spline function within the control polygons.  Ignored for \code{type = "ssr"}}
+
+\item{color}{(boolean) use color in the plot(s)}
 
 \item{n}{number of points to interpolate the spline function with.  Ignored
 for \code{type = "ssr"}.}

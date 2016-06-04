@@ -39,7 +39,6 @@
 #'   examples.
 #' @param theta the ordinates of the control polygon vertices
 #' @param order the order of the B-spline, defaults to 4 for cubic splines
-#' @param p defaults to 2 for the l^p norm.
 #'
 #' @return numeric vectors
 #'

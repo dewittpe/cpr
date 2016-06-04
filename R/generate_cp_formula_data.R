@@ -29,7 +29,6 @@ generate_cp_formula_data <- function(f, .data) {
   f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline", attr(stats::terms(f), "term.labels"), value = TRUE)))
   f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
 
-
   # get a list of the variables and subset the .data
   vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
   data_nobsplines_nobars <- dplyr::select_(.data, .dots = vars_nobsplines_nobars)
@@ -51,14 +50,13 @@ generate_cp_formula_data <- function(f, .data) {
     data_factors_only <- NULL
   }
 
+
   data_nobsplines_nobars <-
     dplyr::select_(data_nobsplines_nobars, .dots = dplyr::setdiff(names(data_nobsplines_nobars), factors))
 
-
   data_bsplines_bars <- 
-    dplyr::select_(.data, .dots = dplyr::setdiff(all.vars(lme4::subbars(f)), 
+    dplyr::select_(.data, .dots = dplyr::setdiff(intersect(all.vars(lme4::subbars(f)), names(.data)),
                                                  all.vars(f_nobsplines_nobars))) 
-  
 
   # construct the new formula and data set
   if (!is.null(data_factors_only)) { 
@@ -72,6 +70,7 @@ generate_cp_formula_data <- function(f, .data) {
     data_for_use <- 
       cbind(data_nobsplines_nobars, data_bsplines_bars)
   }
+
 
   # return the formula and the data set
   # class(f_for_use) <- c("cpr_formula", class(f_for_use))

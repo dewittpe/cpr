@@ -12,14 +12,21 @@ influence_weights(x, p = 2)
 \item{p}{the order of the norm, default \code{p = 2}.}
 }
 \value{
-A list with each element a numeric vector of influence weights for the
-internal knots on a marginal
+A data_frame with two elements, the internal knots (iknots) and the weights.
 }
 \description{
 Determine the influence weight of each iternal knot on each marginal of a
 tensor product.
 }
 \examples{
+
+xvec    <- seq(0, 6, length = 20)
+iknots  <- c(1, 1.5, 2.3, 4, 4.5)
+bmat    <- cpr::bsplines(x = xvec, iknots = iknots, bknots = c(0, 6), order = 4)
+theta   <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
+
+example_cp <- cp(bmat, theta)
+influence_weights(example_cp) 
 
 }
 

@@ -55,9 +55,6 @@ cp <- function(x, ...) {
 #' @param theta a vector of (regression) coefficients, the ordinates of the
 #'        control polygon.
 cp.cpr_bs <- function(x, theta, ...) { 
-  # out <- dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
-  #                          theta   = as.vector(theta))
-
   out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
                                      theta   = as.vector(theta)),
               xi = c(attr(x, "xi")),
@@ -68,14 +65,6 @@ cp.cpr_bs <- function(x, theta, ...) {
               fit    = NA,
               ssr    = NA)
 
-  # attr(out, "iknots") <- c(attr(x, "iknots"))
-  # attr(out, "bknots") <- c(attr(x, "bknots"))
-  # attr(out, "xi")     <- c(attr(x, "xi"))
-  # attr(out, "order")  <- attr(x, "order") 
-  # attr(out, "bmat") <- x
-  # attr(out, "call") <- match.call() 
-  # attr(out, "fit")  <- NULL
-  # attr(out, "ssr")  <- NULL
   class(out) <- c("cpr_cp", class(out))
   out
 }
@@ -151,21 +140,21 @@ cp.cpr_formula <- function(formula, data, method, ...) {
 #' @export
 #' @rdname cp
 print.cpr_cp <- function(x, ...) { 
-  dplyr:::print.tbl_df(x$cp, ...)
+  print(x$cp, ...)
 }
 
-#' @method structure cpr_cp
+#' @method str cpr_cp
+#' @param object a \code{cpr_cp} object
 #' @param max.level default to 1
 #' @export
 #' @rdname cp
 str.cpr_cp <- function(object, max.level = 1, ...) { 
-  utils:::str.default(object, max.level = max.level, ...)
+  utils::str(object, max.level = max.level, ...)
 }
 
 #' @method plot cpr_cp
 #' @export
 #' @rdname cp
-#' @inheritParams plot
 #' @param show_spline boolean (default FALSE) to plot the spline function within
 #' its control polygon
 #' @param color boolean (default FALSE) if more than one \code{cpr_cp} object is

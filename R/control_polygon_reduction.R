@@ -12,72 +12,30 @@
 #' limit on the number of stored regression fits is to keep memory usage down.
 #'
 #' @param x a \code{cpr_cp} or \code{cpr_tensor} object
-#' @param formula a formula that is appropriate for regression method being
-#'        used.
-#' @param data see documentation in \code{\link[stats]{lm}}
-#' @param method the regression method such as \code{\link[stats]{lm}},
-#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
 #' @param p defaults to 2L, the L^p norm used in determining the influence
 #'        weight of each internal knot.
-#' @param keep an integer value (defaults to -1L), the number of regression fits
-#' to keep.  See Details.
-#' @param ... arguments passed to the regression method
+#' @param ... not currently used
 #' 
 #' @export
-cpr <- function(x, ...) { 
+cpr <- function(x, p = 2, ...) { 
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, ...) { 
-  w    <- influence_weights(x) 
-  nkts <- w$iknots[-which.min(w$w)]
-  
-  update(x, formula = newknots(x$call$formula, nkts))
+cpr.cpr_cp <- function(x, p = 2, ...) { 
 
-}
+  out <- vector("list", length = length(x$iknots) + 1L)
 
-#' @export
-cpr.default <- function(formula, data = parent.env(), method = stats::lm, p = 2L, keep = -1L, ...) { 
-
-  cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("p", "keep")))]
-
-  control_polygon <- do.call(cp, cl)
-  iknots <- attr(attr(control_polygon, "bmat"), "iknots")
-
-  # return(list(control_polygon, iknots))
-
-  results <- vector("list", length = length(iknots) + 1L) 
-  
-  for(i in seq_along(results)) { 
-    xi     <- attr(attr(control_polygon, "bmat"), "xi") 
-    iknots <- attr(attr(control_polygon, "bmat"), "iknots") 
-
-    if (length(iknots) > 0) { 
-      w <- weigh_iknots(xi, control_polygon$theta, attr(attr(control_polygon, "bmat"), "order"), p) 
-    } else {
-      w <- NA
-    }
-
-    attr(control_polygon, "weights") = w
- 
-    if (length(iknots) > keep) { 
-      attr(control_polygon, "fit") <- NULL 
-    }
-
-    results[[i]] <- control_polygon
-
-    if (length(iknots) > 0) { 
-      cl$formula <- (newknots(cl$formula, iknots[-which.min(w)]))
-      class(cl$formula) <- NULL
-      control_polygon <- do.call(cp, cl)
-    }
+  for(i in rev(seq_along(out)[-1])) {
+    out[[i]] <- x 
+    w    <- influence_weights(x, p = p) 
+    nkts <- w$iknots[-which.min(w$w)] 
+    x <- stats::update(x, formula = newknots(x$call$formula, nkts))
   }
+  out[[1]] <- x
 
-  results <- results[rev(seq_along(results))]
-  class(results) <- c("cpr_cpr", class(results))
-  return(results)
+  class(out) <- c("cpr_cpr", class(out))
+  out 
 }
 
 #' @method print cpr_cpr

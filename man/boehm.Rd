@@ -26,8 +26,6 @@ examples.}
 \item{theta}{the ordinates of the control polygon vertices}
 
 \item{order}{the order of the B-spline, defaults to 4 for cubic splines}
-
-\item{p}{defaults to 2 for the l^p norm.}
 }
 \value{
 numeric vectors

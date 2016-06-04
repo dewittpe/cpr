@@ -4,25 +4,15 @@
 \alias{cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(formula, data = parent.env(), method = stats::lm, p = 2L,
-  keep = -1L, ...)
+cpr(x, p = 2, ...)
 }
 \arguments{
-\item{formula}{a formula that is appropriate for regression method being
-used.}
-
-\item{data}{see documentation in \code{\link[stats]{lm}}}
-
-\item{method}{the regression method such as \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
+\item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
 
 \item{p}{defaults to 2L, the L^p norm used in determining the influence
 weight of each internal knot.}
 
-\item{keep}{an integer value (defaults to -1L), the number of regression fits
-to keep.  See Details.}
-
-\item{...}{arguments passed to the regression method}
+\item{...}{not currently used}
 }
 \description{
 Run the Control Polygon Reduction Algorithm.

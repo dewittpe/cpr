@@ -47,16 +47,18 @@ print.cpr_selected <- function(x, ...) {
 #' @param to the maximum number of interior knots to display
 #' @param show_spline (boolean, default \code{FALSE}) if \code{TRUE} show the
 #' spline function within the control polygons.  Ignored for \code{type = "ssr"}
+#' @param color (boolean) use color in the plot(s)
 #' @param n number of points to interpolate the spline function with.  Ignored
 #' for \code{type = "ssr"}.
 #' @param ... not currently used.
-plot.cpr_cpr <- function(x, type = "cp", from = 0, to = 9, show_spline = FALSE, n = 500, ...) { 
+plot.cpr_cpr <- function(x, type = "cp", from = 0, to = min(9, length(x) - 1L), show_spline = FALSE, color = FALSE, n = 100, ...) { 
   if (type == "cp") { 
     lp <- suppressMessages(
                            lapply(seq(from, to - 1L, by = 1L) + 1L,
                                   function(idx, .data, sp, n) { 
-                                    plot.cpr_cp(.data[[idx]], .data[[idx + 1L]], show_spline = sp, n = n) + 
+                                    plot.cpr_cp(.data[[idx]], .data[[idx + 1L]], show_spline = sp, color = color, n = n) + 
                                     ggplot2::scale_linetype(name = "", labels = paste(idx + -1:0, "iknots")) + 
+                                    ggplot2::scale_color_hue(name = "", labels = paste(idx + -1:0, "iknots")) + 
                                     ggplot2::theme(legend.position = "top",
                                                    axis.title = ggplot2::element_blank())
                                   },
@@ -86,6 +88,6 @@ plot.cpr_cpr <- function(x, type = "cp", from = 0, to = 9, show_spline = FALSE, 
   } else { 
     stop("type needs to be either 'cp' or 'ssr'.")
   }
-  lp
+  invisible(lp)
 }
 
