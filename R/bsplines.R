@@ -89,7 +89,6 @@ plot.cpr_bs <- function(x, ..., n = 100) {
   lgnd <- scales::parse_format()(lgnd)
 
   .data <- dplyr::tbl_df(.data)
-  # return(.data)
 
   xi <- attr(x, "xi")
   k  <- attr(x, "order")
@@ -99,7 +98,6 @@ plot.cpr_bs <- function(x, ..., n = 100) {
             xilb[!(xi %in% range(xi))],
             paste(utils::tail(xilb, k), collapse = "\n")) 
   xilb <- gsub("\\d\\n", "", xilb)
-
 
   expr <- list(bquote(group('{', xi[j], '}')[j == 1]^{.(k)} ))
 
@@ -117,7 +115,8 @@ plot.cpr_bs <- function(x, ..., n = 100) {
   ggplot2::geom_line() + 
   ggplot2::theme(axis.title = ggplot2::element_blank()) +
   ggplot2::scale_color_hue(name = "B-spline", labels = lgnd) + 
-  ggplot2::scale_x_continuous(breaks = unique(xi), labels = do.call(expression, expr))
+  ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))), labels = do.call(expression, expr))
+  # return(list(breaks = c(min(attr(x, "bknots")), xi, max(attr(x, "bknots"))), labels = do.call(expression, expr)))
 }
 
 #' @export
