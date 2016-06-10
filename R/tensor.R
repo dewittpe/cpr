@@ -101,3 +101,19 @@ print.cpr_tensor <- function(x, ...) {
   cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "") 
   utils::str(x, max.level = 1)
 }
+
+#' @export
+#' @rdname tensor
+tensor2 <- function(A, B) { 
+    .Call('cpr_tp__impl', PACKAGE = 'cpr', A, B) 
+}
+
+build_tensor2 <- function(x) {
+  if (length(x) == 1) {
+    return(x)
+  } else  {
+    build_tensor2(
+                  c(list(tensor2(x[[1]], x[[2]])), x[-(1:2)])
+                  ) 
+  }
+}

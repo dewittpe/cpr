@@ -81,3 +81,7 @@ bsplines__impl <- function(x, iknots, bknots, order) {
     .Call('cpr_bsplines__impl', PACKAGE = 'cpr', x, iknots, bknots, order)
 }
 
+tp__impl <- function(A, B) {
+    .Call('cpr_tp__impl', PACKAGE = 'cpr', A, B)
+}
+

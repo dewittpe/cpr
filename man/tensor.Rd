@@ -2,9 +2,12 @@
 % Please edit documentation in R/tensor.R
 \name{tensor}
 \alias{tensor}
+\alias{tensor2}
 \title{tensor}
 \usage{
 tensor(x, iknots, bknots, orders)
+
+tensor2(A, B)
 }
 \arguments{
 \item{x}{a list of variables to build B-spline transforms of.  The tensor
