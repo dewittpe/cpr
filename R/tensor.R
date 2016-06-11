@@ -3,7 +3,7 @@
 #' Tensor product of B-splines.
 #'
 #' Construction of the B-splines and the tensor product thereof.
-#' 
+#'
 #' The return form this function is the tensor product of the B-splines
 #' transformations for the given variables.  Say we have variables X, Y, and Z
 #' to build the tensor product of.  The columns of the returned matrix
@@ -30,51 +30,50 @@
 #' A matrix with a class cpr_tensor
 #'
 #' @examples
-#' tp <- with(mtcars, 
-#'            tensor(x = list(disp, hp, mpg),
-#'                   iknots = list(numeric(0), c(100, 150), numeric(0))) 
+#' tp <- with(mtcars,
+#'            btensor(x = list(disp, hp, mpg),
+#'                    iknots = list(numeric(0), c(100, 150), numeric(0)))
 #'            )
 #' tp
 #' utils::str(tp)
 #'
 #' ## not run
 #' # The equivalent matrix is could be generated as follows
-#' tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) : 
-#'                        splines::bs(hp, knots = c(100, 150), intercept = TRUE) : 
+#' tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) :
+#'                        splines::bs(hp, knots = c(100, 150), intercept = TRUE) :
 #'                        splines::bs(mpg, intercept = TRUE) + 0,
 #'                     data = mtcars)
 #'
 #' all.equal(tp2, unclass(tp), check.attributes = FALSE)
 #'
-#'
 #' @export
-tensor <- function(x, iknots, bknots, orders) { 
+btensor <- function(x, iknots, bknots, orders) {
 
-  if (missing(iknots)) { 
+  if (missing(iknots)) {
     iknots <- replicate(length(x), numeric(0), simplify = FALSE)
   }
-  if (missing(bknots)) { 
+  if (missing(bknots)) {
     bknots <- lapply(x, range)
   }
-  if (missing(orders)) { 
+  if (missing(orders)) {
     orders <- replicate(length(x), 4L, simplify = FALSE)
   }
 
-  if (any(c(length(iknots), length(bknots), length(orders)) != length(x))) { 
+  if (any(c(length(iknots), length(bknots), length(orders)) != length(x))) {
     stop("Length of x, iknots, bknots, and orders must be the same.")
   }
 
   bspline_list <- mapply(FUN = cpr::bsplines,
                          x = x,
-                         iknots = iknots, 
+                         iknots = iknots,
                          bknots = bknots,
                          order = orders,
-                         SIMPLIFY = FALSE) 
+                         SIMPLIFY = FALSE)
   M <- build_tensor(bspline_list)
 
   attr(M, "x")      = x
   attr(M, "iknots") = iknots
-  attr(M, "bknots") = bknots 
+  attr(M, "bknots") = bknots
   attr(M, "orders") = stats::setNames(orders, names(x))
   attr(M, "bspline_list") = bspline_list
 
@@ -82,7 +81,7 @@ tensor <- function(x, iknots, bknots, orders) {
   M
 }
 
-build_tensor <- function(x) { 
+build_tensor_old <- function(x) {
   mats <- length(x)
   cols <- unlist(lapply(x, ncol))
   rows <- nrow(x[[1]])
@@ -97,23 +96,15 @@ build_tensor <- function(x) {
 
 #' @method print cpr_tensor
 #' @export
-print.cpr_tensor <- function(x, ...) { 
-  cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "") 
+print.cpr_tensor <- function(x, ...) {
+  cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
   utils::str(x, max.level = 1)
 }
 
-#' @export
-#' @rdname tensor
-tensor2 <- function(A, B) { 
-    .Call('cpr_tp__impl', PACKAGE = 'cpr', A, B) 
-}
-
-build_tensor2 <- function(x) {
+build_tensor <- function(x) {
   if (length(x) == 1) {
     return(x)
   } else  {
-    build_tensor2(
-                  c(list(tensor2(x[[1]], x[[2]])), x[-(1:2)])
-                  ) 
+    build_tensor(c(list(.Call('cpr_tp__impl', PACKAGE = 'cpr', x[[1]], x[[2]])), x[-(1:2)]))
   }
 }
