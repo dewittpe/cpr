@@ -1,8 +1,6 @@
-#' tensor
+#' btensor
 #'
-#' Tensor product of B-splines.
-#'
-#' Construction of the B-splines and the tensor product thereof.
+#' Tensor products of B-splnes.
 #'
 #' The return form this function is the tensor product of the B-splines
 #' transformations for the given variables.  Say we have variables X, Y, and Z
@@ -101,10 +99,14 @@ print.cpr_tensor <- function(x, ...) {
   utils::str(x, max.level = 1)
 }
 
-build_tensor <- function(x) {
-  if (length(x) == 1) {
-    return(x)
+#' @export
+#' @rdname build_tensor
+build_tensor <- function(x, ...) {
+  m <- list(x, ...)
+  if (length(m) == 1) {
+    return(m)
   } else  {
-    build_tensor(c(list(.Call('cpr_tp__impl', PACKAGE = 'cpr', x[[1]], x[[2]])), x[-(1:2)]))
+    # build_tensor(c(list(.Call('cpr_tp__impl', PACKAGE = 'cpr', x[[1]], x[[2]])), x[-(1:2)]))
+    build_tensor(c(list(tp__impl(m[[1]], m[[2]])), m[-(1:2)]))
   }
 }
