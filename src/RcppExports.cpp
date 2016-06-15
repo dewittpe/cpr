@@ -101,6 +101,18 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// diag_only
+Rcpp::NumericVector diag_only(arma::mat& A, arma::mat& B);
+RcppExport SEXP cpr_diag_only(SEXP ASEXP, SEXP BSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< arma::mat& >::type B(BSEXP);
+    __result = Rcpp::wrap(diag_only(A, B));
+    return __result;
+END_RCPP
+}
 // tp__impl
 arma::mat tp__impl(arma::mat A, arma::mat B);
 RcppExport SEXP cpr_tp__impl(SEXP ASEXP, SEXP BSEXP) {
