@@ -62,13 +62,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // weigh_iknots
-arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int order, unsigned int p);
+Rcpp::NumericVector weigh_iknots(arma::vec xi, arma::mat theta, unsigned int order, unsigned int p);
 RcppExport SEXP cpr_weigh_iknots(SEXP xiSEXP, SEXP thetaSEXP, SEXP orderSEXP, SEXP pSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type p(pSEXP);
     __result = Rcpp::wrap(weigh_iknots(xi, theta, order, p));

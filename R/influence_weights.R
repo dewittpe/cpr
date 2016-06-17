@@ -27,8 +27,7 @@ influence_weights <- function(x, p = 2) {
 #' @export 
 influence_weights.cpr_cp <- function(x, p = 2) {
   if (length(x$iknots) > 0) { 
-    iw <- .Call('cpr_weigh_iknots', PACKAGE = 'cpr', x$xi, x$cp$theta, x$order, p) 
-    # dplyr::data_frame(xi = x$xi, w = c(rep(NA, x$order), iw, rep(NA, x$order))) 
+    iw <- .Call('cpr_weigh_iknots', PACKAGE = 'cpr', x$xi, matrix(x$cp$theta, ncol = 1), x$order, p) 
     dplyr::data_frame(iknots = x$iknots, w = c(iw))
   } else { 
     dplyr::data_frame(iknots = numeric(0), w = numeric(0))

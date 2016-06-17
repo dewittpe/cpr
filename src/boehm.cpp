@@ -141,13 +141,14 @@ arma::mat insertion_matrix(double x, arma::vec xi, unsigned int order = 4) {
 }
 
 // [[Rcpp::export]]
-arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int order = 4, unsigned int p = 2) {
+Rcpp::NumericVector weigh_iknots(arma::vec xi, arma::mat theta, unsigned int order = 4, unsigned int p = 2) {
 
   int iknots = xi.n_elem - 2 * order;
 
   arma::mat xi_mat(xi.n_elem - 1, iknots);
   arma::vec xi_to_insert = xi(arma::span(order, order + iknots - 1));
 
+  arma::mat w_mat(iknots, theta.n_cols);
   arma::vec w_vec(iknots);
 
   int i,j,l;
@@ -162,11 +163,15 @@ arma::vec weigh_iknots(arma::vec xi, arma::vec theta, unsigned int order = 4, un
     }
   }
 
-  for(j = 0; j < iknots; ++j) { 
-    w_vec(j) = arma::norm(theta - knot_insertion_hat_matrix(xi_to_insert(j), xi_mat.col(j), order) * theta, p);
+  for(i = 0; i < w_mat.n_cols; ++i) { 
+    for(j = 0; j < iknots; ++j) { 
+      w_mat(j, i) = arma::norm(theta.col(i) - knot_insertion_hat_matrix(xi_to_insert(j), xi_mat.col(j), order) * theta.col(i), p);
+    }
   }
 
-  return(w_vec); 
+  w_vec = arma::max(w_mat, 1);
+
+  return Rcpp::NumericVector(w_vec.begin(), w_vec.end());
 }
 
 /******************************************************************************/
