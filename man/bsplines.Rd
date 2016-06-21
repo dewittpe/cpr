@@ -8,7 +8,7 @@
 \usage{
 greville_sites(xi, order)
 
-bsplines(x, iknots = numeric(0), bknots = range(x), order = 4L)
+bsplines(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
 
 is.cpr_bs(x)
 }
@@ -43,7 +43,7 @@ xvec <- seq(-3, 5, length = 100)
 bmat <- bsplines(xvec, iknots = c(-2, 0, 0.2))
 bmat
 
-# view the splints
+# view the splines
 plot(bmat)
 
 # If you want a second x-axis to show the x-values try the following:

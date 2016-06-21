@@ -23,7 +23,7 @@
 #' bmat <- bsplines(xvec, iknots = c(-2, 0, 0.2))
 #' bmat
 #' 
-#' # view the splints
+#' # view the splines
 #' plot(bmat)
 #' 
 #' # If you want a second x-axis to show the x-values try the following:
@@ -40,7 +40,24 @@
 #' plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
 #' 
 #' @export
-bsplines <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) { 
+bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L) { 
+
+  if (is.null(iknots) & is.null(df)) { 
+    iknots <- numeric(0)
+  } else if (is.null(iknots) & !is.null(df)) { 
+    if (df < order) {
+      warning("df being set to order") 
+      iknots <- numeric(0)
+    } else if (df == order) {
+      iknots <- numeric(0)
+    } else {
+      iknots <- trimmed_quantile(x, probs = seq(1, df - order, by = 1) / (df - order + 1))
+    }
+  } else if (!is.null(iknots) & !is.null(df)) {
+    warning("Both iknots and df defined, using iknots")
+  } 
+
+
   B <- .Call('cpr_bsplines__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
   out <- B$Bmat
   # attr(out, "x")       <- x

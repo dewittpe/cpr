@@ -65,12 +65,13 @@ print.cpr_cpr <- function(x, ...) {
 newknots <- function(form, nk) { 
   rr <- function(x, nk) {
       if(is.call(x) && grepl("bsplines", deparse(x[[1]]))) {
-          x$iknots <- nk
-          x
+        x$df <- NULL
+        x$iknots <- nk
+        x
       } else if (is.recursive(x)) {
-          as.call(lapply(as.list(x), rr, nk))
+        as.call(lapply(as.list(x), rr, nk))
       } else {
-          x
+        x
       }
   }
 

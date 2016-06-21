@@ -4,13 +4,15 @@
 \alias{cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(x, p = 2, ...)
+cpr(x, p = 2, progress = interactive(), ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
 
 \item{p}{defaults to 2L, the L^p norm used in determining the influence
 weight of each internal knot.}
+
+\item{progress}{show a progress bar.}
 
 \item{...}{not currently used}
 }
