@@ -67,11 +67,12 @@ plot.cpr_cpr <- function(x, type = "cp", from = 0, to = min(9, length(x) - 1L), 
                                   n = n)) 
     lp <- lapply(lp, ggplot2::ggplotGrob) 
     lp <- gridExtra::grid.arrange(grobs = lp) 
+    return(invisible(lp))
   } else if (type == "ssr") { 
     lp <- suppressMessages(
                            lapply(seq(from, to - 1L, by = 1L) + 1L,
                                   function(idx, .data) { 
-                                    data.frame(iknots = idx - 1L, ssr = attr(.data[[idx]], "ssr"))
+                                    data.frame(iknots = idx - 1L, ssr = .data[[idx]][["ssr"]])
                                   },
                                   .data = x)) 
     lp <- do.call(rbind, lp)
@@ -84,10 +85,9 @@ plot.cpr_cpr <- function(x, type = "cp", from = 0, to = min(9, length(x) - 1L), 
       ggplot2::scale_x_continuous(breaks = seq(from, to, by = 1), #floor(sqrt(to - from))), 
                                   labels = seq(from, to, by = 1)) + #floor(sqrt(to - from)))) +
       ggplot2::theme_bw()
-
+    return(lp) 
   } else { 
     stop("type needs to be either 'cp' or 'ssr'.")
   }
-  invisible(lp)
 }
 
