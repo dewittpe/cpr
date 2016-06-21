@@ -18,7 +18,7 @@
 #' @param ... not currently used
 #' 
 #' @export
-cpr <- function(x, p = 2, ...) { 
+cpr <- function(x, p = 2, progress = interactive(), ...) { 
   UseMethod("cpr")
 }
 
@@ -28,7 +28,9 @@ cpr.cpr_cp <- function(x, p = 2, progress = interactive(), ...) {
   out <- vector("list", length = length(x$iknots) + 1L)
 
   if (progress) { 
-    pb <- utils::txtProgressBar(max = length(out))
+    pb <- utils::txtProgressBar(max = length(out), style = 3)
+    prg <- 0
+    utils::setTxtProgressBar(pb, prg)
   }
 
   for(i in rev(seq_along(out)[-1])) {
@@ -36,9 +38,18 @@ cpr.cpr_cp <- function(x, p = 2, progress = interactive(), ...) {
     w    <- influence_weights(x, p = p) 
     nkts <- w$iknots[-which.min(w$w)] 
     x <- stats::update(x, formula = newknots(x$call$formula, nkts))
-    setTxtPrgressBar(pd, i)
+
+    if (progress) {
+      utils::setTxtProgressBar(pb, prg <- prg + 1)
+    }
   }
+
   out[[1]] <- x
+
+  if (progress) {
+    utils::setTxtProgressBar(pb, prg <- prg + 1)
+    close(pb)
+  } 
 
   class(out) <- c("cpr_cpr", class(out))
   out 
