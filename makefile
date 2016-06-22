@@ -3,12 +3,14 @@
 PKG_VERSION=$(shell awk '/^Version:/{print $$2}' DESCRIPTION)
 PKG_NAME=$(shell awk '/^Package:/{print $$2}' DESCRIPTION)
 
+RFILES:=$(wildcard R/*.R)
+
 all: document build
 
-document: 
+document: $(RFILES)
 	R -e "devtools::document()"
 
-build: $(PKG_NAME)_$(PKG_VERSION).tar.gz
+build: $(PKG_NAME)_$(PKG_VERSION).tar.gz $(RFILES)
 $(PKG_NAME)_$(PKG_VERSION).tar.gz: 
 	R CMD build .
 
