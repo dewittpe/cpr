@@ -104,10 +104,7 @@ cp.cpr_formula <- function(formula, data, method, ...) {
 
   # extract bspline
   Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
-  # return(Bmat)
 
-  # out <- dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
-  #                          theta   = theta(fit)) 
   cl <- match.call()
   cl$formula <- formula
   cl$data <- data
@@ -122,15 +119,6 @@ cp.cpr_formula <- function(formula, data, method, ...) {
               call   = cl,
               fit    = fit,
               ssr    = sum(stats::residuals(fit)^2))
-
-  # attr(out, "iknots") <- c(attr(Bmat, "iknots"))
-  # attr(out, "bknots") <- c(attr(Bmat, "bknots"))
-  # attr(out, "xi")     <- c(attr(Bmat, "xi"))
-  # attr(out, "order")  <- attr(Bmat, "order") 
-  # attr(out, "bmat") <- Bmat
-  # attr(out, "call") <- match.call() 
-  # attr(out, "fit")  <- fit
-  # attr(out, "ssr")  <- sum(stats::residuals(fit)^2)
 
   class(out) <- c("cpr_cp", class(out))
   out 

@@ -1,17 +1,15 @@
 # Makefile for the cpr package
 
-PKG_VERSION=$(shell awk '/^Version:/{print $$2}' DESCRIPTION)
-PKG_NAME=$(shell awk '/^Package:/{print $$2}' DESCRIPTION)
+PKG_VERSION = $(shell awk '/^Version:/{print $$2}' DESCRIPTION)
+PKG_NAME    = $(shell awk '/^Package:/{print $$2}' DESCRIPTION)
 
-RFILES:=$(wildcard R/*.R)
+RFILES = $(wildcard R/*.R)
+MANS   = $(wildcard man/*.Rd)
 
-all: document build
+all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 
-document: $(RFILES)
+$(PKG_NAME)_$(PKG_VERSION).tar.gz: $(RFILES)
 	R -e "devtools::document()"
-
-build: $(PKG_NAME)_$(PKG_VERSION).tar.gz $(RFILES)
-$(PKG_NAME)_$(PKG_VERSION).tar.gz: 
 	R CMD build .
 
 check: $(PKG_NAME)_$(PKG_VERSION).tar.gz
