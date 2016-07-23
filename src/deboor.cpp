@@ -57,9 +57,6 @@ void bspline::set_Bj() {
   Bj.zeros(data.n_elem); 
 
   for (unsigned int i = 0; i < data.n_elem; ++i) {
-    //if ((xi(j) < xi(j + 1)) && (xi(j + 1) == xi(xi.n_elem - 1)) && (data(i) == xi(xi.n_elem - 1))) {
-    //  Bj(i) = 1.0;
-    //} else 
     if (data(i) >= xi(j) && data(i) <= xi(j + order)) {
       Bj(i) = B(data(i), j, order); 
     }
@@ -80,10 +77,7 @@ double bspline::B(double x_, unsigned int j_, unsigned int k_) {
   double rtn;
 
   if (k_ == 1) { 
-    if (
-        ((xi(j_) <= x_) && (x_ < xi(j_ + 1))) //||
-    //    ((xi(j_) < xi(j_ + 1)) && (xi(j_ + 1) == xi(xi.n_elem - 1)) && (x_ == xi(xi.n_elem - 1)))
-       ) { 
+    if (((xi(j_) <= x_) && (x_ < xi(j_ + 1)))) { 
       rtn = 1.0; 
     } else { 
       rtn = 0.0;
