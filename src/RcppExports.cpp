@@ -76,7 +76,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // greville_sites
-arma::vec greville_sites(arma::vec xi, unsigned int order);
+Rcpp::NumericVector greville_sites(arma::vec xi, unsigned int order);
 RcppExport SEXP cpr_greville_sites(SEXP xiSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
@@ -87,17 +87,31 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// bsplines__impl
-Rcpp::List bsplines__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
-RcppExport SEXP cpr_bsplines__impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
+// bspline__impl
+Rcpp::NumericVector bspline__impl(arma::vec x, unsigned int j, unsigned int order, arma::vec knots);
+RcppExport SEXP cpr_bspline__impl(SEXP xSEXP, SEXP jSEXP, SEXP orderSEXP, SEXP knotsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type knots(knotsSEXP);
+    __result = Rcpp::wrap(bspline__impl(x, j, order, knots));
+    return __result;
+END_RCPP
+}
+// bbasis__impl
+Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int k);
+RcppExport SEXP cpr_bbasis__impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
-    __result = Rcpp::wrap(bsplines__impl(x, iknots, bknots, order));
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    __result = Rcpp::wrap(bbasis__impl(x, iknots, bknots, k));
     return __result;
 END_RCPP
 }

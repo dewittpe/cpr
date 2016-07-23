@@ -5,13 +5,16 @@
 #'
 #' The difference between this function and \code{splines::bs} come in the
 #' attributes associated with the output and default options.  The
-#' \code{cpr::bs} call is intended to simplify the work needed with respect to
-#' the control polygon reduction.
+#' \code{cpr::bsplines} call is intended to simplify the work needed with
+#' respect to the control polygon reduction.  Further, the implimentation of
+#' \code{cpr::bsplines} is in C++ and tends to be faster than
+#' \code{splines::bs}.
 #'
-#' \code{greville_sites} returns the knot averages.
 #'
 #' @param x a numeric vector
 #' @param iknots internal knots
+#' @param df degrees of freedom: sum of the order and internal knots.  Ignored
+#' if \code{iknots} is specified.
 #' @param bknots boundary knot locations, defaults to \code{range(x)}.
 #' @param order order of the piecewise polynomials, defualts to 4L.
 #'
@@ -57,18 +60,7 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
     warning("Both iknots and df defined, using iknots")
   } 
 
-
-  B <- .Call('cpr_bsplines__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
-  out <- B$Bmat
-  # attr(out, "x")       <- x
-  # attr(out, "call")    <- match.call()
-  attr(out, "iknots")  <- B$iknots
-  attr(out, "bknots")  <- B$bknots
-  attr(out, "xi")      <- B$xi
-  attr(out, "xi_star") <- B$xi_star
-  attr(out, "order")   <- B$order
-  attr(out, "class")   <- c("cpr_bs", "bs", "basis", "matrix")
-  out
+  .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
 }
 
 #' Print bsplines
