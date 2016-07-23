@@ -60,7 +60,9 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
     warning("Both iknots and df defined, using iknots")
   } 
 
-  .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
+  rtn <- .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
+  class(rtn) <- c("cpr_bs", "bs", "matrix")
+  rtn
 }
 
 #' Print bsplines

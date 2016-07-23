@@ -57,9 +57,10 @@ void bspline::set_Bj() {
   Bj.zeros(data.n_elem); 
 
   for (unsigned int i = 0; i < data.n_elem; ++i) {
-    if ((xi(j) < xi(j + 1)) && (xi(j + 1) == xi(xi.n_elem - 1)) && (data(i) == xi(xi.n_elem - 1))) {
-      Bj(i) = 1.0;
-    } else if (data(i) >= xi(j) && data(i) <= xi(j + order)) {
+    //if ((xi(j) < xi(j + 1)) && (xi(j + 1) == xi(xi.n_elem - 1)) && (data(i) == xi(xi.n_elem - 1))) {
+    //  Bj(i) = 1.0;
+    //} else 
+    if (data(i) >= xi(j) && data(i) <= xi(j + order)) {
       Bj(i) = B(data(i), j, order); 
     }
   }
@@ -155,6 +156,10 @@ Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots
     BJ.set_Bj();
     bmat.col(j) = BJ.get_Bj();
   }
+
+  arma::uvec bx = arma::find(x == bknots(1));
+  arma::uvec jx(bx.n_elem); jx.fill(j - 1);
+  bmat(bx, jx).fill(1.0);
 
   Rcpp::NumericMatrix out = Rcpp::wrap(bmat);
   out.attr("order") = k;
