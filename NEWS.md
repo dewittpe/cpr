@@ -1,12 +1,17 @@
-# version 0.0.3.9000
+# version 0.0.5
 
 ## New Features
+* First and second derivatives of B-splines via `bsplineD1` and `bsplineD2`
+  respectively.
 
 ## Extended Documentation
 * Examples added to `bsplines`
 
 ## End User non-visible changes:
 * Added the not-to-be-exported function `generate_cp_data`
+* Redesign of the deboor.cpp file so that the bsplines are accessable.  The
+  prior design only allowed access to the basis, the current design allows
+  access to the generic B-splines.
 
 
 # version 0.0.3

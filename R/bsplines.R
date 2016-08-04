@@ -65,6 +65,12 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
   rtn
 }
 
+#' @export
+#' @rdname bsplines
+is.cpr_bs <- function(x) { 
+  inherits(x, "cpr_bs")
+}
+
 #' Print bsplines
 #'
 #' @method print cpr_bs
@@ -130,8 +136,82 @@ plot.cpr_bs <- function(x, ..., n = 100) {
   # return(list(breaks = c(min(attr(x, "bknots")), xi, max(attr(x, "bknots"))), labels = do.call(expression, expr)))
 }
 
+#' B-spline Derivatives
+#'
+#' Generate the first and second derivatives of a B-spline Basis.
+#'
+#' @references 
+#' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
+#' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
+#'
+#' @param x a numeric vector
+#' @param iknots internal knots
+#' @param df degrees of freedom: sum of the order and internal knots.  Ignored
+#' if \code{iknots} is specified.
+#' @param bknots boundary knot locations, defaults to \code{range(x)}.
+#' @param order order of the piecewise polynomials, defualts to 4L.
+#'
+#' @examples
+#'
 #' @export
-#' @rdname bsplines
-is.cpr_bs <- function(x) { 
-  inherits(x, "cpr_bs")
+#' @rdname bsplinesD
+bsplineD1 <- function(x, ...) { 
+  UseMethod("bsplineD1")
+}
+#' @export
+#' @rdname bsplinesD
+bsplineD2 <- function(x, ...) { 
+  UseMethod("bsplineD2")
+}
+
+#' @export
+#' @rdname bsplinesD
+bsplineD1.default <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) { 
+  xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order))
+  
+  do.call(cbind, 
+          mapply(bsplineD1__impl,
+                 j = seq(0L, length(iknots) + order - 1L, by = 1L),
+                 MoreArgs = list(x = x, order = order, knots = xi), 
+                 SIMPLIFY = FALSE)
+  ) 
+}
+
+#' @export
+#' @rdname bsplinesD
+#' @param x a \code{cpr_bs} object
+bsplineD1.cpr_bs <- function(x, ...) {
+  stop("No yet implimented.  Need to extract the data from the cpr_bs object for use in the derivative call.")
+  # do.call(cbind, 
+  #         mapply(bsplineD1__impl,
+  #                j = seq(0L, length(attr(x, "xi")) - 1L, by = 1L),
+  #                MoreArgs = list(x = x, order = attr(x, "order"), knots = attr(x, "xi")), 
+  #                SIMPLIFY = FALSE)
+  # ) 
+}
+
+#' @export
+#' @rdname bsplinesD
+bsplineD2.default <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) { 
+  xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order))
+  
+  do.call(cbind, 
+          mapply(bsplineD2__impl,
+                 j = seq(0L, length(iknots) + order - 1L, by = 1L),
+                 MoreArgs = list(x = x, order = order, knots = xi), 
+                 SIMPLIFY = FALSE)
+  ) 
+}
+
+#' @export
+#' @rdname bsplinesD
+#' @param x a \code{cpr_bs} object
+bsplineD2.cpr_bs <- function(x, ...) {
+  stop("No yet implimented.  Need to extract the data from the cpr_bs object for use in the derivative call.")
+  # do.call(cbind, 
+  #         mapply(bsplineD2__impl,
+  #                j = seq(0L, length(attr(x, "xi")) - 1L, by = 1L),
+  #                MoreArgs = list(x = x, order = attr(x, "order"), knots = attr(x, "xi")), 
+  #                SIMPLIFY = FALSE)
+  # ) 
 }

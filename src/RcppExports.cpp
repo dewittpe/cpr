@@ -115,6 +115,20 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// bsplineD2__impl
+Rcpp::NumericVector bsplineD2__impl(arma::vec x, unsigned int j, unsigned int order, arma::vec knots);
+RcppExport SEXP cpr_bsplineD2__impl(SEXP xSEXP, SEXP jSEXP, SEXP orderSEXP, SEXP knotsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type knots(knotsSEXP);
+    __result = Rcpp::wrap(bsplineD2__impl(x, j, order, knots));
+    return __result;
+END_RCPP
+}
 // bbasis__impl
 Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int k);
 RcppExport SEXP cpr_bbasis__impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP kSEXP) {
