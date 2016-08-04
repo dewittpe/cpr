@@ -1,8 +1,7 @@
 # version 0.0.5
 
 ## New Features
-* First and second derivatives of B-splines via `bsplineD1` and `bsplineD2`
-  respectively.
+* First and second derivatives of B-splines via `bsplineD`
 
 ## Extended Documentation
 * Examples added to `bsplines`

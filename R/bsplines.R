@@ -150,68 +150,74 @@ plot.cpr_bs <- function(x, ..., n = 100) {
 #' if \code{iknots} is specified.
 #' @param bknots boundary knot locations, defaults to \code{range(x)}.
 #' @param order order of the piecewise polynomials, defualts to 4L.
+#' @param derivative, (integer) first or second derivative
 #'
 #' @examples
+#' 
+#' set.seed(42)
+#' 
+#' xvec <- seq(0.1, 9.9, length = 1000)
+#' iknots <- sort(runif(rpois(1, 3), 1, 9))
+#' bknots <- c(0, 10)
+#' 
+#' # basis matrix and the first and second derivatives thereof, for cubic (order =
+#' # 4) b-splines
+#' bmat  <- bsplines(xvec, iknots, bknots = bknots)
+#' bmat1 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 1)
+#' bmat2 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 2)
+#' 
+#' # control polygon ordinates
+#' theta <- runif(length(iknots) + 4L, -5, 5)
+#' 
+#' # plot data
+#' plot_data <- 
+#'   dplyr::data_frame(x = xvec, 
+#'                     Spline = as.numeric(bmat %*% theta),
+#'                     "First Derivative" = as.numeric(bmat1 %*% theta),
+#'                     "Second Derivative" = as.numeric(bmat2 %*% theta))
+#' plot_data <- tidyr::gather(plot_data, key = key, value = value, -x)
+#' 
+#' ggplot2::ggplot(plot_data) + 
+#' ggplot2::aes(x = x, y = value, color = key) + 
+#' ggplot2::geom_line() + 
+#' ggplot2::geom_hline(yintercept = 0) + 
+#' ggplot2::geom_vline(xintercept = iknots, linetype = 3)
 #'
 #' @export
 #' @rdname bsplinesD
-bsplineD1 <- function(x, ...) { 
-  UseMethod("bsplineD1")
-}
-#' @export
-#' @rdname bsplinesD
-bsplineD2 <- function(x, ...) { 
-  UseMethod("bsplineD2")
-}
+bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L, derivative = 1L) { 
 
-#' @export
-#' @rdname bsplinesD
-bsplineD1.default <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) { 
-  xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order))
+  if (is.null(iknots) & is.null(df)) { 
+    iknots <- numeric(0)
+  } else if (is.null(iknots) & !is.null(df)) { 
+    if (df < order) {
+      warning("df being set to order") 
+      iknots <- numeric(0)
+    } else if (df == order) {
+      iknots <- numeric(0)
+    } else {
+      iknots <- trimmed_quantile(x, probs = seq(1, df - order, by = 1) / (df - order + 1))
+    }
+  } else if (!is.null(iknots) & !is.null(df)) {
+    warning("Both iknots and df defined, using iknots")
+  } 
+
+  xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order)) 
+
   
-  do.call(cbind, 
-          mapply(bsplineD1__impl,
-                 j = seq(0L, length(iknots) + order - 1L, by = 1L),
-                 MoreArgs = list(x = x, order = order, knots = xi), 
-                 SIMPLIFY = FALSE)
-  ) 
-}
+  if (derivative == 1L) {
+    rtn <- mapply(bsplineD1__impl,
+                  j = seq(0L, length(iknots) + order - 1L, by = 1L),
+                  MoreArgs = list(x = x, order = order, knots = xi), 
+                  SIMPLIFY = FALSE)
+  } else if (derivative == 2L) { 
+    rtn <- mapply(bsplineD2__impl,
+                  j = seq(0L, length(iknots) + order - 1L, by = 1L),
+                  MoreArgs = list(x = x, order = order, knots = xi), 
+                  SIMPLIFY = FALSE) 
+  } else { 
+    stop("Only first and second derivatives are supported")
+  }
 
-#' @export
-#' @rdname bsplinesD
-#' @param x a \code{cpr_bs} object
-bsplineD1.cpr_bs <- function(x, ...) {
-  stop("No yet implimented.  Need to extract the data from the cpr_bs object for use in the derivative call.")
-  # do.call(cbind, 
-  #         mapply(bsplineD1__impl,
-  #                j = seq(0L, length(attr(x, "xi")) - 1L, by = 1L),
-  #                MoreArgs = list(x = x, order = attr(x, "order"), knots = attr(x, "xi")), 
-  #                SIMPLIFY = FALSE)
-  # ) 
-}
-
-#' @export
-#' @rdname bsplinesD
-bsplineD2.default <- function(x, iknots = numeric(0), bknots = range(x), order = 4L) { 
-  xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order))
-  
-  do.call(cbind, 
-          mapply(bsplineD2__impl,
-                 j = seq(0L, length(iknots) + order - 1L, by = 1L),
-                 MoreArgs = list(x = x, order = order, knots = xi), 
-                 SIMPLIFY = FALSE)
-  ) 
-}
-
-#' @export
-#' @rdname bsplinesD
-#' @param x a \code{cpr_bs} object
-bsplineD2.cpr_bs <- function(x, ...) {
-  stop("No yet implimented.  Need to extract the data from the cpr_bs object for use in the derivative call.")
-  # do.call(cbind, 
-  #         mapply(bsplineD2__impl,
-  #                j = seq(0L, length(attr(x, "xi")) - 1L, by = 1L),
-  #                MoreArgs = list(x = x, order = attr(x, "order"), knots = attr(x, "xi")), 
-  #                SIMPLIFY = FALSE)
-  # ) 
+  do.call(cbind, rtn)
 }
