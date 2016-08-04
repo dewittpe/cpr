@@ -77,7 +77,7 @@ double bspline::B(double x_, unsigned int j_, unsigned int k_) {
   double rtn;
 
   if (k_ == 1) { 
-    if (((xi(j_) <= x_) && (x_ < xi(j_ + 1)))) { 
+    if ((xi(j_) <= x_) && (x_ < xi(j_ + 1))) { 
       rtn = 1.0; 
     } else { 
       rtn = 0.0;
@@ -121,6 +121,33 @@ Rcpp::NumericVector bspline__impl(arma::vec x, unsigned int j, unsigned int orde
   return out;
 }
 
+// [[Rcpp::export]]
+Rcpp::NumericVector bsplineD1__impl(arma::vec x, unsigned int j, unsigned int order, arma::vec knots) { 
+
+  double a = 0.0;
+  double b = 0.0;
+  arma::vec A1;
+  arma::vec A2;
+  arma::vec A3;
+  A1.zeros(x.n_elem);
+  A2.zeros(x.n_elem);
+  A3.zeros(x.n_elem);
+
+  if (knots(j + order - 1) - knots(j) != 0) { 
+    bspline A(x, j, order - 1, knots); 
+    A1 = A.get_Bj()/(knots(j + order - 1) - knots(j));
+  }
+
+  if (knots(j + order) - knots(j + 1) != 0) { 
+    bspline B(x, j + 1, order - 1, knots);
+    A2 = B.get_Bj() / (knots(j + order) - knots(j + 1));
+  }
+    
+  A3 = double(order-1) * (A1 - A2);
+  Rcpp::NumericVector out = arma2vec(A3);
+
+  return out;
+}
 
 // [[Rcpp::export]]
 Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int k) { 
@@ -131,6 +158,7 @@ Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots
   arma::vec knots(iknots.n_elem + 2 * k);
   for (i = 0; i < k; ++i) {
     knots(i) = bknots(0);
+    //knots(k + iknots.n_elem + i) = bknots(1) + double(i) * 1.1e-12;
     knots(k + iknots.n_elem + i) = bknots(1);
   }
   for (i = 0; i < iknots.n_elem; ++i) {
