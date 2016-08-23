@@ -2,7 +2,7 @@
 #include <RcppArmadillo.h>
 
 // [[Rcpp::export]]
-Rcpp::NumericVector diag_only(arma::mat &A, arma::mat &B) {
+Rcpp::NumericVector diag_only(const arma::mat& A, const arma::mat& B) {
 
   if (A.n_rows != B.n_cols) { 
     throw std::invalid_argument("Expecting A.n_rows == B.n_cols");
