@@ -59,17 +59,17 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
     iknots <- as.list(numeric(0), length(x))
   } else if (is.null(iknots) & !is.null(df)) { 
     iknots <- 
-      lapply(df, 
-             function(dd) { 
-               if (dd < order) {
+      mapply(function(xx, dd, oo) { 
+               if (dd < oo) {
                  warning("df being set to order") 
                  numeric(0)
-               } else if (dd == order) {
+               } else if (dd == oo) {
                  numeric(0)
                } else {
-                 trimmed_quantile(x, probs = seq(1, dd - order, by = 1) / (dd - order + 1))
+                 trimmed_quantile(xx, probs = seq(1, dd - oo, by = 1) / (dd - oo + 1))
                }
-             })
+             },
+             xx = x, dd = df, oo = order, SIMPLIFY = FALSE)
   } else if (!is.null(iknots) & !is.null(df)) {
     warning("Both iknots and df defined, using iknots")
   } 
