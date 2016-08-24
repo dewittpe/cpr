@@ -22,7 +22,7 @@
 #' @param bknots a list of boundary knots for each x.  As with the iknots, if
 #' omitted the default will be to use the range of each x.  If specificed, the
 #' use must specify the bknots for each x.
-#' @param orders  a list of the order for each x; defaults to 4L for all x.
+#' @param order  a list of the order for each x; defaults to 4L for all x.
 #'
 #' @return
 #' A matrix with a class cpr_tensor
@@ -45,34 +45,51 @@
 #' all.equal(tp2, unclass(tp), check.attributes = FALSE)
 #'
 #' @export
-btensor <- function(x, iknots, bknots, orders) {
+btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
 
-  if (missing(iknots)) {
-    iknots <- replicate(length(x), numeric(0), simplify = FALSE)
-  }
   if (missing(bknots)) {
     bknots <- lapply(x, range)
   }
-  if (missing(orders)) {
-    orders <- replicate(length(x), 4L, simplify = FALSE)
+
+  if (missing(order)) {
+    order <- as.list(rep(4L, length(x)))
   }
 
-  if (any(c(length(iknots), length(bknots), length(orders)) != length(x))) {
-    stop("Length of x, iknots, bknots, and orders must be the same.")
+  if (is.null(df) & is.null(iknots)) {
+    iknots <- as.list(numeric(0), length(x))
+  } else if (is.null(iknots) & !is.null(df)) { 
+    iknots <- 
+      lapply(df, 
+             function(dd) { 
+               if (dd < order) {
+                 warning("df being set to order") 
+                 numeric(0)
+               } else if (dd == order) {
+                 numeric(0)
+               } else {
+                 trimmed_quantile(x, probs = seq(1, dd - order, by = 1) / (dd - order + 1))
+               }
+             })
+  } else if (!is.null(iknots) & !is.null(df)) {
+    warning("Both iknots and df defined, using iknots")
+  } 
+
+  if (any(c(length(iknots), length(bknots), length(order)) != length(x))) {
+    stop("Length of x, iknots, bknots, and order must be the same.")
   }
 
   bspline_list <- mapply(FUN = cpr::bsplines,
                          x = x,
                          iknots = iknots,
                          bknots = bknots,
-                         order = orders,
+                         order = order,
                          SIMPLIFY = FALSE)
   M <- build_tensor(bspline_list)
 
   attr(M, "x")      = x
   attr(M, "iknots") = iknots
   attr(M, "bknots") = bknots
-  attr(M, "orders") = stats::setNames(orders, names(x))
+  attr(M, "order")  = stats::setNames(order, names(x))
   attr(M, "bspline_list") = bspline_list
 
   class(M) <- c("cpr_tensor", class(M))
