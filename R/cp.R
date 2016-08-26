@@ -71,6 +71,24 @@ cp.cpr_bs <- function(x, theta, ...) {
 
 #' @export
 #' @rdname cp
+cp.cpr_bt <- function(x, theta, ...) { 
+  out <-
+    list(cp      = dplyr::tbl_df(cbind(do.call(expand.grid, attr(x, "xi_star")), theta)), 
+         xi      = attr(x, "xi"),
+         xi_star = attr(x, "xi_star"),
+         theta   = theta,
+         iknots  = attr(x, "iknots"),
+         bknots  = attr(x, "bknots"),
+         order   = attr(x, "order"), 
+         call    = match.call(),
+         fit     = NA,
+         ssr     = NA)
+  class(out) <- c("cpr_cn", class(out))
+  out 
+}
+
+#' @export
+#' @rdname cp
 #' @param formula a formula that is appropriate for regression method being
 #'        used.
 #' @param data see documentation in \code{\link[stats]{lm}}
@@ -81,7 +99,7 @@ cp.formula <- function(formula, data = parent.env(), method = stats::lm, ...) {
   fterms <- stats::terms(formula)
   fterms
   if (sum(grepl("bsplines", attr(fterms, "term.labels"))) != 1) {
-    stop("cpr::bspline() must apear once, with no effect modifiers, on the right hand side of the formula.")
+    stop("cpr::bsplines() must apear once, with no effect modifiers, on the right hand side of the formula.")
   }
    
   # this function will add f_for_use and data_for_use into this environment
@@ -186,29 +204,10 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) {
   base_plot
 }
 
-
-# #' @export
-# model <- function(x) { 
-#   UseMethod("model")
-# }
-# 
-# #' @export
-# model.cpr_cp <- function(x) { 
-#   do.call(attr(x, "method"), 
-#           c(list(data = attr(x, "data"), formula = attr(x, "formula")),
-#             attr(x, "dots"))
-#           )
-# }
-# 
-# #' @export
-# model.cpr_selected <- function(x) { 
-#   model.cpr_cp(x$best_cp)
-# }
-
 extract_cpr_bspline <- function(form) { 
   B <- NULL
   rr <- function(x) { 
-    if (is.call(x) && grepl("bsplines", deparse(x[[1]]))) { 
+    if (is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) { 
       B <<- x
     } else if (is.recursive(x)) { 
       as.call(lapply(as.list(x), rr))
@@ -228,21 +227,21 @@ theta <- function(fit) {
 
 theta.lm <- function(fit) { 
   out <- stats::coef(fit)
-  unname(out[grepl("bspline", names(out))])
+  unname(out[grepl("bsplines|btensor", names(out))])
 }
 
 theta.glm <- function(fit) { 
   out <- stats::coef(fit)
-  unname(out[grepl("bspline", names(out))])
+  unname(out[grepl("bsplines|btensor", names(out))])
 }
 
 theta.lmerMod <- function(fit) { 
   out <- lme4::fixef(fit)
-  unname(out[grepl("bspline", names(out))])
+  unname(out[grepl("bsplines|btensor", names(out))])
 }
 
 theta.geeglm <- function(fit) { 
   out <- stats::coef(fit)
-  unname(out[grepl("bspline", names(out))])
+  unname(out[grepl("bsplines|btensor", names(out))])
 }
 

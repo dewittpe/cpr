@@ -45,6 +45,10 @@
 #' @export
 bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L) { 
 
+  if (is.list(x)) { 
+    stop("x is a list.  use cpr::btensor instead of cpr::bsplines.")
+  }
+
   if (is.null(iknots) & is.null(df)) { 
     iknots <- numeric(0)
   } else if (is.null(iknots) & !is.null(df)) { 

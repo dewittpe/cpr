@@ -130,16 +130,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // bbasis__impl
-Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int k);
-RcppExport SEXP cpr_bbasis__impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP kSEXP) {
+Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
+RcppExport SEXP cpr_bbasis__impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
     Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    __result = Rcpp::wrap(bbasis__impl(x, iknots, bknots, k));
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    __result = Rcpp::wrap(bbasis__impl(x, iknots, bknots, order));
     return __result;
 END_RCPP
 }

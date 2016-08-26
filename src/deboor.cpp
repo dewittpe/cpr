@@ -198,19 +198,18 @@ Rcpp::NumericVector bsplineD2__impl(arma::vec x, unsigned int j, unsigned int or
 }
 
 // [[Rcpp::export]]
-Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int k) { 
+Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) { 
 
   unsigned int i,j;
-  arma::mat bmat(x.n_elem, iknots.n_elem + k);
+  arma::mat bmat(x.n_elem, iknots.n_elem + order);
 
-  arma::vec knots(iknots.n_elem + 2 * k);
-  for (i = 0; i < k; ++i) {
+  arma::vec knots(iknots.n_elem + 2 * order);
+  for (i = 0; i < order; ++i) {
     knots(i) = bknots(0);
-    //knots(k + iknots.n_elem + i) = bknots(1) + double(i) * 1.1e-12;
-    knots(k + iknots.n_elem + i) = bknots(1);
+    knots(order + iknots.n_elem + i) = bknots(1);
   }
   for (i = 0; i < iknots.n_elem; ++i) {
-    knots(k + i) = iknots(i);
+    knots(order + i) = iknots(i);
   }
 
   if (!knots.is_sorted()) { 
@@ -218,7 +217,7 @@ Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots
     knots = arma::sort(knots);
   }
 
-  bspline BJ(x, 0, k, knots);
+  bspline BJ(x, 0, order, knots);
   bmat.col(0) = BJ.get_Bj();
 
   for(j = 1; j < bmat.n_cols; ++j) {
@@ -232,11 +231,12 @@ Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots
   bmat(bx, jx).fill(1.0);
 
   Rcpp::NumericMatrix out = Rcpp::wrap(bmat);
-  out.attr("order") = k;
+  out.attr("order")   = order;
   out.attr("iknots")  = arma2vec(iknots);
   out.attr("bknots")  = arma2vec(bknots);
   out.attr("xi")      = arma2vec(knots);
-  out.attr("xi_star") = greville_sites(knots, k);
+  out.attr("xi_star") = greville_sites(knots, order);
+  out.attr("class")   = "cpr_bs";
 
   return out; 
 }

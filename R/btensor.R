@@ -47,6 +47,11 @@
 #' @export
 btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
 
+  if (!is.list(x)) { 
+    warning("wrapping x into a list.")
+    x <- list(x)
+  }
+
   if (missing(bknots)) {
     bknots <- lapply(x, range)
   }
@@ -78,7 +83,7 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
     stop("Length of x, iknots, bknots, and order must be the same.")
   }
 
-  bspline_list <- mapply(FUN = cpr::bsplines,
+  bspline_list <- mapply(FUN = bbasis__impl,
                          x = x,
                          iknots = iknots,
                          bknots = bknots,
@@ -86,26 +91,9 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
                          SIMPLIFY = FALSE)
   M <- build_tensor(bspline_list)
 
-  attr(M, "x")      = x
-  attr(M, "iknots") = iknots
-  attr(M, "bknots") = bknots
-  attr(M, "order")  = stats::setNames(order, names(x))
   attr(M, "bspline_list") = bspline_list
 
-  class(M) <- c("cpr_tensor", class(M))
-  M
-}
-
-build_tensor_old <- function(x) {
-  mats <- length(x)
-  cols <- unlist(lapply(x, ncol))
-  rows <- nrow(x[[1]])
-
-  indices <- do.call(expand.grid, lapply(cols, function(x) seq(1, x, by = 1)))
-
-  M <- lapply(1:mats, function(i) { x[[i]][, indices[, i]]})
-  M <- array(unlist(M), dim = c(rows, prod(cols), mats))
-  M <- apply(M, 1:2, prod)
+  class(M) <- c("cpr_bt", class(M))
   M
 }
 

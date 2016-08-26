@@ -26,7 +26,7 @@
 #' @rdname generate_cp_formula_data
 generate_cp_formula_data <- function(f, .data) { 
   # part the formula, version with no bspline, no bars
-  f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline", attr(stats::terms(f), "term.labels"), value = TRUE)))
+  f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
   f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
 
   # get a list of the variables and subset the .data

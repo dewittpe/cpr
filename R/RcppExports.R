@@ -86,8 +86,8 @@ bsplineD2__impl <- function(x, j, order, knots) {
     .Call('cpr_bsplineD2__impl', PACKAGE = 'cpr', x, j, order, knots)
 }
 
-bbasis__impl <- function(x, iknots, bknots, k) {
-    .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, k)
+bbasis__impl <- function(x, iknots, bknots, order) {
+    .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order)
 }
 
 diag_only <- function(A, B) {
