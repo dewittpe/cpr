@@ -84,44 +84,34 @@ cp.formula <- function(formula, data = parent.env(), method = stats::lm, ...) {
     stop("cpr::bspline() must apear once, with no effect modifiers, on the right hand side of the formula.")
   }
    
-  dat <- generate_cp_formula_data(formula, data)
-
-  # out <- cp.cpr_formula(dat$formula, dat$data, method = method, ...)
-  out <- cp.cpr_formula(dat$formula, dat$data, method = method, ...)
-
-  out
-}
-
-cp.cpr_formula <- function(formula, data, method, ...) { 
+  # this function will add f_for_use and data_for_use into this environment
+  generate_cp_formula_data(formula, data)
 
   regression <- match.fun(method)
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("method")))]
-  cl$formula <- formula
-  cl$data <- data
+  cl$formula <- f_for_use
+  cl$data <- data_for_use
 
   fit <- do.call(regression, cl)
 
-  # extract bspline
   Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
 
-  cl <- match.call()
-  cl$formula <- formula
-  cl$data <- data
-  cl$method <- regression
-
-  out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
-                                     theta   = as.vector(theta(fit))),
-              xi = c(attr(Bmat, "xi")),
-              iknots = c(attr(Bmat, "iknots")),
-              bknots = c(attr(Bmat, "bknots")),
-              order  = attr(Bmat, "order"),
-              call   = cl,
-              fit    = fit,
-              ssr    = sum(stats::residuals(fit)^2))
-
+  out <-
+    list(cp      = dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
+                                     theta   = as.vector(theta(fit))), 
+         xi      = attr(Bmat, "xi"),
+         xi_star = attr(Bmat, "xi_star"),
+         theta   = theta(fit),
+         iknots  = attr(Bmat, "iknots"),
+         bknots  = attr(Bmat, "bknots"),
+         order   = attr(Bmat, "order"), 
+         call    = match.call(),
+         fit     = fit,
+         ssr     = NA)
   class(out) <- c("cpr_cp", class(out))
-  out 
+
+  out
 }
 
 #' @method print cpr_cp
@@ -129,15 +119,6 @@ cp.cpr_formula <- function(formula, data, method, ...) {
 #' @rdname cp
 print.cpr_cp <- function(x, ...) { 
   print(x$cp, ...)
-}
-
-#' @method str cpr_cp
-#' @param object a \code{cpr_cp} object
-#' @param max.level default to 1
-#' @export
-#' @rdname cp
-str.cpr_cp <- function(object, max.level = 1, ...) { 
-  utils::str(object, max.level = max.level, ...)
 }
 
 #' @method plot cpr_cp

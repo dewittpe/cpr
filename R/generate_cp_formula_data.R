@@ -71,11 +71,7 @@ generate_cp_formula_data <- function(f, .data) {
       cbind(data_nobsplines_nobars, data_bsplines_bars)
   }
 
-
-  # return the formula and the data set
-  # class(f_for_use) <- c("cpr_formula", class(f_for_use))
-  # class(data_for_use) <- c("cpr_data", class(data_for_use))
-  out <- list(formula = f_for_use, data = data_for_use)
-  # class(out) <- c("cpr_cp_data", class(out))
-  out
+  e <- parent.frame()
+  e$f_for_use <- f_for_use
+  e$data_for_use <- data_for_use
 }
