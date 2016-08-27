@@ -64,7 +64,7 @@ print.cpr_cpr <- function(x, ...) {
 
 newknots <- function(form, nk) { 
   rr <- function(x, nk) {
-      if(is.call(x) && grepl("bsplines", deparse(x[[1]]))) {
+      if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
         x$df <- NULL
         x$iknots <- nk
         x

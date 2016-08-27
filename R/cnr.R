@@ -38,19 +38,18 @@ cnr.cpr_cn <- function(x, p = 2, progress = interactive(), ...) {
     out[[i]] <- x 
     w    <- influence_weights(x, p = p) 
 
-    print(w)
-
+    # HERE ADD METHOD TO DEAL WITH NO KNOTS...  Make sure that the lists for
+    # nkts is correct if all knots are removed, or if non existed.
     w <- dplyr::bind_rows(w, .id = "margin")
-    print(w)
-    
+
     w <- dplyr::filter_(w, ~ `max(w)` > min(`max(w)`))
-    print(w)
 
     nkts <- unname(lapply(split(w, w$margin), function(xx) xx$iknots))
 
+
     x <- stats::update(x, formula = newknots(x$call$formula, nkts))
 
-    str(x, max.level = 1)
+    # str(x, max.level = 1)
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)
@@ -75,24 +74,24 @@ print.cnr_cnr <- function(x, ...) {
   utils::str(x, max.level = 0)
 }
 
-newknots <- function(form, nk) { 
-  rr <- function(x, nk) {
-      if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
-        x$df <- NULL
-        x$iknots <- nk
-        x
-      } else if (is.recursive(x)) {
-        as.call(lapply(as.list(x), rr, nk))
-      } else {
-        x
-      }
-  }
-
-  z <- lapply(as.list(form), rr, nk)   
-  z <- eval(as.call(z))
-  environment(z) <- environment(form)
-  z
-}
+# newknots <- function(form, nk) { 
+#   rr <- function(x, nk) {
+#       if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
+#         x$df <- NULL
+#         x$iknots <- nk
+#         x
+#       } else if (is.recursive(x)) {
+#         as.call(lapply(as.list(x), rr, nk))
+#       } else {
+#         x
+#       }
+#   }
+# 
+#   z <- lapply(as.list(form), rr, nk)   
+#   z <- eval(as.call(z))
+#   environment(z) <- environment(form)
+#   z
+# }
 
 # is.cnr_bspline <- function(form) { 
 #   rr <- function(x) { 
