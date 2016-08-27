@@ -57,9 +57,10 @@ influence_weights.cpr_cn <- function(x, p = 2) {
                                   influence_weights.cpr_cp(cp(bmat, tt))
                                 },
                                 bmat = x$bspline_list[[idx]])
+                     
                        wghts <- dplyr::bind_rows(wghts)
                        wghts <- dplyr::group_by_(wghts, ~ iknots)
-                       wghts <- dplyr::summarize_(wghts, ~ max(w))
+                       wghts <- dplyr::summarize_(wghts, ~ max(w), ~ idx)
                        wghts 
                      }) 
 }

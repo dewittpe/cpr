@@ -103,6 +103,7 @@ cp.formula <- function(formula, data = parent.env(), method = stats::lm, ...) {
   }
    
   # this function will add f_for_use and data_for_use into this environment
+  f_for_use <- data_for_use <- NULL
   generate_cp_formula_data(formula, data)
 
   regression <- match.fun(method)

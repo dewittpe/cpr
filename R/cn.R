@@ -10,13 +10,13 @@
 #' @param ... arguments passed to the regression method
 #'
 #' @export
-#' @rdname cp
+#' @rdname cn
 cn <- function(x, ...) { 
   UseMethod("cn")
 }
 
 #' @export
-#' @rdname cp
+#' @rdname cn
 #' @param theta a vector of (regression) coefficients, the ordinates of the
 #'        control net.
 cn.cpr_bt <- function(x, theta, ...) { 
@@ -39,7 +39,7 @@ cn.cpr_bt <- function(x, theta, ...) {
 }
 
 #' @export
-#' @rdname cp
+#' @rdname cn
 #' @param formula a formula that is appropriate for regression method being
 #'        used.
 #' @param data see documentation in \code{\link[stats]{lm}}
@@ -54,6 +54,7 @@ cn.formula <- function(formula, data = parent.env(), method = stats::lm, ...) {
   }
    
   # this function will add f_for_use and data_for_use into this environment
+  f_for_use <- data_for_use <- NULL
   generate_cp_formula_data(formula, data)
 
   regression <- match.fun(method)
@@ -79,16 +80,16 @@ cn.formula <- function(formula, data = parent.env(), method = stats::lm, ...) {
   out
 }
 
-#' @method print cpr_cp
+#' @method print cpr_cn
 #' @export
-#' @rdname cp
+#' @rdname cn
 print.cpr_cn <- function(x, ...) { 
   print(x$cn, ...)
 }
 
-#' @method plot cpr_cp
+#' @method plot cpr_cn
 #' @export
-#' @rdname cp
+#' @rdname cn
 #' @param show_spline boolean (default FALSE) to plot the spline function within
 #' its control net
 #' @param color boolean (default FALSE) if more than one \code{cpr_cn} object is

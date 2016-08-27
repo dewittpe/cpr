@@ -4,10 +4,13 @@
 \alias{plot.cpr_bs}
 \title{Plot B-splines}
 \usage{
-\method{plot}{cpr_bs}(x, ..., n = 100)
+\method{plot}{cpr_bs}(x, ..., digits = 2, n = 100)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
+
+\item{digits}{number of digits to the right of the decimal place to report
+for the value of each knot.}
 
 \item{n}{number of values to use to plot the splines, defaults to 100}
 

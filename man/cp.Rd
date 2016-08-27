@@ -3,21 +3,21 @@
 \name{cp}
 \alias{cp}
 \alias{cp.cpr_bs}
+\alias{cp.cpr_bt}
 \alias{cp.formula}
 \alias{plot.cpr_cp}
 \alias{print.cpr_cp}
-\alias{str.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(x, ...)
 
 \method{cp}{cpr_bs}(x, theta, ...)
 
+\method{cp}{cpr_bt}(x, theta, ...)
+
 \method{cp}{formula}(formula, data = parent.env(), method = stats::lm, ...)
 
 \method{print}{cpr_cp}(x, ...)
-
-\method{str}{cpr_cp}(object, max.level = 1, ...)
 
 \method{plot}{cpr_cp}(x, ..., show_spline = FALSE, color = FALSE, n = 100)
 }
@@ -36,10 +36,6 @@ used.}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
-
-\item{object}{a \code{cpr_cp} object}
-
-\item{max.level}{default to 1}
 
 \item{show_spline}{boolean (default FALSE) to plot the spline function within
 its control polygon}
