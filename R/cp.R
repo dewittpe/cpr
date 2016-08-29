@@ -114,6 +114,11 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
 
   fit <- do.call(regression, cl)
 
+  cl <- as.list(match.call())
+  # return(cl)
+  cl[[1]] <- as.name("cp")
+  cl <- as.call(cl)
+
   Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
 
   out <-
@@ -125,7 +130,7 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
          iknots  = attr(Bmat, "iknots"),
          bknots  = attr(Bmat, "bknots"),
          order   = attr(Bmat, "order"), 
-         call    = match.call(),
+         call    = cl,
          fit     = fit,
          ssr     = NA)
   class(out) <- c("cpr_cp", class(out))
