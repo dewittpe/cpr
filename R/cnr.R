@@ -36,13 +36,13 @@ cnr.cpr_cn <- function(x, p = 2, progress = interactive(), ...) {
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x 
-    w <- influence_weights(x, p = p) 
+    w <- cpr::influence_weights(x, p = p) 
     w <- dplyr::bind_rows(w, .id = "margin") 
     w <- dplyr::filter_(w, ~ `max(w)` > min(`max(w)`))
 
     nkts <- lapply(split(w, factor(w$margin, levels = seq_along(x$bspline_list))), function(xx) xx$iknots)
 
-    x <- stats::update(x, formula = newknots(x$call$formula, nkts))
+    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame(), environment(x))
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)

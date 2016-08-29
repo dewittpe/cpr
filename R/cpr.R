@@ -35,9 +35,9 @@ cpr.cpr_cp <- function(x, p = 2, progress = interactive(), ...) {
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x 
-    w    <- influence_weights(x, p = p) 
+    w    <- cpr::influence_weights(x, p = p) 
     nkts <- w$iknots[-which.min(w$w)] 
-    x <- stats::update(x, formula = newknots(x$call$formula, nkts))
+    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame(), environment(x))
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)

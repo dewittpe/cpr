@@ -94,7 +94,7 @@ cp.cpr_bt <- function(x, theta, ...) {
 #' @param data see documentation in \code{\link[stats]{lm}}
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
-cp.formula <- function(formula, data = parent.env(), method = stats::lm, ...) { 
+cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) { 
   # check for some formula specification issues
   fterms <- stats::terms(formula)
   fterms
