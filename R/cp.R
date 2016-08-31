@@ -115,7 +115,6 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
   fit <- do.call(regression, cl)
 
   cl <- as.list(match.call())
-  # return(cl)
   cl[[1]] <- as.name("cp")
   cl <- as.call(cl)
 

@@ -65,6 +65,10 @@ cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
 
   fit <- do.call(regression, cl)
 
+  cl <- as.list(match.call())
+  cl[[1]] <- as.name("cn")
+  cl <- as.call(cl)
+
   Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
   xi_stars <- lapply(attr(Bmat, "bspline_list"), attr, which = "xi_star")
 
@@ -72,7 +76,7 @@ cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
     list(cn      = dplyr::tbl_df(cbind(do.call(expand.grid, xi_stars),
                                  theta   = as.vector(theta(fit)))), 
          bspline_list = attr(Bmat, "bspline_list"),
-         call    = match.call(),
+         call    = cl,
          fit     = fit,
          ssr     = NA)
   class(out) <- c("cpr_cn", class(out))

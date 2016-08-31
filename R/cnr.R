@@ -25,7 +25,6 @@ cnr <- function(x, p = 2, progress = interactive(), ...) {
 #' @export
 cnr.cpr_cn <- function(x, p = 2, progress = interactive(), ...) { 
 
-
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list, attr, which = "iknots"), length)) + 1L)
 
   if (progress) { 
@@ -42,7 +41,7 @@ cnr.cpr_cn <- function(x, p = 2, progress = interactive(), ...) {
 
     nkts <- lapply(split(w, factor(w$margin, levels = seq_along(x$bspline_list))), function(xx) xx$iknots)
 
-    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame(), environment(x))
+    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame())
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)
