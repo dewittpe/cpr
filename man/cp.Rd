@@ -15,7 +15,8 @@ cp(x, ...)
 
 \method{cp}{cpr_bt}(x, theta, ...)
 
-\method{cp}{formula}(formula, data = parent.env(), method = stats::lm, ...)
+\method{cp}{formula}(formula, data = parent.frame(), method = stats::lm,
+  ...)
 
 \method{print}{cpr_cp}(x, ...)
 

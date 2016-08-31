@@ -12,7 +12,8 @@ cn(x, ...)
 
 \method{cn}{cpr_bt}(x, theta, ...)
 
-\method{cn}{formula}(formula, data = parent.env(), method = stats::lm, ...)
+\method{cn}{formula}(formula, data = parent.frame(), method = stats::lm,
+  ...)
 
 \method{print}{cpr_cn}(x, ...)
 
