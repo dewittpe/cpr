@@ -2,6 +2,8 @@
 ^\.Rproj\.user$
 ^build.sh$
 ^test.R$
-.gitignore
-vignettes/figure
-Makefile
+^\.travis\.yml$
+^.gitignore$
+^vignettes/figure$
+^makefile$
+^data-raw$
