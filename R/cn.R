@@ -23,8 +23,7 @@ cn.cpr_bt <- function(x, theta, ...) {
   xi_stars <- lapply(attr(x, "bspline_list"), attr, which = "xi_star")
 
   out <-
-    list(cn      = dplyr::tbl_df(cbind(do.call(expand.grid, xi_stars), theta))
-         )
+    list(cn      = dplyr::tbl_df(cbind(do.call(expand.grid, xi_stars), theta)),
          # xi      = attr(x, "xi"),
          # xi_star = attr(x, "xi_star"),
          # theta   = theta,
@@ -32,8 +31,9 @@ cn.cpr_bt <- function(x, theta, ...) {
          # bknots  = attr(x, "bknots"),
          # order   = attr(x, "order"), 
          # call    = match.call(),
-         # fit     = NA,
-         # ssr     = NA)
+         fit     = NA,
+         loglik  = NA,
+         rmse    = NA)
   class(out) <- c("cpr_cn", class(out))
   out 
 }
@@ -78,7 +78,8 @@ cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
          bspline_list = attr(Bmat, "bspline_list"),
          call    = cl,
          fit     = fit,
-         ssr     = NA)
+         loglik  = loglikelihood(fit),
+         rmse    = sqrt(mean(stats::residuals(fit)^2)))
   class(out) <- c("cpr_cn", class(out))
 
   out

@@ -63,28 +63,11 @@ cp.cpr_bs <- function(x, theta, ...) {
               order  = attr(x, "order"),
               call   = match.call(),
               fit    = NA,
-              ssr    = NA)
+              loglik = NA,
+              rmse   = NA)
 
   class(out) <- c("cpr_cp", class(out))
   out
-}
-
-#' @export
-#' @rdname cp
-cp.cpr_bt <- function(x, theta, ...) { 
-  out <-
-    list(cp      = dplyr::tbl_df(cbind(do.call(expand.grid, attr(x, "xi_star")), theta)), 
-         xi      = attr(x, "xi"),
-         xi_star = attr(x, "xi_star"),
-         theta   = theta,
-         iknots  = attr(x, "iknots"),
-         bknots  = attr(x, "bknots"),
-         order   = attr(x, "order"), 
-         call    = match.call(),
-         fit     = NA,
-         ssr     = NA)
-  class(out) <- c("cpr_cn", class(out))
-  out 
 }
 
 #' @export
@@ -131,7 +114,8 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
          order   = attr(Bmat, "order"), 
          call    = cl,
          fit     = fit,
-         ssr     = NA)
+         loglik  = loglikelihood(fit),
+         rmse    = sqrt(mean(stats::residuals(fit)^2)))
   class(out) <- c("cpr_cp", class(out))
 
   out
