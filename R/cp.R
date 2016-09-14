@@ -208,29 +208,3 @@ extract_cpr_bspline <- function(form) {
   z <- lapply(as.list(form), rr)
   B
 }
-
-
-theta <- function(fit) { 
-  UseMethod("theta")
-}
-
-theta.lm <- function(fit) { 
-  out <- stats::coef(fit)
-  unname(out[grepl("bsplines|btensor", names(out))])
-}
-
-theta.glm <- function(fit) { 
-  out <- stats::coef(fit)
-  unname(out[grepl("bsplines|btensor", names(out))])
-}
-
-theta.lmerMod <- function(fit) { 
-  out <- lme4::fixef(fit)
-  unname(out[grepl("bsplines|btensor", names(out))])
-}
-
-theta.geeglm <- function(fit) { 
-  out <- stats::coef(fit)
-  unname(out[grepl("bsplines|btensor", names(out))])
-}
-
