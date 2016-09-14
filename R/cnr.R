@@ -61,8 +61,19 @@ cnr.cpr_cn <- function(x, p = 2, progress = interactive(), ...) {
 
 #' @method print cnr_cnr
 #' @export
-print.cnr_cnr <- function(x, ...) { 
+print.cpr_cnr <- function(x, ...) { 
   cat("A list of control nets\n")
   utils::str(x, max.level = 0)
 }
 
+#' @export
+#' @rdname cpr
+is.cpr_cnr <- function(x) {
+  inherits("cpr_cpr")
+}
+
+#' @export
+#' @rdname cpr
+summary.cpr_cnr <- function(object, ...) {
+  print(object, ...) 
+}

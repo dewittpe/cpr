@@ -68,3 +68,8 @@ is.cpr_cpr <- function(x) {
   inherits("cpr_cpr")
 }
 
+#' @export
+#' @rdname cpr
+summary.cpr_cpr <- function(object, ...) {
+  print(object, ...) 
+}
