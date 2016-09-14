@@ -69,7 +69,7 @@ cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
   cl[[1]] <- as.name("cn")
   cl <- as.call(cl)
 
-  Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
+  Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
   xi_stars <- lapply(attr(Bmat, "bspline_list"), attr, which = "xi_star")
 
   out <-

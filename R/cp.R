@@ -101,7 +101,7 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
   cl[[1]] <- as.name("cp")
   cl <- as.call(cl)
 
-  Bmat <- eval(extract_cpr_bspline(formula), data, environment(formula))
+  Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
 
   out <-
     list(cp      = dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
@@ -193,18 +193,3 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) {
   base_plot
 }
 
-extract_cpr_bspline <- function(form) { 
-  B <- NULL
-  rr <- function(x) { 
-    if (is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) { 
-      B <<- x
-    } else if (is.recursive(x)) { 
-      as.call(lapply(as.list(x), rr))
-    } else {
-      x
-    }
-  }
-
-  z <- lapply(as.list(form), rr)
-  B
-}
