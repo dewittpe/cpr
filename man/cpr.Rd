@@ -2,9 +2,15 @@
 % Please edit documentation in R/cpr.R
 \name{cpr}
 \alias{cpr}
+\alias{is.cpr_cpr}
+\alias{summary.cpr_cpr}
 \title{Control Polygon Reduction}
 \usage{
 cpr(x, p = 2, progress = interactive(), ...)
+
+is.cpr_cpr(x)
+
+\method{summary}{cpr_cpr}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
@@ -15,6 +21,8 @@ weight of each internal knot.}
 \item{progress}{show a progress bar.}
 
 \item{...}{not currently used}
+
+\item{object}{a \code{cpr_cpr} object}
 }
 \description{
 Run the Control Polygon Reduction Algorithm.

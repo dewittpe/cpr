@@ -3,7 +3,6 @@
 \name{cp}
 \alias{cp}
 \alias{cp.cpr_bs}
-\alias{cp.cpr_bt}
 \alias{cp.formula}
 \alias{plot.cpr_cp}
 \alias{print.cpr_cp}
@@ -12,8 +11,6 @@
 cp(x, ...)
 
 \method{cp}{cpr_bs}(x, theta, ...)
-
-\method{cp}{cpr_bt}(x, theta, ...)
 
 \method{cp}{formula}(formula, data = parent.frame(), method = stats::lm,
   ...)

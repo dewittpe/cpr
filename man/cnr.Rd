@@ -2,9 +2,15 @@
 % Please edit documentation in R/cnr.R
 \name{cnr}
 \alias{cnr}
+\alias{is.cpr_cnr}
+\alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
 cnr(x, p = 2, progress = interactive(), ...)
+
+is.cpr_cnr(x)
+
+\method{summary}{cpr_cnr}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cnr_cp} or \code{cnr_tensor} object}
@@ -15,6 +21,8 @@ weight of each internal knot.}
 \item{progress}{show a progress bar.}
 
 \item{...}{not currently used}
+
+\item{object}{a \code{cpr_cnr} object}
 }
 \description{
 Run the Control Net Reduction Algorithm.
