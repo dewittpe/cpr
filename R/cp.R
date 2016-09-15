@@ -64,9 +64,10 @@ cp.cpr_bs <- function(x, theta, ...) {
               call   = match.call(),
               fit    = NA,
               loglik = NA,
-              rmse   = NA)
-
+              rmse   = NA,
+              wiggle = NA) 
   class(out) <- c("cpr_cp", class(out))
+  out$wiggle <- wiggle(out)
   out
 }
 
@@ -102,20 +103,14 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
   cl <- as.call(cl)
 
   Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
+  out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))
 
-  out <-
-    list(cp      = dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
-                                     theta   = as.vector(theta(fit))), 
-         xi      = attr(Bmat, "xi"),
-         xi_star = attr(Bmat, "xi_star"),
-         theta   = theta(fit),
-         iknots  = attr(Bmat, "iknots"),
-         bknots  = attr(Bmat, "bknots"),
-         order   = attr(Bmat, "order"), 
-         call    = cl,
-         fit     = fit,
-         loglik  = loglikelihood(fit),
-         rmse    = sqrt(mean(stats::residuals(fit)^2)))
+  out$call    = cl
+  out$fit     = fit
+  out$loglik  = loglikelihood(fit)
+  out$rmse    = sqrt(mean(stats::residuals(fit)^2))
+  out$wiggle  = wiggle(out)
+                       
   class(out) <- c("cpr_cp", class(out))
 
   out
