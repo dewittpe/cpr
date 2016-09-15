@@ -72,8 +72,10 @@ is.cpr_cpr <- function(x) {
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
 summary.cpr_cpr <- function(object, ...) {
-  dplyr::data_frame(dfs    = sapply(object, function(x) length(x$theta)),
-                    iknots = sapply(object, function(x) x$iknots),
-                    loglik = sapply(object, function(x) x$loglik),
-                    rmse   = sapply(object, function(x) x$rmse))
+  dplyr::data_frame(dfs      = sapply(object, function(x) length(x$theta)),
+                    n_iknots = sapply(object, function(x) length(x$iknots)),
+                    iknots   = sapply(object, function(x) x$iknots),
+                    loglik   = sapply(object, function(x) x$loglik),
+                    rmse     = sapply(object, function(x) x$rmse))
 } 
+
