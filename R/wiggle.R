@@ -8,18 +8,19 @@
 #' @param object a \code{cpr_cp} object
 #' @param lower the lower limit of the intergral
 #' @param upper the upper limit of the intergral
+#' @param stop.on.error default to \code{FALSE}, see \code{\link[stats]{integrate}}.
 #' @param ... arguments passed to \code{stats::integrate}
 #'
 #' @seealso \code{\link{cp}} \code{\link[stats]{integrate}}
 #'
 
 #' @export
-wiggle <- function(object, lower, upper, ...) { 
+wiggle <- function(object, lower, upper, stop.on.error = FALSE, ...) { 
   UseMethod("wiggle")
 }
 
 #' @export
-wiggle.cpr_cp <- function(object, lower = min(object$bknots), upper = max(object$bknots), ...) { 
+wiggle.cpr_cp <- function(object, lower = min(object$bknots), upper = max(object$bknots), stop.on.error = FALSE, ...) { 
   f <- function(x) { 
     (bsplineD(x, 
               iknots = object$iknots, 
@@ -29,5 +30,5 @@ wiggle.cpr_cp <- function(object, lower = min(object$bknots), upper = max(object
      matrix(object$cp$theta, ncol = 1))^2
   }
 
-  stats::integrate(f, lower = lower, upper = upper, ...)
+  stats::integrate(f, lower = lower, upper = upper, stop.on.error = stop.on.error, ...)
 }

@@ -64,6 +64,7 @@ cp.cpr_bs <- function(x, theta, integrate.args = list(), ...) {
               bknots = c(attr(x, "bknots")),
               order  = attr(x, "order"),
               call   = match.call(),
+              keep_fit = NA,
               fit    = NA,
               loglik = NA,
               rmse   = NA,
@@ -111,10 +112,11 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
   Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
   out <- cp.cpr_bs(Bmat, as.vector(theta(fit)), integrate.args = integrate.args)
 
-  out$call    = cl
-  out$fit     = if (keep_fit) { fit } else {NA}
-  out$loglik  = loglikelihood(fit)
-  out$rmse    = sqrt(mean(stats::residuals(fit)^2))
+  out$call     = cl
+  out$keep_fit = keep_fit
+  out$fit      = if (keep_fit) { fit } else {NA}
+  out$loglik   = loglikelihood(fit)
+  out$rmse     = sqrt(mean(stats::residuals(fit)^2))
                        
   class(out) <- c("cpr_cp", class(out))
 

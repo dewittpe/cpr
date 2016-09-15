@@ -32,6 +32,12 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
   out <- vector("list", length = length(x$iknots) + 1L)
 
+  if (length(out) > (keep + 1) & x$keep_fit) {
+    x <- stats::update(x, keep_fit = FALSE)
+  } else if (length(out) <= (keep + 1) & !x$keep_fit) {
+    x <- stats::update(x, keep_fit = TRUE)
+  }
+
   if (progress) { 
     pb <- utils::txtProgressBar(max = length(out), style = 3)
     prg <- 0
@@ -44,9 +50,7 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
     nkts <- w$iknots[-which.min(w$w)] 
 
     if (i == keep + 1) { 
-      cat("START KEEPING\n")
       x <- stats::update(x, keep_fit = TRUE)
-      cat("end keeping\n")
     }
 
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame())

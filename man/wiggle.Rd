@@ -4,7 +4,7 @@
 \alias{wiggle}
 \title{Wiggliness of a Spline function}
 \usage{
-wiggle(object, lower, upper, ...)
+wiggle(object, lower, upper, stop.on.error = FALSE, ...)
 }
 \arguments{
 \item{object}{a \code{cpr_cp} object}
@@ -12,6 +12,8 @@ wiggle(object, lower, upper, ...)
 \item{lower}{the lower limit of the intergral}
 
 \item{upper}{the upper limit of the intergral}
+
+\item{stop.on.error}{default to \code{FALSE}, see \code{\link[stats]{integrate}}.}
 
 \item{...}{arguments passed to \code{stats::integrate}}
 }
