@@ -6,16 +6,19 @@
 \alias{cp.formula}
 \alias{plot.cpr_cp}
 \alias{print.cpr_cp}
+\alias{summary.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(x, ...)
 
-\method{cp}{cpr_bs}(x, theta, ...)
+\method{cp}{cpr_bs}(x, theta, integrate.args = list(), ...)
 
 \method{cp}{formula}(formula, data = parent.frame(), method = stats::lm,
-  ...)
+  ..., keep_fit = FALSE, integrate.args = list())
 
 \method{print}{cpr_cp}(x, ...)
+
+\method{summary}{cpr_cp}(object, ...)
 
 \method{plot}{cpr_cp}(x, ..., show_spline = FALSE, color = FALSE, n = 100)
 }
@@ -27,6 +30,9 @@ cp(x, ...)
 \item{theta}{a vector of (regression) coefficients, the ordinates of the
 control polygon.}
 
+\item{integrate.args}{a list of arguments passed to \code{cpr::wiggle} and
+ultimately \code{stats::integrate}.}
+
 \item{formula}{a formula that is appropriate for regression method being
 used.}
 
@@ -35,12 +41,18 @@ used.}
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
 
+\item{keep_fit}{(logical, default value is \code{FALSE}).  If \code{TRUE} the
+regression model fit is retained and returned in as the \code{fit} element.
+If \code{FALSE} the \code{fit} element with be \code{NA}.}
+
+\item{object}{a \code{cpr_cp} object}
+
 \item{show_spline}{boolean (default FALSE) to plot the spline function within
 its control polygon}
 
 \item{color}{boolean (default FALSE) if more than one \code{cpr_cp} object is
 to be plotted, set this value to TRUE to have the graphic in color (linetypes
-will be used regardless of the color settting).}
+will be used regardless of the color setting).}
 
 \item{n}{the number of data points to use for plotting the spline}
 }
@@ -61,7 +73,7 @@ xvec <- seq(0, 6, length = 500)
 bmat1 <- cpr::bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
 bmat2 <- cpr::bsplines(x = xvec)
 
-# Define the control vertice ordinates
+# Define the control vertices ordinates
 theta1 <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
 theta2 <- c(1, 3.4, -2, 1.7)
 
@@ -82,7 +94,7 @@ plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 dat <- dplyr::data_frame(x = xvec, y = sin((x - 2)/pi) + 1.4 * cos(x/pi))
 cp3 <- cp(y ~ cpr::bsplines(x) + 0, data = dat)
 
-# plot the control polygon, spline and traget data.
+# plot the control polygon, spline and target data.
 plot(cp3, show_spline = TRUE) + 
   ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "y"), 
                      data = dat, linetype = 2, color = "red")

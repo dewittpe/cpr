@@ -19,7 +19,7 @@ wiggle <- function(object, lower, upper, ...) {
 }
 
 #' @export
-wiggle.cpr_cp <- function(object, lower = min(attr(object, "bknots")), upper = max(attr(object, "bknots")), ...) { 
+wiggle.cpr_cp <- function(object, lower = min(object$bknots), upper = max(object$bknots), ...) { 
   f <- function(x) { 
     (bsplineD(x, 
               iknots = object$iknots, 
@@ -29,5 +29,5 @@ wiggle.cpr_cp <- function(object, lower = min(attr(object, "bknots")), upper = m
      matrix(object$cp$theta, ncol = 1))^2
   }
 
-  stats::integrate(f, lower = lower, upper = upper, ...)$value
+  stats::integrate(f, lower = lower, upper = upper, ...)
 }

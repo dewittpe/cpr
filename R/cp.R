@@ -18,7 +18,7 @@
 #' bmat1 <- cpr::bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
 #' bmat2 <- cpr::bsplines(x = xvec)
 #' 
-#' # Define the control vertice ordinates
+#' # Define the control vertices ordinates
 #' theta1 <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
 #' theta2 <- c(1, 3.4, -2, 1.7)
 #' 
@@ -39,7 +39,7 @@
 #' dat <- dplyr::data_frame(x = xvec, y = sin((x - 2)/pi) + 1.4 * cos(x/pi))
 #' cp3 <- cp(y ~ cpr::bsplines(x) + 0, data = dat)
 #' 
-#' # plot the control polygon, spline and traget data.
+#' # plot the control polygon, spline and target data.
 #' plot(cp3, show_spline = TRUE) + 
 #'   ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "y"), 
 #'                      data = dat, linetype = 2, color = "red")
@@ -54,7 +54,9 @@ cp <- function(x, ...) {
 #' @rdname cp
 #' @param theta a vector of (regression) coefficients, the ordinates of the
 #'        control polygon.
-cp.cpr_bs <- function(x, theta, ...) { 
+#' @param integrate.args a list of arguments passed to \code{cpr::wiggle} and
+#' ultimately \code{stats::integrate}.
+cp.cpr_bs <- function(x, theta, integrate.args = list(), ...) {
   out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
                                      theta   = as.vector(theta)),
               xi = c(attr(x, "xi")),
@@ -66,8 +68,11 @@ cp.cpr_bs <- function(x, theta, ...) {
               loglik = NA,
               rmse   = NA,
               wiggle = NA) 
+
   class(out) <- c("cpr_cp", class(out))
-  out$wiggle <- wiggle(out)
+
+  out$wiggle <- do.call(wiggle.cpr_cp, c(list(object = out), integrate.args))
+
   out
 }
 
@@ -78,12 +83,13 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @param data see documentation in \code{\link[stats]{lm}}
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
-cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) { 
-  # check for some formula specification issues
-  fterms <- stats::terms(formula)
-  fterms
-  if (sum(grepl("bsplines", attr(fterms, "term.labels"))) != 1) {
-    stop("cpr::bsplines() must apear once, with no effect modifiers, on the right hand side of the formula.")
+#' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
+#' regression model fit is retained and returned in as the \code{fit} element.
+#' If \code{FALSE} the \code{fit} element with be \code{NA}.
+cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., keep_fit = FALSE, integrate.args = list()) { 
+  # check for some formula specification issues 
+  if (sum(grepl("bsplines", attr(stats::terms(formula), "term.labels"))) != 1) {
+    stop("cpr::bsplines() must appear once, with no effect modifiers, on the right hand side of the formula.")
   }
    
   # this function will add f_for_use and data_for_use into this environment
@@ -92,7 +98,7 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
 
   regression <- match.fun(method)
   cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("method")))]
+  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "integrate.args")))]
   cl$formula <- f_for_use
   cl$data <- data_for_use
 
@@ -103,13 +109,12 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
   cl <- as.call(cl)
 
   Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
-  out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))
+  out <- cp.cpr_bs(Bmat, as.vector(theta(fit)), integrate.args = integrate.args)
 
   out$call    = cl
-  out$fit     = fit
+  out$fit     = if (keep_fit) { fit } else {NA}
   out$loglik  = loglikelihood(fit)
   out$rmse    = sqrt(mean(stats::residuals(fit)^2))
-  out$wiggle  = wiggle(out)
                        
   class(out) <- c("cpr_cp", class(out))
 
@@ -123,6 +128,20 @@ print.cpr_cp <- function(x, ...) {
   print(x$cp, ...)
 }
 
+#' @export
+#' @param object a \code{cpr_cp} object
+#' @rdname cp
+summary.cpr_cp <- function(object, ...){
+  list(dfs        = length(object$cp$theta),
+       n_iknots   = length(object$iknots),
+       iknots     = object$iknots,
+       loglik     = object$loglik,
+       rmse       = object$rmse,
+       wiggle     = object$wiggle$value,
+       wiggle_msg = object$wiggle$message)
+}
+
+
 #' @method plot cpr_cp
 #' @export
 #' @rdname cp
@@ -130,7 +149,7 @@ print.cpr_cp <- function(x, ...) {
 #' its control polygon
 #' @param color boolean (default FALSE) if more than one \code{cpr_cp} object is
 #' to be plotted, set this value to TRUE to have the graphic in color (linetypes
-#' will be used regardless of the color settting).
+#' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
 #'
 plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) { 

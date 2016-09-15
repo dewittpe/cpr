@@ -6,7 +6,7 @@
 \alias{summary.cpr_cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(x, p = 2, progress = interactive(), ...)
+cpr(x, keep = -1, p = 2, progress = interactive(), ...)
 
 is.cpr_cpr(x)
 
@@ -14,6 +14,12 @@ is.cpr_cpr(x)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
+
+\item{keep}{keep (store) the regression fit for models with \code{keep} or
+fewer internal knots, e.g., \code{keep = 3} will result in the regression fit
+for models with 0, 1, 2, and 3 internal knots being saved in their respective
+\code{cpr_cp} objects.  The default is \code{keep = -1} so that no regression
+models are retained.}
 
 \item{p}{defaults to 2L, the L^p norm used in determining the influence
 weight of each internal knot.}

@@ -12,18 +12,23 @@
 #' limit on the number of stored regression fits is to keep memory usage down.
 #'
 #' @param x a \code{cpr_cp} or \code{cpr_tensor} object
+#' @param keep keep (store) the regression fit for models with \code{keep} or
+#' fewer internal knots, e.g., \code{keep = 3} will result in the regression fit
+#' for models with 0, 1, 2, and 3 internal knots being saved in their respective
+#' \code{cpr_cp} objects.  The default is \code{keep = -1} so that no regression
+#' models are retained.
 #' @param p defaults to 2L, the L^p norm used in determining the influence
 #'        weight of each internal knot.
 #' @param progress show a progress bar.
 #' @param ... not currently used
 #' 
 #' @export
-cpr <- function(x, p = 2, progress = interactive(), ...) { 
+cpr <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, p = 2, progress = interactive(), ...) { 
+cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
 
   out <- vector("list", length = length(x$iknots) + 1L)
 
@@ -37,6 +42,13 @@ cpr.cpr_cp <- function(x, p = 2, progress = interactive(), ...) {
     out[[i]] <- x 
     w    <- cpr::influence_weights(x, p = p) 
     nkts <- w$iknots[-which.min(w$w)] 
+
+    if (i == keep + 1) { 
+      cat("START KEEPING\n")
+      x <- stats::update(x, keep_fit = TRUE)
+      cat("end keeping\n")
+    }
+
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame())
 
     if (progress) {
@@ -72,12 +84,13 @@ is.cpr_cpr <- function(x) {
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
 summary.cpr_cpr <- function(object, ...) {
-  dplyr::data_frame(dfs      = sapply(object, function(x) length(x$theta)),
+  dplyr::data_frame(dfs      = sapply(object, function(x) length(x$cp$theta)),
                     n_iknots = sapply(object, function(x) length(x$iknots)),
                     iknots   = sapply(object, function(x) x$iknots),
                     loglik   = sapply(object, function(x) x$loglik),
                     rmse     = sapply(object, function(x) x$rmse),
-                    wiggle     = sapply(object, function(x) x$wiggle))
+                    wiggle   = sapply(object, function(x) x$wiggle$value),
+                    wiggle_msg = sapply(object, function(x) x$wiggle$message))
 
 } 
 
