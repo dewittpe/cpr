@@ -25,7 +25,8 @@ dissertation work.
 Please refer to the vignettes for more details on the different parts of the package.
 
 ```r
-vignette(package = 'cpr')
+# Comming soon
+# vignette(package = 'cpr')
 ```
 
 ## Installing CPR
@@ -42,11 +43,12 @@ Options for installing CPR:
 
   * Install from the command line
 
-    R CMD INSTALL cpr_<version>.tar.gz
+```bash
+R CMD INSTALL cpr_<version>.tar.gz
+```
 
   * Within R
 
-    install.packages(<path_to_file>, repos = NULL, type="source")
-
-## 
-
+```r
+install.packages(<path_to_file>, repos = NULL, type="source")
+```
