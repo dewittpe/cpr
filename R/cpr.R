@@ -76,6 +76,8 @@ summary.cpr_cpr <- function(object, ...) {
                     n_iknots = sapply(object, function(x) length(x$iknots)),
                     iknots   = sapply(object, function(x) x$iknots),
                     loglik   = sapply(object, function(x) x$loglik),
-                    rmse     = sapply(object, function(x) x$rmse))
+                    rmse     = sapply(object, function(x) x$rmse),
+                    wiggle     = sapply(object, function(x) x$wiggle))
+
 } 
 
