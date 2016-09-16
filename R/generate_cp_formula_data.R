@@ -75,3 +75,18 @@ generate_cp_formula_data <- function(f, .data) {
   e$f_for_use <- f_for_use
   e$data_for_use <- data_for_use
 }
+
+factors_characters_in_f <- function(f, .data) { 
+  # part the formula, version with no bspline, no bars
+  f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
+  f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
+
+  # get a list of the variables and subset the .data
+  vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
+  data_nobsplines_nobars <- dplyr::select_(.data, .dots = vars_nobsplines_nobars)
+
+  # identify any variables which are factors or characters
+  factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)}) 
+
+  return(any(factors))
+}

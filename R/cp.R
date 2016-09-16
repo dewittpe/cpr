@@ -92,16 +92,19 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
   if (sum(grepl("bsplines", attr(stats::terms(formula), "term.labels"))) != 1) {
     stop("cpr::bsplines() must appear once, with no effect modifiers, on the right hand side of the formula.")
   }
-   
-  # this function will add f_for_use and data_for_use into this environment
-  f_for_use <- data_for_use <- NULL
-  generate_cp_formula_data(formula, data)
 
+  # return(factors_characters_in_f(formula, data))
+  if (factors_characters_in_f(formula, data)) { 
+    stop("At least one factor/character variable in the formula.  Use cpr::generate_cp_formula_data to create a data.frame and formula.")
+  }
+  
   regression <- match.fun(method)
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "integrate.args")))]
-  cl$formula <- f_for_use
-  cl$data <- data_for_use
+
+  if (attr(terms(formula), "intercept") == 1) { 
+    cl$formula <- stats::update.formula(formula, . ~ . - 1)
+  }
 
   fit <- do.call(regression, cl)
 
