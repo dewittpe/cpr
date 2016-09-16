@@ -102,7 +102,7 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "integrate.args")))]
 
-  if (attr(terms(formula), "intercept") == 1) { 
+  if (attr(stats::terms(formula), "intercept") == 1) { 
     cl$formula <- stats::update.formula(formula, . ~ . - 1)
   }
 
@@ -112,16 +112,25 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
   cl[[1]] <- as.name("cp")
   cl <- as.call(cl)
 
-  Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
-  out <- cp.cpr_bs(Bmat, as.vector(theta(fit)), integrate.args = integrate.args)
+  Bmat <- stats::model.frame(fit)
+  Bmat <- Bmat[[which(grepl("bsplines", names(Bmat)))]]
 
-  out$call     = cl
-  out$keep_fit = keep_fit
-  out$fit      = if (keep_fit) { fit } else {NA}
-  out$loglik   = loglikelihood(fit)
-  out$rmse     = sqrt(mean(stats::residuals(fit)^2))
-                       
+  out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
+                                     theta   = as.vector(theta(fit))),
+              xi       = c(attr(Bmat, "xi")),
+              iknots   = c(attr(Bmat, "iknots")),
+              bknots   = c(attr(Bmat, "bknots")),
+              order    = attr(Bmat, "order"),
+              call     = cl,
+              keep_fit = keep_fit,
+              fit      = if (keep_fit) { fit } else {NA},
+              loglik   = loglikelihood(fit),
+              rmse     = sqrt(mean(stats::residuals(fit)^2)),
+              wiggle   = numeric(0))
+
   class(out) <- c("cpr_cp", class(out))
+
+  out$wiggle <- do.call(wiggle.cpr_cp, c(list(object = out), integrate.args))
 
   out
 }
