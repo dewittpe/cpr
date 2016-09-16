@@ -72,7 +72,14 @@ cp.cpr_bs <- function(x, theta, integrate.args = list(), ...) {
 
   class(out) <- c("cpr_cp", class(out))
 
-  out$wiggle <- do.call(wiggle.cpr_cp, c(list(object = out), integrate.args))
+  wggl <- try(do.call(wiggle.cpr_cp, c(list(object = out), integrate.args)), silent = TRUE)
+
+  if (class(wggl) == "integrate") { 
+    out$wiggle <- wggl
+  } else {
+    out$wiggle <- numeric(0)
+    attr(out$wiggle, "error") <- wggl
+  }
 
   out
 }
@@ -128,9 +135,22 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
               rmse     = sqrt(mean(stats::residuals(fit)^2)),
               wiggle   = numeric(0))
 
+  # out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))
+  # out$keep_fit = keep_fit
+  # out$fit      = if (keep_fit) { fit } else {NA}
+  # out$loglik   = loglikelihood(fit)
+  # out$rmse     = sqrt(mean(stats::residuals(fit)^2))
   class(out) <- c("cpr_cp", class(out))
 
-  out$wiggle <- do.call(wiggle.cpr_cp, c(list(object = out), integrate.args))
+  wggl <- try(do.call(wiggle.cpr_cp, c(list(object = out), integrate.args)), silent = TRUE)
+
+  if (class(wggl) == "integrate") { 
+    out$wiggle <- wggl
+  } else {
+    out$wiggle <- list()
+    out$wiggle$value <- NA
+    attr(out$wiggle, "error") <- wggl
+  }
 
   out
 }
