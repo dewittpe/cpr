@@ -10,7 +10,7 @@ struct bspline {
   arma::vec knots;    // full knot sequence
   unsigned int j;     // jth spline
   unsigned int order; // polynomial order
-  arma::vec Bj;       // the jth B-spline
+  arma::vec spline;       // the jth B-spline
 
   // constructors
   bspline();
@@ -32,19 +32,30 @@ struct bbasis {
 
   // constructors
   bbasis();
-  bbasis(arma::vec x, arma::vec iknots_, arma::vec bknots_, unsigned int order_) { 
+  bbasis(arma::vec & x, arma::vec & iknots_, arma::vec & bknots_, unsigned int order_);
+
+  // operators
+  bbasis &operator =(const bbasis & b) {
+    order  = b.order;
+    iknots = b.iknots;
+    bknots = b.bknots;
+    knots  = b.knots;
+    bmat   = b.bmat;
+  }
+
 };
 
 struct controlpolygon {
   // member objects
   arma::vec xi_star;
-  bbasis& bmat;
+  bbasis bmat;
   arma::vec theta;
 
   // constructors
-  controlpolygon(arma::vec & bmat_, arma::vec & theta_);
+  controlpolygon(bbasis & bmat_, arma::vec & theta_);
 };
 
-arma::vec greville_sites(arma::vec & xi, unsigned int order);
+arma::vec greville_sites(arma::vec & xi, unsigned int order); 
 
+Rcpp::NumericVector arma2vec(const arma::vec & x);
 #endif

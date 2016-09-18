@@ -1,4 +1,3 @@
-
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include "cpr.h"
@@ -9,19 +8,19 @@ bspline::bspline(arma::vec & x, unsigned int j_, unsigned int order_, arma::vec 
   j = j_;
   order = order_;
   knots = knots_; 
-  Bj.zeros(x.n_elem);
+  spline.zeros(x.n_elem);
 
   for (unsigned int i = 0; i < x.n_elem; ++i) {
     if (x(i) >= x(j) && x(i) <= knots(j + order)) {
-      Bj(i) = B(x(i), j, order);
+      spline(i) = B(x(i), j, order);
     }
   }
 }
 
 double bspline::w(double x, unsigned int j_, unsigned int k_) { 
   double w = 0.0;
-  if (xi(j_ + k_ - 1) != xi(j_)) { 
-    w = (x - xi(j_)) / (xi(j_ + k_ - 1) - xi(j_));
+  if (knots(j_ + k_ - 1) != knots(j_)) { 
+    w = (x - knots(j_)) / (knots(j_ + k_ - 1) - knots(j_));
   }
 
   return(w);
@@ -31,7 +30,7 @@ double bspline::B(double x, unsigned int j_, unsigned int k_) {
   double rtn;
 
   if (k_ == 1) { 
-    if ((xi(j_) <= x) && (x < xi(j_ + 1))) { 
+    if ((knots(j_) <= x) && (x < knots(j_ + 1))) { 
       rtn = 1.0; 
     } else { 
       rtn = 0.0;
@@ -46,7 +45,7 @@ double bspline::B(double x, unsigned int j_, unsigned int k_) {
 bbasis::bbasis() { 
 }
 
-bbasis::bbasis(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) { 
+bbasis::bbasis(arma::vec & x, arma::vec & iknots_, arma::vec & bknots_, unsigned int order_) { 
   order = order_;
   iknots = iknots_;
   bknots = bknots_;
@@ -74,7 +73,7 @@ bbasis::bbasis(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int ord
 
   // define the basis matrix 
   for(j = 0; j < order + iknots.n_elem; ++j) {
-    bmat.col(j) = bspline(x, j, order, knots).Bj;
+    bmat.col(j) = bspline(x, j, order, knots).spline;
   }
 
   arma::uvec bx = arma::find(x == bknots(1));
@@ -82,7 +81,7 @@ bbasis::bbasis(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int ord
   bmat(bx, jx).fill(1.0); 
 }
 
-controlpolygon::controlpolygon(arma::vec & bmat_, arma::vec & theta_) {
+controlpolygon::controlpolygon(bbasis & bmat_, arma::vec & theta_) {
   bmat = bmat_;
   theta = theta_;
 
@@ -97,4 +96,8 @@ arma::vec greville_sites(arma::vec & xi, unsigned int order) {
   }
 
   return xi_star;
+}
+
+Rcpp::NumericVector arma2vec(const arma::vec & x) {
+    return Rcpp::NumericVector(x.begin(), x.end());
 }
