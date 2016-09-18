@@ -11,7 +11,7 @@ bspline::bspline(arma::vec & x, unsigned int j_, unsigned int order_, arma::vec 
   spline.zeros(x.n_elem);
 
   for (unsigned int i = 0; i < x.n_elem; ++i) {
-    if (x(i) >= x(j) && x(i) <= knots(j + order)) {
+    if (x(i) >= knots(j) && x(i) <= knots(j + order)) {
       spline(i) = B(x(i), j, order);
     }
   }

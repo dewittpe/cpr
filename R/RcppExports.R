@@ -70,12 +70,8 @@ weigh_iknots <- function(xi, theta, order = 4L, p = 2L) {
     .Call('cpr_weigh_iknots', PACKAGE = 'cpr', xi, theta, order, p)
 }
 
-greville_sites <- function(xi, order) {
-    .Call('cpr_greville_sites', PACKAGE = 'cpr', xi, order)
-}
-
-bspline__impl <- function(x, j, order, knots) {
-    .Call('cpr_bspline__impl', PACKAGE = 'cpr', x, j, order, knots)
+bbasis__impl <- function(x, iknots, bknots, order) {
+    .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order)
 }
 
 bsplineD1__impl <- function(x, j, order, knots) {
@@ -84,10 +80,6 @@ bsplineD1__impl <- function(x, j, order, knots) {
 
 bsplineD2__impl <- function(x, j, order, knots) {
     .Call('cpr_bsplineD2__impl', PACKAGE = 'cpr', x, j, order, knots)
-}
-
-bbasis__impl <- function(x, iknots, bknots, order) {
-    .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order)
 }
 
 diag_only <- function(A, B) {

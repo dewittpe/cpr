@@ -75,29 +75,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// greville_sites
-Rcpp::NumericVector greville_sites(arma::vec xi, unsigned int order);
-RcppExport SEXP cpr_greville_sites(SEXP xiSEXP, SEXP orderSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type xi(xiSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
-    rcpp_result_gen = Rcpp::wrap(greville_sites(xi, order));
-    return rcpp_result_gen;
-END_RCPP
-}
-// bspline__impl
-Rcpp::NumericVector bspline__impl(arma::vec x, unsigned int j, unsigned int order, arma::vec knots);
-RcppExport SEXP cpr_bspline__impl(SEXP xSEXP, SEXP jSEXP, SEXP orderSEXP, SEXP knotsSEXP) {
+// bbasis__impl
+Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
+RcppExport SEXP cpr_bbasis__impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type knots(knotsSEXP);
-    rcpp_result_gen = Rcpp::wrap(bspline__impl(x, j, order, knots));
+    rcpp_result_gen = Rcpp::wrap(bbasis__impl(x, iknots, bknots, order));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -126,20 +114,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type knots(knotsSEXP);
     rcpp_result_gen = Rcpp::wrap(bsplineD2__impl(x, j, order, knots));
-    return rcpp_result_gen;
-END_RCPP
-}
-// bbasis__impl
-Rcpp::NumericMatrix bbasis__impl(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
-RcppExport SEXP cpr_bbasis__impl(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
-    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
-    rcpp_result_gen = Rcpp::wrap(bbasis__impl(x, iknots, bknots, order));
     return rcpp_result_gen;
 END_RCPP
 }

@@ -65,7 +65,7 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
   } 
 
   rtn <- .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
-  class(rtn) <- c("cpr_bs", "bs", "matrix")
+  class(rtn) <- c("cpr_bs", "matrix")
   rtn
 }
 
