@@ -43,6 +43,8 @@ double bspline::B(double x, unsigned int j_, unsigned int k_) {
   return(rtn);
 }
 
+bbasis::bbasis() { 
+}
 
 bbasis::bbasis(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) { 
   order = order_;

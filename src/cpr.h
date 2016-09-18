@@ -24,26 +24,27 @@ struct bspline {
 struct bbasis {
   // member objects
   unsigned int order;   // polynomial order
-  aram::vec iknots;     // internal knots
-  arma::vec bknots(2);  // boundary knot values
+  arma::vec iknots;     // internal knots
+  arma::vec bknots;     // boundary knot values
   arma::vec knots;      // full knot sequence including the order-fold boundary knots
 
   arma::mat bmat;       // basis matrix
 
   // constructors
-  bbasis::bbasis(arma::vec x, arma::vec iknots_, arma::vec bknots_, unsigned int order_) { 
+  bbasis();
+  bbasis(arma::vec x, arma::vec iknots_, arma::vec bknots_, unsigned int order_) { 
 };
 
 struct controlpolygon {
   // member objects
   arma::vec xi_star;
-  bbasis bmat;
+  bbasis& bmat;
   arma::vec theta;
 
   // constructors
   controlpolygon(arma::vec & bmat_, arma::vec & theta_);
 };
 
-arma::vec greville_sites(arma::vec & xi, unsigned int order)
+arma::vec greville_sites(arma::vec & xi, unsigned int order);
 
 #endif
