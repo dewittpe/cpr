@@ -26,3 +26,22 @@ newknots <- function(form, nk) {
   environment(z) <- environment(form)
   z
 }
+
+newdfs <- function(form, dfs) { 
+  rr <- function(x, dfs) {
+    if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
+      x$df <- dfs
+      x$iknots <- NULL
+      x
+    } else if (is.recursive(x)) {
+      as.call(lapply(as.list(x), rr, dfs))
+    } else {
+      x
+    }
+  }
+
+  z <- lapply(as.list(form), rr, dfs)   
+  z <- eval(as.call(z))
+  environment(z) <- environment(form)
+  z
+}
