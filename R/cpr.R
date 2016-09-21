@@ -33,9 +33,9 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
   out <- vector("list", length = length(x$iknots) + 1L)
 
   if (length(out) > (keep + 1) & x$keep_fit) {
-    x <- stats::update(x, keep_fit = FALSE)
+    x <- eval(stats::update(x, keep_fit = FALSE, evaluate = FALSE), parent.frame())
   } else if (length(out) <= (keep + 1) & !x$keep_fit) {
-    x <- stats::update(x, keep_fit = TRUE)
+    x <- eval(stats::update(x, keep_fit = TRUE, evaluate = FALSE), parent.frame())
   }
 
   if (progress) { 
@@ -87,14 +87,7 @@ is.cpr_cpr <- function(x) {
 #' @export
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
-summary.cpr_cpr <- function(object, ...) {
-  dplyr::data_frame(dfs      = sapply(object, function(x) length(x$cp$theta)),
-                    n_iknots = sapply(object, function(x) length(x$iknots)),
-                    iknots   = sapply(object, function(x) x$iknots),
-                    loglik   = sapply(object, function(x) x$loglik),
-                    rmse     = sapply(object, function(x) x$rmse),
-                    wiggle   = sapply(object, function(x) x$wiggle$value),
-                    wiggle_msg = sapply(object, function(x) x$wiggle$message))
-
+summary.cpr_cpr <- function(object, ...) { 
+  dplyr::tbl_df(dplyr::bind_rows(lapply(object, summary, ...))) 
 } 
 

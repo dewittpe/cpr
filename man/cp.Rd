@@ -11,14 +11,15 @@
 \usage{
 cp(x, ...)
 
-\method{cp}{cpr_bs}(x, theta, integrate.args = list(), ...)
+\method{cp}{cpr_bs}(x, theta, ...)
 
 \method{cp}{formula}(formula, data = parent.frame(), method = stats::lm,
-  ..., keep_fit = FALSE, integrate.args = list())
+  ..., keep_fit = FALSE)
 
 \method{print}{cpr_cp}(x, ...)
 
-\method{summary}{cpr_cp}(object, ...)
+\method{summary}{cpr_cp}(object, wiggle = FALSE, integrate.args = list(),
+  ...)
 
 \method{plot}{cpr_cp}(x, ..., show_spline = FALSE, color = FALSE, n = 100)
 }
@@ -29,9 +30,6 @@ cp(x, ...)
 
 \item{theta}{a vector of (regression) coefficients, the ordinates of the
 control polygon.}
-
-\item{integrate.args}{a list of arguments passed to \code{cpr::wiggle} and
-ultimately \code{stats::integrate}.}
 
 \item{formula}{a formula that is appropriate for regression method being
 used.}
@@ -46,6 +44,13 @@ regression model fit is retained and returned in as the \code{fit} element.
 If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
 \item{object}{a \code{cpr_cp} object}
+
+\item{wiggle}{logical, if \code{TRUE} then the integral of the squared second
+derivative of the spline function will be calculated via
+\code{stats::integrate}.}
+
+\item{integrate.args}{a list of arguments passed to \code{cpr::wiggle} and
+ultimately \code{stats::integrate}.}
 
 \item{show_spline}{boolean (default FALSE) to plot the spline function within
 its control polygon}

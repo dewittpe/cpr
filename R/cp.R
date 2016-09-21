@@ -54,9 +54,7 @@ cp <- function(x, ...) {
 #' @rdname cp
 #' @param theta a vector of (regression) coefficients, the ordinates of the
 #'        control polygon.
-#' @param integrate.args a list of arguments passed to \code{cpr::wiggle} and
-#' ultimately \code{stats::integrate}.
-cp.cpr_bs <- function(x, theta, integrate.args = list(), ...) {
+cp.cpr_bs <- function(x, theta, ...) {
   out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(x, "xi_star")), 
                                      theta   = as.vector(theta)),
               xi = c(attr(x, "xi")),
@@ -67,19 +65,9 @@ cp.cpr_bs <- function(x, theta, integrate.args = list(), ...) {
               keep_fit = NA,
               fit    = NA,
               loglik = NA,
-              rmse   = NA,
-              wiggle = NA) 
+              rmse   = NA)
 
   class(out) <- c("cpr_cp", class(out))
-
-  wggl <- try(do.call(wiggle.cpr_cp, c(list(object = out), integrate.args)), silent = TRUE)
-
-  if (class(wggl) == "integrate") { 
-    out$wiggle <- wggl
-  } else {
-    out$wiggle <- numeric(0)
-    attr(out$wiggle, "error") <- wggl
-  }
 
   out
 }
@@ -94,7 +82,7 @@ cp.cpr_bs <- function(x, theta, integrate.args = list(), ...) {
 #' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
 #' If \code{FALSE} the \code{fit} element with be \code{NA}.
-cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., keep_fit = FALSE, integrate.args = list()) { 
+cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., keep_fit = FALSE) { 
   # check for some formula specification issues 
   if (sum(grepl("bsplines", attr(stats::terms(formula), "term.labels"))) != 1) {
     stop("cpr::bsplines() must appear once, with no effect modifiers, on the right hand side of the formula.")
@@ -107,7 +95,7 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
   
   regression <- match.fun(method)
   cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "integrate.args")))]
+  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit")))]
 
   if (attr(stats::terms(formula), "intercept") == 1) { 
     cl$formula <- stats::update.formula(formula, . ~ . - 1)
@@ -122,35 +110,13 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
   Bmat <- stats::model.frame(fit)
   Bmat <- Bmat[[which(grepl("bsplines", names(Bmat)))]]
 
-  out <- list(cp = dplyr::data_frame(xi_star = as.numeric(attr(Bmat, "xi_star")), 
-                                     theta   = as.vector(theta(fit))),
-              xi       = c(attr(Bmat, "xi")),
-              iknots   = c(attr(Bmat, "iknots")),
-              bknots   = c(attr(Bmat, "bknots")),
-              order    = attr(Bmat, "order"),
-              call     = cl,
-              keep_fit = keep_fit,
-              fit      = if (keep_fit) { fit } else {NA},
-              loglik   = loglikelihood(fit),
-              rmse     = sqrt(mean(stats::residuals(fit)^2)),
-              wiggle   = numeric(0))
+  out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))
 
-  # out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))
-  # out$keep_fit = keep_fit
-  # out$fit      = if (keep_fit) { fit } else {NA}
-  # out$loglik   = loglikelihood(fit)
-  # out$rmse     = sqrt(mean(stats::residuals(fit)^2))
-  class(out) <- c("cpr_cp", class(out))
-
-  wggl <- try(do.call(wiggle.cpr_cp, c(list(object = out), integrate.args)), silent = TRUE)
-
-  if (class(wggl) == "integrate") { 
-    out$wiggle <- wggl
-  } else {
-    out$wiggle <- list()
-    out$wiggle$value <- NA
-    attr(out$wiggle, "error") <- wggl
-  }
+  out$call     <- cl
+  out$keep_fit <- keep_fit
+  out$fit      <- if (keep_fit) { fit } else {NA}
+  out$loglik   <- loglikelihood(fit)
+  out$rmse     <- sqrt(mean(stats::residuals(fit)^2))
 
   out
 }
@@ -164,15 +130,36 @@ print.cpr_cp <- function(x, ...) {
 
 #' @export
 #' @param object a \code{cpr_cp} object
+#' @param wiggle logical, if \code{TRUE} then the integral of the squared second
+#' derivative of the spline function will be calculated via
+#' \code{stats::integrate}.
+#' @param integrate.args a list of arguments passed to \code{cpr::wiggle} and
+#' ultimately \code{stats::integrate}.
 #' @rdname cp
-summary.cpr_cp <- function(object, ...){
-  list(dfs        = length(object$cp$theta),
-       n_iknots   = length(object$iknots),
-       iknots     = object$iknots,
-       loglik     = object$loglik,
-       rmse       = object$rmse,
-       wiggle     = object$wiggle$value,
-       wiggle_msg = object$wiggle$message)
+summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...){
+  out <- 
+    list(dfs        = length(object$cp$theta),
+         n_iknots   = length(object$iknots),
+         iknots     = list(object$iknots),
+         loglik     = object$loglik,
+         rmse       = object$rmse)
+  
+  
+  if (wiggle) {
+    wggl <- try(do.call(wiggle.cpr_cp, c(list(object = object), integrate.args)), silent = TRUE)
+    
+
+    if (class(wggl) == "integrate") { 
+      out$wiggle <- as.numeric(wggl$value)
+      attr(out$wiggle, "abs.error") <- wggl$abs.error
+      attr(out$wiggle, "subdivisions") <- wggl$subdivisions
+      attr(out$wiggle, "message") <- wggl$message
+    } else {
+      out$wiggle <- NA
+      attr(out$wiggle, "error") <- wggl
+    }
+  }
+  out 
 }
 
 
