@@ -20,6 +20,7 @@ Suggests:
     geepack,
     lme4,
     testthat,
-    knitr
+    knitr,
+    covr
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
