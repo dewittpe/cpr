@@ -1,3 +1,17 @@
+# Version 0.1.0
+
+**First version of univariable cpr methods ready for deployment**
+
+## Big picture
+`cpr::cp` and `cpr::cpr` have been used for the simulations which are aimed to
+be part of the first manuscript.  Modifications might be needed, but hopefully
+the univariable methods are stable.
+
+A lot of changes in the implimentation and API have occured from the 0.0.x
+series.  The aim for version 0.2.0 will be to have a very similar API for
+`cpr::cn` and `cpr::cnr` as provided for the `cpr::cp` and `cpr::cpr` calls.
+
+
 # version 0.0.5
 
 ## New Features
