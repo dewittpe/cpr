@@ -21,7 +21,8 @@ cp(x, ...)
 \method{summary}{cpr_cp}(object, wiggle = FALSE, integrate.args = list(),
   ...)
 
-\method{plot}{cpr_cp}(x, ..., show_spline = FALSE, color = FALSE, n = 100)
+\method{plot}{cpr_cp}(x, ..., show_cp = TRUE, show_spline = FALSE,
+  color = FALSE, n = 100)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
@@ -52,8 +53,10 @@ derivative of the spline function will be calculated via
 \item{integrate.args}{a list of arguments passed to \code{cpr::wiggle} and
 ultimately \code{stats::integrate}.}
 
-\item{show_spline}{boolean (default FALSE) to plot the spline function within
-its control polygon}
+\item{show_cp}{logical (default \code{TRUE}), show the control polygon(s)?}
+
+\item{show_spline}{boolean (default \code{FALSE}) to plot the spline
+function?}
 
 \item{color}{boolean (default FALSE) if more than one \code{cpr_cp} object is
 to be plotted, set this value to TRUE to have the graphic in color (linetypes

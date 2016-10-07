@@ -166,16 +166,17 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #' @method plot cpr_cp
 #' @export
 #' @rdname cp
-#' @param show_spline boolean (default FALSE) to plot the spline function within
-#' its control polygon
+#' @param show_cp logical (default \code{TRUE}), show the control polygon(s)?
+#' @param show_spline boolean (default \code{FALSE}) to plot the spline
+#' function?
 #' @param color boolean (default FALSE) if more than one \code{cpr_cp} object is
 #' to be plotted, set this value to TRUE to have the graphic in color (linetypes
 #' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
 #'
-plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) { 
+plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, color = FALSE, n = 100) { 
   nms   <- sapply(match.call()[-1], deparse)
-  nms   <- nms[!(names(nms) %in% c("show_spline", "color", "n"))]
+  nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "color", "n"))]
   cps   <- lapply(list(x, ...), function(x) x$cp)
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
@@ -184,9 +185,12 @@ plot.cpr_cp <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) {
   base_plot <- 
     ggplot2::ggplot(.data) +
     ggplot2::theme_bw() + 
-    ggplot2::geom_point() + 
-    ggplot2::geom_line() + 
     ggplot2::theme(axis.title = ggplot2::element_blank())
+
+  if (show_cp) {
+    base_plot <-
+      base_plot + ggplot2::geom_point() + ggplot2::geom_line()
+  }
 
   if (length(cps) > 1) { 
     base_plot <- 
