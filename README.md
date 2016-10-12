@@ -2,7 +2,6 @@
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
 [![Build Status](https://travis-ci.com/dewittpe/cpr.svg?token=jowN3QrQKY7UdmTc4Efp&branch=master)](https://travis-ci.com/dewittpe/cpr)
-[![codecov](https://codecov.io/gh/dewittpe/cpr/branch/master/graph/badge.svg?token=ffhewwBFxy)](https://codecov.io/gh/dewittpe/cpr)
 
 An R package for implementing the Control Polygon Reduction model
 selection method.  When we are tasked with modeling the functional relationship

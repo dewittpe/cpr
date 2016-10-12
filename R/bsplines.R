@@ -49,20 +49,7 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
     stop("x is a list.  use cpr::btensor instead of cpr::bsplines.")
   }
 
-  if (is.null(iknots) & is.null(df)) { 
-    iknots <- numeric(0)
-  } else if (is.null(iknots) & !is.null(df)) { 
-    if (df < order) {
-      warning("df being set to order") 
-      iknots <- numeric(0)
-    } else if (df == order) {
-      iknots <- numeric(0)
-    } else {
-      iknots <- trimmed_quantile(x, probs = seq(1, df - order, by = 1) / (df - order + 1))
-    }
-  } else if (!is.null(iknots) & !is.null(df)) {
-    warning("Both iknots and df defined, using iknots")
-  } 
+  iknots <- iknots_or_df(x, iknots, df, order)
 
   rtn <- .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order) 
   class(rtn) <- c("cpr_bs", "matrix")
@@ -180,20 +167,7 @@ plot.cpr_bs <- function(x, ..., digits = 2, n = 100) {
 #' @rdname bsplinesD
 bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L, derivative = 1L) { 
 
-  if (is.null(iknots) & is.null(df)) { 
-    iknots <- numeric(0)
-  } else if (is.null(iknots) & !is.null(df)) { 
-    if (df < order) {
-      warning("df being set to order") 
-      iknots <- numeric(0)
-    } else if (df == order) {
-      iknots <- numeric(0)
-    } else {
-      iknots <- trimmed_quantile(x, probs = seq(1, df - order, by = 1) / (df - order + 1))
-    }
-  } else if (!is.null(iknots) & !is.null(df)) {
-    warning("Both iknots and df defined, using iknots")
-  } 
+  iknots <- iknots_or_df(x, iknots, df, order)
 
   xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order)) 
 
@@ -213,4 +187,23 @@ bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L,
   }
 
   do.call(cbind, rtn)
+}
+
+
+iknots_or_df <- function(x, iknots, df, order) { 
+  if (is.null(iknots) & is.null(df)) { 
+    iknots <- numeric(0)
+  } else if (is.null(iknots) & !is.null(df)) { 
+    if (df < order) {
+      warning("df being set to order") 
+      iknots <- numeric(0)
+    } else if (df == order) {
+      iknots <- numeric(0)
+    } else {
+      iknots <- trimmed_quantile(x, probs = seq(1, df - order, by = 1) / (df - order + 1))
+    }
+  } else if (!is.null(iknots) & !is.null(df)) {
+    warning("Both iknots and df defined, using iknots")
+  } 
+  iknots
 }

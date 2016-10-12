@@ -6,5 +6,3 @@ branches:
   only:
     - master
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash) -t b89771c5-90a7-4f46-94ec-5b6db6cd08f2
