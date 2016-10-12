@@ -1,3 +1,13 @@
+# Version 0.1.1
+
+## New Features
+* `plot.cpr_cp` allows the user to suppress the plotting of the control polygon.
+  When plotting multiple control polygons and splines, this option will make it
+  easier to view the spline functions.
+
+# Non-visible changes:
+* Extended testing scripts.
+
 # Version 0.1.0
 
 **First version of univariable cpr methods ready for deployment**
