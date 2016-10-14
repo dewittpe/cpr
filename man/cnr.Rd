@@ -6,7 +6,7 @@
 \alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
-cnr(x, p = 2, progress = interactive(), ...)
+cnr(x, keep = -1, p = 2, progress = interactive(), ...)
 
 is.cpr_cnr(x)
 
@@ -14,6 +14,9 @@ is.cpr_cnr(x)
 }
 \arguments{
 \item{x}{a \code{cnr_cp} or \code{cnr_tensor} object}
+
+\item{keep}{keep (store) the regression fit for the first \code{keep}
+\code{cpr_cn} objects in the list returned by \code{cnr}.}
 
 \item{p}{defaults to 2L, the L^p norm used in determining the influence
 weight of each internal knot.}

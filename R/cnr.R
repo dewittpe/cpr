@@ -12,20 +12,28 @@
 #' limit on the number of stored regression fits is to keep memory usage down.
 #'
 #' @param x a \code{cnr_cp} or \code{cnr_tensor} object
+#' @param keep keep (store) the regression fit for the first \code{keep}
+#' \code{cpr_cn} objects in the list returned by \code{cnr}.
 #' @param p defaults to 2L, the L^p norm used in determining the influence
 #'        weight of each internal knot.
 #' @param progress show a progress bar.
 #' @param ... not currently used
 #' 
 #' @export
-cnr <- function(x, p = 2, progress = interactive(), ...) { 
+cnr <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
   UseMethod("cnr")
 }
 
 #' @export
-cnr.cpr_cn <- function(x, p = 2, progress = interactive(), ...) { 
+cnr.cpr_cn <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
 
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list, attr, which = "iknots"), length)) + 1L)
+
+  if (length(out) > (keep + 1) & x$keep_fit) {
+    x <- eval(stats::update(x, keep_fit = FALSE, evaluate = FALSE), parent.frame())
+  } else if (length(out) <= (keep + 1) & !x$keep_fit) {
+    x <- eval(stats::update(x, keep_fit = TRUE, evaluate = FALSE), parent.frame())
+  }
 
   if (progress) { 
     pb <- utils::txtProgressBar(max = length(out), style = 3)

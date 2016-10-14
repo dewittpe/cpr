@@ -30,7 +30,8 @@ cn.cpr_bt <- function(x, theta, ...) {
          # iknots  = attr(x, "iknots"),
          # bknots  = attr(x, "bknots"),
          # order   = attr(x, "order"), 
-         # call    = match.call(),
+         call    = match.call(),
+         keep_fit = NA,
          fit     = NA,
          loglik  = NA,
          rmse    = NA)
@@ -45,7 +46,10 @@ cn.cpr_bt <- function(x, theta, ...) {
 #' @param data see documentation in \code{\link[stats]{lm}}
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
-cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) { 
+#' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the
+#' regression model fit is retained and returned in the the \code{fit} element.
+#' If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.
+cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., keep_fit = FALSE) { 
   # check for some formula specification issues
   fterms <- stats::terms(formula)
   fterms
@@ -59,7 +63,7 @@ cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
 
   regression <- match.fun(method)
   cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("method")))]
+  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit")))]
   cl$formula <- f_for_use
   cl$data <- data_for_use
 
@@ -77,7 +81,8 @@ cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ...) 
                                  theta   = as.vector(theta(fit)))), 
          bspline_list = attr(Bmat, "bspline_list"),
          call    = cl,
-         fit     = fit,
+         keep_fit = keep_fit,
+         fit     = if (keep_fit) { fit } else { NA },
          loglik  = loglikelihood(fit),
          rmse    = sqrt(mean(stats::residuals(fit)^2)))
   class(out) <- c("cpr_cn", class(out))

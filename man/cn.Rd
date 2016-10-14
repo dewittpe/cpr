@@ -13,7 +13,7 @@ cn(x, ...)
 \method{cn}{cpr_bt}(x, theta, ...)
 
 \method{cn}{formula}(formula, data = parent.frame(), method = stats::lm,
-  ...)
+  ..., keep_fit = FALSE)
 
 \method{print}{cpr_cn}(x, ...)
 
@@ -34,6 +34,10 @@ used.}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
+
+\item{keep_fit}{(logical, defaults to \code{FALSE}).  If \code{TRUE} the
+regression model fit is retained and returned in the the \code{fit} element.
+If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.}
 
 \item{show_spline}{boolean (default FALSE) to plot the spline function within
 its control net}
