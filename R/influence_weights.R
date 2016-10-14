@@ -11,63 +11,83 @@
 #'
 #' @param x a \code{cpr_cp} or \code{cpr_tensor} object
 #' @param p the order of the norm, default \code{p = 2}.
+#' @param n_polycoef for influence weights in tensor products, this parameter
+#' set the number of polynomial coefficients to use in each of the marginal
+#' calculations.  Ignored for \code{cpr_cp} objects.
 #'
 #' @return
 #' A data_frame with two elements, the internal knots (iknots) and the weights.
 #'
-#' @export 
-influence_weights <- function(x, p = 2) { 
+#' @export
+influence_weights <- function(x, p = 2, n_polycoef = 50L) {
   UseMethod("influence_weights")
 }
 
-#' @export 
-influence_weights.cpr_cp <- function(x, p = 2) {
-  if (length(x$iknots) > 0) { 
-    iw <- .Call('cpr_weigh_iknots', PACKAGE = 'cpr', x$xi, matrix(x$cp$theta, ncol = 1), x$order, p) 
+#' @export
+influence_weights.cpr_cp <- function(x, p = 2, n_polycoef = 50L) {
+  if (length(x$iknots) > 0) {
+    iw <- .Call('cpr_weigh_iknots', PACKAGE = 'cpr', x$xi, matrix(x$cp$theta, ncol = 1), x$order, p)
     dplyr::data_frame(iknots = x$iknots, w = c(iw))
-  } else { 
+  } else {
     dplyr::data_frame(iknots = numeric(0), w = numeric(0))
   }
 
 }
 
-#' @export 
-influence_weights.cpr_cn <- function(x, p = 2) { 
+#' @export
+influence_weights.cpr_cn <- function(x, p = 2, n_polycoef = 50L) {
 
-  dfs <- sapply(x$bspline_list, ncol)
+  dfs    <- sapply(x$bspline_list, ncol)
+  bknots <- lapply(x$bspline_list, attr, which = "bknots")
+  iknots <- lapply(x$bspline_list, attr, which = "iknots")
+  orders <- lapply(x$bspline_list, attr, which = "order")
 
-  marginal_thetas <- 
-    lapply(seq_along(x$bspline_list), 
+  xvecs <-
+    mapply(seq,
+           from = lapply(bknots, min),
+           to   = lapply(bknots, max),
+           MoreArgs = list(length = n_polycoef),
+           SIMPLIFY = FALSE)
+
+  marginal_bsplines <-
+    mapply(bsplines,
+           x = xvecs,
+           iknots = iknots,
+           bknots = bknots,
+           order  = orders,
+           SIMPLIFY = FALSE)
+
+  marginal_tensors <-
+    lapply(seq_along(marginal_bsplines),
+           function(idx) {
+             build_tensor(marginal_bsplines[-idx])
+           })
+
+  marginal_thetas <-
+    lapply(seq_along(x$bspline_list),
            function(m) {
              apply(array(x$cn$theta, dim = dfs), m, function(x) x)
            })
 
-  marginal_tensors <- 
-    lapply(seq_along(x$bspline_list), 
-           function(idx) {
-             build_tensor(x$bspline_list[-idx])
-           })
-
-  polynomial_coef <- 
+  polynomial_coef <-
     mapply(function(xx, yy) {t(xx %*% yy)},
-           xx = marginal_tensors, 
-           yy = marginal_thetas, 
+           xx = marginal_tensors,
+           yy = marginal_thetas,
            SIMPLIFY = FALSE)
 
   parallel::mclapply(seq_along(x$bspline_list),
-                     function(idx) { 
-                       wghts <- 
+                     function(idx) {
+                       wghts <-
                          lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
-                                function(tt, bmat) { 
+                                function(tt, bmat) {
                                   influence_weights.cpr_cp(cp(bmat, tt), p)
                                 },
                                 bmat = x$bspline_list[[idx]])
-                     
                        wghts <- dplyr::bind_rows(wghts)
                        wghts <- dplyr::group_by_(wghts, ~ iknots)
                        wghts <- dplyr::summarize_(wghts, ~ max(w), ~ idx)
-                       wghts 
-                     }) 
+                       wghts
+                     })
 }
 
 ################################################################################
