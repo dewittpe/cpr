@@ -13,9 +13,9 @@
 \code{"loglik"} for the loglikihood by degrees of freedom, 
 \code{"rmse"} for root mean squared residuals by degrees of freedom}
 
-\item{from}{the minimum number of internal knots}
+\item{from}{the first index of \code{x} to plot}
 
-\item{to}{the maximum number of internal knots}
+\item{to}{the last index of \code{x} to plot}
 
 \item{...}{args passed to \code{cpr::plot.cpr_cp}}
 }

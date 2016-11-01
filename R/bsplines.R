@@ -77,14 +77,22 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 
 #' Plot B-splines
 #'
-#' @method plot cpr_bs
-#' @export
 #' @param x a \code{cpr_bs} object
+#' @param show_xi logical, show the knot locations, using the greek letter xi, on the x-axis
+#' @param show_x  logical, show the x values of the knots on the x-axis
 #' @param digits number of digits to the right of the decimal place to report
 #' for the value of each knot.
 #' @param n number of values to use to plot the splines, defaults to 100
 #' @param \ldots not currently used
-plot.cpr_bs <- function(x, ..., digits = 2, n = 100) {
+#' @examples
+#' bmat <- bsplines(seq(-3, 2, length = 1000), iknots = c(-2, 0, 0.2))
+#' plot(bmat)
+#' plot(bmat, show_xi = FALSE, show_x = TRUE)
+#' plot(bmat, show_xi = TRUE, show_x = FALSE)
+#' plot(bmat, show_xi = FALSE, show_x = FALSE)
+#' @method plot cpr_bs
+#' @export
+plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2, n = 100) {
   xvec <- seq(min(attr(x, "bknots")), max(attr(x, "bknots")), length = n)
   bmat <- bsplines(xvec, iknots = attr(x, "iknots"), order = attr(x, "order"))
   .data <- tidyr::gather_(cbind(as.data.frame(bmat), "x" = xvec),
@@ -98,22 +106,51 @@ plot.cpr_bs <- function(x, ..., digits = 2, n = 100) {
   k  <- attr(x, "order")
   bk <- attr(x, "bknots")
 
-  expr <- list(bquote(atop(group('{', xi[j], '}')[j == 1]^{.(k)}, .(formatC(bk[1], digits, format = "f")))))
+  g <-
+    ggplot2::ggplot(.data) + 
+    ggplot2::theme_bw() + 
+    ggplot2::aes_string(x = "x", y = "value", color = "spline") + 
+    ggplot2::geom_line() + 
+    ggplot2::theme(axis.title = ggplot2::element_blank())
 
-  if (length(xi) > 2 * k) { 
-    for(i in seq(k + 1, length(xi) - k, by = 1)) { 
-      expr <- c(expr, bquote(atop(xi[.(i)], .(formatC(xi[i], digits, format = "f")))))
-    }
+  if (show_xi & show_x) { 
+    expr <- list(bquote(atop(group('{', xi[j], '}')[j == 1]^{.(k)}, .(formatC(bk[1], digits, format = "f"))))) 
+    if (length(xi) > 2 * k) { 
+      for(i in seq(k + 1, length(xi) - k, by = 1)) { 
+        expr <- c(expr, bquote(atop(xi[.(i)], .(formatC(xi[i], digits, format = "f")))))
+      }
+    } 
+    expr <- c(expr, bquote(atop(group('{', xi[j], '}')[j == .(length(xi) - k + 1L)]^{.(length(xi))}, .(formatC(bk[2], digits, format = "f")))))
+
+    g <- g +
+      ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))),
+                                  labels = do.call(expression, expr))
+  } else if (show_xi & !show_x) { 
+    expr <- list(bquote(group('{', xi[j], '}')[j == 1]^{.(k)})) 
+    if (length(xi) > 2 * k) { 
+      for(i in seq(k + 1, length(xi) - k, by = 1)) { 
+        expr <- c(expr, bquote(xi[.(i)]))
+      }
+    } 
+    expr <- c(expr, bquote(group('{', xi[j], '}')[j == .(length(xi) - k + 1L)]^{.(length(xi))}))
+
+    g <- g +
+      ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))),
+                                  labels = do.call(expression, expr))
+  } else if (!show_xi & show_x) { 
+    expr <- list(bquote(.(formatC(bk[1], digits, format = "f"))))
+    if (length(xi) > 2 * k) { 
+      for(i in seq(k + 1, length(xi) - k, by = 1)) { 
+        expr <- c(expr, bquote(.(formatC(xi[i], digits, format = "f"))))
+      }
+    } 
+    expr <- c(expr, bquote(.(formatC(bk[2], digits, format = "f"))))
+
+    g <- g +
+      ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))),
+                                  labels = do.call(expression, expr))
   }
-
-  expr <- c(expr, bquote(atop(group('{', xi[j], '}')[j == .(length(xi) - k + 1L)]^{.(length(xi))}, .(formatC(bk[2], digits, format = "f")))))
-
-  ggplot2::ggplot(.data) + 
-  ggplot2::theme_bw() + 
-  ggplot2::aes_string(x = "x", y = "value", color = "spline") + 
-  ggplot2::geom_line() + 
-  ggplot2::theme(axis.title = ggplot2::element_blank()) +
-  ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))), labels = do.call(expression, expr))
+  g 
 }
 
 #' B-spline Derivatives

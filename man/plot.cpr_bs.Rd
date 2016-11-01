@@ -4,10 +4,15 @@
 \alias{plot.cpr_bs}
 \title{Plot B-splines}
 \usage{
-\method{plot}{cpr_bs}(x, ..., digits = 2, n = 100)
+\method{plot}{cpr_bs}(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2,
+  n = 100)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
+
+\item{show_xi}{logical, show the knot locations, using the greek letter xi, on the x-axis}
+
+\item{show_x}{logical, show the x values of the knots on the x-axis}
 
 \item{digits}{number of digits to the right of the decimal place to report
 for the value of each knot.}
@@ -18,5 +23,12 @@ for the value of each knot.}
 }
 \description{
 Plot B-splines
+}
+\examples{
+bmat <- bsplines(seq(-3, 2, length = 1000), iknots = c(-2, 0, 0.2))
+plot(bmat)
+plot(bmat, show_xi = FALSE, show_x = TRUE)
+plot(bmat, show_xi = TRUE, show_x = FALSE)
+plot(bmat, show_xi = FALSE, show_x = FALSE)
 }
 

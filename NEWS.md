@@ -3,6 +3,7 @@
 ## New Features
 * Option to save fits in `cnr` (#8)
 * Option to define the number of polynomial coefficients to use in `cnr` (#10)
+* x-axis tick label options for plotting b-splines (#12)
 
 ## Bug Fixes
 * `from` and `to` args for `plot.cpr_cpr` fixed (#14)
