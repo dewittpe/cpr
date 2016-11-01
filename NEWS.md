@@ -4,6 +4,8 @@
 * Option to save fits in `cnr` (#8)
 * Option to define the number of polynomial coefficients to use in `cnr` (#10)
 * x-axis tick label options for plotting b-splines (#12)
+* added `show_xi` to `cpr:::plot.cp` and using `ggplot2::geom_rug` to show the
+  location of the knots for each of the control polygons plotted.
 
 ## Bug Fixes
 * `from` and `to` args for `plot.cpr_cpr` fixed (#14)

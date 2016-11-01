@@ -167,25 +167,39 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #' @export
 #' @rdname cp
 #' @param show_cp logical (default \code{TRUE}), show the control polygon(s)?
-#' @param show_spline boolean (default \code{FALSE}) to plot the spline
+#' @param show_spline logical (default \code{FALSE}) to plot the spline
 #' function?
+#' @param show_xi logical (default \code{TRUE}) use
+#' \code{\link[ggplot2]{geom_rug}} to show the location of the knots in the
+#' respective control polygons.
 #' @param color boolean (default FALSE) if more than one \code{cpr_cp} object is
 #' to be plotted, set this value to TRUE to have the graphic in color (linetypes
 #' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
 #'
-plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, color = FALSE, n = 100) { 
+plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = TRUE, color = FALSE, n = 100) { 
   nms   <- sapply(match.call()[-1], deparse)
   nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "color", "n"))]
   cps   <- lapply(list(x, ...), function(x) x$cp)
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
                           .dots = stats::setNames(list(rfctr), "row")) 
+
+  knot_data <- lapply(list(x, ...), function(x) {data.frame(x = x$xi)})
+  knot_data <- dplyr::mutate_(dplyr::bind_rows(knot_data, .id = "row"),
+                          .dots = stats::setNames(list(rfctr), "row")) 
                   
   base_plot <- 
     ggplot2::ggplot(.data) +
     ggplot2::theme_bw() + 
     ggplot2::theme(axis.title = ggplot2::element_blank())
+
+  if (show_xi) {
+    base_plot <-
+      base_plot +
+      ggplot2::geom_rug(data = knot_data, 
+                        mapping = ggplot2::aes_string(x = "x", y = NULL))
+  }
 
   if (show_cp) {
     base_plot <-
