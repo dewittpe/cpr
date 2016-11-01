@@ -10,6 +10,10 @@
 ## Bug Fixes
 * `from` and `to` args for `plot.cpr_cpr` fixed (#14)
 
+## Non-User visible changes
+* non-exported function `knot_expr` created to help with plotting the knot
+  locations in `cpr:::plot.cpr_bs`.
+
 # Version 0.1.1
 
 ## New Features

@@ -102,9 +102,6 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2, n = 1
 
   .data <- dplyr::tbl_df(.data)
 
-  xi <- attr(x, "xi")
-  k  <- attr(x, "order")
-  bk <- attr(x, "bknots")
 
   g <-
     ggplot2::ggplot(.data) + 
@@ -113,42 +110,12 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2, n = 1
     ggplot2::geom_line() + 
     ggplot2::theme(axis.title = ggplot2::element_blank())
 
-  if (show_xi & show_x) { 
-    expr <- list(bquote(atop(group('{', xi[j], '}')[j == 1]^{.(k)}, .(formatC(bk[1], digits, format = "f"))))) 
-    if (length(xi) > 2 * k) { 
-      for(i in seq(k + 1, length(xi) - k, by = 1)) { 
-        expr <- c(expr, bquote(atop(xi[.(i)], .(formatC(xi[i], digits, format = "f")))))
-      }
-    } 
-    expr <- c(expr, bquote(atop(group('{', xi[j], '}')[j == .(length(xi) - k + 1L)]^{.(length(xi))}, .(formatC(bk[2], digits, format = "f")))))
+  if (show_xi | show_x) { 
+    e <- knot_expr(x, digits, show_xi, show_x)
 
     g <- g +
-      ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))),
-                                  labels = do.call(expression, expr))
-  } else if (show_xi & !show_x) { 
-    expr <- list(bquote(group('{', xi[j], '}')[j == 1]^{.(k)})) 
-    if (length(xi) > 2 * k) { 
-      for(i in seq(k + 1, length(xi) - k, by = 1)) { 
-        expr <- c(expr, bquote(xi[.(i)]))
-      }
-    } 
-    expr <- c(expr, bquote(group('{', xi[j], '}')[j == .(length(xi) - k + 1L)]^{.(length(xi))}))
-
-    g <- g +
-      ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))),
-                                  labels = do.call(expression, expr))
-  } else if (!show_xi & show_x) { 
-    expr <- list(bquote(.(formatC(bk[1], digits, format = "f"))))
-    if (length(xi) > 2 * k) { 
-      for(i in seq(k + 1, length(xi) - k, by = 1)) { 
-        expr <- c(expr, bquote(.(formatC(xi[i], digits, format = "f"))))
-      }
-    } 
-    expr <- c(expr, bquote(.(formatC(bk[2], digits, format = "f"))))
-
-    g <- g +
-      ggplot2::scale_x_continuous(breaks = c(min(attr(x, "bknots")), attr(x, "iknots"), max(attr(x, "bknots"))),
-                                  labels = do.call(expression, expr))
+      ggplot2::scale_x_continuous(breaks = e$breaks,
+                                  labels = e$labels)
   }
   g 
 }
