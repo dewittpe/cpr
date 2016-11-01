@@ -44,7 +44,9 @@ plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
     } else if (to > length(x)) { 
       to <- length(x)
     }
-    ggplot2::ggplot(dplyr::filter(summary(x), dplyr::between(seq_along(dfs), from, to))) + 
+
+
+    ggplot2::ggplot(dplyr::filter_(summary(x), .dots = ~ dplyr::between(seq_along(dfs), from, to))) + 
     ggplot2::theme_bw() + 
     ggplot2::aes_string(x = "seq_along(dfs)", y = type) + 
     ggplot2::geom_point() + 

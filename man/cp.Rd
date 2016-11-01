@@ -22,7 +22,7 @@ cp(x, ...)
   ...)
 
 \method{plot}{cpr_cp}(x, ..., show_cp = TRUE, show_spline = FALSE,
-  color = FALSE, n = 100)
+  show_xi = TRUE, color = FALSE, n = 100)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
@@ -55,8 +55,12 @@ ultimately \code{stats::integrate}.}
 
 \item{show_cp}{logical (default \code{TRUE}), show the control polygon(s)?}
 
-\item{show_spline}{boolean (default \code{FALSE}) to plot the spline
+\item{show_spline}{logical (default \code{FALSE}) to plot the spline
 function?}
+
+\item{show_xi}{logical (default \code{TRUE}) use
+\code{\link[ggplot2]{geom_rug}} to show the location of the knots in the
+respective control polygons.}
 
 \item{color}{boolean (default FALSE) if more than one \code{cpr_cp} object is
 to be plotted, set this value to TRUE to have the graphic in color (linetypes
