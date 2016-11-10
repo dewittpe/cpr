@@ -1,4 +1,11 @@
 # Makefile for the cpr package
+#
+# optional commandline arguments
+# args:  these are passed to R CMD build.  For example, to build the package
+#        without the vignette use
+#
+#     make args="--no-build-vignettes"
+#
 
 PKG_VERSION = $(shell awk '/^Version:/{print $$2}' DESCRIPTION)
 PKG_NAME    = $(shell awk '/^Package:/{print $$2}' DESCRIPTION)
@@ -11,7 +18,7 @@ all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 
 $(PKG_NAME)_$(PKG_VERSION).tar.gz: $(RFILES) $(SRC)
 	R -e "devtools::document()"
-	R CMD build .
+	R CMD build $(args) .
 
 check: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 	R CMD check $(PKG_NAME)_$(PKG_VERSION).tar.gz
