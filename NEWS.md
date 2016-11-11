@@ -9,6 +9,7 @@
 
 ## Bug Fixes
 * `from` and `to` args for `plot.cpr_cpr` fixed (#14)
+* correct construction of missing `iknots` argment in `btensor`
 
 ## Non-User visible changes
 * non-exported function `knot_expr` created to help with plotting the knot
