@@ -6,10 +6,13 @@
 * x-axis tick label options for plotting b-splines (#12)
 * added `show_xi` to `cpr:::plot.cp` and using `ggplot2::geom_rug` to show the
   location of the knots for each of the control polygons plotted.
+* `summary` for `cpr_cn` and `cpr_cnr` objects added.
+* `plot` method for `cpr_cnr` objects.
 
 ## Bug Fixes
 * `from` and `to` args for `plot.cpr_cpr` fixed (#14)
-* correct construction of missing `iknots` argment in `btensor`
+* correct construction of missing `iknots` argument in `btensor`
+* `keep` is correctly handled in the `cnr` call.
 
 ## Non-User visible changes
 * non-exported function `knot_expr` created to help with plotting the knot
@@ -34,7 +37,7 @@
 be part of the first manuscript.  Modifications might be needed, but hopefully
 the univariable methods are stable.
 
-A lot of changes in the implimentation and API have occured from the 0.0.x
+A lot of changes in the implementation and API have occurred from the 0.0.x
 series.  The aim for version 0.2.0 will be to have a very similar API for
 `cpr::cn` and `cpr::cnr` as provided for the `cpr::cp` and `cpr::cpr` calls.
 
@@ -49,7 +52,7 @@ series.  The aim for version 0.2.0 will be to have a very similar API for
 
 ## End User non-visible changes:
 * Added the not-to-be-exported function `generate_cp_data`
-* Redesign of the deboor.cpp file so that the bsplines are accessable.  The
+* Redesign of the deboor.cpp file so that the bsplines are accessible.  The
   prior design only allowed access to the basis, the current design allows
   access to the generic B-splines.
 

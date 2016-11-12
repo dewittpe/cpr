@@ -163,3 +163,21 @@ plot.cpr_cn <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) {
   base_plot
 }
 
+#' @export
+#' @param object a \code{cpr_cn} object
+#' @rdname cn
+summary.cpr_cn <- function(object, ...) {
+  out <- 
+    c(list(dfs        = length(object$cn$theta),
+           loglik     = object$loglik,
+           rmse       = object$rmse), 
+      setNames(lapply(lapply(object$bspline_list, attr, which = "iknots"), length),
+               paste0("n_iknots", seq_along(object$bspline_list))),
+      setNames(lapply(lapply(lapply(object$bspline_list, attr, which = "iknots"),
+                      function(x) if (length(x)) { x } else { NA }),
+                      list),
+               paste0("iknots", seq_along(object$bspline_list)))
+      )
+
+  dplyr::as_data_frame(out)
+}

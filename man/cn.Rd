@@ -6,6 +6,7 @@
 \alias{cn.formula}
 \alias{plot.cpr_cn}
 \alias{print.cpr_cn}
+\alias{summary.cpr_cn}
 \title{Control Nets}
 \usage{
 cn(x, ...)
@@ -18,6 +19,8 @@ cn(x, ...)
 \method{print}{cpr_cn}(x, ...)
 
 \method{plot}{cpr_cn}(x, ..., show_spline = FALSE, color = FALSE, n = 100)
+
+\method{summary}{cpr_cn}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
@@ -47,6 +50,8 @@ to be plotted, set this value to TRUE to have the graphic in color (linetypes
 will be used regardless of the color settting).}
 
 \item{n}{the number of data points to use for plotting the spline}
+
+\item{object}{a \code{cpr_cn} object}
 }
 \description{
 Generate the control net for a uni-variable B-spline

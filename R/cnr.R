@@ -49,6 +49,10 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
     nkts <- lapply(split(w, factor(w$margin, levels = seq_along(x$bspline_list))), function(xx) xx$iknots)
 
+    if (i == keep + 1) { 
+      x <- stats::update(x, keep_fit = TRUE)
+    }
+
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame())
 
     if (progress) {
@@ -84,5 +88,6 @@ is.cpr_cnr <- function(x) {
 #' @param object a \code{cpr_cnr} object
 #' @rdname cnr
 summary.cpr_cnr <- function(object, ...) {
-  print(object, ...) 
+  dplyr::bind_rows(lapply(object, summary))
 }
+
