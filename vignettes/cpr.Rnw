@@ -1,0 +1,74 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{cpr}
+
+%\documentclass[letterpaper,10pt]{article}
+\documentclass[article]{jss}
+\usepackage{amsmath,amssymb}
+
+\author{Peter E.\ DeWitt\\University of Colorado Anschutz Medical Campus}
+\title{\pkg{cpr}: An \proglang{R} Package For Finding Parsimonious B-Spline
+Regression Models via Control Polygon Reduction and Control Net Reduction} 
+
+\Plainauthor{Peter E.\ DeWitt}
+\Plaintitle{cpr: An R Package For Finding Parsimonious B-Spline Regression Models via Control Polygon Reduction and Control Net Reduction} 
+\Shorttitle{\pkg{cpr}: Control Polygon Reduction}
+
+\Abstract{
+  This is an abstract\ldots
+}
+
+\Keywords{b-splines, control polygons, parsimony, regression}
+\Plainkeywords{b-splines, control polygons, parsimony, regression}
+
+\Address{
+  Peter E.\ DeWitt\\
+  Department of Biostatistics and Informatics\\
+  University of Colorado Anschutz Medical Campus\\
+  Aurora Colorado, United States of America\\
+  E-mail: \email{peter.dewitt@ucdenver.edu}
+}
+
+\begin{document}
+
+<<setup, include = FALSE>>=
+opts_chunk$set(echo       = FALSE,
+               cache      = TRUE,
+               out.width  = '.49\\linewidth',
+               results    = 'hide',
+               fig.width  = 5,
+               fig.height = 5)
+render_sweave() # use boring Sweave environments
+set_header(highlight = '') # do not use the Sweave.sty package
+pdf.options(family = 'Palatino')
+options(width = 84, digits = 3, prompt = 'R> ', continue = "+  ")
+set.seed(42)  # for reproducibility
+@
+
+\section{Introduction}
+B-splines are a commonly used tool for modeling an unknown functional form.
+B-splines are defined by their polynomial order (order = degree + 1), and a knot
+sequence.  For a review of B-splines see \citet{deboor2001} and/or the vignette
+on B-splines:
+<<eval = FALSE>>=
+vignette("bsplines", package = "cpr")
+@
+
+It is sufficient for now to give just the notation: $\boldsymbol{\xi}$
+represents the knot sequence.
+
+\section{Control Polygons}
+
+\begin{equation}
+  \label{eq:general_model}
+  y = f(x) + e
+\end{equation}
+
+
+The control polygon reduciton (CPR) algorithm was developed to provide a quick
+and efficient method for selecting a knot sequence when using B-splines in
+regression models of the form
+
+% \bibliographystyle{plainnat}
+\bibliography{references} 
+
+\end{document}
