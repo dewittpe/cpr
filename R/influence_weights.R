@@ -78,19 +78,19 @@ influence_weights.cpr_cn <- function(x, p = 2, margin = seq_along(x$bspline_list
            SIMPLIFY = FALSE)
 
   wghts <- 
-    parallel::mclapply(seq_along(x$bspline_list)[margin],
-                       function(idx) {
-                         wghts <-
-                           lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
-                                  function(tt, bmat) {
-                                    influence_weights.cpr_cp(cp(bmat, tt), p)
-                                  },
-                                  bmat = x$bspline_list[[idx]])
-                         wghts <- dplyr::bind_rows(wghts)
-                         wghts <- dplyr::group_by_(wghts, ~ iknots)
-                         wghts <- dplyr::summarize_(wghts, ~ max(w))
-                         wghts
-                       })
+    lapply(seq_along(x$bspline_list)[margin],
+           function(idx) {
+             wghts <-
+               lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
+                      function(tt, bmat) {
+                        influence_weights.cpr_cp(cp(bmat, tt), p)
+                      },
+                      bmat = x$bspline_list[[idx]])
+             wghts <- dplyr::bind_rows(wghts)
+             wghts <- dplyr::group_by_(wghts, ~ iknots)
+             wghts <- dplyr::summarize_(wghts, ~ max(w))
+             wghts
+           })
   out <- lapply(iknots, function(ik) dplyr::data_frame(iknots = ik, `max(w)` = rep(Inf, length(ik))))
   out[seq_along(x$bspline_list) %in% margin] <- wghts
   out
