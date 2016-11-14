@@ -15,12 +15,20 @@
 #' @param keep keep (store) the regression fit for the first \code{keep}
 #' \code{cpr_cn} objects in the list returned by \code{cnr}.
 #' @param p defaults to 2L, the L^p norm used in determining the influence
-#'        weight of each internal knot.
+#'        weight of each internal knot.  Passed to
+#'        \code{\link{influence_weights}}.
+#' @param margin the margins to apply the CNR algorithm to.  Passed to
+#' \code{\link{influence_weights}}.
+#' @param n_polycoef the number of polynomial coefficients to use when assessing
+#' the influence of each internal knot.
 #' @param progress show a progress bar.
 #' @param ... not currently used
+#'
+#' @seealso \code{\link{influence_weights}}, \code{\link{cpr}} for the
+#' univariable version, Control Polygon Reduction.
 #' 
 #' @export
-cnr <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
+cnr <- function(x, keep = -1, p = 2, margin, n_polycoef, progress = interactive(), ...) { 
   UseMethod("cnr")
 }
 

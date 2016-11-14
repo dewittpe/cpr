@@ -4,12 +4,16 @@
 \alias{influence_weights}
 \title{Influence Weights}
 \usage{
-influence_weights(x, p = 2, n_polycoef = 50L)
+influence_weights(x, p = 2, margin = seq_along(x$bspline_list),
+  n_polycoef = 50L)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
 
 \item{p}{the order of the norm, default \code{p = 2}.}
+
+\item{margin}{The margins to apply CNR to.  Ignored for \code{cpr_cp}
+objects.}
 
 \item{n_polycoef}{for influence weights in tensor products, this parameter
 set the number of polynomial coefficients to use in each of the marginal

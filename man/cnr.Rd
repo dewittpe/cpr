@@ -6,7 +6,8 @@
 \alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
-cnr(x, keep = -1, p = 2, progress = interactive(), ...)
+cnr(x, keep = -1, p = 2, margin, n_polycoef, progress = interactive(),
+  ...)
 
 is.cpr_cnr(x)
 
@@ -19,7 +20,14 @@ is.cpr_cnr(x)
 \code{cpr_cn} objects in the list returned by \code{cnr}.}
 
 \item{p}{defaults to 2L, the L^p norm used in determining the influence
-weight of each internal knot.}
+weight of each internal knot.  Passed to
+\code{\link{influence_weights}}.}
+
+\item{margin}{the margins to apply the CNR algorithm to.  Passed to
+\code{\link{influence_weights}}.}
+
+\item{n_polycoef}{the number of polynomial coefficients to use when assessing
+the influence of each internal knot.}
 
 \item{progress}{show a progress bar.}
 
@@ -39,5 +47,9 @@ for models with upto and including keep fits.  For example, if \code{keep =
 stored in the first \code{keep + 1} (zero internal knots, one internal knot,
 \ldots, \code{keep} internal knots) \code{cnr\_cp} objects in the list.  The
 limit on the number of stored regression fits is to keep memory usage down.
+}
+\seealso{
+\code{\link{influence_weights}}, \code{\link{cpr}} for the
+univariable version, Control Polygon Reduction.
 }
 
