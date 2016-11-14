@@ -8,6 +8,8 @@
   location of the knots for each of the control polygons plotted.
 * `summary` for `cpr_cn` and `cpr_cnr` objects added.
 * `plot` method for `cpr_cnr` objects.
+* `margin` option in `cnr` allows the user to specify which marginals CNR will
+  be applied to.
 
 ## Bug Fixes
 * `from` and `to` args for `plot.cpr_cpr` fixed (#14)

@@ -25,9 +25,9 @@ cnr <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 }
 
 #' @export
-cnr.cpr_cn <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
+cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 50L, progress = interactive(), ...) { 
 
-  out <- vector("list", length = sum(sapply(lapply(x$bspline_list, attr, which = "iknots"), length)) + 1L)
+  out <- vector("list", length = sum(sapply(lapply(x$bspline_list[margin], attr, which = "iknots"), length)) + 1L)
 
   if (length(out) > (keep + 1) & x$keep_fit) {
     x <- eval(stats::update(x, keep_fit = FALSE, evaluate = FALSE), parent.frame())
@@ -43,7 +43,7 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x 
-    w <- cpr::influence_weights(x, p = p) 
+    w <- influence_weights(x, p = p, margin, n_polycoef) 
     w <- dplyr::bind_rows(w, .id = "margin") 
     w <- dplyr::filter_(w, ~ `max(w)` > min(`max(w)`))
 
