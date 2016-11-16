@@ -179,7 +179,7 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #'
 plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = TRUE, color = FALSE, n = 100) { 
   nms   <- sapply(match.call()[-1], deparse)
-  nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "color", "n"))]
+  nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "show_xi", "color", "n"))]
   cps   <- lapply(list(x, ...), function(x) x$cp)
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
