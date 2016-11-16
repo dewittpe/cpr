@@ -86,13 +86,13 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 #' @param \ldots not currently used
 #' @examples
 #' bmat <- bsplines(seq(-3, 2, length = 1000), iknots = c(-2, 0, 0.2))
-#' plot(bmat)
+#' plot(bmat, show_xi = TRUE,  show_x = TRUE)
 #' plot(bmat, show_xi = FALSE, show_x = TRUE)
-#' plot(bmat, show_xi = TRUE, show_x = FALSE)
+#' plot(bmat, show_xi = TRUE,  show_x = FALSE)  ## Default
 #' plot(bmat, show_xi = FALSE, show_x = FALSE)
 #' @method plot cpr_bs
 #' @export
-plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2, n = 100) {
+plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, digits = 2, n = 100) {
   xvec <- seq(min(attr(x, "bknots")), max(attr(x, "bknots")), length = n)
   bmat <- bsplines(xvec, iknots = attr(x, "iknots"), order = attr(x, "order"))
   .data <- tidyr::gather_(cbind(as.data.frame(bmat), "x" = xvec),
@@ -100,8 +100,8 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2, n = 1
                           value_col = "value", 
                           gather_cols = paste0("V", seq(1, ncol(x), by = 1L)))
 
+  .data$spline <- factor(as.numeric(gsub("V(\\d+)", "\\1", .data$spline)))
   .data <- dplyr::tbl_df(.data)
-
 
   g <-
     ggplot2::ggplot(.data) + 
@@ -111,11 +111,19 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2, n = 1
     ggplot2::theme(axis.title = ggplot2::element_blank())
 
   if (show_xi | show_x) { 
-    e <- knot_expr(x, digits, show_xi, show_x)
+    e <- knot_expr(x, digits)
 
-    g <- g +
-      ggplot2::scale_x_continuous(breaks = e$breaks,
-                                  labels = e$labels)
+    if (show_xi & !show_x) {
+      g <- g + ggplot2::scale_x_continuous(breaks = e$breaks, labels = e$xi_expr)
+    } else if (!show_xi & show_x) {
+      g <- g + ggplot2::scale_x_continuous(breaks = e$breaks, labels = e$num_expr)
+    } else {
+      g <- g + ggplot2::scale_x_continuous(breaks = e$breaks, labels = e$xi_expr,
+                                           sec.axis = ggplot2::sec_axis(~ .,
+                                                                        breaks = e$breaks,
+                                                                        labels = e$num_expr))
+    }
+
   }
   g 
 }
