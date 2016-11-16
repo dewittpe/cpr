@@ -1,4 +1,12 @@
-# Version 0.1.1.9000
+# Version 0.2.0
+This version has a fairly polished set of tools for b-splines, cpr, and cnr.
+This version seems to be in a good place for use in the three major papers 
+
+1. Methods 1: uni-variable functions,
+2. Methods 2: multi-variable functions, and
+3. Software paper.
+
+Continued development should be focused on bug fixes and minor enhancements.
 
 ## New Features
 * Option to save fits in `cnr` (#8)
@@ -10,11 +18,14 @@
 * `plot` method for `cpr_cnr` objects.
 * `margin` option in `cnr` allows the user to specify which marginals CNR will
   be applied to.
+* Using `sec.axis` option from `ggplot2_2.2.0` for the plotting of the knot
+  sequence and numeric values in `plot.cpr_bs` (#18)
 
 ## Bug Fixes
 * `from` and `to` args for `plot.cpr_cpr` fixed (#14)
 * correct construction of missing `iknots` argument in `btensor`
 * `keep` is correctly handled in the `cnr` call.
+* `show_xi` correctly handled in the `plot.cpr_cp` call.
 
 ## Non-User visible changes
 * non-exported function `knot_expr` created to help with plotting the knot
