@@ -4,7 +4,7 @@
 \alias{plot.cpr_bs}
 \title{Plot B-splines}
 \usage{
-\method{plot}{cpr_bs}(x, ..., show_xi = TRUE, show_x = TRUE, digits = 2,
+\method{plot}{cpr_bs}(x, ..., show_xi = TRUE, show_x = FALSE, digits = 2,
   n = 100)
 }
 \arguments{
@@ -26,9 +26,9 @@ Plot B-splines
 }
 \examples{
 bmat <- bsplines(seq(-3, 2, length = 1000), iknots = c(-2, 0, 0.2))
-plot(bmat)
+plot(bmat, show_xi = TRUE,  show_x = TRUE)
 plot(bmat, show_xi = FALSE, show_x = TRUE)
-plot(bmat, show_xi = TRUE, show_x = FALSE)
+plot(bmat, show_xi = TRUE,  show_x = FALSE)  ## Default
 plot(bmat, show_xi = FALSE, show_x = FALSE)
 }
 
