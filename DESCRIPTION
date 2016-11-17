@@ -3,8 +3,8 @@ Title: Control Polygon Reduction
 Version: 0.2.0.9000
 Authors@R: 
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre")),
-      person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths"),
-      person("Nichole", "Carlson", email = "nichole.carlson@ucdenver.edu", role = c("ths")) 
+      person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),
+      person("Nichole", "Carlson", email = "nichole.carlson@ucdenver.edu", role = c("ths")))
 Description: Implementation of the Control Polygon Reduction methods described
     in PAPER TO BE PUBLISHED.
 Depends:
