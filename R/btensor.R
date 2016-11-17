@@ -28,7 +28,7 @@
 #' @param order  a list of the order for each x; defaults to 4L for all x.
 #'
 #' @return
-#' A matrix with a class cpr_tensor
+#' A matrix with a class cpr_bt
 #'
 #' @examples
 #' tp <- with(mtcars,
@@ -100,9 +100,9 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
   M
 }
 
-#' @method print cpr_tensor
+#' @method print cpr_bt
 #' @export
-print.cpr_tensor <- function(x, ...) {
+print.cpr_bt <- function(x, ...) {
   cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
   utils::str(x, max.level = 1)
 }

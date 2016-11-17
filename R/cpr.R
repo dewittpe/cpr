@@ -11,7 +11,7 @@
 #' \ldots, \code{keep} internal knots) \code{cpr\_cp} objects in the list.  The
 #' limit on the number of stored regression fits is to keep memory usage down.
 #'
-#' @param x a \code{cpr_cp} or \code{cpr_tensor} object
+#' @param x a \code{cpr_cp} object
 #' @param keep keep (store) the regression fit for models with \code{keep} or
 #' fewer internal knots, e.g., \code{keep = 3} will result in the regression fit
 #' for models with 0, 1, 2, and 3 internal knots being saved in their respective

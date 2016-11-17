@@ -9,7 +9,7 @@
 #' \code{options(mc.cores = 3L)}.  NOTE:  There is no benefit to using more
 #' cores than there are margins of the tensor product.
 #'
-#' @param x a \code{cpr_cp} or \code{cpr_tensor} object
+#' @param x a \code{cpr_cp} or \code{cpr_cn} object
 #' @param p the order of the norm, default \code{p = 2}.
 #' @param n_polycoef for influence weights in tensor products, this parameter
 #' set the number of polynomial coefficients to use in each of the marginal

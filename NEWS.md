@@ -1,3 +1,6 @@
+# Version 0.2.0.9000
+Documentation improvements.
+
 # Version 0.2.0
 This version has a fairly polished set of tools for b-splines, cpr, and cnr.
 This version seems to be in a good place for use in the three major papers 

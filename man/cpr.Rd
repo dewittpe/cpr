@@ -13,7 +13,7 @@ is.cpr_cpr(x)
 \method{summary}{cpr_cpr}(object, ...)
 }
 \arguments{
-\item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
+\item{x}{a \code{cpr_cp} object}
 
 \item{keep}{keep (store) the regression fit for models with \code{keep} or
 fewer internal knots, e.g., \code{keep = 3} will result in the regression fit

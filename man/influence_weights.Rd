@@ -8,7 +8,7 @@ influence_weights(x, p = 2, margin = seq_along(x$bspline_list),
   n_polycoef = 50L)
 }
 \arguments{
-\item{x}{a \code{cpr_cp} or \code{cpr_tensor} object}
+\item{x}{a \code{cpr_cp} or \code{cpr_cn} object}
 
 \item{p}{the order of the norm, default \code{p = 2}.}
 

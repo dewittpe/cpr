@@ -25,7 +25,7 @@ use must specify the bknots for each x.}
 \item{order}{a list of the order for each x; defaults to 4L for all x.}
 }
 \value{
-A matrix with a class cpr_tensor
+A matrix with a class cpr_bt
 }
 \description{
 Tensor products of B-splines.
