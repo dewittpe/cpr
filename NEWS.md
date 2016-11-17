@@ -1,6 +1,10 @@
 # Version 0.2.0.9000
 Documentation improvements.
 
+## New Features
+* `influence_of` and `plot.cpr_influence_of` provide a clean interface for users
+  to explore the influence of a set of knots on a spline function.  (#19)
+
 # Version 0.2.0
 This version has a fairly polished set of tools for b-splines, cpr, and cnr.
 This version seems to be in a good place for use in the three major papers 
