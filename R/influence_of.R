@@ -4,11 +4,25 @@
 #' the specified internal knots and generate graphics showing the original,
 #' coarsened, and approximated control polygons.
 #'
-#' @param x a \code{\link{cpr_cp}} object
+#' @param x a \code{cpr_cp} object
 #' @param indices an integer vector specifying the elements of \code{attr(x,
-#' "iknots")} to assess.
+#' "iknots")} to assess.  Defaults to all internal knots.
 #' @param ... Additional arguments passed to \code{\link{influence_weights}}.
 #'
+#' @return A \code{cpr_influence_of} object.  This is a list with the following
+#' elements:
+#' \describe{
+#'   \item{weight}{A \code{tibble} (data.frame) showing the influence weight and
+#'   relative rank of each internal knot}
+#'   \item{orig_cp}{The original control polygon}
+#'   \item{indices}{The indices of the internal knots assessed.}
+#'   \item{coarsened_cp}{A list of control polygons.  These are the control
+#'   polygons built on the coarsened knot sequence}
+#'  \item{reinserted_cp}{A list of control polygons.  These are the control
+#'  polygons resulting from the reinsertion of the assessed internal knot.}
+#' }
+#'
+#' @seealso \code{\link{plot.cpr_influence_of}}, \code{\link{cp}}
 #'
 #' @export
 influence_of <- function(x, indices, ...) {
@@ -84,10 +98,24 @@ influence_of.cpr_cp <- function(x, indices, ...) {
   out
 } 
 
-
 #' @export
+print.cpr_influence_of <- function(x, ...) {
+  print(x$weight, ...)
+}
+
+#' Plotting for cpr_influence_of objects
+#'
+#' Plot method for cpr_influence_of objects
+#'
 #' @param x a \code{cpr_influence_of} object
 #' @param ... Arguments passed to \code{\link{plot.cpr_cp}}
+#'
+#' @return a \code{ggplot2} graphic
+#'
+#' @seealso \code{\link{influence_of}}
+#'
+#' @method plot cpr_influence_of
+#' @export
 plot.cpr_influence_of <- function(x, ...) {
   Original <- x$orig_cp
   plots <-
@@ -111,7 +139,3 @@ plot.cpr_influence_of <- function(x, ...) {
   ggplot2::facet_wrap( ~ index, labeller = ggplot2::label_parsed)
 }
 
-#' @export
-print.cpr_influence_of <- function(x, ...) {
-  print(x$weight, ...)
-}

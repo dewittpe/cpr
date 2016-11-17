@@ -23,14 +23,7 @@ calculations.  Ignored for \code{cpr_cp} objects.}
 A data_frame with two elements, the internal knots (iknots) and the weights.
 }
 \description{
-Determine the influence weight of each iternal knot on each marginal of a
+Determine the influence weight of each internal knot on each marginal of a
 tensor product.
-}
-\details{
-\code{parallel::mclapply} is used when generating the influence weights for a
-\code{cpr_cn} object.  By default, \code{parallel::mclapply} uses two cores.
-To use more than two cores, e.g., to use three cores, set
-\code{options(mc.cores = 3L)}.  NOTE:  There is no benefit to using more
-cores than there are margins of the tensor product.
 }
 

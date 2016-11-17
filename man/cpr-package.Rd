@@ -5,14 +5,11 @@
 \alias{cpr-package}
 \title{cpr: Control Polygon Reduction}
 \description{
-The cpr package implements the control polygon reduction method presented in
+The cpr package implements the control polygon reduction and control net
+reduction method presented in
 MY TO BE PUBLISHED paper(s).
 
-There are several options that the user can set while working with this
-package that will help with the reporting and plotting of results.
-
-\itemize{
-   \item Options...  Define them
-}
+This package was part of Peter DeWitt's Ph.D. dissertation which was overseen
+by his advisors Samantha MaWhinney and Nichole Carlson.
 }
 

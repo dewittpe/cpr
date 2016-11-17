@@ -13,6 +13,7 @@ Imports:
     ggplot2 (>= 2.2.0),
     lazyeval,
     Rcpp (>= 0.11.0),
+    tibble,
     tidyr
 LinkingTo: Rcpp (>= 0.11.0),
     RcppArmadillo
