@@ -88,7 +88,6 @@ cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., 
     stop("cpr::bsplines() must appear once, with no effect modifiers, on the right hand side of the formula.")
   }
 
-  # return(factors_characters_in_f(formula, data))
   if (factors_characters_in_f(formula, data)) { 
     stop("At least one factor/character variable in the formula.  Use cpr::generate_cp_formula_data to create a data.frame and formula.")
   }
@@ -184,48 +183,15 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
                           .dots = stats::setNames(list(rfctr), "row")) 
+  .data <- dplyr::rename_(.data, .dots = 
+                          stats::setNames(list( ~ xi_star, ~ theta),
+                                          c("x", "y")))
 
   knot_data <- lapply(list(x, ...), function(x) {data.frame(x = x$xi)})
   knot_data <- dplyr::mutate_(dplyr::bind_rows(knot_data, .id = "row"),
                           .dots = stats::setNames(list(rfctr), "row")) 
-                  
-  base_plot <- 
-    ggplot2::ggplot(.data) +
-    ggplot2::theme_bw() + 
-    ggplot2::theme(axis.title = ggplot2::element_blank())
-
-  if (show_xi) {
-    base_plot <-
-      base_plot +
-      ggplot2::geom_rug(data = knot_data, 
-                        mapping = ggplot2::aes_string(x = "x", y = NULL))
-  }
-
-  if (show_cp) {
-    base_plot <-
-      base_plot + ggplot2::geom_point() + ggplot2::geom_line()
-  }
-
-  if (length(cps) > 1) { 
-    base_plot <- 
-      base_plot + 
-      ggplot2::aes_string(x = "xi_star", y = "theta", linetype = "factor(row)") + 
-      ggplot2::theme(legend.title = ggplot2::element_blank())
-  } else { 
-    base_plot <- 
-      base_plot + ggplot2::aes_string(x = "xi_star", y = "theta")
-  }
-
-  if (color) { 
-    base_plot <-
-      base_plot + 
-      ggplot2::aes_string(color = "factor(row)") 
-  }
-      
-
-  if (show_spline) { 
-    .data2 <- 
-      lapply(list(x, ...), function(xx) { 
+  spline_data <- 
+    lapply(list(x, ...), function(xx) { 
            b <- xx$bknots
            bmat <- cpr::bsplines(seq(b[1], b[2], length = n), 
                                  iknots = xx$iknots, 
@@ -234,15 +200,54 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
            data.frame(x = seq(b[1], b[2], length = n), 
                       y = as.numeric(bmat %*% xx$cp$theta))
                           }) 
-    .data2 <- 
-        dplyr::mutate_(dplyr::bind_rows(.data2, .id = "row"),
-                      .dots = stats::setNames(list(rfctr), "row")) 
+  spline_data <- 
+    dplyr::mutate_(dplyr::bind_rows(spline_data, .id = "row"),
+                   .dots = stats::setNames(list(rfctr), "row")) 
 
-      base_plot <- 
-        base_plot + 
-        ggplot2::geom_line(data = .data2, 
-                           mapping = ggplot2::aes_string(x = "x", y = "y"))
+  .data <- dplyr::bind_rows(.data, knot_data, spline_data, .id = 'object')
+  .data$object <- factor(.data$object, levels = 1:3, labels = c("cp", "knots", "spline"))
+
+  base_plot <- 
+    ggplot2::ggplot(.data) +
+    ggplot2::theme_bw() + 
+    ggplot2::aes_string(x = "x", y = "y") +
+    ggplot2::theme(axis.title = ggplot2::element_blank())
+
+  if (show_xi) {
+    base_plot <-
+      base_plot +
+      ggplot2::geom_rug(data = function(x) dplyr::filter_(x, .dots = ~ object == "knots")) 
   }
+
+  if (show_cp) {
+    base_plot <-
+      base_plot +
+      ggplot2::geom_point(data = function(x) dplyr::filter_(x, .dots = ~ object == "cp")) +
+      ggplot2::geom_line(data = function(x) dplyr::filter_(x, .dots = ~ object == "cp"))
+  }
+
+  if (show_spline) { 
+    base_plot <- 
+      base_plot + 
+      ggplot2::geom_line(data = function(x) dplyr::filter_(x, .dots = ~ object == "spline"))
+  }
+
+  if (length(cps) > 1) { 
+    base_plot <- 
+      base_plot + 
+      ggplot2::aes_string(linetype = "row") + 
+      ggplot2::theme(legend.title = ggplot2::element_blank())
+  }
+
+  if (color) { 
+    base_plot <-
+      base_plot +
+      ggplot2::aes_string(color = "row") +
+      ggplot2::theme(legend.title = ggplot2::element_blank())
+  }
+      
+
+
   base_plot
 }
 
