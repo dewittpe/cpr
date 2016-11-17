@@ -7,18 +7,16 @@
 #' @param x a \code{\link{cpr_cp}} object
 #' @param indices an integer vector specifying the elements of \code{attr(x,
 #' "iknots")} to assess.
-#' @param sort order the returning data objects by the provided indices or by
-#' the influence weights.
 #' @param ... Additional arguments passed to \code{\link{influence_weights}}.
 #'
 #'
 #' @export
-influence_of <- function(x, indices, sort_by = c("index", "weight"), ...) {
+influence_of <- function(x, indices, ...) {
   UseMethod("influence_of")
 }
 
 #' @export
-influence_of.cpr_cp <- function(x, indices, sort_by = c("index", "weight"), ...) {
+influence_of.cpr_cp <- function(x, indices, ...) {
   valid_indices <- which(x$xi %in% x$iknots)
 
   if (missing(indices)) {
@@ -76,12 +74,6 @@ influence_of.cpr_cp <- function(x, indices, sort_by = c("index", "weight"), ...)
   weight <- dplyr::filter_(weight, .dots = ~ index %in% indices)
   weight <- dplyr::mutate_(weight, .dots = stats::setNames(list(~ rank(w)), "rank"))
 
-  if (!all(sort_by %in% c("index", "weight"))) {
-    stop('sort_by not in c("index", "weight")', call. = FALSE)
-  } else if (sort_by[1] == "weight") {
-    weight <- dplyr::arrange_(weight, .dots = ~ rank)
-  } 
-
   out <- list(weight = weight, 
               orig_cp = x,
               indices = indices,
@@ -107,11 +99,6 @@ plot.cpr_influence_of <- function(x, ...) {
            })
   .data <- lapply(plots, getElement, name = "data")
 
-  # THIS IS A HACK: To get at the spline data if show_spline = TRUE
-  if (length(plots[[1]]$layers) == 4) {
-    warning("Redo the plot_cp method and then fix plot.cpr_influence_of")
-  }
-    
   .data <- dplyr::bind_rows(.data, .id = "index")
   .data$index <- factor(.data$index, 
                         levels = seq_along(x$indices),
@@ -120,9 +107,11 @@ plot.cpr_influence_of <- function(x, ...) {
                                           bquote(xi[.(i)])
                                         }))
 
-  ggplot2::`%+%`(plots[[1]], .data) + 
+  ggplot2::`%+%`(plots[[1]], .data) +
   ggplot2::facet_wrap( ~ index, labeller = ggplot2::label_parsed)
-  
-  # do.call(gridExtra::grid.arrange, plots)
+}
 
+#' @export
+print.cpr_influence_of <- function(x, ...) {
+  print(x$weight, ...)
 }
