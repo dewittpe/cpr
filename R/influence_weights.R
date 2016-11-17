@@ -1,13 +1,7 @@
 #' Influence Weights
 #'
-#' Determine the influence weight of each iternal knot on each marginal of a
+#' Determine the influence weight of each internal knot on each marginal of a
 #' tensor product.
-#'
-#' \code{parallel::mclapply} is used when generating the influence weights for a
-#' \code{cpr_cn} object.  By default, \code{parallel::mclapply} uses two cores.
-#' To use more than two cores, e.g., to use three cores, set
-#' \code{options(mc.cores = 3L)}.  NOTE:  There is no benefit to using more
-#' cores than there are margins of the tensor product.
 #'
 #' @param x a \code{cpr_cp} or \code{cpr_cn} object
 #' @param p the order of the norm, default \code{p = 2}.
