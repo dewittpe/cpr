@@ -4,8 +4,8 @@
 \alias{plot.cpr_bs}
 \title{Plot B-splines}
 \usage{
-\method{plot}{cpr_bs}(x, ..., show_xi = TRUE, show_x = FALSE, digits = 2,
-  n = 100)
+\method{plot}{cpr_bs}(x, ..., show_xi = TRUE, show_x = FALSE,
+  color = TRUE, digits = 2, n = 100)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
@@ -13,6 +13,9 @@
 \item{show_xi}{logical, show the knot locations, using the greek letter xi, on the x-axis}
 
 \item{show_x}{logical, show the x values of the knots on the x-axis}
+
+\item{color}{logical, if \code{TRUE} (default) the splines are plotted in
+color.  If \code{FALSE} all splines are black lines.}
 
 \item{digits}{number of digits to the right of the decimal place to report
 for the value of each knot.}
@@ -30,5 +33,8 @@ plot(bmat, show_xi = TRUE,  show_x = TRUE)
 plot(bmat, show_xi = FALSE, show_x = TRUE)
 plot(bmat, show_xi = TRUE,  show_x = FALSE)  ## Default
 plot(bmat, show_xi = FALSE, show_x = FALSE)
+}
+\seealso{
+\code{\link{bsplines}}
 }
 

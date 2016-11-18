@@ -47,9 +47,9 @@ plot(bmat)
 # If you want a second x-axis to show the x-values try the following:
 second_x_axis <- round(stats::quantile(xvec, probs = seq(0, 1, by = .2)), 2)
 
-plot(bmat) + 
-ggplot2::annotate(geom = "text", x = second_x_axis, y = -0.02, label = second_x_axis) + 
-ggplot2::annotate(geom = "linerange", x = second_x_axis, ymin = -0.05, ymax = -0.04) + 
+plot(bmat) +
+ggplot2::annotate(geom = "text", x = second_x_axis, y = -0.02, label = second_x_axis) +
+ggplot2::annotate(geom = "linerange", x = second_x_axis, ymin = -0.05, ymax = -0.04) +
 ggplot2::coord_cartesian(ylim = c(0, 1))
 
 # quadratic splines
@@ -57,5 +57,15 @@ bmat <- bsplines(xvec, iknots = c(-2, 0, 0.2), order = 3L)
 bmat
 plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
 
+}
+\references{
+C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
+
+H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
+}
+\seealso{
+\code{\link{plot.cpr_bs}} for plotting the basis,
+\code{\link{bsplinesD}} for building the basis matrices for the first and
+second derivative of a B-spline.
 }
 

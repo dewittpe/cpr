@@ -42,22 +42,26 @@ bmat2 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 2)
 theta <- runif(length(iknots) + 4L, -5, 5)
 
 # plot data
-plot_data <- 
-  dplyr::data_frame(x = xvec, 
+plot_data <-
+  dplyr::data_frame(x = xvec,
                     Spline = as.numeric(bmat \%*\% theta),
                     "First Derivative" = as.numeric(bmat1 \%*\% theta),
                     "Second Derivative" = as.numeric(bmat2 \%*\% theta))
 plot_data <- tidyr::gather(plot_data, key = key, value = value, -x)
 
-ggplot2::ggplot(plot_data) + 
-ggplot2::aes(x = x, y = value, color = key) + 
-ggplot2::geom_line() + 
-ggplot2::geom_hline(yintercept = 0) + 
+ggplot2::ggplot(plot_data) +
+ggplot2::aes(x = x, y = value, color = key) +
+ggplot2::geom_line() +
+ggplot2::geom_hline(yintercept = 0) +
 ggplot2::geom_vline(xintercept = iknots, linetype = 3)
 
 }
 \references{
 C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
+
 H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
+}
+\seealso{
+\code{\link{bsplines}}
 }
 
