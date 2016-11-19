@@ -6,6 +6,9 @@ Documentation improvements.
   to explore the influence of a set of knots on a spline function.  (#19)
 * `color` (`TRUE`/`FALSE`) option added to `plot.cpr_bs`.
 
+## Non-User Visible Changes
+* removed a redundant `build_tensor` definition
+
 # Version 0.2.0
 This version has a fairly polished set of tools for b-splines, cpr, and cnr.
 This version seems to be in a good place for use in the three major papers 

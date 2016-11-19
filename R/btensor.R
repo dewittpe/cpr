@@ -106,14 +106,3 @@ print.cpr_bt <- function(x, ...) {
   cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
   utils::str(x, max.level = 1)
 }
-
-#' @export
-#' @rdname build_tensor
-build_tensor <- function(x, ...) {
-  m <- list(x, ...)
-  if (length(m) == 1) {
-    return(m)
-  } else  {
-    build_tensor(c(list(tp__impl(m[[1]], m[[2]])), m[-(1:2)]))
-  }
-}
