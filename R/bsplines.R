@@ -23,7 +23,7 @@
 #' @param order order of the piecewise polynomials, defualts to 4L.
 #'
 #' @seealso \code{\link{plot.cpr_bs}} for plotting the basis,
-#' \code{\link{bsplinesD}} for building the basis matrices for the first and
+#' \code{\link{bsplineD}} for building the basis matrices for the first and
 #' second derivative of a B-spline.
 #'
 #' @examples
@@ -202,7 +202,7 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 #' ggplot2::geom_vline(xintercept = iknots, linetype = 3)
 #'
 #' @export
-#' @rdname bsplinesD
+#' @rdname bsplineD
 bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L, derivative = 1L) {
 
   iknots <- iknots_or_df(x, iknots, df, order)

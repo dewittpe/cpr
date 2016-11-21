@@ -65,7 +65,7 @@ H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer,
 }
 \seealso{
 \code{\link{plot.cpr_bs}} for plotting the basis,
-\code{\link{bsplinesD}} for building the basis matrices for the first and
+\code{\link{bsplineD}} for building the basis matrices for the first and
 second derivative of a B-spline.
 }
 
