@@ -97,70 +97,55 @@ print.cpr_cn <- function(x, ...) {
   print(x$cn, ...)
 }
 
+#' Plotting Control Nets
+#'
+#' One- and Two-dimensional plots of control nets.
+#'
 #' @method plot cpr_cn
 #' @export
-#' @rdname cn
-#' @param show_spline boolean (default FALSE) to plot the spline function within
-#' its control net
-#' @param color boolean (default FALSE) if more than one \code{cpr_cn} object is
-#' to be plotted, set this value to TRUE to have the graphic in color (linetypes
-#' will be used regardless of the color settting).
-#' @param n the number of data points to use for plotting the spline
+#' @param x a \code{cpr_cn} object
+#' @param margin an integer vector or length 1 or 2.  For length 1, the marginal
+#' control polygon is plotted via a call to \code{\link{plot.cpr_cp}}.  For
+#' length 2, the (marginal) tensor surface is plotted.  See details.
+#' @param at point value for marginals not defined in the \code{margin}.  See
+#' details.
+#' @param \ldots arguments passed to \code{\link{plot.cpr_cp}}
 #'
-plot.cpr_cn <- function(x, ..., show_spline = FALSE, color = FALSE, n = 100) { 
-  stop("Needs to be rewritten")
-  nms   <- sapply(match.call()[-1], deparse)
-  nms   <- nms[!(names(nms) %in% c("show_spline", "color", "n"))]
-  cps   <- lapply(list(x, ...), function(x) x$cn)
-  rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
-  .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
-                          .dots = stats::setNames(list(rfctr), "row")) 
-                  
-  base_plot <- 
-    ggplot2::ggplot(.data) +
-    ggplot2::theme_bw() + 
-    ggplot2::geom_point() + 
-    ggplot2::geom_line() + 
-    ggplot2::theme(axis.title = ggplot2::element_blank())
+plot.cpr_cn <- function(x, margin = 1:2, at, ...) { 
+  if (missing(at)) { 
+    at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
+  } 
 
-  if (length(cps) > 1) { 
-    base_plot <- 
-      base_plot + 
-      ggplot2::aes_string(x = "xi_star", y = "theta", linetype = "factor(row)") + 
-      ggplot2::theme(legend.title = ggplot2::element_blank())
-  } else { 
-    base_plot <- 
-      base_plot + ggplot2::aes_string(x = "xi_star", y = "theta")
+  dfs    <- sapply(x$bspline_list, ncol)
+  bknots <- lapply(x$bspline_list, attr, which = "bknots")
+  iknots <- lapply(x$bspline_list, attr, which = "iknots")
+  orders <- lapply(x$bspline_list, attr, which = "order")
+
+  if (length(margin) == 1L) {
+    mbs <- mapply(bsplines, x = at, iknots = iknots, bknots = bknots, order = orders, SIMPLIFY = FALSE)
+    tensor <- build_tensor(mbs[-margin])
+    thetas <- apply(array(x$cn$theta, dim = dfs), margin, function(x) x)
+    marginal_cp <- cp(x$bspline_list[[margin]], t(tensor %*% thetas))
+
+    plot(marginal_cp, ...) 
+
+  } else if (length(margin) == 2L) {
+
+
+    if (length(x$bspline_list) == 2L) {
+      xvecs <- do.call(expand.grid, lapply(bknots, function(x) seq(x[1], x[2], length = 100)))
+      tp  <- btensor(xvecs, iknots = iknots, bknots = bknots, order = orders) 
+      dat <- data.frame(x = xvecs[[1]], y = xvecs[[2]], z = tp %*% x$cn$theta)
+      ggplot2::ggplot(dat) +
+      ggplot2::aes_string(x = "x", y = "y", fill = "z") +
+      ggplot2::geom_tile()
+    } else {
+      stop("not yet implimented for more than two 2D")
+    } 
+
+  } else {
+    stop("margin needs to be a length one or two integer vector")
   }
-
-  if (color) { 
-    base_plot <-
-      base_plot + 
-      ggplot2::aes_string(color = "factor(row)") 
-  }
-      
-
-  if (show_spline) { 
-    .data2 <- 
-      lapply(list(x, ...), function(xx) { 
-           b <- xx$bknots
-           bmat <- cpr::bsplines(seq(b[1], b[2], length = n), 
-                                 iknots = xx$iknots, 
-                                 bknots = b, 
-                                 order  = xx$order)
-           data.frame(x = seq(b[1], b[2], length = n), 
-                      y = as.numeric(bmat %*% xx$cn$theta))
-                          }) 
-    .data2 <- 
-        dplyr::mutate_(dplyr::bind_rows(.data2, .id = "row"),
-                      .dots = stats::setNames(list(rfctr), "row")) 
-
-      base_plot <- 
-        base_plot + 
-        ggplot2::geom_line(data = .data2, 
-                           mapping = ggplot2::aes_string(x = "x", y = "y"))
-  }
-  base_plot
 }
 
 #' @export

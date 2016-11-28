@@ -4,7 +4,6 @@
 \alias{cn}
 \alias{cn.cpr_bt}
 \alias{cn.formula}
-\alias{plot.cpr_cn}
 \alias{print.cpr_cn}
 \alias{summary.cpr_cn}
 \title{Control Nets}
@@ -17,8 +16,6 @@ cn(x, ...)
   ..., keep_fit = FALSE)
 
 \method{print}{cpr_cn}(x, ...)
-
-\method{plot}{cpr_cn}(x, ..., show_spline = FALSE, color = FALSE, n = 100)
 
 \method{summary}{cpr_cn}(object, ...)
 }
@@ -41,15 +38,6 @@ used.}
 \item{keep_fit}{(logical, defaults to \code{FALSE}).  If \code{TRUE} the
 regression model fit is retained and returned in the the \code{fit} element.
 If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.}
-
-\item{show_spline}{boolean (default FALSE) to plot the spline function within
-its control net}
-
-\item{color}{boolean (default FALSE) if more than one \code{cpr_cn} object is
-to be plotted, set this value to TRUE to have the graphic in color (linetypes
-will be used regardless of the color settting).}
-
-\item{n}{the number of data points to use for plotting the spline}
 
 \item{object}{a \code{cpr_cn} object}
 }
