@@ -111,15 +111,20 @@ print.cpr_cn <- function(x, ...) {
 #' details.
 #' @param \ldots arguments passed to \code{\link{plot.cpr_cp}}
 #'
-plot.cpr_cn <- function(x, margin = 1:2, at, ...) { 
+plot.cpr_cn <- function(x, margin = 1:2, at, show_net = TRUE, show_surface = FALSE, net_args = list(), surface_args = list(), ...) { 
   if (missing(at)) { 
     at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
+  } 
+  
+  if (!is.list(at) | length(at) != length(x$bspline_list)) {
+    stop("the `at` argument needs to be a list of the same length as `x$bspline_list`.")
   } 
 
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
   iknots <- lapply(x$bspline_list, attr, which = "iknots")
   orders <- lapply(x$bspline_list, attr, which = "order")
+
 
   if (length(margin) == 1L) {
     mbs <- mapply(bsplines, x = at, iknots = iknots, bknots = bknots, order = orders, SIMPLIFY = FALSE)
@@ -131,16 +136,93 @@ plot.cpr_cn <- function(x, margin = 1:2, at, ...) {
 
   } else if (length(margin) == 2L) {
 
+    if (show_net) {
+      xvecs <- lapply(x$bspline_list, attr, which = "xi_star")
+      xvecs[-margin] <- at[-margin] 
+      net <- do.call(expand.grid, xvecs) 
+      tensors <- Map(btensor,
+                     x = split(net, row(net)[, 1]), 
+                     MoreArgs = list(iknots = iknots,
+                                     bknots = bknots,
+                                     order = orders)) 
+      net$z <- do.call(c, Map(`%*%`, x = tensors,
+                                  MoreArgs = list(y = x$cn$theta))) 
+    }
 
-    if (length(x$bspline_list) == 2L) {
-      xvecs <- do.call(expand.grid, lapply(bknots, function(x) seq(x[1], x[2], length = 100)))
-      tp  <- btensor(xvecs, iknots = iknots, bknots = bknots, order = orders) 
-      dat <- data.frame(x = xvecs[[1]], y = xvecs[[2]], z = tp %*% x$cn$theta)
-      ggplot2::ggplot(dat) +
-      ggplot2::aes_string(x = "x", y = "y", fill = "z") +
-      ggplot2::geom_tile()
+    if (show_surface) { 
+      xvecs <- lapply(bknots, function(x) seq(x[1], x[2], length = 100))
+      xvecs[-margin] <- at[-margin] 
+      surface <- do.call(expand.grid, xvecs) 
+      tensors <- Map(btensor,
+                     x = split(surface, row(surface)[, 1]), 
+                     MoreArgs = list(iknots = iknots,
+                                     bknots = bknots,
+                                     order = orders)) 
+      surface$z <- do.call(c, Map(`%*%`, x = tensors,
+                                  MoreArgs = list(y = x$cn$theta)))
+    }
+
+    if (show_net & !show_surface) {
+      zlim = range(c(net[['z']], surface[['z']]))
+      do.call(plot3D::persp3D,
+              c(list(x = unique(net[[margin[1]]]),
+                     y = unique(net[[margin[2]]]),
+                     z = matrix(net[['z']],
+                                nrow = dplyr::n_distinct(net[[margin[1]]]),
+                                ncol = dplyr::n_distinct(net[[margin[2]]]))),
+                zlim = zlim,
+                net_args))
+      do.call(plot3D::scatter3D,
+              c(list(x = net[[margin[1]]],
+                     y = net[[margin[2]]],
+                     z = net[['z']]),
+                add = TRUE,
+                zlim = zlim,
+                net_args))
+    } else if (show_net & show_surface) { 
+
+      zlim = range(c(net[['z']], surface[['z']]))
+      cvar = 
+
+
+      do.call(plot3D::persp3D,
+              c(list(x = unique(net[[margin[1]]]),
+                     y = unique(net[[margin[2]]]),
+                     z = matrix(net[['z']],
+                                nrow = dplyr::n_distinct(net[[margin[1]]]),
+                                ncol = dplyr::n_distinct(net[[margin[2]]]))),
+                zlim = zlim,
+                net_args))
+
+      do.call(plot3D::scatter3D,
+              c(list(x = net[[margin[1]]],
+                     y = net[[margin[2]]],
+                     z = net[['z']]),
+                add = TRUE,
+                zlim = zlim,
+                net_args))
+
+      do.call(plot3D::persp3D,
+              c(list(x = unique(surface[[margin[1]]]),
+                     y = unique(surface[[margin[2]]]),
+                     z = matrix(surface[['z']],
+                                nrow = dplyr::n_distinct(surface[[margin[1]]]),
+                                ncol = dplyr::n_distinct(surface[[margin[2]]]))),
+                add = TRUE,
+                zlim = zlim,
+                surface_args))
+
+    } else if (!show_net & show_surface) {
+      do.call(plot3D::persp3D,
+              c(list(x = unique(surface[[margin[1]]]),
+                     y = unique(surface[[margin[2]]]),
+                     z = matrix(surface[['z']],
+                                nrow = dplyr::n_distinct(surface[[margin[1]]]),
+                                ncol = dplyr::n_distinct(surface[[margin[2]]]))),
+                surface_args))
     } else {
-      stop("not yet implimented for more than two 2D")
+      warning("Nothing to plot.")
+      return(invisible())
     } 
 
   } else {
