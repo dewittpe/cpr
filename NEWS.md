@@ -5,6 +5,12 @@ Documentation improvements.
 * `influence_of` and `plot.cpr_influence_of` provide a clean interface for users
   to explore the influence of a set of knots on a spline function.  (#19)
 * `color` (`TRUE`/`FALSE`) option added to `plot.cpr_bs`.
+* `plot.cpr_cn` lets the user plot 2D surfaces for tensor product surfaces.  The
+  plots are for the whole surface if the input is a 2D tensor product, and is a
+  2D slice evaluated at a given value for other margins for 3+ dimensional
+  tensor products.
+
+* `is.` a collection of `is.cpr_cp`, `is.cpr_bs`, ... functions added.
 
 ## Non-User Visible Changes
 * removed a redundant `build_tensor` definition
