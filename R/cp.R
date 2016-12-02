@@ -180,6 +180,12 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   nms   <- sapply(match.call()[-1], deparse)
   nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "show_xi", "color", "n"))]
   cps   <- lapply(list(x, ...), function(x) x$cp)
+
+  if (length(nms) != length(cps)) {
+    nms <- paste("CP", seq_along(cps))  ## This is a hack to let plot.cpr_cn work
+  }
+
+
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
                           .dots = stats::setNames(list(rfctr), "row")) 

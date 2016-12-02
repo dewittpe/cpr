@@ -111,7 +111,8 @@ print.cpr_cn <- function(x, ...) {
 #' details.
 #' @param \ldots arguments passed to \code{\link{plot.cpr_cp}}
 #'
-plot.cpr_cn <- function(x, margin = 1:2, at, show_net = TRUE, show_surface = FALSE, net_args = list(), surface_args = list(), ...) { 
+plot.cpr_cn <- function(x, margin = 1:2, at, show_net = TRUE, show_surface = FALSE,
+                        net_args = list(), surface_args = list(), cp_args = list(show_cp = TRUE, show_spline = TRUE, show_xi = FALSE)) { 
   if (missing(at)) { 
     at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
   } 
@@ -132,7 +133,9 @@ plot.cpr_cn <- function(x, margin = 1:2, at, show_net = TRUE, show_surface = FAL
     thetas <- apply(array(x$cn$theta, dim = dfs), margin, function(x) x)
     marginal_cp <- cp(x$bspline_list[[margin]], t(tensor %*% thetas))
 
-    plot(marginal_cp, ...) 
+    # plot(marginal_cp, cp_args) 
+    print(do.call(call, c(list(name = "plot", x = marginal_cp), cp_args), quote = TRUE))
+    eval(do.call(call, c(list(name = "plot", x = marginal_cp), cp_args)), environment())
 
   } else if (length(margin) == 2L) {
 
