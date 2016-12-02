@@ -2,12 +2,9 @@
 % Please edit documentation in R/bsplines.R
 \name{bsplines}
 \alias{bsplines}
-\alias{is.cpr_bs}
 \title{B-Splines}
 \usage{
 bsplines(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
-
-is.cpr_bs(x)
 }
 \arguments{
 \item{x}{a numeric vector}

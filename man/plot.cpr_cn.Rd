@@ -4,7 +4,11 @@
 \alias{plot.cpr_cn}
 \title{Plotting Control Nets}
 \usage{
-\method{plot}{cpr_cn}(x, margin = 1:2, at, ...)
+\method{plot}{cpr_cn}(x, ..., margin = 1:2, at, show_net = TRUE,
+  show_surface = FALSE, xlim, ylim, zlim, xlab = "margin 1",
+  ylab = "margin 2", zlab = "", aspect, net_args = list(),
+  surface_args = list(), cp_args = list(show_cp = TRUE, show_spline = TRUE,
+  show_xi = FALSE))
 }
 \arguments{
 \item{x}{a \code{cpr_cn} object}
@@ -16,9 +20,36 @@ length 2, the (marginal) tensor surface is plotted.  See details.}
 \item{at}{point value for marginals not defined in the \code{margin}.  See
 details.}
 
-\item{\ldots}{arguments passed to \code{\link{plot.cpr_cp}}}
+\item{show_net}{logical, show the control net}
+
+\item{show_surface}{logical, show the tensor product surface}
+
+\item{xlim, ylim, zlim}{x-, y- and z-limits.  If present, the plot is clipped to this region.}
+
+\item{xlab, ylab, zlab}{titles for the axes.  N.B. These must be character
+strings; expressions are not accepted.  Numbers will be coerced to character
+strings.}
+
+\item{aspect}{aspect ratio of the graphic}
+
+\item{net_args}{\code{\link[rgl]{rgl.material}} and other arguments passed to
+\code{\link[rgl]{persp3d}} to modify the appearance of the control net.
+Defaults to \code{front = "lines", back = "lines"}.}
+
+\item{surface_args}{\code{\link[rgl]{rgl.material}} and other arguments
+passed to \code{\link[rgl]{persp3d}} to modify the appearance of the surface.
+Defaults to \code{front = "lines", back = "lines"}.}
+
+\item{cp_args}{arguments passed to \code{\link{plot.cpr_cp}}, only used if
+\code{length(margin) == 1L}.}
+
+\item{\ldots}{ignored}
 }
 \description{
 One- and Two-dimensional plots of control nets.
+}
+\seealso{
+\code{\link{plot.cpr_cp}}, \code{\link[rgl]{persp3d}},
+\code{\link[rgl]{rgl.material}}
 }
 

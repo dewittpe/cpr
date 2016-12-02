@@ -79,12 +79,6 @@ print.cpr_cpr <- function(x, ...) {
 }
 
 #' @export
-#' @rdname cpr
-is.cpr_cpr <- function(x) {
-  inherits(x, "cpr_cpr")
-}
-
-#' @export
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
 summary.cpr_cpr <- function(object, ...) { 

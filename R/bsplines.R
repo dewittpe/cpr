@@ -64,12 +64,6 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
   rtn
 }
 
-#' @export
-#' @rdname bsplines
-is.cpr_bs <- function(x) {
-  inherits(x, "cpr_bs")
-}
-
 #' Print bsplines
 #'
 #' @method print cpr_bs

@@ -2,14 +2,11 @@
 % Please edit documentation in R/cnr.R
 \name{cnr}
 \alias{cnr}
-\alias{is.cpr_cnr}
 \alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
 cnr(x, keep = -1, p = 2, margin, n_polycoef, progress = interactive(),
   ...)
-
-is.cpr_cnr(x)
 
 \method{summary}{cpr_cnr}(object, ...)
 }

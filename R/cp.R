@@ -257,9 +257,3 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   base_plot
 }
 
-#' @export 
-#' @param x an object
-#' @rdname cp
-is.cpr_cp <- function(x) {
-  inherits(x, "cpr_cp")
-}

@@ -2,13 +2,10 @@
 % Please edit documentation in R/cpr.R
 \name{cpr}
 \alias{cpr}
-\alias{is.cpr_cpr}
 \alias{summary.cpr_cpr}
 \title{Control Polygon Reduction}
 \usage{
 cpr(x, keep = -1, p = 2, progress = interactive(), ...)
-
-is.cpr_cpr(x)
 
 \method{summary}{cpr_cpr}(object, ...)
 }
