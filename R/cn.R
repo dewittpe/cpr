@@ -133,8 +133,6 @@ plot.cpr_cn <- function(x, margin = 1:2, at, show_net = TRUE, show_surface = FAL
     thetas <- apply(array(x$cn$theta, dim = dfs), margin, function(x) x)
     marginal_cp <- cp(x$bspline_list[[margin]], t(tensor %*% thetas))
 
-    # plot(marginal_cp, cp_args) 
-    print(do.call(call, c(list(name = "plot", x = marginal_cp), cp_args), quote = TRUE))
     eval(do.call(call, c(list(name = "plot", x = marginal_cp), cp_args)), environment())
 
   } else if (length(margin) == 2L) {
