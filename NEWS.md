@@ -1,4 +1,4 @@
-# Version 0.2.0.9000
+# Version 0.2.1
 Documentation improvements.
 
 ## New Features
@@ -8,9 +8,9 @@ Documentation improvements.
 * `plot.cpr_cn` lets the user plot 2D surfaces for tensor product surfaces.  The
   plots are for the whole surface if the input is a 2D tensor product, and is a
   2D slice evaluated at a given value for other margins for 3+ dimensional
-  tensor products.
-
+  tensor products.  
 * `is.` a collection of `is.cpr_cp`, `is.cpr_bs`, ... functions added.
+* The dataset `spdg` has been added to the package.
 
 ## Non-User Visible Changes
 * removed a redundant `build_tensor` definition

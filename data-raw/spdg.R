@@ -61,7 +61,8 @@ spdg$ethnicity <-
   sample(c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"),
          size    = SUBJECTS,
          replace = TRUE,
-         prob    = c(32, 18, 20, 7, 25))
+         prob    = c(32, 18, 20, 7, 25)) %>%
+  factor(., levels = c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"))
 
 # Check, visual check, swan vs spdg
 # par(mfrow = c(2, 2))
@@ -101,7 +102,8 @@ spdg <- dplyr::full_join(spdg, flll, by = "id")
 spdg %<>%
   dplyr::group_by(id) %>%
   dplyr::mutate(day = dplyr::if_else(day_from_dlt > 0, day_from_dlt / (max(day_from_dlt)), day_from_dlt / (-min(day_from_dlt)))
-                )
+                ) %>%
+  dplyr::ungroup()
 
 dplyr::glimpse(spdg)
 summary(spdg)
@@ -124,14 +126,10 @@ error <- apply(X, 1, function(x) sqrt(matrix(x, nrow = 1) %*% Sigma %*% matrix(x
 mu    <- as.numeric(X %*% Theta)
 rint  <- rep(runif(SUBJECTS, -0.5, 0.5), times = table(spdg$id))
 
-spdg$log10PDG <- apply(cbind(mu, error), 1, function(x) rnorm(1, x[1], 15 * x[2])) + rint
+spdg$pdg <- 10^(apply(cbind(mu, error), 1, function(x) rnorm(1, x[1], 15 * x[2])) + rint)
+
 
 devtools::use_data(spdg, overwrite = TRUE)
-
-# library(swandata)
-# library(ggplot2)
-#  g <-ggplot(spdg) + aes(x = day, y = log10PDG, group = id, color = age) + geom_path() + facet_wrap( ~ ethnicity)
-#  gridExtra::grid.arrange(g, g %+% filter(dhs, visit == "H01", log10(pdgadj) > -2) + aes(x = day_dlt, y = log10(pdgadj), group = interaction(id, visit)), nrow = 1)
 
 ################################################################################
 # end of file
