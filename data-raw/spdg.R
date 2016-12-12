@@ -101,7 +101,8 @@ spdg <- dplyr::full_join(spdg, flll, by = "id")
 
 spdg %<>%
   dplyr::group_by(id) %>%
-  dplyr::mutate(day = dplyr::if_else(day_from_dlt > 0, day_from_dlt / (max(day_from_dlt)), day_from_dlt / (-min(day_from_dlt)))
+  dplyr::mutate(day_of_cycle = seq_along(day_from_dlt),
+                day = dplyr::if_else(day_from_dlt > 0, day_from_dlt / (max(day_from_dlt)), day_from_dlt / (-min(day_from_dlt)))
                 ) %>%
   dplyr::ungroup()
 

@@ -24,6 +24,7 @@
 #'  \item{day_from_dlt}{A integer value for the number of days from Day of
 #'  Luteal Transition (DLT).  The DLT is \code{day_from_dlt == 0}.  Negative
 #'  values indicate the follicular phase, positive values for the luteal phase.}
+#'  \item{day_of_cycle}{the day of cycle}
 #'  \item{day}{A scaled day-of-cycle between [-1, 1] with 0 for the DLT.  See
 #'  Details}
 #'  \item{pdg}{A simulated PDG value}

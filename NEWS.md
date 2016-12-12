@@ -1,3 +1,10 @@
+# Version 0.2.1.9000
+
+## New Features
+* `get_spline` is an S3 method for getting a `data.frame` of interpolated values
+  of a spline given a `cpr_cp` object.  Later development will add methods for
+  `cpr_cn` objects.
+
 # Version 0.2.1
 Documentation improvements.
 
@@ -11,9 +18,6 @@ Documentation improvements.
   tensor products.  
 * `is.` a collection of `is.cpr_cp`, `is.cpr_bs`, ... functions added.
 * The dataset `spdg` has been added to the package.
-* `get_spline` is an S3 method for getting a `data.frame` of interpolated values
-  of a spline given a `cpr_cp` object.  Later development will add methods for
-  `cpr_cn` objects.
 
 ## Non-User Visible Changes
 * removed a redundant `build_tensor` definition
