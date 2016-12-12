@@ -132,10 +132,10 @@ print.cpr_cn <- function(x, ...) {
 plot.cpr_cn <- function(x, ..., margin = 1:2, at,
                         show_net = TRUE, show_surface = FALSE,
                         xlim, ylim, zlim,
-                        xlab = "margin 1", ylab = "margin 2", zlab = "", 
+                        xlab = "", ylab = "", zlab = "", 
                         aspect,
-                        net_args = list(),
-                        surface_args = list(),
+                        net_args = list(col = "black"),
+                        surface_args = list(col = "grey20"),
                         cp_args = list(show_cp = TRUE, show_spline = TRUE, show_xi = FALSE)) { 
   if (missing(at)) { 
     at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
@@ -186,9 +186,6 @@ plot.cpr_cn <- function(x, ..., margin = 1:2, at,
   iknots <- lapply(x$bspline_list, attr, which = "iknots")
   orders <- lapply(x$bspline_list, attr, which = "order")
 
-  print(net_args)
-  print(surface_args)
-
   if (length(margin) == 1L) {
     mbs <- mapply(bsplines, x = at, iknots = iknots, bknots = bknots, order = orders, SIMPLIFY = FALSE)
     tensor <- build_tensor(mbs[-margin])
@@ -225,9 +222,7 @@ plot.cpr_cn <- function(x, ..., margin = 1:2, at,
                                   MoreArgs = list(y = x$cn$theta)))
     }
 
-    rgl::open3d()
-
-    if (show_net) {
+    if (show_net) { 
         do.call(rgl::persp3d,
                 c(
                   list(x = unique(net[[margin[1]]]),
