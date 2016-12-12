@@ -5,10 +5,10 @@
 \title{Plotting Control Nets}
 \usage{
 \method{plot}{cpr_cn}(x, ..., margin = 1:2, at, show_net = TRUE,
-  show_surface = FALSE, xlim, ylim, zlim, xlab = "margin 1",
-  ylab = "margin 2", zlab = "", aspect, net_args = list(),
-  surface_args = list(), cp_args = list(show_cp = TRUE, show_spline = TRUE,
-  show_xi = FALSE))
+  show_surface = FALSE, xlim, ylim, zlim, xlab = "", ylab = "",
+  zlab = "", aspect, net_args = list(col = "black"),
+  surface_args = list(col = "grey20"), cp_args = list(show_cp = TRUE,
+  show_spline = TRUE, show_xi = FALSE))
 }
 \arguments{
 \item{x}{a \code{cpr_cn} object}

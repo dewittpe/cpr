@@ -6,7 +6,7 @@
 #'
 #' @param x a \code{cpr_cp} object
 #' @param indices an integer vector specifying the elements of \code{attr(x,
-#' "iknots")} to assess.  Defaults to all internal knots.
+#' "knots")} to assess.  Defaults to all internal knots.
 #' @param ... Additional arguments passed to \code{\link{influence_weights}}.
 #'
 #' @return A \code{cpr_influence_of} object.  This is a list with the following
