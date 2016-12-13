@@ -5,8 +5,8 @@
 \alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
-cnr(x, keep = -1, p = 2, margin, n_polycoef, progress = interactive(),
-  ...)
+cnr(x, keep = -1, p = 2, margin, n_polycoef = 20L,
+  progress = interactive(), ...)
 
 \method{summary}{cpr_cnr}(object, ...)
 }

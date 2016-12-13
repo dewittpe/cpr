@@ -28,12 +28,12 @@
 #' univariable version, Control Polygon Reduction.
 #' 
 #' @export
-cnr <- function(x, keep = -1, p = 2, margin, n_polycoef, progress = interactive(), ...) { 
+cnr <- function(x, keep = -1, p = 2, margin, n_polycoef = 20L, progress = interactive(), ...) { 
   UseMethod("cnr")
 }
 
 #' @export
-cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 50L, progress = interactive(), ...) { 
+cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 20L, progress = interactive(), ...) { 
 
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list[margin], attr, which = "iknots"), length)) + 1L)
 
