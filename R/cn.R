@@ -43,13 +43,13 @@ cn.cpr_bt <- function(x, theta, ...) {
 #' @rdname cn
 #' @param formula a formula that is appropriate for regression method being
 #'        used.
-#' @param data see documentation in \code{\link[stats]{lm}}
+#' @param data a required \code{data.frame}
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
 #' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in the the \code{fit} element.
 #' If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.
-cn.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., keep_fit = FALSE) { 
+cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE) { 
   # check for some formula specification issues
   fterms <- stats::terms(formula)
   fterms

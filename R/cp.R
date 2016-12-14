@@ -76,29 +76,27 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @rdname cp
 #' @param formula a formula that is appropriate for regression method being
 #'        used.
-#' @param data see documentation in \code{\link[stats]{lm}}
+#' @param data a required \code{data.frame}
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
 #' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
 #' If \code{FALSE} the \code{fit} element with be \code{NA}.
-cp.formula <- function(formula, data = parent.frame(), method = stats::lm, ..., keep_fit = FALSE) { 
+cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE) { 
   # check for some formula specification issues 
   if (sum(grepl("bsplines", attr(stats::terms(formula), "term.labels"))) != 1) {
     stop("cpr::bsplines() must appear once, with no effect modifiers, on the right hand side of the formula.")
   }
 
-  if (factors_characters_in_f(formula, data)) { 
-    stop("At least one factor/character variable in the formula.  Use cpr::generate_cp_formula_data to create a data.frame and formula.")
-  }
+  # this function will add f_for_use and data_for_use into this environment
+  f_for_use <- data_for_use <- NULL
+  generate_cp_formula_data(formula, data)
   
   regression <- match.fun(method)
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit")))]
-
-  if (attr(stats::terms(formula), "intercept") == 1) { 
-    cl$formula <- stats::update.formula(formula, . ~ . - 1)
-  }
+  cl$formula <- f_for_use
+  cl$data <- data_for_use
 
   fit <- do.call(regression, cl)
 

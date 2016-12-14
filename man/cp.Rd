@@ -13,8 +13,8 @@ cp(x, ...)
 
 \method{cp}{cpr_bs}(x, theta, ...)
 
-\method{cp}{formula}(formula, data = parent.frame(), method = stats::lm,
-  ..., keep_fit = FALSE)
+\method{cp}{formula}(formula, data, method = stats::lm, ...,
+  keep_fit = FALSE)
 
 \method{print}{cpr_cp}(x, ...)
 
@@ -35,7 +35,7 @@ control polygon.}
 \item{formula}{a formula that is appropriate for regression method being
 used.}
 
-\item{data}{see documentation in \code{\link[stats]{lm}}}
+\item{data}{a required \code{data.frame}}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}

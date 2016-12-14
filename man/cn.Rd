@@ -12,8 +12,8 @@ cn(x, ...)
 
 \method{cn}{cpr_bt}(x, theta, ...)
 
-\method{cn}{formula}(formula, data = parent.frame(), method = stats::lm,
-  ..., keep_fit = FALSE)
+\method{cn}{formula}(formula, data, method = stats::lm, ...,
+  keep_fit = FALSE)
 
 \method{print}{cpr_cn}(x, ...)
 
@@ -30,7 +30,7 @@ control net.}
 \item{formula}{a formula that is appropriate for regression method being
 used.}
 
-\item{data}{see documentation in \code{\link[stats]{lm}}}
+\item{data}{a required \code{data.frame}}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
