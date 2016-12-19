@@ -109,11 +109,13 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE)
 
   out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))
 
-  out$call     <- cl
-  out$keep_fit <- keep_fit
-  out$fit      <- if (keep_fit) { fit } else {NA}
-  out$loglik   <- loglikelihood(fit)
-  out$rmse     <- sqrt(mean(stats::residuals(fit)^2))
+  out$call         <- cl
+  out$keep_fit     <- keep_fit
+  out$fit          <- if (keep_fit) { fit } else {NA}
+  out$coefficients <- BETA(fit)
+  out$vcov         <- SIGMA(fit)
+  out$loglik       <- loglikelihood(fit)
+  out$rmse         <- sqrt(mean(stats::residuals(fit)^2))
 
   out
 }

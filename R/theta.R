@@ -32,3 +32,30 @@ theta.lmerMod <- function(fit) {
   unname(out[grepl("bsplines|btensor", names(out))])
 }
 
+BETA <- function(fit) {
+  UseMethod("BETA") 
+}
+
+BETA.default <- function(fit) { 
+  out <- stats::coef(fit)
+  unname(out)
+}
+
+BETA.lmerMod <- function(fit) { 
+  out <- lme4::fixef(fit)
+  unname(out)
+}
+
+SIGMA <- function(fit) {
+  UseMethod("SIGMA")
+}
+
+SIGMA.default <- function(fit) { 
+  out <- stats::vcov(fit)
+  unname(out)
+}
+
+SIGMA.lmerMod <- function(fit) { 
+  out <- as.matrix(stats::vcov(fit))
+  unname(out)
+}
