@@ -52,3 +52,22 @@ R CMD INSTALL cpr_<version>.tar.gz
 ```r
 install.packages(<path_to_file>, repos = NULL, type="source")
 ```
+
+## Other Notes:
+The `cpr` package provides 3D graphics via the
+[`rgl`](https://CRAN.R-project.org/package=rgl) package.  If you are get an
+error, or rather message, of the form:
+```
+  font family "sans" not found, using "bitmap"
+```
+Then there is an easy fix.  You need to get the [FreeType 2 font
+engine](https://www.freetype.org/).  
+
+On Debian, you can get the library via:
+
+```
+apt-get install libfreetype6-dev
+```
+
+Once the FreeType 2 font engine has been installed on your computer you **must
+reinstall** the `rgl` package.
