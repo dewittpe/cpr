@@ -86,12 +86,12 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
     stop("Length of x, iknots, bknots, and order must be the same.")
   }
 
-  bspline_list <- mapply(FUN = bbasis__impl,
-                         x = x,
-                         iknots = iknots,
-                         bknots = bknots,
-                         order = order,
-                         SIMPLIFY = FALSE)
+  bspline_list <- Map(f = bsplines,
+                      x = x,
+                      iknots = iknots,
+                      bknots = bknots,
+                      order = order)
+                         
   M <- build_tensor(bspline_list)
 
   attr(M, "bspline_list") = bspline_list
