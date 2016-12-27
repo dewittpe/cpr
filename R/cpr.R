@@ -46,8 +46,8 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x 
-    w    <- cpr::influence_weights(x, p = p) 
-    nkts <- w$iknots[-which.min(w$w)] 
+    w    <- influence_weights(x, p = p) 
+    nkts <- w$iknots[rank(w$w, ties.method = "first") > 1] 
 
     if (i == keep + 1) { 
       x <- stats::update(x, keep_fit = TRUE)

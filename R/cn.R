@@ -24,12 +24,7 @@ cn.cpr_bt <- function(x, theta, ...) {
 
   out <-
     list(cn      = dplyr::tbl_df(cbind(do.call(expand.grid, xi_stars), theta)),
-         # xi      = attr(x, "xi"),
-         # xi_star = attr(x, "xi_star"),
-         # theta   = theta,
-         # iknots  = attr(x, "iknots"),
-         # bknots  = attr(x, "bknots"),
-         # order   = attr(x, "order"), 
+         bspline_list = attr(x, "bspline_list"),
          call    = match.call(),
          keep_fit = NA,
          fit     = NA,

@@ -15,7 +15,7 @@
 #' A data_frame with two elements, the internal knots (iknots) and the weights.
 #'
 #' @export
-influence_weights <- function(x, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 50L) {
+influence_weights <- function(x, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 20L) {
   UseMethod("influence_weights")
 }
 
@@ -31,7 +31,7 @@ influence_weights.cpr_cp <- function(x, p = 2, margin = NULL, n_polycoef = NULL)
 }
 
 #' @export
-influence_weights.cpr_cn <- function(x, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 50L) {
+influence_weights.cpr_cn <- function(x, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 20L) {
 
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
