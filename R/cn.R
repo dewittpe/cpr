@@ -78,6 +78,8 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE)
          call    = cl,
          keep_fit = keep_fit,
          fit     = if (keep_fit) { fit } else { NA },
+         coefficients = BETA(fit),
+         vcov = SIGMA(fit),
          loglik  = loglikelihood(fit),
          rmse    = sqrt(mean(stats::residuals(fit)^2)))
   class(out) <- c("cpr_cn", class(out))
