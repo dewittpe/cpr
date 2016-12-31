@@ -104,7 +104,11 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE)
   cl[[1]] <- as.name("cp")
   cl <- as.call(cl)
 
-  Bmat <- stats::model.frame(fit)
+  if ((ncol(stats::model.matrix(fit)) != length(stats::coefficients(fit))) | any(is.na(stats::coefficients(fit)))) {
+    warning("Design Matrix is rank deficient.")
+  } 
+
+  Bmat <- stats::model.frame(fit) 
   Bmat <- Bmat[[which(grepl("bsplines", names(Bmat)))]]
 
   out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))

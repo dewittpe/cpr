@@ -64,6 +64,10 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE)
 
   fit <- do.call(regression, cl)
 
+  if ((ncol(stats::model.matrix(fit)) != length(stats::coefficients(fit))) | any(is.na(stats::coefficients(fit)))) {
+    warning("Design Matrix is rank deficient.")
+  } 
+
   cl <- as.list(match.call())
   cl[[1]] <- as.name("cn")
   cl <- as.call(cl)
