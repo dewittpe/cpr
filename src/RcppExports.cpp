@@ -129,6 +129,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// matrix_rank
+double matrix_rank(Rcpp::NumericMatrix x);
+RcppExport SEXP cpr_matrix_rank(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_rank(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // tp__impl
 arma::mat tp__impl(const arma::mat& A, const arma::mat& B);
 RcppExport SEXP cpr_tp__impl(SEXP ASEXP, SEXP BSEXP) {

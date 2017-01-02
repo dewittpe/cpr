@@ -27,7 +27,7 @@
 //'
 //' @export
 // [[Rcpp::export]]
-double matrix_rank(NumericMatrix x) {
+double matrix_rank(Rcpp::NumericMatrix x) {
   arma::mat X(x.begin(), x.nrow(), x.ncol(), false);
   return arma::rank(X);
 }
