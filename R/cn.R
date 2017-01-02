@@ -58,14 +58,6 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   f_for_use <- data_for_use <- NULL
   generate_cp_formula_data(formula, data)
 
-  if (check_rank) {
-    m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
-    if (matrix_rank(m) != ncol(m)) warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
-                                           call. = FALSE,
-                                           immediate. = TRUE)
-    keep_fit <- TRUE
-  } 
-
   regression <- match.fun(method)
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "check_rank")))]
@@ -73,6 +65,16 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   cl$data <- data_for_use
 
   fit <- do.call(regression, cl)
+
+  if (check_rank) {
+    m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
+    if (matrix_rank(m) != ncol(m) | any(is.na(BETA(fit)))) {
+      warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
+              call. = FALSE,
+              immediate. = TRUE)
+    keep_fit <- TRUE
+    }
+  } 
 
   cl <- as.list(match.call())
   cl[[1]] <- as.name("cn")
