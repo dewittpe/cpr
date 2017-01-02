@@ -32,6 +32,9 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
   out <- vector("list", length = length(x$iknots) + 1L)
 
+  # Set check_rank to FALSE
+  x <- stats::update(x, check_rank = FALSE, evaluate = FALSE)
+
   if (length(out) > (keep + 1) & x$keep_fit) {
     x <- eval(stats::update(x, keep_fit = FALSE, evaluate = FALSE), parent.frame())
   } else if (length(out) <= (keep + 1) & !x$keep_fit) {

@@ -104,7 +104,7 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   
   regression <- match.fun(method)
   cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit")))]
+  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "check_rank")))]
   cl$formula <- f_for_use
   cl$data <- data_for_use
 
