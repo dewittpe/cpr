@@ -82,7 +82,9 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
 #' If \code{FALSE} the \code{fit} element with be \code{NA}.
-cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE) { 
+#' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the
+#' design matrix is full rank.
+cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE, check_rank = TRUE) { 
   # check for some formula specification issues 
   if (sum(grepl("bsplines", attr(stats::terms(formula), "term.labels"))) != 1) {
     stop("cpr::bsplines() must appear once, with no effect modifiers, on the right hand side of the formula.")
@@ -91,6 +93,14 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE)
   # this function will add f_for_use and data_for_use into this environment
   f_for_use <- data_for_use <- NULL
   generate_cp_formula_data(formula, data)
+
+  if (check_rank) {
+    m <- model.matrix(lme4::nobars(f_for_use), data_for_use)
+    if (matrix_rank(m) != ncol(m)) warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
+                                           call. = FALSE,
+                                           immediate. = TRUE)
+    keep_fit <- TRUE
+  } 
   
   regression <- match.fun(method)
   cl <- as.list(match.call())
@@ -103,10 +113,6 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE)
   cl <- as.list(match.call())
   cl[[1]] <- as.name("cp")
   cl <- as.call(cl)
-
-  if ((ncol(stats::model.matrix(fit)) != length(stats::coefficients(fit))) | any(is.na(stats::coefficients(fit)))) {
-    warning("Design Matrix is rank deficient.")
-  } 
 
   Bmat <- stats::model.frame(fit) 
   Bmat <- Bmat[[which(grepl("bsplines", names(Bmat)))]]
