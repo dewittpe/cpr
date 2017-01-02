@@ -13,7 +13,7 @@ cn(x, ...)
 \method{cn}{cpr_bt}(x, theta, ...)
 
 \method{cn}{formula}(formula, data, method = stats::lm, ...,
-  keep_fit = FALSE)
+  keep_fit = FALSE, check_rank = TRUE)
 
 \method{print}{cpr_cn}(x, ...)
 
@@ -38,6 +38,9 @@ used.}
 \item{keep_fit}{(logical, defaults to \code{FALSE}).  If \code{TRUE} the
 regression model fit is retained and returned in the the \code{fit} element.
 If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.}
+
+\item{check_rank}{(logical, defaults to \code{TRUE}) if TRUE check that the
+design matrix is full rank.}
 
 \item{object}{a \code{cpr_cn} object}
 }

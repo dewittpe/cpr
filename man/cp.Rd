@@ -14,7 +14,7 @@ cp(x, ...)
 \method{cp}{cpr_bs}(x, theta, ...)
 
 \method{cp}{formula}(formula, data, method = stats::lm, ...,
-  keep_fit = FALSE)
+  keep_fit = FALSE, check_rank = TRUE)
 
 \method{print}{cpr_cp}(x, ...)
 
@@ -43,6 +43,9 @@ used.}
 \item{keep_fit}{(logical, default value is \code{FALSE}).  If \code{TRUE} the
 regression model fit is retained and returned in as the \code{fit} element.
 If \code{FALSE} the \code{fit} element with be \code{NA}.}
+
+\item{check_rank}{(logical, defaults to \code{TRUE}) if TRUE check that the
+design matrix is full rank.}
 
 \item{object}{a \code{cpr_cp} object}
 

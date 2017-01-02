@@ -95,7 +95,7 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   generate_cp_formula_data(formula, data)
 
   if (check_rank) {
-    m <- model.matrix(lme4::nobars(f_for_use), data_for_use)
+    m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
     if (matrix_rank(m) != ncol(m)) warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
                                            call. = FALSE,
                                            immediate. = TRUE)

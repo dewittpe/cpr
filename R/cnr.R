@@ -37,13 +37,10 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), 
 
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list[margin], attr, which = "iknots"), length)) + 1L)
 
-  # Set check_rank to FALSE
-  x <- stats::update(x, check_rank = FALSE, evaluate = FALSE)
-
   if (length(out) > (keep + 1) & x$keep_fit) {
-    x <- eval(stats::update(x, keep_fit = FALSE, evaluate = FALSE), parent.frame())
+    x <- eval(stats::update(x, keep_fit = FALSE, check_rank = FALSE, evaluate = FALSE), parent.frame())
   } else if (length(out) <= (keep + 1) & !x$keep_fit) {
-    x <- eval(stats::update(x, keep_fit = TRUE, evaluate = FALSE), parent.frame())
+    x <- eval(stats::update(x, keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
   }
 
   if (progress) { 
@@ -64,7 +61,7 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), 
       x <- stats::update(x, keep_fit = TRUE)
     }
 
-    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame())
+    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), check_rank = FALSE, evaluate = FALSE), parent.frame())
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)

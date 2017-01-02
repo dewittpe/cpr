@@ -32,13 +32,10 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
   out <- vector("list", length = length(x$iknots) + 1L)
 
-  # Set check_rank to FALSE
-  x <- stats::update(x, check_rank = FALSE, evaluate = FALSE)
-
-  if (length(out) > (keep + 1) & x$keep_fit) {
-    x <- eval(stats::update(x, keep_fit = FALSE, evaluate = FALSE), parent.frame())
+  if ((length(out) > (keep + 1)) && (x$keep_fit)) {
+    x <- eval(stats::update(x, keep_fit = FALSE, check_rank = FALSE, evaluate = FALSE), parent.frame())
   } else if (length(out) <= (keep + 1) & !x$keep_fit) {
-    x <- eval(stats::update(x, keep_fit = TRUE, evaluate = FALSE), parent.frame())
+    x <- eval(stats::update(x, keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
   }
 
   if (progress) { 
@@ -56,7 +53,7 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
       x <- stats::update(x, keep_fit = TRUE)
     }
 
-    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), evaluate = FALSE), parent.frame())
+    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), check_rank = FALSE, evaluate = FALSE), parent.frame())
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)
