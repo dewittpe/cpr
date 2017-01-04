@@ -135,6 +135,10 @@ print.cpr_cn <- function(x, ...) {
 #' @param cp_args arguments passed to \code{\link{plot.cpr_cp}}, only used if
 #' \code{length(margin) == 1L}.
 #'
+#' @return
+#' A list with the data for plotting the surface and the net.
+#' The return is invisible, i.e., does not print to the screen.
+#'
 #' @seealso \code{\link{plot.cpr_cp}}, \code{\link[rgl]{persp3d}},
 #' \code{\link[rgl]{rgl.material}}
 #'
@@ -272,6 +276,7 @@ plot.cpr_cn <- function(x, ..., margin = 1:2, at,
   } else {
     stop("margin needs to be a length one or two integer vector")
   }
+  invisible(list(surface = surface, net = net))
 }
 
 #' @export

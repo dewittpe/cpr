@@ -45,6 +45,10 @@ Defaults to \code{front = "lines", back = "lines"}.}
 
 \item{\ldots}{ignored}
 }
+\value{
+A list with the data for plotting the surface and the net.
+The return is invisible, i.e., does not print to the screen.
+}
 \description{
 One- and Two-dimensional plots of control nets.
 }
