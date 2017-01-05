@@ -47,8 +47,7 @@ get_cp_spline.cpr_cp <- function(x, margin = 1, at, n = 100) {
   xvec <- seq(min(x$bknots), max(x$bknots), length = n)
   bmat <- bsplines(xvec, iknots = x$iknots, bknots = x$bknots, order = x$order)
   out <- list(cp     = x$cp,
-              spline = dplyr::data_frame(x = xvec, y = as.numeric(bmat %*% x[["cp"]][["theta"]]))
-              )
+              spline = dplyr::as_data_frame(data.frame(x = xvec, y = as.numeric(bmat %*% x[["cp"]][["theta"]]))))
   out
 }
 
@@ -125,5 +124,5 @@ get_cn_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
   surface$z <- do.call(c, Map(`%*%`, x = tensors,
                               MoreArgs = list(y = x$cn$theta)))
 
-  list(net = net, surface = surface)
+  list(cn = net, surface = surface)
 }
