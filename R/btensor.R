@@ -95,6 +95,8 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
   M <- build_tensor(bspline_list)
 
   attr(M, "bspline_list") = bspline_list
+  attr(M, "call") <- match.call()
+  attr(M, "environment") <- parent.frame()
 
   class(M) <- c("cpr_bt", class(M))
   M

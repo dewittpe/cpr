@@ -8,7 +8,7 @@
 #' \code{bknots}, or \code{order}.
 #' @param evaluate If true evaluate the new call else return the call.
 #'
-#' @seealso \code{\link[stats]{update}}, \code{\link{bspline}},
+#' @seealso \code{\link[stats]{update}}, \code{\link{bsplines}},
 #' \code{\link{btensor}}
 #'
 #' @export
@@ -20,14 +20,7 @@ update_bsplines <- function(object, ..., evaluate = TRUE) {
 #' @export
 update_bsplines.formula <- function(object, ..., evaluate = TRUE) {
   dots <- as.list(match.call(expand.dots = FALSE))$...
-  dots <- dots[!is.na(match(names(dots), c("iknots", "df", "bknots", "order")))]
-
-  # if (all(c("df", "iknots") %in% names(dots))) {
-  #   if (all(c(!is.null(dots[["df"]]), !is.null(dots[["iknots"]])))) { 
-  #     stop("In update_bspline, provide either iknots or df, not both.", call. = FALSE)
-  #   }
-  # }
-
+  dots <- dots[!is.na(match(names(dots), c("iknots", "df", "bknots", "order")))] 
   out <- lapply(as.list(object), find_update_b_, dots)
   out <- eval(as.call(out))
   environment(out) <- environment(object)
@@ -35,7 +28,23 @@ update_bsplines.formula <- function(object, ..., evaluate = TRUE) {
 }
 
 #' @export
-update_bspline.cpr_bs <- function(object, ..., evaluate = TRUE) {
+update_bsplines.cpr_bs <- function(object, ..., evaluate = TRUE) { 
+  cl <- as.list(attr(object, "call"))
+  dots <- match.call(expand.dots = FALSE)$...
+  dots <- dots[!is.na(match(names(dots), c("iknots", "df", "bknots", "order")))] 
+  
+  for(a in names(dots)) { 
+    if (!all(c(is.null(cl[[a]]), is.null(dots[[a]])))) {
+      cl[[a]] <- dots[[a]]
+    }
+  }
+
+  if (evaluate) {
+    eval(as.call(cl), attr(object, "environment"))
+  } else {
+    cl
+  }
+  
 }
 
 #' @export
@@ -60,6 +69,8 @@ update_btensor <- function(object, ..., evaluate = TRUE) {
 update_btensor.formula <- update_bsplines.formula
 #' @export
 update_btensor.cpr_cn <- update_bsplines.cpr_cp
+#' @export
+update_btensor.cpr_bt <- update_bsplines.cpr_bs
 
 
 find_update_b_ <- function(x, dots) {

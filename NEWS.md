@@ -1,4 +1,4 @@
-# Version 0.2.1.9002
+# Version 0.2.1.9003
 
 ## New Features
 * `get_spline` is an S3 method for getting a `data.frame` of interpolated values
@@ -6,6 +6,7 @@
   `cpr_cn` objects.
 * `predict.cpr_cp` and `predict.cpr_cn` methods added
 * `matrix_rank` added
+* `update_bsplines` and `update_btensor` methods added (#27)
 
 # Version 0.2.1
 Documentation improvements.
