@@ -1,4 +1,4 @@
-# Version 0.2.1.9003
+# Version 0.2.2
 
 ## New Features
 * `get_spline` is an S3 method for getting a `data.frame` of interpolated values

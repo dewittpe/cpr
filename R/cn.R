@@ -61,8 +61,8 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   regression <- match.fun(method)
   cl <- as.list(match.call())
   cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "check_rank")))]
-  cl$formula <- f_for_use
-  cl$data <- data_for_use
+  cl$formula <- as.name("f_for_use")
+  cl$data <- as.name("data_for_use")
 
   fit <- do.call(regression, cl)
 
