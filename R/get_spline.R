@@ -4,7 +4,7 @@
 #' function, given a \code{cpr_cp} or \code{cpr_cn} object.
 #'
 #' A control polygon, \code{cpr\_cp} object, has a spline function f(x).
-#' \code{get_cp_spline} returns a list of two \code{data.frame}.  The \code{cp}
+#' \code{get_spline} returns a list of two \code{data.frame}.  The \code{cp}
 #' element is a \code{data.frame} with the (x, y) corrdinates control points and
 #' the \code{spline} element is a \code{data.frame} with \code{n} rows for
 #' interpolating f(x).
@@ -12,14 +12,14 @@
 #' For a control net, \code{cpr\_cn} object, the return is the same as for a
 #' \code{cpr\_cp} object, but conseptually different.  Where a \code{cpr\_cp}
 #' objects have a univariable spline function, \code{cpr\_cn} have
-#' multi-variable spline surfaces.  \code{get_cp_spline} returns a "slice" of the
+#' multi-variable spline surfaces.  \code{get_spline} returns a "slice" of the
 #' higher dimensional object.  For example, consider a three-dimensional control
 #' net defined on the unit cube with marginals \code{x1}, \code{x2}, and
 #' \code{x3}.  The implied spline surface is the function f(x1, x2, x3).
-#' \code{get_cp_spline(x, margin = 2, at = list(0.2, NA, 0.5))} would
+#' \code{get_spline(x, margin = 2, at = list(0.2, NA, 0.5))} would
 #' return the control polygon and spline surface for f(0.2, x, 0.5).
 #'
-#' See \code{\link{get_cn_surface}} for taking a two-dimensional slice of a
+#' See \code{\link{get_surface}} for taking a two-dimensional slice of a
 #' three-plus dimensional control net, or, for generating a useful data set for
 #' plotting the surface of a two-dimensional control net.
 #'
@@ -33,17 +33,17 @@
 #' knotss for each marginal is used.
 #' @param n the length of sequence to use for interpolating the spline function.
 #'
-#' @seealso \code{\link{get_cn_surface}}
+#' @seealso \code{\link{get_surface}}
 #'
 #' @examples
 #'
 #' @export
-get_cp_spline <- function(x, margin = 1, at, n = 100) {
-  UseMethod("get_cp_spline")
+get_spline <- function(x, margin = 1, at, n = 100) {
+  UseMethod("get_spline")
 }
 
 #' @export
-get_cp_spline.cpr_cp <- function(x, margin = 1, at, n = 100) {
+get_spline.cpr_cp <- function(x, margin = 1, at, n = 100) {
   xvec <- seq(min(x$bknots), max(x$bknots), length = n)
   bmat <- bsplines(xvec, iknots = x$iknots, bknots = x$bknots, order = x$order)
   out <- list(cp     = x$cp,
@@ -52,10 +52,16 @@ get_cp_spline.cpr_cp <- function(x, margin = 1, at, n = 100) {
 }
 
 #' @export
-get_cp_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
+get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
+
+  if (length(margin) > 1) {
+    stop("use get_surface when length(margin) > 1.", call. = FALSE)
+  }
+
   if (missing(at)) { 
     at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
   } 
+
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
   iknots <- lapply(x$bspline_list, attr, which = "iknots")
@@ -65,7 +71,7 @@ get_cp_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
   tensor <- build_tensor(mbs[-margin])
   thetas <- apply(array(x$cn$theta, dim = dfs), margin, function(x) x)
   marginal_cp <- cp(x$bspline_list[[margin]], t(tensor %*% thetas))
-  get_cp_spline.cpr_cp(marginal_cp) 
+  get_spline.cpr_cp(marginal_cp) 
 }
 
 #' Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets
@@ -81,17 +87,17 @@ get_cp_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
 #' knotss for each marginal is used.
 #' @param n the length of sequence to use for interpolating the spline function.
 #'
-#' @seealso \code{\link{get_cp_spline}
+#' @seealso \code{\link{get_spline}}
 #'
 #' @examples
 #' 
 #' @export
-get_cn_surface <- function(x, margin = 1:2, at, n = 100) {
-  UseMethod("get_cn_surface")
+get_surface <- function(x, margin = 1:2, at, n = 100) {
+  UseMethod("get_surface")
 } 
 
 #' @export
-get_cn_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
+get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
   if (missing(at)) { 
     at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
   } 
@@ -125,4 +131,4 @@ get_cn_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
                               MoreArgs = list(y = x$cn$theta)))
 
   list(cn = net, surface = surface)
-}
+} 
