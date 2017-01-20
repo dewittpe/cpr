@@ -1,3 +1,8 @@
+# Version 0.2.2.9000
+
+## New Features
+* `plot.cpr_cn` suports `rgl` and `plot3D` graphics
+
 # Version 0.2.2
 
 ## New Features

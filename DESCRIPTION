@@ -16,6 +16,7 @@ Imports:
     dplyr,
     ggplot2 (>= 2.2.0),
     lazyeval,
+    plot3D,
     Rcpp (>= 0.11.0),
     rgl,
     tibble,
@@ -27,7 +28,6 @@ Suggests:
     geepack,
     knitr,
     lme4,
-    plot3D,
     testthat
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
