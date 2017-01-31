@@ -135,3 +135,25 @@ find_update_b_ <- function(x, dots) {
     x
   }
 }
+
+
+# newknots are used in the cpr and cnr calls.  No other use for this function.
+# It should, at some point, be deprecated in favor of update_bsplines
+newknots <- function(form, nk) { 
+  rr <- function(x, nk) {
+    if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
+      x$df <- NULL
+      x$iknots <- nk
+      x
+    } else if (is.recursive(x)) {
+      as.call(lapply(as.list(x), rr, nk))
+    } else {
+      x
+    }
+  }
+
+  z <- lapply(as.list(form), rr, nk)   
+  z <- eval(as.call(z))
+  environment(z) <- environment(form)
+  z
+}
