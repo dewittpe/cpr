@@ -14,6 +14,8 @@
 #' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
 #'
 #' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
+#' 
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a numeric vector
 #' @param iknots internal knots

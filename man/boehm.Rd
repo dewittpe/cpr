@@ -47,12 +47,7 @@ coarsened ordinates by removing the value 2 from the vector (0, 0, 0, 0, 1,
 2, 3, 4, 4, 4, 4) (the knot vector for a cubic B-spline with boundary knots
 at zero and four and internal knots 1, 2, 3) should be specified by
 \code{coarsen_ordinate(x = 2, xi = c(0, 0, 0, 0, 1, 3, 4, 4, 4, 4), theta)}.
-See examples.
-
-This was done intentionaly such that the overall coding would be similar to
-the primary reference (SEE MY TO BE PUBLISHED PAPER) where 
-\eqn{\boldsymbol{W}_{k, \xi} (x)}{W<sub>k, &xi;</sub>(x)} is the knot
-insertion matrix for inserting \eqn{x} into \eqn{\xi}{&xi;}.
+See the vignette.
 
 The function \code{hat_ordinate} is the coarsen-then-refine estimate of the
 ordinate vector.  The name comes from the the use of a hat matrix based on the
@@ -60,5 +55,8 @@ in knot insertion matrix.
 
 \code{iknot_weights} returns a vector with the 'importance weight' of each
 of the internal knots in \code{xi}.
+}
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
 }
 

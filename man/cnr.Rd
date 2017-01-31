@@ -45,6 +45,9 @@ stored in the first \code{keep + 1} (zero internal knots, one internal knot,
 \ldots, \code{keep} internal knots) \code{cnr\_cp} objects in the list.  The
 limit on the number of stored regression fits is to keep memory usage down.
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \seealso{
 \code{\link{influence_weights}}, \code{\link{cpr}} for the
 univariable version, Control Polygon Reduction.

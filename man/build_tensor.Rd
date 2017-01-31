@@ -2,7 +2,7 @@
 % Please edit documentation in R/build_tensor.R
 \name{build_tensor}
 \alias{build_tensor}
-\title{build_tensor}
+\title{Build Tensor}
 \usage{
 build_tensor(x, ...)
 }
@@ -24,5 +24,8 @@ build_tensor(A, B)
 build_tensor(list(A, B))
 build_tensor(A, B, B)
 
+}
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
 }
 

@@ -46,7 +46,23 @@ three-plus dimensional control net, or, for generating a useful data set for
 plotting the surface of a two-dimensional control net.
 }
 \examples{
+data(spdg, package = "cpr")
 
+## Extract the control polygon and spline for plotting.  We'll use base R
+## graphics for this example.
+a_cp <- cp(pdg ~ bsplines(day, df = 10), data = spdg)
+
+cp_and_spline <- get_spline(a_cp)
+plot(cp_and_spline$cp, type = "b")
+points(cp_and_spline$spline, type = "l")
+grid()
+
+# compare to the cpr:::plot.cpr_cp method
+plot(a_cp, show_spline = TRUE)
+
+}
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
 }
 \seealso{
 \code{\link{get_surface}}

@@ -3,9 +3,8 @@
 #' A collection of function for the inspection and evaluation of the control
 #' polygon reduction.
 #' 
-
-
-
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @method plot cpr_cnr
 #' @rdname cnr_diagnostics
 #' @export 
@@ -37,7 +36,7 @@ plot.cpr_cnr <- function(x, type = "rmse", from = 1, to, ...) {
     ggplot2::xlab("Index")
 
   } else { 
-    stop("type needs to be either 'cps', 'loglik', or 'rmse'.")
+    stop("type needs to be either 'loglik' or 'rmse'.")
   }
 }
 

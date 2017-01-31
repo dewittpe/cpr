@@ -55,6 +55,9 @@ bmat
 plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
 
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \references{
 C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
 

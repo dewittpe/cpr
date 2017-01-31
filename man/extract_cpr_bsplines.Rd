@@ -10,6 +10,9 @@ extract_cpr_bsplines(form)
 \item{form}{a formula}
 }
 \description{
-Extract the bspline or btensor call from a formula
+Non-exported function.  Might be depericated.
+}
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
 }
 

@@ -11,6 +11,9 @@
 #' This function is implicitly called in the \code{cpr::cp} and
 #' \code{cpr::cn} calls.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
+#'
 #' @param fit a regression model fit
 #'
 #' @return the regression coeficients associated with terms with names

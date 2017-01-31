@@ -66,6 +66,9 @@ For \code{plot3D} graphics there are no defaults values for the
 ## see vignette("plotting_cpr_cn", package = "cpr")
 
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \seealso{
 \code{\link{plot.cpr_cp}} for plotting control polygons and splines,
 \code{\link[rgl]{persp3d}} and \code{\link[rgl]{rgl.material}} for generating

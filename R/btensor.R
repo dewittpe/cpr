@@ -14,6 +14,8 @@
 #' as
 #' \code{ model.matrix( ~ bsplines(X) : bsplines(Y) : bsplines(Z) + 0) }.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a list of variables to build B-spline transforms of.  The tensor
 #' product of these B-splines will be returned.
 #' @param df degrees of freedom.  a list of the degrees of freedom for each

@@ -115,4 +115,7 @@ plot(cp3, show_spline = TRUE) +
                      data = dat, linetype = 2, color = "red")
 
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 

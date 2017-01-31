@@ -23,6 +23,8 @@
 #' three-plus dimensional control net, or, for generating a useful data set for
 #' plotting the surface of a two-dimensional control net.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a \code{cpr_cp} or \code{cpr_cn} object.
 #' @param margin an integer identifying the maginal of the control net to slice
 #' along.  Only used when working \code{x} is a \code{cpr_cn} object.
@@ -36,7 +38,20 @@
 #' @seealso \code{\link{get_surface}}
 #'
 #' @examples
-#'
+#' data(spdg, package = "cpr")
+#' 
+#' ## Extract the control polygon and spline for plotting.  We'll use base R
+#' ## graphics for this example.
+#' a_cp <- cp(pdg ~ bsplines(day, df = 10), data = spdg)
+#' 
+#' cp_and_spline <- get_spline(a_cp)
+#' plot(cp_and_spline$cp, type = "b")
+#' points(cp_and_spline$spline, type = "l")
+#' grid()
+#' 
+#' # compare to the cpr:::plot.cpr_cp method
+#' plot(a_cp, show_spline = TRUE)
+#' 
 #' @export
 get_spline <- function(x, margin = 1, at, n = 100) {
   UseMethod("get_spline")
@@ -90,6 +105,31 @@ get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
 #' @seealso \code{\link{get_spline}}
 #'
 #' @examples
+#' ## Extract the control net and surface from a cpr_cn object.
+#' a_cn <- cn(pdg ~ btensor(list(day, age), df = list(15, 3), order = list(3, 2)),
+#'            data = spdg)
+#' 
+#' cn_and_surface <- get_surface(a_cn)
+#' str(cn_and_surface, max.level = 2)
+#' 
+#' par(mfrow = c(1, 2))
+#' with(cn_and_surface$cn, 
+#'      plot3D::persp3D(unique(Var1), 
+#'                      unique(Var2), 
+#'                      matrix(z,
+#'                             nrow = dplyr::n_distinct(Var1), 
+#'                             ncol = dplyr::n_distinct(Var2)),
+#'                      main = "Control Net")
+#'      )
+#' with(cn_and_surface$surface, 
+#'      plot3D::persp3D(unique(Var1), 
+#'                      unique(Var2), 
+#'                      matrix(z,
+#'                             nrow = dplyr::n_distinct(Var1), 
+#'                             ncol = dplyr::n_distinct(Var2)),
+#'                      main = "Surface")
+#'      )
+#'
 #' 
 #' @export
 get_surface <- function(x, margin = 1:2, at, n = 100) {

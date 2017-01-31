@@ -50,6 +50,9 @@ Generate the control net for a uni-variable B-spline
 \details{
 \code{cn} generates the control net for the given B-spline function.
 
-\code{cpr} runs the control net reduction algorithm
+\code{cnr} runs the control net reduction algorithm
+}
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
 }
 

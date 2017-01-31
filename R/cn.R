@@ -4,7 +4,9 @@
 #'
 #' \code{cn} generates the control net for the given B-spline function.  
 #'
-#' \code{cpr} runs the control net reduction algorithm
+#' \code{cnr} runs the control net reduction algorithm
+#"
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a \code{cpr_bs} object 
 #' @param ... arguments passed to the regression method

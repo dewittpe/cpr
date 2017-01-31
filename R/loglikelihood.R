@@ -15,6 +15,8 @@
 #' See \code{methods(loglikelihood)} for a list of the provided methods.  The
 #' default method uses \code{stats::logLik}.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a regression fit object
 #' @param ... passed through to \code{stats::logLik}
 #'

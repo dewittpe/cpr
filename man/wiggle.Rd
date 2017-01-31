@@ -24,6 +24,9 @@ Calculate the integral of the squared second derivate of the spline function.
 \deqn{\int \left( \frac{\mathrm{d}^2}{\mathrm{d}x^2} f \left(x \right)
 \right)^2 \mathrm{d}x.}{ \int (d^2 / dx^2 f(x))^2 dx}
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \seealso{
 \code{\link{cp}} \code{\link[stats]{integrate}}
 }

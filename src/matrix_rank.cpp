@@ -16,6 +16,8 @@
 //' difference between 1 and the least value greater than 1 that is
 //' representable.
 //'
+//' @author Peter DeWitt \email{dewittpe@gmail.com}
+//'
 //' @param x a numeric matrix
 //'
 //' @return
@@ -23,7 +25,8 @@
 //'
 //' @references
 //'
-//' Conrad Sanderson and Ryan Curtin.  Armadillo: a template-based C++ library for linear algebra.  Journal of Open Source Software, Vol. 1, pp. 26, 2016.
+//' Conrad Sanderson and Ryan Curtin.  Armadillo: a template-based C++ library
+//' for linear algebra.  Journal of Open Source Software, Vol. 1, pp. 26, 2016.
 //'
 //' @export
 // [[Rcpp::export]]

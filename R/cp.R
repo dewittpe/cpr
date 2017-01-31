@@ -6,6 +6,8 @@
 #'
 #' \code{cpr} runs the control polygon reduction algorithm
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a \code{cpr_bs} object 
 #' @param ... arguments passed to the regression method
 #'

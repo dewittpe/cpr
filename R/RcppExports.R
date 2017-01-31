@@ -18,12 +18,7 @@
 #' 2, 3, 4, 4, 4, 4) (the knot vector for a cubic B-spline with boundary knots
 #' at zero and four and internal knots 1, 2, 3) should be specified by
 #' \code{coarsen_ordinate(x = 2, xi = c(0, 0, 0, 0, 1, 3, 4, 4, 4, 4), theta)}.
-#' See examples.
-#'
-#' This was done intentionaly such that the overall coding would be similar to
-#' the primary reference (SEE MY TO BE PUBLISHED PAPER) where 
-#' \eqn{\boldsymbol{W}_{k, \xi} (x)}{W<sub>k, &xi;</sub>(x)} is the knot
-#' insertion matrix for inserting \eqn{x} into \eqn{\xi}{&xi;}.
+#' See the vignette.
 #'
 #' The function \code{hat_ordinate} is the coarsen-then-refine estimate of the
 #' ordinate vector.  The name comes from the the use of a hat matrix based on the
@@ -31,6 +26,8 @@
 #'
 #' \code{iknot_weights} returns a vector with the 'importance weight' of each
 #' of the internal knots in \code{xi}.
+#'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x the value of the knot to be inserted into the knot vector
 #' @param xi the (whole) knot vector, including the repeated boundary knots.
@@ -100,6 +97,8 @@ diag_only <- function(A, B) {
 #' difference between 1 and the least value greater than 1 that is
 #' representable.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a numeric matrix
 #'
 #' @return
@@ -107,7 +106,8 @@ diag_only <- function(A, B) {
 #'
 #' @references
 #'
-#' Conrad Sanderson and Ryan Curtin.  Armadillo: a template-based C++ library for linear algebra.  Journal of Open Source Software, Vol. 1, pp. 26, 2016.
+#' Conrad Sanderson and Ryan Curtin.  Armadillo: a template-based C++ library
+#' for linear algebra.  Journal of Open Source Software, Vol. 1, pp. 26, 2016.
 #'
 #' @export
 matrix_rank <- function(x) {

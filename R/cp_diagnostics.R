@@ -11,6 +11,7 @@
 #' \code{cp_diff} returns the absolute vertical distance between the control
 #' vertices of cp1 to the control polygon cp2.
 
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
 
 #' @export
 #' @rdname cp_diagnostics

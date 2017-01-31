@@ -27,4 +27,7 @@ is.cpr_cnr(x)
 \description{
 Test if an R object is of a class specific to the cpr package
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 

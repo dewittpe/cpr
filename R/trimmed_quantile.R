@@ -4,6 +4,9 @@
 #' the quantiles for a trimmed data set, e.g., X \ {x(1), x(r)} (trim = 1), or 
 #' X \ {x(1), x(2), x(r-1), x(r)} (trim = 2).
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
+#'
 #' @param x a numeric vector
 #' @param trim defaults to 1, omitting the min and the max
 #' @param use_unique logical, if true (defaults), base the quantiles on unique

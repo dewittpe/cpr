@@ -4,6 +4,8 @@
 #' the specified internal knots and generate graphics showing the original,
 #' coarsened, and approximated control polygons.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a \code{cpr_cp} object
 #' @param indices an integer vector specifying the elements of \code{attr(x,
 #' "knots")} to assess.  Defaults to all internal knots.

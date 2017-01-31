@@ -1,7 +1,8 @@
-
-#' build_tensor
+#' Build Tensor
 #'
 #' Tensor products of Matrices.
+#'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a matrix, or list of matrices, build the TP
 #' @param ... Matrices to build the TP

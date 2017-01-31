@@ -3,6 +3,8 @@
 #' Determine the influence weight of each internal knot on each marginal of a
 #' tensor product.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a \code{cpr_cp} or \code{cpr_cn} object
 #' @param p the order of the norm, default \code{p = 2}.
 #' @param n_polycoef for influence weights in tensor products, this parameter

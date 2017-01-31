@@ -26,6 +26,9 @@ so.
 This function is implicitly called in the \code{cpr::cp} and
 \code{cpr::cn} calls.
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \seealso{
 \code{\link[stats]{coef}} \code{\link{cp}} \code{\link{cn}}
 }

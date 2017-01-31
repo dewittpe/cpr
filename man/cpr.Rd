@@ -40,4 +40,7 @@ stored in the first \code{keep + 1} (zero internal knots, one internal knot,
 \ldots, \code{keep} internal knots) \code{cpr\_cp} objects in the list.  The
 limit on the number of stored regression fits is to keep memory usage down.
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 

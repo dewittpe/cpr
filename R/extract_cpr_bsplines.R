@@ -1,5 +1,10 @@
 #' Extract the bspline or btensor call from a formula
 #'
+#' Non-exported function.  Might be depericated.
+#'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
+#'
 #' @param form a formula
 extract_cpr_bsplines <- function(form) { 
   B <- NULL

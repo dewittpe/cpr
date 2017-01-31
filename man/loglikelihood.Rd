@@ -31,6 +31,9 @@ one.
 See \code{methods(loglikelihood)} for a list of the provided methods.  The
 default method uses \code{stats::logLik}.
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \seealso{
 \code{\link{cpr}} \code{\link{cnr}} \code{\link[stats]{logLik}}
 }

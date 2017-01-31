@@ -33,6 +33,9 @@ Given a control polygon and set of indices, return the influence weight for
 the specified internal knots and generate graphics showing the original,
 coarsened, and approximated control polygons.
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \seealso{
 \code{\link{plot.cpr_influence_of}}, \code{\link{cp}}
 }

@@ -22,6 +22,8 @@
 #' For \code{plot3D} graphics there are no defaults values for the
 #' \code{net_args} and \code{surface_args}.
 #'
+#' @author Peter DeWitt \email{dewittpe@gmail.com}
+#'
 #' @param x a \code{cpr_cn} object
 #' @param ... common arguments which would be
 #' used for both the plot of the control net and the surface, e.g., xlim, ylim,
