@@ -9,14 +9,14 @@ get_surface(x, margin = 1:2, at, n = 100)
 \arguments{
 \item{x}{a \code{cpr_cn} object}
 
-\item{margin}{an integer identifying the maginal of the control net to slice
+\item{margin}{an integer identifying the marginal of the control net to slice
 along.  Only used when working \code{x} is a \code{cpr_cn} object.}
 
 \item{at}{point value for marginals not defined in the \code{margin}.  Only
 used when \code{x} is a \code{cpr_cn} object.  Expected input is a list of
 length \code{length(attr(x, "bspline_list"))}.  Entries for elements
 \code{marginal} are ignored.  If omitted, the midpoint between the boundary
-knotss for each marginal is used.}
+knots for each marginal is used.}
 
 \item{n}{the length of sequence to use for interpolating the spline function.}
 }
@@ -54,4 +54,3 @@ with(cn_and_surface$surface,
 \seealso{
 \code{\link{get_spline}}
 }
-

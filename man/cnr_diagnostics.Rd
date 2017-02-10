@@ -26,4 +26,3 @@ polygon reduction.
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

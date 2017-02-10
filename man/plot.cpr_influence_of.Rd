@@ -20,4 +20,3 @@ Plot method for cpr_influence_of objects
 \seealso{
 \code{\link{influence_of}}
 }
-

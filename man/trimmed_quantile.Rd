@@ -34,4 +34,3 @@ trimmed_quantile(1:100, trim = 3, prob = 1:23 / 24, name = FALSE)
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

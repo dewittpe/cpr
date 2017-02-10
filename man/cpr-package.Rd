@@ -12,4 +12,3 @@ MY TO BE PUBLISHED paper(s).
 This package was part of Peter DeWitt's Ph.D. dissertation which was overseen
 by his advisors Samantha MaWhinney and Nichole Carlson.
 }
-

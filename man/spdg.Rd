@@ -43,14 +43,13 @@ package.  The DHS data cannot be made public, so this simulated data set has
 been provided for use in examples and instructions for use of the \code{cpr}
 package.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}
 \references{
 Santoro, Nanette, et al. "Body size and ethnicity are associated with
 menstrual cycle alterations in women in the early menopausal transition: The
 Study of Women's Health across the Nation (SWAN) Daily Hormone Study." The
 Journal of Clinical Endocrinology & Metabolism 89.6 (2004): 2622-2631.
 }
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}
 \keyword{datasets}
-

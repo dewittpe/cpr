@@ -4,9 +4,9 @@
 \alias{cp}
 \alias{cp.cpr_bs}
 \alias{cp.formula}
-\alias{plot.cpr_cp}
 \alias{print.cpr_cp}
 \alias{summary.cpr_cp}
+\alias{plot.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(x, ...)
@@ -65,7 +65,7 @@ function?}
 \code{\link[ggplot2]{geom_rug}} to show the location of the knots in the
 respective control polygons.}
 
-\item{color}{boolean (default FALSE) if more than one \code{cpr_cp} object is
+\item{color}{Boolean (default FALSE) if more than one \code{cpr_cp} object is
 to be plotted, set this value to TRUE to have the graphic in color (linetypes
 will be used regardless of the color setting).}
 
@@ -118,4 +118,3 @@ plot(cp3, show_spline = TRUE) +
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

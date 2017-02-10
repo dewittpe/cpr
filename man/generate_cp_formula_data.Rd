@@ -36,4 +36,3 @@ fit, we hope to reduce memory use and increase the speed of the cpr method.
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

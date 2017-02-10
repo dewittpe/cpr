@@ -15,4 +15,3 @@ Non-exported function.  Might be depericated.
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

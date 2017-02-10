@@ -28,4 +28,3 @@ build_tensor(A, B, B)
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

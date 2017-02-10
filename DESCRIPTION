@@ -16,6 +16,7 @@ Imports:
     dplyr,
     ggplot2 (>= 2.2.0),
     lazyeval,
+    lme4,
     plot3D,
     Rcpp (>= 0.11.0),
     rgl,
@@ -27,7 +28,6 @@ Suggests:
     covr,
     geepack,
     knitr,
-    lme4,
     testthat
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 VignetteBuilder: knitr

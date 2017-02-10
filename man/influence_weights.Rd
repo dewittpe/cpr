@@ -29,4 +29,3 @@ tensor product.
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

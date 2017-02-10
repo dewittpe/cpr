@@ -3,10 +3,10 @@
 \name{is.cpr_bs}
 \alias{is.cpr_bs}
 \alias{is.cpr_bt}
-\alias{is.cpr_cn}
-\alias{is.cpr_cnr}
 \alias{is.cpr_cp}
 \alias{is.cpr_cpr}
+\alias{is.cpr_cn}
+\alias{is.cpr_cnr}
 \title{Tests for Objects}
 \usage{
 is.cpr_bs(x)
@@ -30,4 +30,3 @@ Test if an R object is of a class specific to the cpr package
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

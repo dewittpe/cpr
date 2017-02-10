@@ -68,11 +68,10 @@ plot(init_cn, rgl = FALSE)
 plot(updt_cn, rgl = FALSE)
 
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}
 \seealso{
 \code{\link[stats]{update}}, \code{\link{bsplines}},
 \code{\link{btensor}}
 }
-
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}

@@ -26,11 +26,10 @@ of x, max_sv is the maximal singular value of x, and datum::eps is the
 difference between 1 and the least value greater than 1 that is
 representable.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}
 \references{
 Conrad Sanderson and Ryan Curtin.  Armadillo: a template-based C++ library
 for linear algebra.  Journal of Open Source Software, Vol. 1, pp. 26, 2016.
 }
-
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}

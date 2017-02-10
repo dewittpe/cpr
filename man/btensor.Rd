@@ -34,7 +34,7 @@ Tensor products of B-splines.
 The return form this function is the tensor product of the B-splines
 transformations for the given variables.  Say we have variables X, Y, and Z
 to build the tensor product of.  The columns of the returned matrix
-correspond to the column products of the three B-splines thusly:
+correspond to the column products of the three B-splines:
 
 x1y1z1 x2y1z1 x3y1z1 x4y1z1 x1y2z1 x2y2z1 ... x4y4z4
 
@@ -64,4 +64,3 @@ all.equal(tp2, unclass(tp), check.attributes = FALSE)
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-

@@ -10,7 +10,7 @@
 \arguments{
 \item{x}{a \code{cpr_bs} object}
 
-\item{show_xi}{logical, show the knot locations, using the greek letter xi, on the x-axis}
+\item{show_xi}{logical, show the knot locations, using the Greek letter xi, on the x-axis}
 
 \item{show_x}{logical, show the x values of the knots on the x-axis}
 
@@ -37,4 +37,3 @@ plot(bmat, show_xi = FALSE, show_x = FALSE)
 \seealso{
 \code{\link{bsplines}}
 }
-

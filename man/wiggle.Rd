@@ -9,25 +9,24 @@ wiggle(object, lower, upper, stop.on.error = FALSE, ...)
 \arguments{
 \item{object}{a \code{cpr_cp} object}
 
-\item{lower}{the lower limit of the intergral}
+\item{lower}{the lower limit of the integral}
 
-\item{upper}{the upper limit of the intergral}
+\item{upper}{the upper limit of the integral}
 
 \item{stop.on.error}{default to \code{FALSE}, see \code{\link[stats]{integrate}}.}
 
 \item{...}{arguments passed to \code{stats::integrate}}
 }
 \description{
-Calculate the integral of the squared second derivate of the spline function.
+Calculate the integral of the squared second derivative of the spline function.
 }
 \details{
 \deqn{\int \left( \frac{\mathrm{d}^2}{\mathrm{d}x^2} f \left(x \right)
 \right)^2 \mathrm{d}x.}{ \int (d^2 / dx^2 f(x))^2 dx}
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}
 \seealso{
 \code{\link{cp}} \code{\link[stats]{integrate}}
 }
-
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}

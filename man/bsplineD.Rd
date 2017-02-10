@@ -17,7 +17,7 @@ if \code{iknots} is specified.}
 
 \item{bknots}{boundary knot locations, defaults to \code{range(x)}.}
 
-\item{order}{order of the piecewise polynomials, defualts to 4L.}
+\item{order}{order of the piecewise polynomials, defaults to 4L.}
 
 \item{derivative, }{(integer) first or second derivative}
 }
@@ -64,4 +64,3 @@ H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer,
 \seealso{
 \code{\link{bsplines}}
 }
-

@@ -16,17 +16,17 @@ if \code{iknots} is specified.}
 
 \item{bknots}{boundary knot locations, defaults to \code{range(x)}.}
 
-\item{order}{order of the piecewise polynomials, defualts to 4L.}
+\item{order}{order of the piecewise polynomials, defaults to 4L.}
 }
 \description{
-An implimentation of Carl de Boor's recursive algorimthm for building
+An implementation of Carl de Boor's recursive algorithm for building
 B-splines.
 }
 \details{
 The difference between this function and \code{splines::bs} come in the
 attributes associated with the output and default options.  The
 \code{cpr::bsplines} call is intended to simplify the work needed with
-respect to the control polygon reduction.  Further, the implimentation of
+respect to the control polygon reduction.  Further, the implementation of
 \code{cpr::bsplines} is in C++ and tends to be faster than
 \code{splines::bs}.
 }
@@ -55,9 +55,6 @@ bmat
 plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
 
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}
 \references{
 C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
 
@@ -68,4 +65,6 @@ H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer,
 \code{\link{bsplineD}} for building the basis matrices for the first and
 second derivative of a B-spline.
 }
-
+\author{
+Peter DeWitt \email{dewittpe@gmail.com}
+}

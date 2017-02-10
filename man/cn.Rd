@@ -55,4 +55,3 @@ Generate the control net for a uni-variable B-spline
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
 }
-
