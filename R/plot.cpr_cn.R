@@ -47,7 +47,7 @@
 #'
 #' @seealso \code{\link{plot.cpr_cp}} for plotting control polygons and splines,
 #' \code{\link[rgl]{persp3d}} and \code{\link[rgl]{rgl.material}} for generating
-#' and controlling rgl grahics. \code{\link[plot3D]{persp3D}} for building
+#' and controlling rgl graphics. \code{\link[plot3D]{persp3D}} for building
 #' plot3D graphics. \code{\link{get_surface}} for generating the data sets
 #' needed for the plotting methods.
 #'

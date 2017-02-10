@@ -5,13 +5,13 @@
 #'
 #' A control polygon, \code{cpr\_cp} object, has a spline function f(x).
 #' \code{get_spline} returns a list of two \code{data.frame}.  The \code{cp}
-#' element is a \code{data.frame} with the (x, y) corrdinates control points and
+#' element is a \code{data.frame} with the (x, y) coordinates control points and
 #' the \code{spline} element is a \code{data.frame} with \code{n} rows for
 #' interpolating f(x).
 #'
 #' For a control net, \code{cpr\_cn} object, the return is the same as for a
-#' \code{cpr\_cp} object, but conseptually different.  Where a \code{cpr\_cp}
-#' objects have a univariable spline function, \code{cpr\_cn} have
+#' \code{cpr\_cp} object, but conceptually different.  Where a \code{cpr\_cp}
+#' objects have a uni-variable spline function, \code{cpr\_cn} have
 #' multi-variable spline surfaces.  \code{get_spline} returns a "slice" of the
 #' higher dimensional object.  For example, consider a three-dimensional control
 #' net defined on the unit cube with marginals \code{x1}, \code{x2}, and
@@ -26,13 +26,13 @@
 #' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a \code{cpr_cp} or \code{cpr_cn} object.
-#' @param margin an integer identifying the maginal of the control net to slice
+#' @param margin an integer identifying the marginal of the control net to slice
 #' along.  Only used when working \code{x} is a \code{cpr_cn} object.
 #' @param at point value for marginals not defined in the \code{margin}.  Only
 #' used when \code{x} is a \code{cpr_cn} object.  Expected input is a list of
 #' length \code{length(attr(x, "bspline_list"))}.  Entries for elements
 #' \code{marginal} are ignored.  If omitted, the midpoint between the boundary
-#' knotss for each marginal is used.
+#' knots for each marginal is used.
 #' @param n the length of sequence to use for interpolating the spline function.
 #'
 #' @seealso \code{\link{get_surface}}
@@ -93,13 +93,13 @@ get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
 #'
 #' 
 #' @param x a \code{cpr_cn} object
-#' @param margin an integer identifying the maginal of the control net to slice
+#' @param margin an integer identifying the marginal of the control net to slice
 #' along.  Only used when working \code{x} is a \code{cpr_cn} object.
 #' @param at point value for marginals not defined in the \code{margin}.  Only
 #' used when \code{x} is a \code{cpr_cn} object.  Expected input is a list of
 #' length \code{length(attr(x, "bspline_list"))}.  Entries for elements
 #' \code{marginal} are ignored.  If omitted, the midpoint between the boundary
-#' knotss for each marginal is used.
+#' knots for each marginal is used.
 #' @param n the length of sequence to use for interpolating the spline function.
 #'
 #' @seealso \code{\link{get_spline}}
@@ -146,7 +146,7 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
   iknots <- lapply(x$bspline_list, attr, which = "iknots")
   orders <- lapply(x$bspline_list, attr, which = "order")
 
-  # The contol net
+  # The control net
   xvecs <- lapply(x$bspline_list, attr, which = "xi_star")
   xvecs[-margin] <- at[-margin] 
   net <- do.call(expand.grid, xvecs) 

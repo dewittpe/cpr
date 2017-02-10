@@ -5,7 +5,7 @@
 #' \code{cpr} runs the control polygon reduction algorithm.  
 #'
 #' \code{keep} will keep the regression fit as part of the \code{cpr\_cp} object
-#' for models with upto and including keep fits.  For example, if \code{keep =
+#' for models with up to and including keep fits.  For example, if \code{keep =
 #' 10} then the resulting \code{cpr\_cpr} object will have the regression fit
 #' stored in the first \code{keep + 1} (zero internal knots, one internal knot,
 #' \ldots, \code{keep} internal knots) \code{cpr\_cp} objects in the list.  The

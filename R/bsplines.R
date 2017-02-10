@@ -1,12 +1,12 @@
 #' B-Splines
 #'
-#' An implimentation of Carl de Boor's recursive algorimthm for building
+#' An implementation of Carl de Boor's recursive algorithm for building
 #' B-splines.
 #'
 #' The difference between this function and \code{splines::bs} come in the
 #' attributes associated with the output and default options.  The
 #' \code{cpr::bsplines} call is intended to simplify the work needed with
-#' respect to the control polygon reduction.  Further, the implimentation of
+#' respect to the control polygon reduction.  Further, the implementation of
 #' \code{cpr::bsplines} is in C++ and tends to be faster than
 #' \code{splines::bs}.
 #'
@@ -22,7 +22,7 @@
 #' @param df degrees of freedom: sum of the order and internal knots.  Ignored
 #' if \code{iknots} is specified.
 #' @param bknots boundary knot locations, defaults to \code{range(x)}.
-#' @param order order of the piecewise polynomials, defualts to 4L.
+#' @param order order of the piecewise polynomials, defaults to 4L.
 #'
 #' @seealso \code{\link{plot.cpr_bs}} for plotting the basis,
 #' \code{\link{bsplineD}} for building the basis matrices for the first and
@@ -84,7 +84,7 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 #' Plot B-splines
 #'
 #' @param x a \code{cpr_bs} object
-#' @param show_xi logical, show the knot locations, using the greek letter xi, on the x-axis
+#' @param show_xi logical, show the knot locations, using the Greek letter xi, on the x-axis
 #' @param show_x  logical, show the x values of the knots on the x-axis
 #' @param color logical, if \code{TRUE} (default) the splines are plotted in
 #' color.  If \code{FALSE} all splines are black lines.
@@ -163,7 +163,7 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 #' @param df degrees of freedom: sum of the order and internal knots.  Ignored
 #' if \code{iknots} is specified.
 #' @param bknots boundary knot locations, defaults to \code{range(x)}.
-#' @param order order of the piecewise polynomials, defualts to 4L.
+#' @param order order of the piecewise polynomials, defaults to 4L.
 #' @param derivative, (integer) first or second derivative
 #'
 #' @seealso \code{\link{bsplines}}

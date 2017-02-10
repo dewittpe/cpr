@@ -5,7 +5,7 @@
 #' \code{stats::coef} to extract all the regression coefficients.  A specific
 #' method for \code{lmerMod} objects has been provided.  If you are using a
 #' regression method which \code{stats::coef} will not return the regression
-#' coeficients, you'll need to define an S3 method for \code{stats::coef} to do
+#' coefficients, you'll need to define an S3 method for \code{stats::coef} to do
 #' so.
 #'
 #' This function is implicitly called in the \code{cpr::cp} and
@@ -16,7 +16,7 @@
 #'
 #' @param fit a regression model fit
 #'
-#' @return the regression coeficients associated with terms with names
+#' @return the regression coefficients associated with terms with names
 #' containing either "bsplines" or "btensor".
 #'
 #' @seealso \code{\link[stats]{coef}} \code{\link{cp}} \code{\link{cn}}
