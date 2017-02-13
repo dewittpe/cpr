@@ -2,7 +2,7 @@
 #'
 #' Run the Control Polygon Reduction Algorithm.
 #'
-#' \code{cpr} runs the control polygon reduction algorithm.  
+#' \code{cpr} runs the control polygon reduction algorithm.
 #'
 #' \code{keep} will keep the regression fit as part of the \code{cpr\_cp} object
 #' for models with up to and including keep fits.  For example, if \code{keep =
@@ -24,14 +24,14 @@
 #'        weight of each internal knot.
 #' @param progress show a progress bar.
 #' @param ... not currently used
-#' 
+#'
 #' @export
-cpr <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
+cpr <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) { 
+cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
   out <- vector("list", length = length(x$iknots) + 1L)
 
@@ -41,18 +41,18 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
     x <- eval(stats::update(x, keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
   }
 
-  if (progress) { 
+  if (progress) {
     pb <- utils::txtProgressBar(max = length(out), style = 3)
     prg <- 0
     utils::setTxtProgressBar(pb, prg)
   }
 
   for(i in rev(seq_along(out)[-1])) {
-    out[[i]] <- x 
-    w    <- influence_weights(x, p = p) 
-    nkts <- w$iknots[rank(w$w, ties.method = "first") > 1] 
+    out[[i]] <- x
+    w    <- influence_weights(x, p = p)
+    nkts <- w$iknots[rank(w$w, ties.method = "first") > 1]
 
-    if (i == keep + 1) { 
+    if (i == keep + 1) {
       x <- stats::update(x, keep_fit = TRUE)
     }
 
@@ -68,15 +68,15 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
   if (progress) {
     utils::setTxtProgressBar(pb, prg <- prg + 1)
     close(pb)
-  } 
+  }
 
   class(out) <- c("cpr_cpr", class(out))
-  out 
+  out
 }
 
 #' @method print cpr_cpr
 #' @export
-print.cpr_cpr <- function(x, ...) { 
+print.cpr_cpr <- function(x, ...) {
   cat("A list of control polygons\n")
   utils::str(x, max.level = 0)
 }
@@ -84,7 +84,7 @@ print.cpr_cpr <- function(x, ...) {
 #' @export
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
-summary.cpr_cpr <- function(object, ...) { 
-  dplyr::tbl_df(dplyr::bind_rows(lapply(object, summary, ...))) 
-} 
+summary.cpr_cpr <- function(object, ...) {
+  dplyr::tbl_df(dplyr::bind_rows(lapply(object, summary, ...), .id = 'index'))
+}
 
