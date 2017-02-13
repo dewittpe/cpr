@@ -28,9 +28,9 @@ plot.cpr_cnr <- function(x, type = "rmse", from = 1, to, ...) {
       to <- length(x)
     }
 
-    ggplot2::ggplot(dplyr::filter_(summary(x), .dots = ~ dplyr::between(seq_along(dfs), from, to))) + 
+    ggplot2::ggplot(dplyr::filter_(summary(x), .dots = ~ dplyr::between(index, from, to))) + 
     ggplot2::theme_bw() + 
-    ggplot2::aes_string(x = "seq_along(dfs)", y = type) + 
+    ggplot2::aes_string(x = "index", y = type) + 
     ggplot2::geom_point() + 
     ggplot2::geom_line() +
     ggplot2::xlab("Index")

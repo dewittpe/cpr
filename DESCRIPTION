@@ -17,6 +17,7 @@ Imports:
     ggplot2 (>= 2.2.0),
     lazyeval,
     lme4,
+    magrittr,
     plot3D,
     Rcpp (>= 0.11.0),
     rgl,

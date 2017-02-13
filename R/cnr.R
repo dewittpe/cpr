@@ -92,6 +92,10 @@ print.cpr_cnr <- function(x, ...) {
 #' @param object a \code{cpr_cnr} object
 #' @rdname cnr
 summary.cpr_cnr <- function(object, ...) {
-  dplyr::tbl_df(dplyr::bind_rows(lapply(object, summary, ...), .id = 'index'))
+  object %>%
+  lapply(summary) %>%
+  dplyr::bind_rows(.id = 'index') %>%
+  dplyr::mutate_(index = ~ as.integer(index)) %>%
+  dplyr::tbl_df()
 }
 

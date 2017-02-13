@@ -11,6 +11,7 @@
 #' @useDynLib cpr
 #' @importFrom Rcpp sourceCpp
 #' @importFrom graphics plot
+#' @importFrom magrittr "%>%"
 #'
 #' @docType package
 #' @name cpr-package
