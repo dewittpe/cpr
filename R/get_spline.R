@@ -170,5 +170,6 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
   surface$z <- do.call(c, Map(`%*%`, x = tensors,
                               MoreArgs = list(y = x$cn$theta)))
 
-  list(cn = net, surface = surface)
+  list(cn      = net[c(margin, ncol(net))],
+       surface = surface[c(margin, ncol(net))])
 } 
