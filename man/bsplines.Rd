@@ -41,7 +41,7 @@ xvec <- seq(-3, 5, length = 100)
 bmat <- bsplines(xvec, iknots = c(-2, 0, 0.2))
 bmat
 
-# view the splines
+# plot the splines
 plot(bmat)
 
 # If you want a second x-axis to show the x-values try the following:

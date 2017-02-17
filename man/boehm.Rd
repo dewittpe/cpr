@@ -34,27 +34,12 @@ numeric vectors
 Functions for the insertion, removal, and reinsertion of internal knots for
 B-splines.
 }
-\details{
-\code{refine_ordinate} provides the estimated ordinates of the control
-polygon's vertex sequence after inserting the value \code{x} into the knot
-vector \code{xi}.
+\examples{
+\dontrun{
+# See the vignette
+vignette("cpr-pkg", package = "cpr")
+}
 
-\code{coarsen_ordinate} provides the estimated ordinates of the control
-polygon's vertex sequence after the removal of the the value \code{x} from the
-knot vector \code{xi}.  The expected input for this function is the value
-\code{x} to insert into \code{xi}.  That is, to find the estimate of the
-coarsened ordinates by removing the value 2 from the vector (0, 0, 0, 0, 1,
-2, 3, 4, 4, 4, 4) (the knot vector for a cubic B-spline with boundary knots
-at zero and four and internal knots 1, 2, 3) should be specified by
-\code{coarsen_ordinate(x = 2, xi = c(0, 0, 0, 0, 1, 3, 4, 4, 4, 4), theta)}.
-See the vignette.
-
-The function \code{hat_ordinate} is the coarsen-then-refine estimate of the
-ordinate vector.  The name comes from the the use of a hat matrix based on the
-in knot insertion matrix.
-
-\code{iknot_weights} returns a vector with the 'importance weight' of each
-of the internal knots in \code{xi}.
 }
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}

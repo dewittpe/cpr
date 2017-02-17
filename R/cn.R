@@ -2,14 +2,30 @@
 #'
 #' Generate the control net for a uni-variable B-spline
 #'
-#' \code{cn} generates the control net for the given B-spline function.  
-#'
-#' \code{cnr} runs the control net reduction algorithm
+#' \code{cn} generates the control net for the given B-spline function.  There
+#' are several methods for building a control net.  
 #"
 #' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a \code{cpr_bs} object 
 #' @param ... arguments passed to the regression method
+#'
+#' @return a \code{cpr_cn} object.  This is a list with the following elements.
+#' Some of the elements are omitted when the using the \code{cn.cpr_bt} method.
+#' \describe{
+#'  \item{cn}{the control net, \code{data.frame} with each row defining a vertex
+#'  of the control net}
+#'  \item{bspline_list}{A list of the marginal B-splines}
+#'  \item{call}{the call}
+#'  \item{keep_fit}{logical, indicates if the regression models was retained}
+#'  \item{fit}{if \code{isTRUE(keep_fit)} then the regression model is here,
+#'  else \code{NA}.}
+#'  \item{coefficients}{regression coefficients, only the fixed effects if a
+#'  mixed effects model was used.}
+#'  \item{vcov}{The variance-covariance matrix for the \code{coefficients}}
+#'  \item{loglik}{The log-likelihood for the regression model}
+#'  \item{rmse}{The root mean squared error for the regression models}
+#'  }
 #'
 #' @export
 #' @rdname cn

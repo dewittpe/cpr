@@ -44,8 +44,8 @@ used.}
 regression model fit is retained and returned in as the \code{fit} element.
 If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
-\item{check_rank}{(logical, defaults to \code{TRUE}) if TRUE check that the
-design matrix is full rank.}
+\item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check
+that the design matrix is full rank.}
 
 \item{object}{a \code{cpr_cp} object}
 
@@ -76,8 +76,6 @@ Generate the control polygon for a uni-variable B-spline
 }
 \details{
 \code{cp} generates the control polygon for the given B-spline function.
-
-\code{cpr} runs the control polygon reduction algorithm
 }
 \examples{
 

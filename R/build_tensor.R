@@ -4,18 +4,13 @@
 #'
 #' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
-#' @param x a matrix, or list of matrices, build the TP
-#' @param ... Matrices to build the TP
+#' @param x a matrix, or list of numeric matrices, build the tensor product
+#' @param ... additional numeric matrices to build the tensor product
 #'
 #' @return
 #' A matrix 
 #'
-#' @examples
-#' A <- matrix(1:4, nrow = 10, ncol = 20)
-#' B <- matrix(1:6, nrow = 10, ncol = 6)
-#' build_tensor(A, B)
-#' build_tensor(list(A, B))
-#' build_tensor(A, B, B)
+#' @example examples/build_tensor.R
 #' 
 #' @export
 build_tensor <- function(x, ...) { 

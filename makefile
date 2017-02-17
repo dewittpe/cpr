@@ -9,7 +9,7 @@ MANS   = $(wildcard man/*.Rd)
 
 all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 
-$(PKG_NAME)_$(PKG_VERSION).tar.gz: $(RFILES) $(SRC)
+$(PKG_NAME)_$(PKG_VERSION).tar.gz: $(RFILES) $(SRC) DESCRIPTION
 	R -e "devtools::document()"
 	R CMD build .
 

@@ -23,6 +23,8 @@
 //' @return
 //' the rank of the matrix as a numeric value.
 //'
+//' @example examples/matrix_rank.R
+//'
 //' @references
 //'
 //' Conrad Sanderson and Ryan Curtin.  Armadillo: a template-based C++ library

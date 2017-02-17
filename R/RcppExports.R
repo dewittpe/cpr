@@ -18,11 +18,14 @@
 #' 2, 3, 4, 4, 4, 4) (the knot vector for a cubic B-spline with boundary knots
 #' at zero and four and internal knots 1, 2, 3) should be specified by
 #' \code{coarsen_ordinate(x = 2, xi = c(0, 0, 0, 0, 1, 3, 4, 4, 4, 4), theta)}.
-#' See the vignette.
 #'
 #' The function \code{hat_ordinate} is the coarsen-then-refine estimate of the
 #' ordinate vector.  The name comes from the the use of a hat matrix based on the
 #' in knot insertion matrix.
+#'
+#' Examples for the \code{refine_ordinate}, \code{coarsen_ordinate}, and
+#' \code{hat_ordinate} are best shown in the vignette, 
+#' \code(vignette("cpr-pkg", package = "cpr")}.
 #'
 #' \code{iknot_weights} returns a vector with the 'importance weight' of each
 #' of the internal knots in \code{xi}.
@@ -38,6 +41,12 @@
 #' @param order the order of the B-spline, defaults to 4 for cubic splines
 #'
 #' @return numeric vectors
+#'
+#' @examples
+#' \dontrun{
+#' # See the vignette
+#' vignette("cpr-pkg", package = "cpr")
+#' }
 #'
 #' @export
 #' @rdname boehm
@@ -103,6 +112,8 @@ diag_only <- function(A, B) {
 #'
 #' @return
 #' the rank of the matrix as a numeric value.
+#'
+#' @example examples/matrix_rank.R
 #'
 #' @references
 #'

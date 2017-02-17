@@ -26,6 +26,22 @@ of x, max_sv is the maximal singular value of x, and datum::eps is the
 difference between 1 and the least value greater than 1 that is
 representable.
 }
+\examples{
+# Check the rank of a matrix
+mat <- matrix(rnorm(25000 * 120), nrow = 25000)
+Matrix::rankMatrix(mat)[1]
+matrix_rank(mat)
+
+# A full rank B-spline basis
+bmat <- bsplines(seq(0, 1, length = 100), df = 15)
+matrix_rank(bmat)
+
+# A rank deficient B-spline basis
+bmat <- bsplines(seq(0, 1, length = 100), iknots = c(0.001, 0.002))
+ncol(bmat)
+matrix_rank(bmat)
+
+}
 \references{
 Conrad Sanderson and Ryan Curtin.  Armadillo: a template-based C++ library
 for linear algebra.  Journal of Open Source Software, Vol. 1, pp. 26, 2016.

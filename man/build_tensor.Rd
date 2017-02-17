@@ -7,9 +7,9 @@
 build_tensor(x, ...)
 }
 \arguments{
-\item{x}{a matrix, or list of matrices, build the TP}
+\item{x}{a matrix, or list of numeric matrices, build the tensor product}
 
-\item{...}{Matrices to build the TP}
+\item{...}{additional numeric matrices to build the tensor product}
 }
 \value{
 A matrix
@@ -18,12 +18,19 @@ A matrix
 Tensor products of Matrices.
 }
 \examples{
+# see vignette("cpr-pkg", package = "cpr") for details on tensor products.
+
 A <- matrix(1:4, nrow = 10, ncol = 20)
 B <- matrix(1:6, nrow = 10, ncol = 6)
-build_tensor(A, B)
-build_tensor(list(A, B))
-build_tensor(A, B, B)
 
+# Two ways of building the same tensor product
+tensor1 <- build_tensor(A, B) 
+tensor2 <- build_tensor(list(A, B))
+all.equal(tensor1, tensor2)
+
+# a three matrix tensor product
+tensor3 <- build_tensor(A, B, B)
+str(tensor3)
 }
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}

@@ -42,6 +42,8 @@ for three fourth order B-splines with no internal knots.  The columns of X
 cycle the quickest, followed by Y, and then Z.  This would be the same result
 as
 \code{ model.matrix( ~ bsplines(X) : bsplines(Y) : bsplines(Z) + 0) }.
+
+See \code{vignette("cpr-pkg", package = "cpr")} for more details.
 }
 \examples{
 tp <- with(mtcars,
@@ -51,7 +53,6 @@ tp <- with(mtcars,
 tp
 utils::str(tp)
 
-## not run
 # The equivalent matrix is could be generated as follows
 tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) :
                        splines::bs(hp, knots = c(100, 150), intercept = TRUE) :
@@ -59,7 +60,6 @@ tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) :
                     data = mtcars)
 
 all.equal(tp2, unclass(tp), check.attributes = FALSE)
-
 }
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}

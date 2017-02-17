@@ -14,6 +14,8 @@
 #' as
 #' \code{ model.matrix( ~ bsplines(X) : bsplines(Y) : bsplines(Z) + 0) }.
 #'
+#' See \code{vignette("cpr-pkg", package = "cpr")} for more details.
+#'
 #' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a list of variables to build B-spline transforms of.  The tensor
@@ -32,22 +34,7 @@
 #' @return
 #' A matrix with a class cpr_bt
 #'
-#' @examples
-#' tp <- with(mtcars,
-#'            btensor(x = list(disp, hp, mpg),
-#'                    iknots = list(numeric(0), c(100, 150), numeric(0)))
-#'            )
-#' tp
-#' utils::str(tp)
-#'
-#' ## not run
-#' # The equivalent matrix is could be generated as follows
-#' tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) :
-#'                        splines::bs(hp, knots = c(100, 150), intercept = TRUE) :
-#'                        splines::bs(mpg, intercept = TRUE) + 0,
-#'                     data = mtcars)
-#'
-#' all.equal(tp2, unclass(tp), check.attributes = FALSE)
+#' @example examples/btensor.R
 #'
 #' @export
 btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {

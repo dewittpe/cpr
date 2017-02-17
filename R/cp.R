@@ -4,12 +4,12 @@
 #'
 #' \code{cp} generates the control polygon for the given B-spline function.  
 #'
-#' \code{cpr} runs the control polygon reduction algorithm
-#'
 #' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a \code{cpr_bs} object 
 #' @param ... arguments passed to the regression method
+#'
+#' 
 #'
 #' @examples
 #' 
@@ -84,8 +84,8 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
 #' If \code{FALSE} the \code{fit} element with be \code{NA}.
-#' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the
-#' design matrix is full rank.
+#' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check
+#' that the design matrix is full rank.
 cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE, check_rank = TRUE) { 
   # check for some formula specification issues 
   if (sum(grepl("bsplines", attr(stats::terms(formula), "term.labels"))) != 1) {
@@ -195,11 +195,6 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "show_xi", "color", "n"))]
   cps   <- lapply(list(x, ...), function(x) x$cp)
 
-  if (length(nms) != length(cps)) {
-    nms <- paste("CP", seq_along(cps))  ## This is a hack to let plot.cpr_cn work
-  }
-
-
   rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
   .data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
                           .dots = stats::setNames(list(rfctr), "row")) 
@@ -266,8 +261,6 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
       ggplot2::theme(legend.title = ggplot2::element_blank())
   }
       
-
-
   base_plot
 }
 
