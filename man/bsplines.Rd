@@ -29,6 +29,9 @@ attributes associated with the output and default options.  The
 respect to the control polygon reduction.  Further, the implementation of
 \code{cpr::bsplines} is in C++ and tends to be faster than
 \code{splines::bs}.
+
+See the \code{vignette("cpr-pkg", package = "cpr")} for a detailed
+comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls.
 }
 \examples{
 # build a vector of values to transform
@@ -53,7 +56,6 @@ ggplot2::coord_cartesian(ylim = c(0, 1))
 bmat <- bsplines(xvec, iknots = c(-2, 0, 0.2), order = 3L)
 bmat
 plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
-
 }
 \references{
 C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
@@ -64,6 +66,10 @@ H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer,
 \code{\link{plot.cpr_bs}} for plotting the basis,
 \code{\link{bsplineD}} for building the basis matrices for the first and
 second derivative of a B-spline.
+
+See \code{\link{update_bsplines}} for info on a tool for updating a
+\code{cpr_bs} object.  This is a similar method to the
+\code{\link[stats]{update}} function from the \code{stats} package.
 }
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}
