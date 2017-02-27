@@ -1,7 +1,7 @@
 Package: cpr
 Title: Control Polygon Reduction
 Version: 0.2.2.9000
-Authors@R: 
+Authors@R:
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre")),
       person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),
       person("Nichole", "Carlson", email = "nichole.carlson@ucdenver.edu", role = c("ths")))
@@ -30,6 +30,7 @@ Suggests:
     geepack,
     knitr,
     Matrix,
-    testthat
+    testthat,
+    rmarkdown
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

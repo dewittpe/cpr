@@ -1,0 +1,73 @@
+---
+title: "The Control Polygon Reduction Package"
+author: "Peter DeWitt"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{The Control Polygon Reduction Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+library(knitr)
+opts_chunk$set(collapse = TRUE)
+```
+
+The cpr package provides several tools for finding parsimonious B-spline
+regression models via control polygon reduction.  This vignette is an overview
+of the tools provided by the package.
+
+```{r}
+library(cpr)
+```
+
+# CPR: Control Polygon Reduction
+*Coming Soon*  A description of the CPR method, including the background on
+B-splines and assessing knot influence will be provided soon.
+
+
+# CNR: Control Net Reduction
+*Coming Soon*  Control Net reduction is the natural extension of CPR from
+uni-variable functions to multi-variable functions.  Details on this work will
+be added to this vignette soon.
+
+# B-Splines
+Base R includes the splines package and the `splines::bs` call for building
+B-splines.  The cpr package provides the `cpr::bsplines` call as there are
+certain default behaviors and additional required meta-data storage requirements
+needed for the CPR method that the `splines::bs` call does not provide.  In this
+section we compare `splines::bs` and `cpr::bsplines` so that end users can
+translate between the two functions.
+
+```{r}
+bmat <- bsplines(x = seq(0, 6, length = 500), iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
+plot(bmat)
+```
+
+# Construction of Control Polygons
+
+# Tensor-Products
+
+## In General
+
+## Of B-Splines Bases
+
+# Construction of Control Nets
+
+
+# Assessing the Relative Influence of a Knot.
+
+# Running the CPR Model Selection Algorithm
+
+## Plotting Diagnostics
+
+## Plotting Curves
+
+# Running the CNR Model Selection Algorithm
+
+## Plotting Diagnostics
+
+## Plotting Surfaces
