@@ -16,18 +16,42 @@ knots in a tensor product of B-splines.
 This model selection method was developed as part of Peter DeWitt's PhD
 dissertation work.  
 
-### Related Publications:
-
-* Comming soon
-
 ### Vignettes
 
 Please refer to the vignettes for more details on the different parts of the package.
 
 ```r
-# Comming soon
-# vignette(package = 'cpr')
+# See all vignettes provided in the `cpr` packge
+vignette(package = 'cpr')
 ```
+
+### Related Publications:
+
+* The CPR method was presented at the 28th International Biometric Conference
+  held July 2016, in Victoria, British Columbia, Canada.  The abstract, paper,
+  and talk had the title: 
+  "Parsimonious B-splines Regression Models via Control Polygon
+  Reduction."  A bibtex entry for the abstract:
+
+    @inproceedings{,
+      author = {DeWitt, Peter E. and Carlson, Nichole E. and Samantha MaWhinney},
+      title = {Parsimonious B-spline Regression Models via Control Polygon Reduction},
+      booktitle = {Abstracts for the XXVIIIth International Biometric Conference}, 
+      month = {July}, 
+      year  = {2016}, 
+      organization = {International Biometric Society}, 
+      address = {Victoria, British Columbia},
+      url = {http://www.biometricsociety.org/conference-abstracts/2016/},
+      isbn = {978-0-9821919-4-1}
+    }
+
+**Awards:** The presentation of the work earned Peter DeWitt two awards:
+
+1. "Best Student Oral Presentation" from the International Biometric Society
+   (IBS).
+2. "Distinguished Oral Presentation" as part of the student
+   paper competition hosted by the Western North American Region
+   (WNAR) of the IBs.
 
 ## Installing CPR
 Currently CPR is under private development.  
