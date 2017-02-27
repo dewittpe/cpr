@@ -21,13 +21,37 @@ regression models via control polygon reduction.  This vignette is an overview
 of the tools provided by the package.
 
 ```{r}
+# Needed packages to run the examples in this vignette
 library(cpr)
+library(splines)
 ```
 
 # CPR: Control Polygon Reduction
-*Coming Soon*  A description of the CPR method, including the background on
+*Coming Soon*  A full description of the CPR method, including the background on
 B-splines and assessing knot influence will be provided soon.
 
+The quick overview: for a uni-variable B-spline regression model
+$$\boldsymbol{y}= f(\boldsymbol{x}) + \boldsymbol{Z}_{f} \boldsymbol{\beta} + \boldsymbol{Z}_{r} \boldsymbol{b} + \epsilon$$
+where $\boldsymbol{y}$ is a function of one variable $x$ with other (optional)
+fixed effects $\boldsymbol{Z}_{f} \beta$ and (optional) random effects
+$\boldsymbol{Z}_{r} \boldsymbol{b},$ we are interested in modeling the function
+$f\left( \boldsymbol{x} \right)$ with B-splines.  
+
+The B-spline function is
+$$ f \left(\boldsymbol{x}\right) \approx \boldsymbol{B}_{k, \boldsymbol{\xi}} \left( \boldsymbol{x} \right) \boldsymbol{\theta}$$
+were $\boldsymbol{B}$ is the basis matrix defined by the polynomial order $k$
+and knot sequence $\boldsymbol{\xi},$ and the regression coefficients
+$\boldsymbol{\theta}.$
+
+The Control Polygon Reduction (CPR) approach to finding parsimonious regression
+models with a good quality of fit is to start with a high cardinal knot
+sequence, assess the relative influence of each knot on the spline function,
+remove the least influential knot, refit the regression model, reassess the
+relative influence of each knot, and so forth until all knots knots have been
+removed.  The selection of a regression model is made by looking at the
+regression models of sequentially larger knot sequences until it is determined
+that the use of an additional knot does not provide any meaningful improvements
+to the regression model.
 
 # CNR: Control Net Reduction
 *Coming Soon*  Control Net reduction is the natural extension of CPR from
@@ -41,6 +65,25 @@ certain default behaviors and additional required meta-data storage requirements
 needed for the CPR method that the `splines::bs` call does not provide.  In this
 section we compare `splines::bs` and `cpr::bsplines` so that end users can
 translate between the two functions.
+
+           & \code{splines::bs}               & \code{cpr::bsplines}     \\ \hline
+ Arguments &                                  &                          \\
+           & \code{x}                         & \code{x}                 \\
+           & \code{df}                        & \code{df}                \\
+           & \code{knots}                     & \code{iknots}            \\
+           & \code{degree = 3}                & \code{order = 4L}        \\
+           & \code{Boundary.knots = range(x)} & \code{bknots = range(x)} \\
+           & \code{intercept = FALSE}         & --                       \\ \hline
+Attributes &                                  &                          \\ \hline
+           & \code{dim}                       & \code{dim}               \\
+           & \code{degree}                    & \code{order}             \\
+           & \code{knots}                     & \code{iknots}            \\
+           & \code{Boundary.knots}            & \code{bknots}            \\
+           & \code{intercept}                 & --                       \\
+           & --                               & \code{xi}                \\
+           & --                               & \code{xi\_star}          \\
+           & \code{class}                     & \code{class}             \\ \hline
+
 
 ```{r}
 bmat <- bsplines(x = seq(0, 6, length = 500), iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
@@ -71,3 +114,8 @@ plot(bmat)
 ## Plotting Diagnostics
 
 ## Plotting Surfaces
+
+# Session Info
+```{r}
+print(sessionInfo(), local = FALSE)
+```
