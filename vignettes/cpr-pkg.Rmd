@@ -13,7 +13,8 @@ vignette: >
 
 ```{r setup, include = FALSE}
 library(knitr)
-opts_chunk$set(collapse = TRUE)
+opts_chunk$set(collapse = TRUE,
+               fig.align = "center")
 ```
 
 The cpr package provides several tools for finding parsimonious B-spline
@@ -92,6 +93,7 @@ index 4 is sufficient for modeling the data.
 # sequential control polygons
 plot(cpr_run, color = TRUE)
 ```
+
 Further, in the plot below, we see that there is very little improvement in the
 RMSE from model index 4 to 5, and beyond.  As with the plot above, we conclude
 that model index 4 is sufficient for modeling the data.
