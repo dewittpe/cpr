@@ -8,3 +8,4 @@
 ^makefile$
 ^data-raw$
 ^codecov\.yml$
+^examples$
