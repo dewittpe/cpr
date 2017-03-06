@@ -49,7 +49,7 @@ package or \code{\link[rgl]{persp3d}} from the \code{rgl} package.
 
 Building complex and customized graphics might be easier for you if you use
 \code{\link{get_surface}} to generate the needed data for plotting.  See
-\code{vignette("plotting_cpr_cn", package = "cpr")} for examples of building
+\code{vignette("cpr-pkg", package = "cpr")} for examples of building
 different plots.
 
 For \code{rgl} graphics, the \code{surface_args} and \code{net_args} are
@@ -63,7 +63,7 @@ For \code{plot3D} graphics there are no defaults values for the
 \code{net_args} and \code{surface_args}.
 }
 \examples{
-## see vignette("plotting_cpr_cn", package = "cpr")
+## see vignette("cpr-pkg", package = "cpr")
 
 }
 \seealso{
