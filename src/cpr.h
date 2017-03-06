@@ -35,14 +35,13 @@ struct bbasis {
   bbasis(arma::vec & x, arma::vec & iknots_, arma::vec & bknots_, unsigned int order_);
 
   // operators
-  bbasis &operator =(const bbasis & b) {
-    order  = b.order;
-    iknots = b.iknots;
-    bknots = b.bknots;
-    knots  = b.knots;
-    bmat   = b.bmat;
-  }
-
+  // bbasis &operator =(const bbasis & b) {
+  //   order  = b.order;
+  //   iknots = b.iknots;
+  //   bknots = b.bknots;
+  //   knots  = b.knots;
+  //   bmat   = b.bmat;
+  // } 
 };
 
 struct controlpolygon {

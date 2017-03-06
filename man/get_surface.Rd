@@ -28,7 +28,7 @@ Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets
 a_cn <- cn(pdg ~ btensor(list(day, age), df = list(15, 3), order = list(3, 2)),
            data = spdg)
 
-cn_and_surface <- get_surface(a_cn)
+cn_and_surface <- get_surface(a_cn, n = 50)
 str(cn_and_surface, max.level = 2)
 
 par(mfrow = c(1, 2))
@@ -47,9 +47,7 @@ with(cn_and_surface$surface,
                             nrow = dplyr::n_distinct(Var1), 
                             ncol = dplyr::n_distinct(Var2)),
                      main = "Surface")
-     )
-
-
+     ) 
 }
 \seealso{
 \code{\link{get_spline}}
