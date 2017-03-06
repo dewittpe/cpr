@@ -6,7 +6,7 @@
 An R package for implementing the Control Polygon Reduction model
 selection method.  When we are tasked with modeling the functional relationship
 between a response and a continuous predictor, i.e., y = f(x), CPR allows for quick and
-efficient searching of a large model space to find B-spline estiamtes of the
+efficient searching of a large model space to find B-spline estimates of the
 function f(x).  
 
 CPR extends to multiple dimensions and allows one to find good locations for
@@ -18,12 +18,14 @@ dissertation work.
 
 ### Vignettes
 
-Please refer to the vignettes for more details on the different parts of the package.
+There is one vignette included with the package, for now.  Additional details
+will be added to this vignette.
 
 ```r
-# See all vignettes provided in the `cpr` packge
-vignette(package = 'cpr')
+vignette('cpr-pkg', package = 'cpr')
 ```
+
+Additional vignettes may also be authored soon.
 
 ### Related Publications:
 
@@ -33,17 +35,19 @@ vignette(package = 'cpr')
   "Parsimonious B-splines Regression Models via Control Polygon
   Reduction."  A bibtex entry for the abstract:
 
-    @inproceedings{,
-      author = {DeWitt, Peter E. and Carlson, Nichole E. and Samantha MaWhinney},
-      title = {Parsimonious B-spline Regression Models via Control Polygon Reduction},
-      booktitle = {Abstracts for the XXVIIIth International Biometric Conference}, 
-      month = {July}, 
-      year  = {2016}, 
-      organization = {International Biometric Society}, 
-      address = {Victoria, British Columbia},
-      url = {http://www.biometricsociety.org/conference-abstracts/2016/},
-      isbn = {978-0-9821919-4-1}
-    }
+```
+@inproceedings{,
+  author       = {DeWitt, Peter E. and Carlson, Nichole E. and Samantha MaWhinney},
+  title        = {Parsimonious B-spline Regression Models via Control Polygon Reduction},
+  booktitle    = {Abstracts for the XXVIIIth International Biometric Conference},
+  month        = {July},
+  year         = {2016},
+  organization = {International Biometric Society},
+  address      = {Victoria, British Columbia},
+  url          = {http://www.biometricsociety.org/conference-abstracts/2016/},
+  isbn         = {978-0-9821919-4-1}
+}
+```
 
 **Awards:** The presentation of the work earned Peter DeWitt two awards:
 
@@ -54,15 +58,31 @@ vignette(package = 'cpr')
    (WNAR) of the IBs.
 
 ## Installing CPR
-Currently CPR is under private development.  
-
 Options for installing CPR:
+1. Install from the Comprehensive R Archive Network (CRAN)
 
-1. Clone the repo and use `GNU make`
+```
+# within R
+install.packages("cpr", repos = "https://cran.rstudio.com")
+```
 
-    make install
+2. Install the developmental version from github.  This will require you to have
+   [devtools](https://github.com/hadley/devtools) installed, and, if you are
+   using Windows, you'll need
+   [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed as well.
 
-2. Go to the [release page](https://github.com/dewittpe/cpr/releases) and down
+```
+library(devtools)
+install_github("dewittpe/cpr", build_vignettes = TRUE)
+```
+
+3. Clone the repo and use `GNU make`
+
+```bash
+make install
+```
+
+4. Go to the [release page](https://github.com/dewittpe/cpr/releases) and down
    load the tar.gz file of the version you want to install.
 
   * Install from the command line
