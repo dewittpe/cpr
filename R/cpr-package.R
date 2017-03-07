@@ -7,7 +7,7 @@
 #' This package was part of Peter DeWitt's Ph.D. dissertation which was overseen
 #' by his advisors Samantha MaWhinney and Nichole Carlson.
 #'
-#' @useDynLib cpr
+#' @useDynLib cpr, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom graphics plot
 #' @importFrom magrittr "%>%"
