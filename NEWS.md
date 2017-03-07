@@ -1,7 +1,9 @@
-# Version 0.2.2.9000
+# Version 0.2.3
+First public release.
 
 ## New Features
 * `plot.cpr_cn` suports `rgl` and `plot3D` graphics
+* start of a vignette.
 
 # Version 0.2.2
 
