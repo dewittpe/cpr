@@ -1,4 +1,4 @@
-cpr: Control Polygon Reduction <img src="cpr-hex.png" align="right"/>
+cpr: Control Polygon Reduction <img src="cpr-hex-small.png" align="right"/>
 =====================================================================
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
