@@ -98,7 +98,7 @@ arma::mat knot_insertion_hat_matrix(double x, const arma::vec& xi, unsigned int 
 //'
 //' Examples for the \code{refine_ordinate}, \code{coarsen_ordinate}, and
 //' \code{hat_ordinate} are best shown in the vignette, 
-//' \code(vignette("cpr-pkg", package = "cpr")}.
+//' \code{vignette("cpr-pkg", package = "cpr")}.
 //'
 //' \code{iknot_weights} returns a vector with the 'importance weight' of each
 //' of the internal knots in \code{xi}.
