@@ -7,7 +7,13 @@ SRC    = $(wildcard src/*.cpp)
 RFILES = $(wildcard R/*.R)
 MANS   = $(wildcard man/*.Rd)
 
+.PHONY: fast all
+
 all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
+
+fast: $(RFILES) $(SRC) DESCRIPTION
+	R -e "devtools::document()"
+	R CMD build --no-build-vignettes --no-manual .
 
 $(PKG_NAME)_$(PKG_VERSION).tar.gz: $(RFILES) $(SRC) DESCRIPTION
 	R -e "devtools::document()"
