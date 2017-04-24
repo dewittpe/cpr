@@ -1,0 +1,365 @@
+%\VignetteEngine{knitr::knitr} 
+%\VignetteIndexEntry{The Control Polygon Reduction Package}
+%\VignetteEncoding{UTF-8}
+
+\documentclass[10pt]{article}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% ----------------------------------------------------------------------------- %
+% Float setup
+\usepackage{ctable}
+\usepackage{floatrow}
+\floatsetup[table]{framestyle=colorbox,framefit=yes,heightadjust=all,framearound=all,capposition=top}
+\floatsetup[figure]{framestyle=colorbox,framefit=yes,heightadjust=all,framearound=all,capposition=bottom}
+\usepackage{subcaption}
+
+% ---------------------------------------------------------------------------- %
+% JSS style commands:  \proglang, \pkg, and \code
+\makeatletter
+\@ifundefined{proglang}{%
+  \let\proglang=\textsf
+  \newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+  \newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
+  \def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
+}
+\makeatother
+
+% ---------------------------------------------------------------------------- %
+% Math Stuff
+\usepackage{amsmath,amssymb,amsfonts,mathrsfs}
+
+% ---------------------------------------------------------------------------- %
+% new commands
+\newcommand{\ie}{{\itshape i.e.}}
+\newcommand{\eg}{{\itshape e.g.}}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\card}[1]{\left|#1\right|}
+
+% ---------------------------------------------------------------------------- %
+% Bibtex
+\usepackage{filecontents}
+\usepackage[authoryear]{natbib}
+
+% ---------------------------------------------------------------------------- %
+% Front Matter
+\title{The Control Polygon Reduction Package}
+\author{Peter DeWitt}
+
+% ---------------------------------------------------------------------------- %
+% Begin the document
+\begin{document}
+\maketitle
+
+<<setup, include = FALSE>>=
+library(knitr)
+opts_chunk$set(collapse = TRUE,
+               fig.width = 6,
+               fig.height = 4,
+               fig.align = "center")
+@
+
+The cpr package provides several tools for finding parsimonious B-spline
+regression models via control polygon reduction.  This vignette is an overview
+of the tools provided by the package.
+
+This vignette is not complete.  The details will be filled in soon.  As for now,
+this is a placeholder for many topics to come.  A Journal of Statistical
+Software paper is under development.  That paper will become the foundation for
+this vignette.
+
+A brief overview of the Control Polygon Reduction and Control Net Reduction
+method for finding parsimonious B-spline regression models are presented first.
+The later sections of this vignette provide extended detail on the additional
+tools provided by the cpr package.
+<<>>=
+# Needed packages to run the examples in this vignette
+library(cpr)
+library(splines)
+@
+
+\section{CPR: Control Polygon Reduction}
+
+The quick overview: for a uni-variable B-spline regression model
+$$\boldsymbol{y}= f(\boldsymbol{x}) + \boldsymbol{Z}_{f} \boldsymbol{\beta} + \boldsymbol{Z}_{r} \boldsymbol{b} + \epsilon$$
+where $\boldsymbol{y}$ is a function of one variable $x$ with other (optional)
+fixed effects $\boldsymbol{Z}_{f} \beta$ and (optional) random effects
+$\boldsymbol{Z}_{r} \boldsymbol{b},$ we are interested in modeling the function
+$f\left( \boldsymbol{x} \right)$ with B-splines.
+
+The B-spline function is
+$$ f \left(\boldsymbol{x}\right) \approx \boldsymbol{B}_{k, \boldsymbol{\xi}} \left( \boldsymbol{x} \right) \boldsymbol{\theta}$$
+were $\boldsymbol{B}$ is the basis matrix defined by the polynomial order $k$
+and knot sequence $\boldsymbol{\xi},$ and the regression coefficients
+$\boldsymbol{\theta}.$
+
+The Control Polygon Reduction (CPR) approach to finding parsimonious regression
+models with a good quality of fit is to start with a high cardinal knot
+sequence, assess the relative influence of each knot on the spline function,
+remove the least influential knot, refit the regression model, reassess the
+relative influence of each knot, and so forth until all knots knots have been
+removed.  The selection of a regression model is made by looking at the
+regression models of sequentially larger knot sequences until it is determined
+that the use of an additional knot does not provide any meaningful improvements
+to the regression model.
+
+There are only four steps that the end user needs to take to use the CPR
+algorithm within the cpr package.
+\begin{enumerate}
+  \item Construct a control polygon with a large cardinal knot sequence, using \code{cp}.
+  \item Run the CPR algorithm via a call to \code{cpr}.
+  \item Use diagnostic plots to determine the preferable model.
+  \item Save the preferable model.
+\end{enumerate} 
+Here is an example.
+
+<<>>=
+# Construct the initial control polygon
+initial_cp <- cp(log10(pdg) ~ bsplines(day, df = 54), data = spdg)
+
+# Run CPR
+cpr_run    <- cpr(initial_cp)
+@
+
+There are two types of diagnostic plots, 1) sequential control polygons, and 2)
+root mean squared error (RMSE) by model index.
+
+In the plot below, there is no major differences in the shape of the control
+polygon between model index 4, 5, and 6.  As such, we would conclude that model
+index 4 is sufficient for modeling the data.
+<<>>=
+# sequential control polygons
+plot(cpr_run, color = TRUE)
+@
+
+Further, in the plot below, we see that there is very little improvement in the
+RMSE from model index 4 to 5, and beyond.  As with the plot above, we conclude
+that model index 4 is sufficient for modeling the data.
+<<>>=
+# RMSE by model index
+plot(cpr_run, type = 'rmse', to = 10)
+@
+
+Extract the model.  To save memory when running CPR, the default is to omit the
+regression model objects from the control polygons with in the \code{cpr_run} object.
+To get the regression model back, you can extract the knot locations and build
+the model yourself, or update the \code{selected_cp} object to retain the fit.
+<<>>=
+selected_cp <- cpr_run[[4]]
+selected_cp$iknots
+@
+
+<<>>=
+selected_cp <- update(selected_cp, keep_fit = TRUE)
+selected_fit <- selected_cp$fit
+coef_matrix <- summary(selected_fit)$coef
+dimnames(coef_matrix)[[1]] <- paste("Vertex", 1:7)
+coef_matrix
+@
+
+If you wanted to run this analysis with a better modeling approach, e.g., using
+mixed effect models handle the multiple observations within a subject, you can
+specify the regression approach via the \code{method} argument in the \code{cp} call.
+<<eval = FALSE>>=
+library(lme4)
+initial_lmer_cp <- cp(log10(pdg) ~ bsplines(day, df = 54) + (1 | id),
+                      data = spdg,
+                      method = lmer)
+@
+
+\section{CNR: Control Net Reduction}
+Control Net reduction is the natural extension of CPR from uni-variable
+functions to multi-variable functions.  The regression model we are interested
+in is of the form
+$$\boldsymbol{y}= f\left(\boldsymbol{x}_1, \boldsymbol{x}_2, \ldots, \boldsymbol{x}_m\right) + \boldsymbol{Z}_{f} \boldsymbol{\beta} + \boldsymbol{Z}_{r} \boldsymbol{b} + \epsilon.$$
+The function $f$ is to be modeled by multi-variable B-splines:
+
+$$ f\left(\boldsymbol{x}_1, \boldsymbol{x}_2, \ldots, \boldsymbol{x}_m \right) = \mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left(x_1, x_2, \ldots, x_m \right) \boldsymbol{\theta}_{\boldsymbol{\Xi}}.$$
+
+The basis matrix
+$\mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left( \boldsymbol{x}_1, \boldsymbol{x}_2, \ldots, \boldsymbol{x}_m \right)$
+for multi-variable B-splines is constructed by tensor products of marginal
+uni-variable B-splines.
+For a $m = 2$ dimensional tensor product
+$$ \mathscr{B}_{ \left\{k_1, k_2\right\}, \left\{ \boldsymbol{\xi}_1, \boldsymbol{\xi}_2 \right\}} \left(\boldsymbol{x}_1, \boldsymbol{x}_2 \right) = \left( \boldsymbol{1}_{\card{\boldsymbol{\xi}_2} - k_2}^{T} \otimes \boldsymbol{B}_{k_1, \boldsymbol{\xi}_1}\left(\boldsymbol{x}_1\right) \right) \odot \left( \boldsymbol{B}_{k_2, \boldsymbol{\xi}_2} \left( \boldsymbol{x}_2\right) \otimes \boldsymbol{1}_{\card{\boldsymbol{\xi}_1} - k_1}^{T} \right)$$
+For $m > 2$
+$$ \mathscr{B}_{ \boldsymbol{K}, \boldsymbol{\Xi}} \left(\boldsymbol{X}\right) = \left( \boldsymbol{1}_{\card{\boldsymbol{\xi}_m} - k_m}^{T} \otimes \mathscr{B}_{\boldsymbol{K} \backslash k_m, \boldsymbol{\Xi} \backslash \boldsymbol{\xi}_m}\left(\boldsymbol{X} \backslash \boldsymbol{x}_m\right) \right) \odot \left( \boldsymbol{B}_{k_m, \boldsymbol{\xi}_m} \left( \boldsymbol{x}_m\right) \otimes \boldsymbol{1}_{\prod_{i = 1}^{m-1} \left( \card{\boldsymbol{\xi}_i} - k_i\right)}^{T} \right)$$
+The \code{cpr::btensor} function constructs $m$-dimensional multi-variable B-spline.
+
+The Control Net Reduction algorithm assess the influence of each internal knot
+on each marginal and removes the least influential knot, regardless of the
+margin, at each step.  To run this algorithm one need to do the following:
+
+\begin{enumerate}
+  \item Construct an initial control net via \code{cn}.
+  \item Run the CNR algorithm via \code{cnr}.
+  \item Plot diagnostics.
+  \item Selected a preferable model.
+\end{enumerate}
+
+The example below looks for a two-variable B-spline
+surface for \code{pdg} as a function of day-of-cycle and age.
+
+<<>>=
+initial_cn <-
+  cn(log10(pdg) ~ btensor(x = list(day, age), df = list(24, 22), order = list(4, 2)),
+     data = spdg)
+cnr_run <- cnr(initial_cn)
+plot(cnr_run)
+preferable_cn <- cnr_run[[4]]
+summary(preferable_cn)
+@
+
+The preferable control net and surface can be plotted with the \code{plot} method.
+The default plotting method for these three-dimensional graphics is \code{rgl}.  This
+will let the user interact with the graphics, zoom in/out, and rotate.
+
+If preferred, or for static documents, setting \code{rgl = FALSE} will use the
+\code{plot3D} package methods for generating the graphics.
+
+<<fig.width = 6, fig.height = 4>>=
+par(mfrow = c(1, 2))
+plot(preferable_cn, rgl = FALSE,
+     xlab = "day", ylab = "age", zlab = "log10(pdg)")
+plot(preferable_cn, show_net = FALSE, show_surface = TRUE, rgl = FALSE,
+     xlab = "day", ylab = "age", zlab = "log10(pdg)")
+@
+
+
+\section{Additional Tools}
+The CPR and CNR algorithms rely on B-splines, control polygons, tensor products
+of B-splines, and control nets.  The following sections provide additional
+detail on the tools within the cpr package.
+
+\subsection{B-Splines}
+Base R includes the splines package and the \code{splines::bs} call for building
+B-splines.  The cpr package provides the \code{cpr::bsplines} call as there are
+certain default behaviors and additional required meta-data storage requirements
+needed for the CPR method that the \code{splines::bs} call does not provide.  In this
+section we compare \code{splines::bs} and \code{cpr::bsplines} so that end users can
+translate between the two functions.
+
+\ctable[caption = {Comparison of the arguments, with default values, for \code{bs}\ and \code{bsplines}.  The attributes for the resulting \code{bs}\ and \code{cpr\_bs} objects are also reported.},
+        cap = {Comparison of the arguments between \code{bs}\ and \code{bsplines}.},
+      label = {tab:bs_vs_bsplines}]{lll}{}{                              \FL
+           & \code{splines::bs}               & \code{cpr::bsplines}     \ML
+ Arguments &                                  &                          \NN
+           & \code{x}                         & \code{x}                 \NN
+           & \code{df}                        & \code{df}                \NN
+           & \code{knots}                     & \code{iknots}            \NN
+           & \code{degree = 3}                & \code{order = 4L}        \NN
+           & \code{Boundary.knots = range(x)} & \code{bknots = range(x)} \NN
+           & \code{intercept = FALSE}         & --                       \ML
+Attributes &                                  &                          \NN
+           & \code{dim}                       & \code{dim}               \NN
+           & \code{degree}                    & \code{order}             \NN
+           & \code{knots}                     & \code{iknots}            \NN
+           & \code{Boundary.knots}            & \code{bknots}            \NN
+           & \code{intercept}                 & --                       \NN
+           & --                               & \code{xi}                \NN
+           & --                               & \code{xi\_star}          \NN
+           & \code{class}                     & \code{class}             \LL
+      }
+
+The differences in the functional arguments and the attributes of the return
+objects between \code{bs} and \code{bsplines} are listed in
+Table~\ref{tab:bs_vs_bsplines}. Of the noted differences, the use of the
+\code{intercept} argument is the most significant difference between \code{bs}
+and \code{bsplines}.  By default, \code{bs} will omit the
+first column of the basis whereas \code{bsplines} will return the whole
+basis.  The omission of the first column of the basis generated by
+\code{bs} allows for additive \code{bs} calls to be used on the
+right-hand-side of a regression formula and generate a full rank design matrix.
+If additive \code{bsplines} calls, or additive \code{bs} with \code{intercept =
+TRUE}, are on the right-hand-side of the regression equation the resulting
+design matrix will be rank deficient.  This is a result of the B-splines being a
+partition of unity.  As the CPR algorithm is based on having the whole basis,
+{he \code{bsplines} function is provided to make it easy to work with the whole
+basis without having to remember to use non-default settings in \code{bs}.
+
+Both functions use \code{x}, a numeric vector,
+as the first argument.  The degrees of freedom, \code{df}, argument is slightly
+different between the two functions; the return object from \code{bs}
+depends on the values of \code{df} and \code{intercept} whereas
+\code{bsplines} always returns the full basis and thus \code{df} will be
+equal the number of columns of the returned basis.
+
+\code{bs} uses the polynomial \code{degree} (degree = order - 1) whereas
+\code{bsplines} uses the polynomial \code{order} to define the splines.  The
+default for both \code{bs} and \code{bsplines} is to generate cubic B-splines.
+
+Specifying the internal knots and boundary knots are the same between the two
+functions save the name of the arguments.  For both \code{bs} and
+\code{bsplines} only the degrees of freedom or the internal knots need to be
+specified.  If the end user specifies both, the specified knots take precedence.
+If only the degrees of freedom are specified then \code{bs} will generate
+internal knots via a call equivalent to \code{stats::quantile(x, probs = seq(0,
+1, length = length(knots) + 2L)[-c(1, length(knots) + 2L)]}.  The default
+behavior for \code{bsplines} is nearly the same, only that a call to
+\code{trimmed\_quantile} is made.
+
+<< eval = FALSE>>=
+stats::quantile(x, probs = seq(0, 1, length = length(knots) + 2L)[-c(1, length(knots) + 2L)])
+@
+
+The default call \code{bs(x)} is replicated by \code{bsplines(x)[, -1]} and the
+default call \code{bsplines(x)} is replicated \code{bs(x, intercept = TRUE)}.
+
+A simple example of building a fourth-order B-spline with a define set of knots
+is below.  The return is a numeric matrix with several attributes.
+<<>>=
+bmat <- bsplines(x = seq(0, 6, length = 500), iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
+bmat
+str(bmat)
+@
+
+The cpr package provides many plotting methods.  The plotting method for
+\code{cpr_bs} objects returns a \code{ggplot} object.  Additional layers and
+\pkg{ggplot2} tools can be used.  The plotting method shows the basis splines
+and knot locations.
+<<>>=
+plot(bmat)
+@
+
+\subsection{Multi-variable B-splines: btensor}
+
+The construction of a multi-variable B-spline is done with a call to \code{btensor}.
+The arguments are similar to those of the \code{bsplines} call, only \code{btensor} needs
+lists.  For example
+<<>>=
+with(spdg,
+     btensor(list(day, age, ttm),
+             df = list(13, 12, 12),
+             order = list(3, 2, 2)))
+
+@
+is a multi-variable B-spline built on three uni-variable B-splines.  For \code{day},
+the B-spline is of polynomial order 3, and as 13 degrees of freedom (10 internal
+knots defined by \code{trimmed_quantile}).  The uni-variable B-splines for
+\code{age} and
+\code{ttm} are both second order and have 12 degrees of freedom each.
+
+The return object is a matrix.  The \code{bspline_list} attribute is a list of each
+of the marginal uni-variable B-splines.
+
+
+\section{Topics to be written:}
+\begin{itemize}
+  \item Construction of control polygons, \code{cp} and \code{update_bsplines}
+  \item Construction of control nets, \code{cn} and \code{update_btensor}
+  \item Assessing the relative influence of a knot
+  \item Plotting splines and surfaces
+\end{itemize}
+
+\section{Exported Functions}
+<<>>=
+ls('package:cpr')
+@
+
+\section{Session Info}
+<<>>=
+print(sessionInfo(), local = FALSE)
+@
+
+\end{document}

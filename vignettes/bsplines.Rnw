@@ -17,10 +17,14 @@
 
 % ---------------------------------------------------------------------------- %
 % JSS style commands:  \proglang, \pkg, and \code
-\let\proglang=\textsf
-\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
-\newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
-\def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
+\makeatletter
+\@ifundefined{proglang}{%
+  \let\proglang=\textsf
+  \newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+  \newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
+  \def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
+}
+\makeatother
 
 % ---------------------------------------------------------------------------- %
 % Math Stuff
@@ -105,6 +109,9 @@ and
 The basis is a partition of unity over the support of $\bs{x},$
 \ie, all rows sum to one, and the span of the basis defines a spline
 space $\mathbb{S}_{k, \bs{\xi}} = \text{span } \bs{B}_{k, \bs{\xi}}.$
+
+
+build B-splines via \code{bsplines}
 
 % ---------------------------------------------------------------------------- %
 % Bib
