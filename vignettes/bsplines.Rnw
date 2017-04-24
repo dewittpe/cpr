@@ -1,0 +1,130 @@
+%\VignetteEngine{knitr::knitr} 
+%\VignetteIndexEntry{B-Splines}
+%\VignetteEncoding{UTF-8}
+
+\documentclass[10pt]{article}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+% ----------------------------------------------------------------------------- %
+% Float setup
+\usepackage{ctable}
+\usepackage{floatrow}
+\floatsetup[table]{framestyle=colorbox,framefit=yes,heightadjust=all,framearound=all,capposition=top}
+\floatsetup[figure]{framestyle=colorbox,framefit=yes,heightadjust=all,framearound=all,capposition=bottom}
+\usepackage{subcaption}
+
+% ---------------------------------------------------------------------------- %
+% JSS style commands:  \proglang, \pkg, and \code
+\let\proglang=\textsf
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+\newcommand\code{\bgroup\@makeother\_\@makeother\~\@makeother\$\@codex}
+\def\@codex#1{{\normalfont\ttfamily\hyphenchar\font=-1 #1}\egroup}
+
+% ---------------------------------------------------------------------------- %
+% Math Stuff
+\usepackage{amsmath,amssymb,amsfonts,mathrsfs}
+
+% ---------------------------------------------------------------------------- %
+% new commands
+\newcommand{\ie}{{\itshape i.e.}}
+\newcommand{\eg}{{\itshape e.g.}}
+\newcommand{\bs}[1]{\boldsymbol{#1}}
+\newcommand{\card}[1]{\left|#1\right|}
+
+% ---------------------------------------------------------------------------- %
+% Bibtex
+\usepackage{filecontents}
+\usepackage[authoryear]{natbib}
+
+% ---------------------------------------------------------------------------- %
+% Front Matter
+\title{B-Splines}
+\author{Peter DeWitt}
+
+% ---------------------------------------------------------------------------- %
+% Begin the document
+\begin{document}
+\maketitle
+\abstract{%
+  This vignette covers general theory and mathematics of B-Splines along with
+  the use of the \pkg{cpr} package to build and work with B-Splines.
+}
+
+\tableofcontents
+
+\section{B-Splines}
+Many references are available for B-splines.  Two very good references are
+\citet{deboor2001} and \citet{prautzsch2002}.  The goal of this document is to
+provide a detailed exploration of B-splines in the context that would be used in
+statistical models.
+
+B-splines get there name from `basis`-splines.  That this, a set of basis
+functions define a B-spline basis and space.  A B-spline basis, $\bs{B}_{k,
+\bs{\xi}} \left(\bs{x}\right)$ is defined by a polynomial order $k,$ knot
+sequence $\bs{\xi}.$  The
+traditional knot sequence construction places $k$ fold boundary knots at
+$\min\left(\bs{x}\right)$ and $\max\left(\bs{x}\right),$  with an additional $l
+\geq 0$ internal knots located within $\text{range}\left(\bs{x}\right).$
+The basis matrix, $\bs{b}_{k, \bs{\xi}} \left( x\right) \in
+\mathbb{R}^{\card{\bs{x}} \times \left(k + l\right)}$ is of the form
+\begin{equation}
+  \label{eq:basis_matrix} 
+  \bs{B}_{k, \bs{\xi}} \left(x \right) =
+  \begin{pmatrix}
+    B_{1, k, \bs{\xi}}\left(x_1\right) & B_{2, k, \bs{\xi}}\left(x_1\right) & \cdots & B_{k+l, k, \bs{\xi}}\left(x_1\right) \\
+    B_{1, k, \bs{\xi}}\left(x_2\right) & B_{2, k, \bs{\xi}}\left(x_2\right) & \cdots & B_{k+l, k, \bs{\xi}}\left(x_2\right) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    B_{1, k, \bs{\xi}}\left(x_{\card{\bs{x}}}\right) & B_{2, k, \bs{\xi}}\left(x_{\card{\bs{x}}}\right) & \cdots & B_{k+l, k, \bs{\xi}}\left(x_{\card{\bs{x}}}\right) \\
+  \end{pmatrix}
+\end{equation}
+where $B_{j, k, \bs{\xi}} \left( \bs{x} \right)$ is the $j^{th}$ B-spline defined by de Boor's recursive algorithm
+
+\begin{equation}
+  \label{eq:deboor_recursion}
+  B_{j, k, \bs{\xi}} \left(x\right) =
+  \omega_{j, k, \bs{\xi}}\left(x\right) B_{j, k-1, \bs{\xi}}\left(x\right) + \left(1 -
+  \omega_{j+1, k, \bs{\xi}} \right) B_{j+1, k-1, \bs{\xi}}\left(x\right),
+\end{equation}
+with 
+\begin{equation}
+  \label{eq:recurrence_relation_null}
+  B_{j, k, \bs{\xi}} \left(x\right) = 0 \quad \text{for} \quad x \notin \left[\xi_{j}, \xi_{j+k}\right]
+\end{equation}
+and
+\begin{equation}
+  \label{eq:omega} 
+  \omega_{jk}\left(x\right) =
+  \begin{cases}
+  \hfil 0                                        & \hfil x \leq \xi_{j} \\
+  \frac{x - \xi_{j}} {\xi_{j + k - 1} - \xi_{j}} & \xi_{j} < x < \xi_{j+ k - 1} \\
+  \hfil 1                                        & \hfil \xi_{j + k - 1} \leq x
+  \end{cases}.
+\end{equation}
+The basis is a partition of unity over the support of $\bs{x},$
+\ie, all rows sum to one, and the span of the basis defines a spline
+space $\mathbb{S}_{k, \bs{\xi}} = \text{span } \bs{B}_{k, \bs{\xi}}.$
+
+% ---------------------------------------------------------------------------- %
+% Bib
+\begin{filecontents*}{bsplinerefs.bib}
+@book{deboor2001,
+  title     = {A practical guide to splines, revised Edition, Vol. 27 of Applied Mathematical Sciences},
+  author    = {de~Boor, Carl},
+  year      = {2001},
+  publisher = {Springer-Verlag, Berlin}
+}
+
+@book{prautzsch2002,
+  title     = {B{\'e}zier and B-Spline Techniques},
+  author    = {Prautzsch, Hartmut and Boehm, Wolfgang and Paluszny, Marco},
+  year      = {2002},
+  publisher = {Springer Science \& Business Media}
+} 
+\end{filecontents*}
+
+\bibliographystyle{plainnat}
+\bibliography{bsplinerefs}
+
+\end{document}
