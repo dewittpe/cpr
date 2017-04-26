@@ -25,6 +25,8 @@
 #' @param progress show a progress bar.
 #' @param ... not currently used
 #'
+#' @example examples/cpr.R
+#'
 #' @export
 cpr <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
   UseMethod("cpr")

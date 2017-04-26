@@ -30,6 +30,7 @@ Suggests:
     geepack,
     knitr,
     Matrix,
+    qwraps2,
     testthat,
     rmarkdown
 RoxygenNote: 6.0.1

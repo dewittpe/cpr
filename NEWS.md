@@ -1,3 +1,13 @@
+# Version 0.2.3.9000
+
+## New Examples
+* `cpr` has examples
+
+## Vignettes
+* The package overview has been changed from .Rmd to .Rnw and will be a draft of
+  a JSS submission.
+* A new vignette focused on just B-splines has been started.
+
 # Version 0.2.3
 First public release.
 
