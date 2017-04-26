@@ -1,0 +1,41 @@
+\section{Discussion}\label{sec:discussion}
+The \pkg{cpr} package provides a clean and user friendly interface for
+implementing our Control Polygon Reduction and Control Net Reduction algorithms
+for B-spline regression model selection.
+
+The CPR and CNR algorithms take a novel approach to regression model selection.
+Instead of focusing on the likelihood function we focus on the geometry of the
+control polygons and control nets to determine the influence of any one
+particular knot.  That said, the CPR algorithm has been shown to be able to
+select models with fewer degrees of freedom and with superior fit statistics
+compared to a forward step model selection approach.
+The model space
+searched by CPR is larger than the model space searched by a forward step
+model selection approach. The additional calculations for determining knot
+influence require few computation resources and are done quickly.  Thus, CPR
+requires negligibly more time to run than a forward step selection approach. 
+
+Compared to a comparable likelihood based backward step selection approach, CPR
+picks models which are on average equivalent to the likelihood based selected
+models on a degree of freedom  for degree of freedom basis.  The time required
+to run a likelihood based backward step selection approach can be considerable,
+CPR is much faster.
+
+Overall, CPR can quickly select a parsimonious model with preferable fit
+statistics to likelihood based model selection approaches.  Further, as was
+demonstrated in this manuscript, since CPR requires very little time to run,
+exploration of B-splines or different polynomial orders is feasible.  Fourth
+order B-splines are commonly used as they have twice differentiable and
+relatively smooth.  However, while perhaps not as `smooth', lower order splines
+may fit the data more efficiently than higher order splines.
+
+CNR provides analysts many of the same benefits as CPR, fast model selection
+from a very large model space.  The tools allow for exploration of complex
+non-linear multi-variable functions.
+
+Continued development of
+the package can be tracked and contributed to at
+\url{https://github.com/dewittpe/cpr}.  The package is also hosted on the
+Comprehensive R Archive Network (CRAN) at
+\url{https://cran.r-project.org/package=cpr}.
+

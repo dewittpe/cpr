@@ -1,0 +1,105 @@
+\section{Control Polygon Reduction} \label{sec:cpr_algorithm}
+
+CPR is based on the assumption that $f$ in~\eqref{eq:cpr_general_model} can be
+sufficiently modeled by $\bs{B}_{k, \bs{\xi}} \left(x\right)
+\bs{\theta}_{\bs{\xi}} \in \mathbb{S}_{k, \bs{\xi}}.$ If we start searching for $\bs{B}_{k, \bs{\xi}}
+\left(x\right) \bs{\theta}_{\bs{\xi}}$ in a larger space $\mathbb{S}_{k, \bs{\xi} \cup \bs{\xi}'}$
+then there must be at least one internal
+knot within $\bs{\xi} \cup \bs{\xi}'$ which is unnecessary to sufficiently model $f.$
+
+By starting with a large knot sequence, $\card{\bs{\xi}} - 2k = L$ internal
+knots, is not without
+precedence.  Large quantities of internal knots have been used, and strongly encouraged
+by \citet{eilers1996, eilers2010} and \citet{binder2008b}.  While the B-spline
+models are sensitive to knot location, the difference between a location of
+$\xi_j$ and $\xi_j + \varepsilon,$ for some small $\left|\varepsilon \right| >
+0,$ is negligible.
+
+CPR is a backward-step model selection algorithm---we start with a large
+degree of freedom model and reduce the degrees of freedom incrementally.  Final
+selection of the model is not done by an automated stopping criterion.  Instead,
+sequentially larger models, starting with the zero internal knot model, are
+assessed by fit statistics or visual inspection until the analyst is satisfied
+that an additional knot provides only negligibly better fit.
+
+As a model selection method, CPR is preferable to likelihood based forward-step,
+backward-step, and grid search methods.   First, a forward-step method requires
+placing one knot somewhere on the support, generally on the median, then placing
+two knots, generally on the tritiles, and so forth.  The model space is limited
+to only one model of each dimension.  Further, sequential models are are not
+within the same spline space.  This can make find an acceptable model difficult
+as higher dimensional models maybe selected so that a needed low dimensional
+knot sequence is used within the larger model.  CPR allows for the location of
+interior knots to be selected, that is, a one knot model may have the knot at
+any location, depending on initial knot sequence construction.  The difference
+computational time required to run CPR versus a forward-step process is
+negligibly.
+
+Using a grid search of possible knot locations is computationally impractical.
+For $L$ possible initial knot locations there are $\sum_{l=0}^{L} \binom{L}{l} =
+2^L$ possible models to fit.  With $L = 20$ possible knot locations there would
+be $\Sexpr{qwraps2::frmt(as.integer(sum(choose(20, 0:20))))}$ regression models to assess.
+Likely more models than data observations, and simply too computationally
+expensive to be done.
+
+Using a backward-step likelihood based selection method requires far fewer
+regression model fits.  For $L$ possible knot locations there are $L(L+1)/2 + 1$
+regression models to fit, that is, 
+$\Sexpr{qwraps2::frmt(as.integer(20 * (21)/2 + 1))}$ models for twenty possible
+locations,
+$\Sexpr{qwraps2::frmt(as.integer(50 * (51)/2 + 1))}$ models for fifty possible
+locations, and $\Sexpr{qwraps2::frmt(as.integer(100 * (101)/2 + 1))}$ models for
+one-hundred possible locations.  The computation time can still be great, but at
+least the backward-step approach is reasonable, compared to the grid search.
+
+CPR is similar to the backward-step likelihood based approaches, but requires
+only $L + 1$ regression models to be fitted for a set of $L$ initial knot
+locations.  The computation time saved by requiring only $L + 1$ versus
+$L(L+1)/2 + 1$ can be considerable.
+
+
+\paragraph{The CPR Algorithm}
+\begin{enumerate}
+  \item Start with a knot sequence with a sufficient large number of interior
+    knots, say $L = 50,$ and set $l = L$ to index models.
+  \item Use an appropriate regression modeling approach to fit a regression
+    model for~\eqref{eq:cpr_general_model}. 
+  \item \label{step:build_cp} Construct the control polygon for the current
+    $\bs{\xi}^{(l)}$ and $\bs{\theta}^{(l)}$ estimate.
+  \item\label{step:weights} Use $\CP_{k, \bs{\xi}^{(l)}, \bs{\theta}^{(l)}}$ and
+    \eqref{eq:influence_weight} to find the influence weight for all internal
+    knots.
+  \item\label{step:coarsen} Coarsen the knot sequence by removing the knot with
+    the smallest influence weight.
+  \item\label{step:refit} Refit the regression model using the coarsened knot
+    sequence and index $l = l - 1.$
+  \item Repeat steps \ref{step:build_cp} through \ref{step:refit} until all
+    internal knots have been removed, {\itshape i.e.}, if $l \geq 0$ goto
+      \ref{step:build_cp}, else goto \ref{step:selection}.
+  \item\label{step:selection} Select the preferable model by visual inspection
+    of diagnostic graphics.
+\end{enumerate}
+
+There are two diagnostic plots we suggest using for step \ref{step:selection}.
+1) Consider sequential control polygons.  Starting with $l = 0$ internal knots,
+compare the control polygon for $l$ and $l + 1$ internal knots.  When the
+control polygon with $l+1$ internal knots appears to be nested within the
+control polygon based on $l$ internal knots, the preferable model is the one
+with $l$ internal knots.  2) Plot the root mean squared error (RMSE) as a
+function of the number of internal knots.  When there is no longer a meaningful
+decrease in the RMSE between models with $l$ and $l + 1$ internal knots, select
+the model with $l$ internal knots.  These diagnostic plots will be shown in
+examples below.
+
+\citet{lyche1988b} presented a similar grouped knot removal process when
+estimating a function with no noise via B-splines.  CPR differs from Lyche and
+M{\o}rken in four key ways: 1) CPR is applicable to noisy data with an unknown
+target function whereas Lyche and M{\o}rken had a known target function.  2) The
+regression models selected by CPR will approximate $f(x) \approx \bs{B}_{k,
+\bs{\xi}} \left(x \right) \bs{\theta}$ whereas Lyche and M{\o}rken made
+estimates of the form $f \left( \xi_{i}^{*} \right) \approx \theta_i.$ 3) CPR
+coarsens the knot sequence by removal of one element and then refits the
+regression model.  Lyche and M{\o}rken coarsen the knot sequence via removal of
+multiple knots before refitting the regression model.  4) CPR has no automated
+stopping criteria.
+

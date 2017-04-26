@@ -1,0 +1,32 @@
+\section{The cpr Package} \label{sec:cpr_package} 
+The objective of the \pkg{cpr} is to provide a simple, intuitive, and clean API
+for the CPR algorithm.  A four-line script is the foundation of the expected use
+case.
+<<eval = FALSE, echo = TRUE>>=
+initial_cp    <- cp(y ~ bsplines(x), data = your_data_frame)
+cpr_run       <- cpr(initial_cp)
+plot(cpr_run)
+preferable_cp <- cpr_run[[4]]
+@
+In the first line the initial control polygon is constructed via a common
+regression statement.  Passing the initial control polygon object to the
+\code{cpr} function applies the CPR algorithm and returns a list of control
+polygons in the \code{cpr_run} object.  The \code{plot} call generates the
+diagnostic plots used for selecting a preferable model.  Lastly, the preferable
+control polygon is retrieved.
+
+In the following subsections we will present details on the relevant calls noted
+above.  We start with \code{bsplines} for generating B-spline bases and follow
+with \code{cp} for construction of control polygons.  We will then illustrate
+the use of \code{cpr} for selecting good fitting parsimonious B-spline
+regression models.
+
+\pkg{cpr} relies on \pkg{Rcpp}~\citep{eddelbuettel2011rcpp,
+eddelbuettel2013seamless} and
+\pkg{RcppArmadillo}~\citep{eddelbuettel2014rcpparmadillo} to gain computational
+efficiency for several functions and matrix arithmetic.  Heavy reliance on
+\pkg{dplyr}~\citep{wickham2016dplyr} and \pkg{tidyr}~\citep{wickham2016tidyr}
+for data manipulation.  Two-dimensional graphics are generated via
+\pkg{ggplot2}~\citep{wickham2009ggplot2}. Three-dimensional graphics are
+generated using either \pkg{rgl}~\citep{adler2016rgl} for dynamic iterative
+graphics, or \pkg{plot3D}~\citep{r-plot3D} of static graphics.

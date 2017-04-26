@@ -1,8 +1,8 @@
-%\VignetteEngine{knitr::knitr} 
-%\VignetteIndexEntry{The Control Polygon Reduction Package}
-%\VignetteEncoding{UTF-8}
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{cpr}
 
-\documentclass[article,shortnames,nojss]{jss}
+%\documentclass[letterpaper,10pt]{article}
+\documentclass[article,shortnames]{jss}
 \usepackage{amsmath,amssymb,mathrsfs}
 \usepackage{subcaption}
 %\usepackage{showkeys}
@@ -73,7 +73,7 @@ control nets, knot selection, parsimony, tensor producuts, regression}
 }
 
 <<read_chunks, cache = FALSE, include = FALSE>>=
-knitr::read_chunk(path = "cpr-pkg-children/cpr_jss.R")
+knitr::read_chunk(path = "cpr_jss.R")
 @
 
 <<cpr_jss_setup, cache = FALSE, include = FALSE>>=
@@ -82,34 +82,34 @@ knitr::read_chunk(path = "cpr-pkg-children/cpr_jss.R")
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-<<child = "cpr-pkg-children/01_introduction.Rnw">>=
+<<child = "01_introduction.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/02_00_background.Rnw">>=
+<<child = "02_00_background.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/03_00_cpr.Rnw">>=
+<<child = "03_00_cpr.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/04_00_cpr-pkg.Rnw">>=
+<<child = "04_00_cpr-pkg.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/04_01_bsplines.Rnw">>=
+<<child = "04_01_bsplines.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/04_02_cp.Rnw">>=
+<<child = "04_02_cp.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/04_03_influence.Rnw">>=
+<<child = "04_03_influence.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/04_04_cpr.Rnw">>=
+<<child = "04_04_cpr.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/05_00_cnr.Rnw">>=
+<<child = "05_00_cnr.Rnw">>=
 @
 
-<<child = "cpr-pkg-children/06_discussion.Rnw">>=
+<<child = "06_discussion.Rnw">>=
 @
 
 \section{Acknowledgements}
@@ -117,12 +117,10 @@ The development of the \pkg{cpr} package was part of Peter DeWitt's PhD
 dissertation under the advisement of co-authors Drs. MaWhinney and Carlson.  We
 thank Dr. Edward Bedrick for his help in framing the influence weight heuristic.
 
-\section{Session Info}
-This document was created with the following session info.
-<<sessionInfo, cache = FALSE, echo = TRUE, results = "markup">>=
-print(sessionInfo(), local = FALSE)
-
-@
+% This document was created with the following session info.
+% <<sessionInfo, cache = FALSE, echo = TRUE, results = "markup">>=
+% print(sessionInfo(), local = FALSE)
+% @
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \bibliographystyle{plainnat}
 \bibliography{references}

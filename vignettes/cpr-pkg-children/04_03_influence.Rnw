@@ -1,0 +1,37 @@
+\subsection{Relative Influence of the Knots}
+
+Our metric for assessing the relative influence of a knot was derived via the
+geometry of control polygons. Thus, \pkg{cpr} provides the
+\code{cpr::influence_of} function to calculate and provide
+the relative influence weight for each internal knot of a given \code{cpr_cp} object.
+
+<<>>=
+influence_of(eg_cp)
+@
+
+The default behavior of \code{influence_of} is to return the influence weight
+of all internal knots.  The end user may request only a subset of knots be
+evaluated by passing the \code{indices}\footnote{\code{indices} based on
+the full knot sequence, not just the interior knots.  That is, for a fourth
+order spline, the first interior knot is index 5 as knots 1:4 are the left
+boundary knots.} of the knot of interest as the second argument to
+\code{influence_of}.
+
+The output printed to the console gives the index of each knot, the value of the
+knot, weight, and rank with rank == 1 given to the least influential.  The
+structure of the returned \code{cpr_influence_of} object is more complex than
+the output belies.
+
+<<>>=
+str(influence_of(eg_cp), max.level = 1)
+@
+
+The \code{weight} \code{data.frame} is what is shown in the console.  The
+original control polygon and a lists of each coarsened and reinserted control
+polygon are also returned.  These lists of control polygons are useful for
+plotting the results.  A plot similar to the right column of
+Figure~\ref{fig:influence_weight_plots} can be generated via:
+
+<<eval = FALSE>>=
+plot(influence_of(eg_cp, c(6, 8)))
+@

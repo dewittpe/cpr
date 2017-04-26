@@ -1,0 +1,49 @@
+\section{Introduction} \label{sec:intro}
+Since their formal definition by \citet{curry1947}, B-splines have become
+a common tool for approximating functions and surfaces with piece-wise
+polynomials.  The fields of numeric analysis, computer aided graphics and
+design, and statistics, to name only a few, have all benefited from B-splines
+and generated a rich literature thereof.  The richness of the literature is
+partially due to the 
+lack of an analytic solution for optimal specification of the knot sequence
+defining the B-splines and the resulting spline functions
+\cite{jupp1978approximation}.
+
+Methods for knot sequence specification vary based on secondary objectives.
+Controlling the wiggliness of the spline function has been done by using knot
+sequences of large cardinality and maximizing a penalized objective function
+(see \citet{osullivan1986a} and penalized B-splines of \citet{eilers1996}, and
+\citet{eilers2010}).
+Estimation of the target function via the
+(regression) coefficients instead of the spline function results in a larger
+knot sequences \citep{lyche1988b}.
+If we allow the location of the knots to be free then there are many different
+adaptive methods \citep{biller2000, bakin1997, friedman1995, miyata2003adaptive,
+ruppert2000, richardson2008multivariate, zhou2001spatially} for
+knot sequences specification.
+
+What we found to be lacking from the literature was a method for knot sequences
+specification which was able to provide regression models with a high quality of
+fit with a small number of degrees of freedom.  Further, we desired a model
+selection approach that was computationally efficient for B-spline models of
+uni-variable functions and extendible to multi-variable functions via tensor
+products of B-splines.  We developed a back-ward step selection process based on
+the geometry of the control polygons about B-splines for selection of such
+models.  Computational efficiency is gained by operating on sparse low-rank
+matrices instead of a dense high-rank design matrix.
+
+\pkg{cpr}\footnote{Released Version:
+  \url{https://cran.r-project.org/package=cpr}; Developmental Version:
+\url{https://github.com/dewittpe/cpr}} is an \proglang{R}~\citep{R-base} package
+developed to provided extended functions for B-splines, tensor products, control
+polygons, control nets, and the model selection algorithms CPR and CNR.
+
+This manuscript will focus on CPR and is structured as follows: Section~\ref{sec:background} provides a
+brief overview of B-splines, control polygons, and the assessment of the influence
+of a knot on a spline function.
+The CPR algorithm is defined in Section~\ref{sec:cpr_algorithm}.
+Section~\ref{sec:cpr_package} has detailed examples of the use of the functions
+provided by \pkg{cpr} along with explanations for modeling functions of one
+continuous predictor.  A brief overview of the CNR algorithm as associated tools
+is provided in Section~\ref{sec:cnr}.
+
