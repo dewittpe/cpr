@@ -1,6 +1,11 @@
 sudo: false
 language: r
-cache: packages
+r:
+  - devel
+
+env:
+  global:
+    - R_CHECK_ARGS="--as-cran"
 
 before_install:
     - tlmgr install filecontents

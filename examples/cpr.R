@@ -1,6 +1,6 @@
 ###############################################################################
 # Example 1: find a model for log10(pdg) = f(day) from the spdg data set
-
+\dontrun{
 # need the lme4 package to fit a mixed effect model
 # library(lme4)
 
@@ -15,6 +15,8 @@ plot(cpr_run, type = "rmse", to = 10)
 
 # preferable model is in index 4
 preferable_cp <- cpr_run[[4]]
+
+}
 
 ###############################################################################
 # Example 2: logistic regression

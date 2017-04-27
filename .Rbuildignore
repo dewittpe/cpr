@@ -10,3 +10,5 @@
 ^codecov\.yml$
 ^examples$
 ^cpr-hex.png$
+^cpr-hex-small.png$
+^README.md$
