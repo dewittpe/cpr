@@ -20,7 +20,7 @@ SUBJECTS <- 864
 # load summary statistics and densities
 ################################################################################
 
-dhs_summary <- readRDS("data-raw/dhs_summary.rds")
+dhs_summary <- readRDS("dhs_summary.rds")
 list2env(dhs_summary, .GlobalEnv)
 agettm_sccm_ch <- sccm::convex_hull(agettm_convexhull)
 
