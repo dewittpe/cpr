@@ -132,10 +132,11 @@ specification which was able to provide regression models with a high quality of
 fit with a small number of degrees of freedom.  Further, we desired a model
 selection approach that was computationally efficient for B-spline models of
 uni-variable functions and extendible to multi-variable functions via tensor
-products of B-splines.  We developed a back-ward step selection process based on
-the geometry of the control polygons about B-splines for selection of such
-models.  Computational efficiency is gained by operating on sparse low-rank
-matrices instead of a dense high-rank design matrix.
+products of B-splines.  We the control polygon reduction (CPR)
+\citep{dewittp2017dissertation}, a back-ward step selection process based on the
+geometry of the control polygons about B-splines, for selection of such models.
+Computational efficiency is gained by operating on sparse low-rank matrices
+instead of a dense high-rank design matrix.
 
 \pkg{cpr}\footnote{Released Version:
   \url{https://cran.r-project.org/package=cpr}; Developmental Version:
@@ -536,12 +537,13 @@ function than $\xi_6.$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control Polygon Reduction} \label{sec:cpr_algorithm}
 
-CPR is based on the assumption that $f$ in~\eqref{eq:cpr_general_model} can be
-sufficiently modeled by $\bs{B}_{k, \bs{\xi}} \left(x\right)
-\bs{\theta}_{\bs{\xi}} \in \mathbb{S}_{k, \bs{\xi}}.$ If we start searching for $\bs{B}_{k, \bs{\xi}}
-\left(x\right) \bs{\theta}_{\bs{\xi}}$ in a larger space $\mathbb{S}_{k, \bs{\xi} \cup \bs{\xi}'}$
-then there must be at least one internal
-knot within $\bs{\xi} \cup \bs{\xi}'$ which is unnecessary to sufficiently model $f.$
+CPR \citep{dewittp2017dissertation} is based on the assumption that $f$
+in~\eqref{eq:cpr_general_model} can be sufficiently modeled by $\bs{B}_{k,
+\bs{\xi}} \left(x\right) \bs{\theta}_{\bs{\xi}} \in \mathbb{S}_{k, \bs{\xi}}.$
+If we start searching for $\bs{B}_{k, \bs{\xi}} \left(x\right)
+\bs{\theta}_{\bs{\xi}}$ in a larger space $\mathbb{S}_{k, \bs{\xi} \cup
+\bs{\xi}'}$ then there must be at least one internal knot within $\bs{\xi} \cup
+\bs{\xi}'$ which is unnecessary to sufficiently model $f.$
 
 By starting with a large knot sequence, $\card{\bs{\xi}} - 2k = L$ internal
 knots, is not without
