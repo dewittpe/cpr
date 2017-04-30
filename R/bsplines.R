@@ -10,8 +10,9 @@
 #' \code{cpr::bsplines} is in C++ and tends to be faster than
 #' \code{splines::bs}.
 #'
-#' See the \code{vignette("cpr-pkg", package = "cpr")} for a detailed
-#' comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls.
+#' See the \code{vignette("bsplines", package = "cpr")} for a detailed
+#' comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls
+#' and notes about B-splines in general.
 #'
 #' @references
 #' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.

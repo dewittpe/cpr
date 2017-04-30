@@ -2,21 +2,23 @@
 xvec <- seq(-3, 5, length = 100)
 
 # cubic b-spline
-bmat <- bsplines(xvec, iknots = c(-2, 0, 0.2))
+bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0))
 bmat
 
 # plot the splines
-plot(bmat)
+plot(bmat)                # each spline will be colored by default
+plot(bmat, color = FALSE) # black and white plot
+plot(bmat, color = FALSE) + ggplot2::aes(linetype = spline) # add a linetype
 
-# If you want a second x-axis to show the x-values try the following:
-second_x_axis <- round(stats::quantile(xvec, probs = seq(0, 1, by = .2)), 2)
+# Axes
+# The x-axis, by default, show the knot locations.  Other options are numeric
+# values, and/or to use a second x-axis
 
-plot(bmat) +
-ggplot2::annotate(geom = "text", x = second_x_axis, y = -0.02, label = second_x_axis) +
-ggplot2::annotate(geom = "linerange", x = second_x_axis, ymin = -0.05, ymax = -0.04) +
-ggplot2::coord_cartesian(ylim = c(0, 1))
+plot(bmat, show_xi = TRUE,  show_x = FALSE) # default, knot, symbols, on lower axis
+plot(bmat, show_xi = FALSE, show_x = TRUE)  # Numeric value for the knot locations
+plot(bmat, show_xi = TRUE,  show_x = TRUE)  # symbols on bottom, numbers on top
 
 # quadratic splines
-bmat <- bsplines(xvec, iknots = c(-2, 0, 0.2), order = 3L)
+bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0), order = 3L)
 bmat
 plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
