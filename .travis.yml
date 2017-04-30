@@ -11,6 +11,9 @@ before_install:
     - tlmgr install filecontents
     - tlmgr install natbib
 
+r_github_packages:
+    - jimhester/covr
+
 script: 
     - |
       R CMD build .
