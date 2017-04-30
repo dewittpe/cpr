@@ -1,5 +1,5 @@
 %\VignetteEngine{knitr::knitr} 
-%\VignetteIndexEntry{B-Splines}
+%\VignetteIndexEntry{B-Splines and Control Polygons}
 %\VignetteEncoding{UTF-8}
 
 \documentclass[10pt]{article}
@@ -44,7 +44,7 @@
 
 % ---------------------------------------------------------------------------- %
 % Front Matter
-\title{B-Splines}
+\title{B-Splines and Control Polygons}
 \author{Peter DeWitt}
 
 % ---------------------------------------------------------------------------- %
@@ -52,13 +52,23 @@
 \begin{document}
 \maketitle
 \abstract{%
-  This vignette covers general theory and mathematics of B-Splines along with
-  the use of the \pkg{cpr} package to build and work with B-Splines.
+  This vignette covers general theory and mathematics of B-Splines and their
+  corresponding control polygons.  The use of the \pkg{cpr} package to build and
+  work with B-Splines and control polygons is presented to show examples of the
+  general concepts.
 }
 
 \tableofcontents
 
+\section*{Preface}
+Options and packages used in the following examples.
+<<>>=
+options(width = 84, digits = 3)
+library(cpr)
+@
+
 \section{B-Splines}
+\subsection{General Definition}
 Many references are available for B-splines.  Two very good references are
 \citet{deboor2001} and \citet{prautzsch2002}.  The goal of this document is to
 provide a detailed exploration of B-splines in the context that would be used in
@@ -94,7 +104,13 @@ where $B_{j, k, \bs{\xi}} \left( \bs{x} \right)$ is the $j^{th}$ B-spline define
 with 
 \begin{equation}
   \label{eq:recurrence_relation_null}
-  B_{j, k, \bs{\xi}} \left(x\right) = 0 \quad \text{for} \quad x \notin \left[\xi_{j}, \xi_{j+k}\right]
+  B_{j, k, \bs{\xi}}\left(x\right) = 0 \quad \text{for } x \notin
+  \left[\xi_{j}, \xi_{j+k}\right), \quad
+  B_{j, 1, \bs{\xi}}\left(x\right) = 
+  \begin{cases}
+    1 & x \in \left[\xi_{j}, \xi_{j+1} \right)\\
+    0 & \text{otherwise},
+  \end{cases} 
 \end{equation}
 and
 \begin{equation}
@@ -110,9 +126,146 @@ The basis is a partition of unity over the support of $\bs{x},$
 \ie, all rows sum to one, and the span of the basis defines a spline
 space $\mathbb{S}_{k, \bs{\xi}} = \text{span } \bs{B}_{k, \bs{\xi}}.$
 
+\subsection{Building B-splines with \code{bsplines}}
+Build B-splines via \code{bsplines}.
+<<>>=
+str(bsplines)
+@
+\noindent There are five arguments for the \code{bsplines} call.
+\begin{itemize}
+  \item \code{x} is a numeric vector as noted in the above notation.
+  \item \code{iknots} is a numeric vector of locations for the internal knots.
+  \item \code{df} an integer value for the number of degrees of freedom.
+    \code{df} will be equal to the \code{order + length(iknots)}.
+  \item \code{bknots} boundary knots.  This needs only be a numeric vector of
+    length two.  The \code{bsplines} call will generate the full knot sequence
+    $\bs{\xi}$ with the proper multiplicity of the boundary knots.
+  \item \code{order} the polynomial order.  By default \code{order = 4L}
+    generates fourth-order B-splines, also called cubic B-splines as polynomial
+    order the polynomial degree plus one.
+\end{itemize}
+You only need to specify \code{iknots} or \code{df}.  If both are provided a
+warning will be given and \code{iknots} will be used in the construction of the
+basis matrix.
 
-build B-splines via \code{bsplines}
+<<>>=
+bmat <- bsplines(x      = seq(0, 6, length = 500),
+                 iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
+bmat
+@
 
+\subsection{cpr::bsplines vs splines::bs}
+The standard installation of \proglang{R} includes the
+\pkg{splines}~\citep{R-base} package and the \code{splines::bs} function for generating
+the basis matrix of B-splines, {\it i.e.} the matrix shown in
+\eqref{eq:basis_matrix}.  The \pkg{cpr} package provides an alternative
+function, \code{cpr::bsplines} for generating B-spline basis matrices with the class
+\code{cpr\_bs}.  The differences in the functional arguments and the attributes
+of the return objects between \code{splines::bs} and \code{cpr::bsplines} are listed in
+Table~\ref{tab:bs_vs_bsplines}. 
+\begin{table}
+  \caption{Comparison of the arguments, with default values, for \code{splines::bs} and
+    \code{cpr::bsplines}.  The attributes for the resulting \code{splines::bs} and
+  \code{cpr\_bs} objects are also reported.}
+  \label{tab:bs_vs_bsplines}
+  \centering
+\begin{tabular}{lll} \hline
+           & \code{splines::bs}               & \code{cpr::bsplines}     \\ \hline
+ Arguments &                                  &                          \\
+           & \code{x}                         & \code{x}                 \\
+           & \code{df}                        & \code{df}                \\
+           & \code{knots}                     & \code{iknots}            \\
+           & \code{degree = 3}                & \code{order = 4L}        \\
+           & \code{Boundary.knots = range(x)} & \code{bknots = range(x)} \\
+           & \code{intercept = FALSE}         & --                       \\ \hline
+Attributes &                                  &                          \\
+           & \code{dim}                       & \code{dim}               \\
+           & \code{degree}                    & \code{order}             \\
+           & \code{knots}                     & \code{iknots}            \\
+           & \code{Boundary.knots}            & \code{bknots}            \\
+           & \code{intercept}                 & --                       \\
+           & --                               & \code{xi}                \\
+           & --                               & \code{xi\_star}          \\
+           & \code{class}                     & \code{class}             \\
+           & --                               & \code{call}              \\
+           & --                               & \code{environment}       \\ \hline
+\end{tabular}
+\end{table}
+
+A major difference between the two functions is related to the \code{intercept}
+argument of \code{splines::bs}.  By default, \code{splines::bs} will omit the
+first column of the basis whereas \code{cpr::bsplines} will return the whole
+basis.  The omission of the first column of the basis generated by
+\code{splines::bs} allows for additive \code{splines::bs} calls to be used on the
+right-hand-side of a regression formula and generate a full rank design matrix.
+If additive \code{cpr::bsplines} calls, or additive \code{splines::bs} with \code{intercept =
+TRUE}, are on the right-hand-side of the regression equation the resulting
+design matrix will be rank deficient.  This is a result of the B-splines being a
+partition of unity.  As the CPR algorithm is based on having the whole basis,
+{he \code{cpr::bsplines} function is provided to make it easy to work with the whole
+basis without having to remember to use non-default settings in \code{splines::bs}.
+The default call \code{splines::bs(x)} is replicated
+by \code{cpr::bsplines(x)[, -1]} and the default call \code{cpr::bsplines(x)} is
+replicated \code{splines::bs(x, intercept = TRUE)}.
+
+Specifying the polynomial order and knot sequence between the two functions
+differ between \code{splines::bs} and \code{cpr::bsplines}.
+\code{splines::bs} uses the polynomial \code{degree} whereas \code{cpr::bsplines} uses the
+polynomial \code{order} (order = degree + 1) to define the splines.  The default
+for both \code{splines::bs} and \code{cpr::bsplines} is to generate cubic B-splines.
+
+For both \code{splines::bs} and
+\code{cpr::bsplines} only the degrees of freedom or the internal knots need to be
+specified.  If the end user specifies both, the specified knots take precedence.
+If only \code{df} is specified then \code{df - order} internal knots will be
+generated.
+\code{splines::bs} and \code{cpr::bsplines}.
+For a numeric vector \code{x}, 
+\code{splines::bs} will generate a sequence of
+internal knots via a call equivalent to 
+<<eval = FALSE, echo = TRUE>>=
+knots <- df + order + (1L - intercept)
+stats::quantile(x,
+  probs = seq(0, 1, length = length(knots) + 2L)[-c(1, length(knots) + 2L)])
+@ 
+whereas \code{cpr::bsplines} will generate a sequence  equivalent to
+<<eval = FALSE, echo = TRUE>>=
+stats::quantile(unique(x)[-c(1, length(unique(x)))],
+                probs = seq(1, df - order, by = 1) / (df - order + 1))
+@
+The function \code{cpr::trimmed_quantile} is provided to generate such
+sequences.
+
+The return object from both \code{splines::bs} and \code{cpr::bsplines} is a matrix.  The
+attributes returned include the argument values used to construct the basis.
+The major difference in the attributes between the two objects is that
+\code{cpr::bsplines} returns the full knot sequence, $\bs{\xi},$ in the \code{xi}
+element and the Greville sites, $\bs{\xi}^{*}$ in the \code{xi\_star} element.
+These attributes are used in the construction of control polygons.
+Lastly, the classes for the two objects differ: \code{splines::bs} returns a three
+classes, \code{c("bs", "basis", "matrix")} and \code{cpr::bsplines} returns two
+classes, \code{c("cpr\_bs", "matrix")}.  An example construction and structure
+are below.
+<<eg_bmat_construction>>=
+<<eg_bmat>>
+bmat
+@
+
+\subsection{Plotting B-spline Bases}
+There is no default method for plotting \code{splines::bs} objects.  If the numeric
+vector \code{x} is sorted, then a minimally useful basis plot can be generated
+via \code{graphics::matplot}.  The \pkg{cpr} package provides an plotting method
+for the \code{cpr\_bs} objects. The plotting method returns a \code{c("gg",
+"ggplot")} object and can be modified by adding additions layers as would be
+done for any other \code{ggplot} object.
+
+% \begin{figure}
+% \end{figure}
+
+\section{Session Info}
+<<>>=
+print(sessionInfo(), locale = FALSE)
+@
 % ---------------------------------------------------------------------------- %
 % Bib
 \begin{filecontents*}{bsplinerefs.bib}
@@ -133,5 +286,6 @@ build B-splines via \code{bsplines}
 
 \bibliographystyle{plainnat}
 \bibliography{bsplinerefs}
+
 
 \end{document}
