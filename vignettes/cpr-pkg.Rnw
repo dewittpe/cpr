@@ -109,34 +109,37 @@ options(width = 84, digits = 3, prompt = 'R> ', continue = "+  ",
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction} \label{sec:intro}
-Since their formal definition by \citet{curry1947}, B-splines have become a
-common tool for approximating functions and surfaces with piece-wise
+Since their formal definition by \citet{curry1947}, B-splines have become
+a common tool for approximating functions and surfaces with piece-wise
 polynomials.  The fields of numeric analysis, computer aided graphics and
-design, and statistics, to name only a few, have all benefited from B-splines
-and generated a rich literature thereof.  The richness of the literature is
-partially due to the lack of an analytic solution for optimal specification of
-the knot sequence defining the B-splines and the resulting spline functions
+design, and statistics, to name only a few, have all benefited from B-splines.
+The richness of the B-spline literature is
+partially due to the 
+lack of an analytic solution for optimal specification of the knot sequence
+defining the B-splines and the resulting spline functions
 \cite{jupp1978approximation}.
 
 Methods for knot sequence specification vary based on secondary objectives.
 Controlling the wiggliness of the spline function has been done by using knot
 sequences of large cardinality and maximizing a penalized objective function
 (see \citet{osullivan1986a} and penalized B-splines of \citet{eilers1996}, and
-\citet{eilers2010}).  Estimation of the target function via the (regression)
-coefficients instead of the spline function results in a larger knot sequences
-\citep{lyche1988b}.  If we allow the location of the knots to be free then there
-are many different adaptive methods \citep{biller2000, bakin1997, friedman1995,
-miyata2003adaptive, ruppert2000, richardson2008multivariate, zhou2001spatially}
-for knot sequences specification.
+\citet{eilers2010}).
+Estimation of the target function via the
+(regression) coefficients instead of the spline function results in a larger
+knot sequences \citep{lyche1988b}.
+If we allow the location of the knots to be free then there are many different
+adaptive methods \citep{biller2000, bakin1997, friedman1995, miyata2003adaptive,
+ruppert2000, richardson2008multivariate, zhou2001spatially} for
+knot sequences specification.
 
 What we found to be lacking from the literature was a method for knot sequences
 specification which was able to provide regression models with a high quality of
 fit with a small number of degrees of freedom.  Further, we desired a model
 selection approach that was computationally efficient for B-spline models of
 uni-variable functions and extendible to multi-variable functions via tensor
-products of B-splines.  We the control polygon reduction (CPR)
-\citep{dewittp2017dissertation}, a back-ward step selection process based on the
-geometry of the control polygons about B-splines, for selection of such models.
+products of B-splines.  For selection of such models, we developed the Control
+Polygon Reduction (CPR) \citep{dewittp2017dissertation}, a backward-step
+selection process based on the geometry of the control polygons about B-splines.
 Computational efficiency is gained by operating on sparse low-rank matrices
 instead of a dense high-rank design matrix.
 
@@ -1250,10 +1253,34 @@ We recommend and have set the default in \pkg{cpr} to use $p = 20$ values for ea
 \end{enumerate}
 
 CNR is applied to all margins of interest at once.  The knot with the lowest
-influence weight is omitted at each step, regardless of the margin it comes
-from.  The qualification ``margin of interest'' is explained in the following
-section on implementation issues.  It is possible, and reasonable, in some cases
-to build a control net and only want to apply CNR to a subset of the margins.
+influence weight is omitted at each step, regardless of the margin it originates
+from.  
+
+
+\subsection{Implementation Issue: Dimensionality}
+The CNR algorithm is not immune to the curse of dimensionality.  The total
+degrees of freedom consumed by the tensor product is the product of the degrees
+of freedom of each marginal B-spline.  This fact needs to be considered when
+starting the search for a parsimonious model.  Consider a two-dimensional double
+cubic B-spline with fifty internal knots on each marginal.  This construction
+generates a regression model with $54 \times 54 = 2916$ regression
+coefficients.
+
+This is important because a common method for solving regression problems is to
+use a QR decomposition of the design matrix.  QR decomposition is an $O(n^3)$
+algorithm where $n$ is the number of regression coefficients.  It will take a
+considerable amount of computational resources to estimate the $2916$
+regression parameters, and may not be feasible for some computing environments.
+
+The size of the initial model is even more problematic for three-dimensional
+B-splines.  Setting up a search for a set of parsimonious knot sequences with
+three cubic B-splines, each with initially fifty internal knots would require
+$157,464$ regression coefficients.  This is unreasonable.
+
+We suggest that for $m \geq 3$ to model a primary explanatory variable via
+uni-variable methods such as control polygon reduction, and then use the
+resulting uni-variable B-spline as a static marginal in the multi-variable
+B-spline.  Example follows in the next section.
 
 \subsection{Use In The cpr Package}
 The use of the CNR algorithm in the \pkg{cpr} package is very similar to the use
@@ -1285,16 +1312,17 @@ Instead of focusing on the likelihood function we focus on the geometry of the
 control polygons and control nets to determine the influence of any one
 particular knot.  That said, the CPR algorithm has been shown to be able to
 select models with fewer degrees of freedom and with superior fit statistics
-compared to a forward step model selection approach.  The model space searched
-by CPR is larger than the model space searched by a forward step model selection
-approach. The additional calculations for determining knot influence require few
-computation resources and are done quickly.  Thus, CPR requires negligibly more
-time to run than a forward step selection approach. 
+compared to a forward step model selection approach.
+The model space
+searched by CPR is larger than the model space searched by a forward step
+model selection approach. The additional calculations for determining knot
+influence require few computation resources and are done quickly.  Thus, CPR
+requires negligibly more time to run than a forward step selection approach. 
 
-Compared to a comparable likelihood based backward step selection approach, CPR
+Compared to a comparable likelihood based backward-step selection approach, CPR
 picks models which are on average equivalent to the likelihood based selected
 models on a degree of freedom  for degree of freedom basis.  The time required
-to run a likelihood based backward step selection approach can be considerable,
+to run a likelihood based backward-step selection approach can be considerable,
 CPR is much faster.
 
 Overall, CPR can quickly select a parsimonious model with preferable fit
@@ -1318,17 +1346,11 @@ Comprehensive R Archive Network (CRAN) at
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Acknowledgements}
-The development of the \pkg{cpr} package was part of Peter DeWitt's PhD
+The development of the \pkg{cpr} package was part of Peter DeWitt's Ph.D.\
 dissertation under the advisement of co-authors Drs. MaWhinney and Carlson.  We
 thank Dr. Edward Bedrick for his help in framing the influence weight heuristic.
-Partial funding from grant NIH (1 R03 DA026743, Forster and MaWhinney; 1 R01
-DA030495, Forster and MaWhinney).
-
-\section{Session Info}
-This document was created with the following session info.
-<<sessionInfo, cache = FALSE, echo = TRUE, results = "markup">>=
-print(sessionInfo(), local = FALSE)
-@
+Partial financial support for this work was provided by NIH grants 1 R03
+DA026743, Forster and MaWhinney; and 1 R01 DA030495, Forster and MaWhinney.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \bibliographystyle{plainnat}
