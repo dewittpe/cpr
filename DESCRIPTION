@@ -1,6 +1,6 @@
 Package: cpr
 Title: Control Polygon Reduction
-Version: 0.2.3.9000
+Version: 0.2.3.9001
 Authors@R:
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre")),
       person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),
@@ -19,11 +19,11 @@ Imports:
     lme4,
     magrittr,
     plot3D,
-    Rcpp (>= 0.11.0),
+    Rcpp (>= 0.12.11),
     rgl,
     tibble,
     tidyr
-LinkingTo: Rcpp (>= 0.11.0),
+LinkingTo: Rcpp (>= 0.12.11),
     RcppArmadillo
 Suggests:
     covr,

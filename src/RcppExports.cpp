@@ -152,3 +152,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"cpr_refine_ordinate", (DL_FUNC) &cpr_refine_ordinate, 4},
+    {"cpr_coarsen_ordinate", (DL_FUNC) &cpr_coarsen_ordinate, 4},
+    {"cpr_hat_ordinate", (DL_FUNC) &cpr_hat_ordinate, 4},
+    {"cpr_insertion_matrix", (DL_FUNC) &cpr_insertion_matrix, 3},
+    {"cpr_weigh_iknots", (DL_FUNC) &cpr_weigh_iknots, 4},
+    {"cpr_bbasis__impl", (DL_FUNC) &cpr_bbasis__impl, 4},
+    {"cpr_bsplineD1__impl", (DL_FUNC) &cpr_bsplineD1__impl, 4},
+    {"cpr_bsplineD2__impl", (DL_FUNC) &cpr_bsplineD2__impl, 4},
+    {"cpr_diag_only", (DL_FUNC) &cpr_diag_only, 2},
+    {"cpr_matrix_rank", (DL_FUNC) &cpr_matrix_rank, 1},
+    {"cpr_tp__impl", (DL_FUNC) &cpr_tp__impl, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_cpr(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

@@ -1,4 +1,4 @@
-# Version 0.2.3.9000
+# Version 0.2.3.9001
 
 ## New Examples
 * `cpr` has examples
@@ -8,11 +8,14 @@
   a JSS submission.
 * A new vignette focused on just B-splines has been started.
 
+## Other Changes
+* Depends on Rcpp >= 0.12.11 to handle registering native routines.
+
 # Version 0.2.3
 First public release.
 
 ## New Features
-* `plot.cpr_cn` suports `rgl` and `plot3D` graphics
+* `plot.cpr_cn` supports `rgl` and `plot3D` graphics
 * start of a vignette.
 
 # Version 0.2.2
