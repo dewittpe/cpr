@@ -1,6 +1,6 @@
 Package: cpr
 Title: Control Polygon Reduction
-Version: 0.2.3.9001
+Version: 0.2.3.9002
 Authors@R:
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre")),
       person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),
@@ -13,7 +13,7 @@ License: GPL (>= 2)
 URL: https://github.com/dewittpe/cpr/
 LazyData: true
 Imports:
-    dplyr,
+    dplyr (>= 0.7.0),
     ggplot2 (>= 2.2.0),
     lazyeval,
     lme4,
@@ -21,6 +21,7 @@ Imports:
     plot3D,
     Rcpp (>= 0.12.11),
     rgl,
+    rlang,
     tibble,
     tidyr
 LinkingTo: Rcpp (>= 0.12.11),
