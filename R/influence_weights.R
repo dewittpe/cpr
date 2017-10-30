@@ -81,12 +81,11 @@ influence_weights.cpr_cn <- function(x, p = 2, margin = seq_along(x$bspline_list
                       influence_weights.cpr_cp(cp(bmat, tt), p)
                     },
                     bmat = x$bspline_list[[idx]]) %>%
-             dplyr::bind_rows(wghts) %>%
-             dplyr::group_by_(wghts, ~ iknots) %>%
-             dplyr::summarize_(wghts, ~ max(w))
+             dplyr::bind_rows() %>%
+             dplyr::group_by(.data$iknots) %>%
+             dplyr::summarize(max(.data$w))
            })
   out <- lapply(iknots, function(ik) dplyr::data_frame(iknots = ik, `max(w)` = rep(Inf, length(ik))))
   out[seq_along(x$bspline_list) %in% margin] <- wghts
   out
 } 
->>>>>>> fix-Rcpp
