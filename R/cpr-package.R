@@ -11,6 +11,7 @@
 #' @importFrom Rcpp sourceCpp
 #' @importFrom graphics plot
 #' @importFrom magrittr "%>%"
+#' @importFrom rlang .data
 #'
 #' @docType package
 #' @name cpr-package
