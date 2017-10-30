@@ -24,7 +24,7 @@ influence_weights <- function(x, p = 2, margin = seq_along(x$bspline_list), n_po
 #' @export
 influence_weights.cpr_cp <- function(x, p = 2, margin = NULL, n_polycoef = NULL) {
   if (length(x$iknots) > 0) {
-    iw <- .Call('cpr_weigh_iknots', PACKAGE = 'cpr', x$xi, matrix(x$cp$theta, ncol = 1), x$order, p)
+    iw <- .Call('_cpr_weigh_iknots', PACKAGE = 'cpr', x$xi, matrix(x$cp$theta, ncol = 1), x$order, p)
     dplyr::data_frame(iknots = x$iknots, w = c(iw))
   } else {
     dplyr::data_frame(iknots = numeric(0), w = numeric(0))
@@ -76,21 +76,17 @@ influence_weights.cpr_cn <- function(x, p = 2, margin = seq_along(x$bspline_list
   wghts <- 
     lapply(seq_along(x$bspline_list)[margin],
            function(idx) {
-             # wghts <-
-               lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
-                      function(tt, bmat) {
-                        influence_weights.cpr_cp(cp(bmat, tt), p)
-                      },
-                      bmat = x$bspline_list[[idx]]) %>%
-           # wghts <-
-               dplyr::bind_rows() %>%
-               # wghts <-
-               dplyr::group_by(wghts,  .data$iknots) %>%
-               # wghts <-
-               dplyr::summarize(wghts,  max(.data$w))
-               # wghts
+             lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
+                    function(tt, bmat) {
+                      influence_weights.cpr_cp(cp(bmat, tt), p)
+                    },
+                    bmat = x$bspline_list[[idx]]) %>%
+             dplyr::bind_rows(wghts) %>%
+             dplyr::group_by_(wghts, ~ iknots) %>%
+             dplyr::summarize_(wghts, ~ max(w))
            })
   out <- lapply(iknots, function(ik) dplyr::data_frame(iknots = ik, `max(w)` = rep(Inf, length(ik))))
   out[seq_along(x$bspline_list) %in% margin] <- wghts
   out
 } 
+>>>>>>> fix-Rcpp

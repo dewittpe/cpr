@@ -47,7 +47,7 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
 
   iknots <- iknots_or_df(x, iknots, df, order)
 
-  rtn <- .Call('cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order)
+  rtn <- .Call('_cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order)
   attr(rtn, "call") <- match.call()
   attr(rtn, "environment") <- parent.frame()
   class(rtn) <- c("cpr_bs", "matrix")

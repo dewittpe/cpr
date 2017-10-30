@@ -51,45 +51,45 @@
 #' @export
 #' @rdname boehm
 refine_ordinate <- function(x, xi, theta, order = 4L) {
-    .Call(cpr_refine_ordinate, x, xi, theta, order)
+    .Call(`_cpr_refine_ordinate`, x, xi, theta, order)
 }
 
 #' @export
 #' @rdname boehm
 coarsen_ordinate <- function(x, xi, theta, order = 4L) {
-    .Call(cpr_coarsen_ordinate, x, xi, theta, order)
+    .Call(`_cpr_coarsen_ordinate`, x, xi, theta, order)
 }
 
 #' @export
 #' @rdname boehm
 hat_ordinate <- function(x, xi, theta, order = 4L) {
-    .Call(cpr_hat_ordinate, x, xi, theta, order)
+    .Call(`_cpr_hat_ordinate`, x, xi, theta, order)
 }
 
 #' @export
 #' @rdname boehm
 insertion_matrix <- function(x, xi, order = 4L) {
-    .Call(cpr_insertion_matrix, x, xi, order)
+    .Call(`_cpr_insertion_matrix`, x, xi, order)
 }
 
 weigh_iknots <- function(xi, theta, order = 4L, p = 2L) {
-    .Call(cpr_weigh_iknots, xi, theta, order, p)
+    .Call(`_cpr_weigh_iknots`, xi, theta, order, p)
 }
 
 bbasis__impl <- function(x, iknots, bknots, order) {
-    .Call(cpr_bbasis__impl, x, iknots, bknots, order)
+    .Call(`_cpr_bbasis__impl`, x, iknots, bknots, order)
 }
 
 bsplineD1__impl <- function(x, j, order, knots) {
-    .Call(cpr_bsplineD1__impl, x, j, order, knots)
+    .Call(`_cpr_bsplineD1__impl`, x, j, order, knots)
 }
 
 bsplineD2__impl <- function(x, j, order, knots) {
-    .Call(cpr_bsplineD2__impl, x, j, order, knots)
+    .Call(`_cpr_bsplineD2__impl`, x, j, order, knots)
 }
 
 diag_only <- function(A, B) {
-    .Call(cpr_diag_only, A, B)
+    .Call(`_cpr_diag_only`, A, B)
 }
 
 #' Rank of a Matrix
@@ -122,10 +122,10 @@ diag_only <- function(A, B) {
 #'
 #' @export
 matrix_rank <- function(x) {
-    .Call(cpr_matrix_rank, x)
+    .Call(`_cpr_matrix_rank`, x)
 }
 
 tp__impl <- function(A, B) {
-    .Call(cpr_tp__impl, A, B)
+    .Call(`_cpr_tp__impl`, A, B)
 }
 

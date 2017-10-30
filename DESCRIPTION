@@ -19,12 +19,12 @@ Imports:
     lme4,
     magrittr,
     plot3D,
-    Rcpp (>= 0.12.11),
+    Rcpp (>= 0.12.13),
     rgl,
     rlang,
     tibble,
     tidyr
-LinkingTo: Rcpp (>= 0.12.11),
+LinkingTo: Rcpp (>= 0.12.13),
     RcppArmadillo
 Suggests:
     covr,
