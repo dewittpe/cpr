@@ -18,8 +18,8 @@ cp(x, ...)
 
 \method{print}{cpr_cp}(x, ...)
 
-\method{summary}{cpr_cp}(object, wiggle = FALSE, integrate.args = list(),
-  ...)
+\method{summary}{cpr_cp}(object, wiggle = FALSE,
+  integrate.args = list(), ...)
 
 \method{plot}{cpr_cp}(x, ..., show_cp = TRUE, show_spline = FALSE,
   show_xi = TRUE, color = FALSE, n = 100)

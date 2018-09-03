@@ -4,7 +4,8 @@
 \alias{bsplines}
 \title{B-Splines}
 \usage{
-bsplines(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
+bsplines(x, iknots = NULL, df = NULL, bknots = range(x),
+  order = 4L)
 }
 \arguments{
 \item{x}{a numeric vector}

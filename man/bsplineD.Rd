@@ -4,8 +4,8 @@
 \alias{bsplineD}
 \title{B-spline Derivatives}
 \usage{
-bsplineD(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L,
-  derivative = 1L)
+bsplineD(x, iknots = NULL, df = NULL, bknots = range(x),
+  order = 4L, derivative = 1L)
 }
 \arguments{
 \item{x}{a numeric vector}
