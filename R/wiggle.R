@@ -18,17 +18,17 @@
 #'
 
 #' @export
-wiggle <- function(object, lower, upper, stop.on.error = FALSE, ...) { 
+wiggle <- function(object, lower, upper, stop.on.error = FALSE, ...) {
   UseMethod("wiggle")
 }
 
 #' @export
-wiggle.cpr_cp <- function(object, lower = min(object$bknots), upper = max(object$bknots), stop.on.error = FALSE, ...) { 
-  f <- function(x) { 
-    (bsplineD(x, 
-              iknots = object$iknots, 
+wiggle.cpr_cp <- function(object, lower = min(object$bknots), upper = max(object$bknots), stop.on.error = FALSE, ...) {
+  f <- function(x) {
+    (bsplineD(x,
+              iknots = object$iknots,
               bknots = object$bknots,
-              order  = object$order, 
+              order  = object$order,
               derivative = 2L) %*%
      matrix(object$cp$theta, ncol = 1))^2
   }
