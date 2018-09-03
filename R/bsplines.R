@@ -18,7 +18,7 @@
 #' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
 #'
 #' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
-#' 
+#'
 #' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a numeric vector
@@ -31,7 +31,7 @@
 #' @seealso \code{\link{plot.cpr_bs}} for plotting the basis,
 #' \code{\link{bsplineD}} for building the basis matrices for the first and
 #' second derivative of a B-spline.
-#' 
+#'
 #' See \code{\link{update_bsplines}} for info on a tool for updating a
 #' \code{cpr_bs} object.  This is a similar method to the
 #' \code{\link[stats]{update}} function from the \code{stats} package.
@@ -92,16 +92,16 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, digits = 2, n = 100) {
   xvec <- seq(min(attr(x, "bknots")), max(attr(x, "bknots")), length = n)
   bmat <- bsplines(xvec, iknots = attr(x, "iknots"), order = attr(x, "order"))
-  .data <- tidyr::gather_(cbind(as.data.frame(bmat), "x" = xvec),
-                          key_col = "spline",
-                          value_col = "value",
-                          gather_cols = paste0("V", seq(1, ncol(x), by = 1L)))
+  plot_data <- do.call(tidyr::gather,
+                       list(data = cbind(as.data.frame(bmat), "x" = xvec),
+                            key = "spline", value = "value",
+                            paste0("V", seq(1, ncol(x), by = 1L))))
 
-  .data$spline <- factor(as.numeric(gsub("V(\\d+)", "\\1", .data$spline)))
-  .data <- dplyr::tbl_df(.data)
+  plot_data$spline <- factor(as.numeric(gsub("V(\\d+)", "\\1", plot_data$spline)))
+  plot_data <- dplyr::tbl_df(plot_data)
 
   g <-
-    ggplot2::ggplot(.data) +
+    ggplot2::ggplot(plot_data) +
     ggplot2::theme_bw() +
     ggplot2::aes_string(x = "x", y = "value") +
     ggplot2::geom_line() +
