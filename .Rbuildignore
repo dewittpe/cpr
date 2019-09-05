@@ -12,3 +12,5 @@
 ^cpr-hex.png$
 ^cpr-hex-small.png$
 ^README.md$
+.document.Rout
+.install_dev_deps.Rout
