@@ -58,8 +58,6 @@
   general concepts.
 }
 
-\tableofcontents
-
 \section*{Preface}
 Options and packages used in the following examples.
 <<>>=
