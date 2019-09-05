@@ -1,6 +1,6 @@
 Package: cpr
 Title: Control Polygon Reduction
-Version: 0.2.3.9002
+Version: 0.2.3.9003
 Authors@R:
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre")),
       person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),
@@ -35,5 +35,5 @@ Suggests:
     qwraps2,
     testthat,
     rmarkdown
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1.9000
 VignetteBuilder: knitr

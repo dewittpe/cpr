@@ -36,7 +36,7 @@ the influence of each internal knot.}
 Run the Control Net Reduction Algorithm.
 }
 \details{
-\code{cnr} runs the control net reduction algorithm.
+\code{cnr} runs the control net reduction algorithm.  
 
 \code{keep} will keep the regression fit as part of the \code{cnr\_cp} object
 for models with up to and including keep fits.  For example, if \code{keep =
