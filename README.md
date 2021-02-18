@@ -2,7 +2,7 @@ cpr: Control Polygon Reduction <img src="cpr-hex-small.png" align="right"/>
 =====================================================================
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
-[![Build Status](https://travis-ci.org/dewittpe/cpr.svg?branch=master)](https://travis-ci.org/dewittpe/cpr)
+[![R-CMD-check](https://github.com/dewittpe/cpr/workflows/R-CMD-check/badge.svg)](https://github.com/dewittpe/cpr/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/dewittpe/cpr/master.svg)](https://codecov.io/github/dewittpe/cpr?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cpr)](https://cran.r-project.org/package=cpr)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cpr)](http://www.r-pkg.org/pkg/cpr)
