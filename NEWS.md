@@ -1,4 +1,4 @@
-# Version 0.2.3.9001
+# Version 0.2.3.9003
 
 ## New Examples
 * `cpr` has examples
@@ -10,6 +10,7 @@
 
 ## Other Changes
 * Depends on Rcpp >= 0.12.11 to handle registering native routines.
+* Moves rgl from `Imports` to `Enhances` (re #36)
 
 # Version 0.2.3
 First public release.
@@ -38,7 +39,7 @@ Documentation improvements.
 * `plot.cpr_cn` lets the user plot 2D surfaces for tensor product surfaces.  The
   plots are for the whole surface if the input is a 2D tensor product, and is a
   2D slice evaluated at a given value for other margins for 3+ dimensional
-  tensor products.  
+  tensor products.
 * `is.` a collection of `is.cpr_cp`, `is.cpr_bs`, ... functions added.
 * The dataset `spdg` has been added to the package.
 
@@ -47,7 +48,7 @@ Documentation improvements.
 
 # Version 0.2.0
 This version has a fairly polished set of tools for b-splines, cpr, and cnr.
-This version seems to be in a good place for use in the three major papers 
+This version seems to be in a good place for use in the three major papers
 
 1. Methods 1: uni-variable functions,
 2. Methods 2: multi-variable functions, and
@@ -130,7 +131,7 @@ Biometric Society, Student paper competition.  The conference will be held 10 -
 
 * `plot.cpr_bs` correctly displays the indices for the knot sequence.
 
-## End User Visible changes: 
+## End User Visible changes:
 * The knot insertion matrix **W** is accessible to the end user in a new way.
   Names of functions in `boehem.cpp` are cleaner.
 * `plot.cpr_cpr` allows user to select either control polygons or sums of

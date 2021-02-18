@@ -21,7 +21,6 @@ Imports:
     magrittr,
     plot3D,
     Rcpp (>= 0.12.13),
-    rgl,
     rlang,
     tibble,
     tidyr
@@ -36,5 +35,7 @@ Suggests:
     qwraps2,
     testthat,
     rmarkdown
+Enhances:
+    rgl
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr

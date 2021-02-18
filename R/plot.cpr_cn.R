@@ -18,7 +18,7 @@
 #' "lines", back = "lines"} for the \code{net_args} and
 #' \code{col = "grey20", front = "fill", back = "lines"} for the
 #' \code{surface_args}.
-#' 
+#'
 #' For \code{plot3D} graphics there are no defaults values for the
 #' \code{net_args} and \code{surface_args}.
 #'
@@ -27,17 +27,17 @@
 #' @param x a \code{cpr_cn} object
 #' @param ... common arguments which would be
 #' used for both the plot of the control net and the surface, e.g., xlim, ylim,
-#' zlim.  
+#' zlim.
 #' @param xlab,ylab,zlab labels for the axes.
-#' @param show_net logical, show the control net 
-#' @param show_surface logical, show the tensor product surface 
+#' @param show_net logical, show the control net
+#' @param show_surface logical, show the tensor product surface
 #' @param get_surface_args a list of arguments passed to the
 #' \code{\link{get_surface}} call.  This call generates the needed data sets
-#' used in the plotting.  
+#' used in the plotting.
 #' @param net_args arguments to be used explicitly for the control net.  Ignored
 #' if \code{show_net = FALSE}.
 #' @param surface_args arguments to be used explicitly for the surface.  Ignored
-#' if \code{show_surface = FALSE}.  
+#' if \code{show_surface = FALSE}.
 #' @param rgl If \code{TRUE}, the default, generate use \code{rgl::persp3d} to
 #' generate the graphics.  If \code{FALSE}, use \code{plot3D::persp3D} to
 #' generate the graphics.
@@ -56,7 +56,7 @@
 #'
 #' @method plot cpr_cn
 #' @export
-plot.cpr_cn <- function(x, ..., 
+plot.cpr_cn <- function(x, ...,
                         xlab = "", ylab = "", zlab = "",
                         show_net = TRUE,
                         show_surface = FALSE,
@@ -72,6 +72,16 @@ plot.cpr_cn <- function(x, ...,
     get_surface_args$x <- x
   }
   .data <- do.call(get_surface, get_surface_args)
+
+  if (rgl & requireNamespace("rgl", quietly = TRUE)) {
+    plotter <- match.fun(rgl::persp3d)
+  } else {
+    if (rgl) {
+      rgl <- FALSE
+      warning("requireNamespace('rgl') is FALSE - reverting to plot3D::persp3D")
+    }
+    plotter <- match.fun(plot3D::persp3D)
+  }
 
   if (missing(net_args)) {
     if (rgl) {
@@ -93,14 +103,8 @@ plot.cpr_cn <- function(x, ...,
   net_args$ylab <- surface_args$ylab <- ylab
   net_args$zlab <- surface_args$zlab <- zlab
 
-  if (rgl) {
-    plotter <- match.fun(rgl::persp3d)
-  } else {
-    plotter <- match.fun(plot3D::persp3D)
-  }
-
   if (show_net) {
-    do.call(plotter, 
+    do.call(plotter,
             c(list(x = unique(.data$cn[[1]]),
                    y = unique(.data$cn[[2]]),
                    z = matrix(.data$cn[[3]],
@@ -108,17 +112,17 @@ plot.cpr_cn <- function(x, ...,
                               ncol = dplyr::n_distinct(.data$cn[[2]]))),
               net_args))
     if (show_surface) {
-      do.call(plotter, 
+      do.call(plotter,
               c(list(x = unique(.data$surface[[1]]),
                      y = unique(.data$surface[[2]]),
                      z = matrix(.data$surface[[3]],
                                 nrow = dplyr::n_distinct(.data$surface[[1]]),
                                 ncol = dplyr::n_distinct(.data$surface[[2]]))),
-                surface_args, 
+                surface_args,
                 add = TRUE))
     }
   } else if (!show_net && show_surface) {
-      do.call(plotter, 
+      do.call(plotter,
               c(list(x = unique(.data$surface[[1]]),
                      y = unique(.data$surface[[2]]),
                      z = matrix(.data$surface[[3]],
