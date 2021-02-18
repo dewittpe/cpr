@@ -12,8 +12,7 @@ cn(x, ...)
 
 \method{cn}{cpr_bt}(x, theta, ...)
 
-\method{cn}{formula}(formula, data, method = stats::lm, ...,
-  keep_fit = FALSE, check_rank = TRUE)
+\method{cn}{formula}(formula, data, method = stats::lm, ..., keep_fit = FALSE, check_rank = TRUE)
 
 \method{print}{cpr_cn}(x, ...)
 

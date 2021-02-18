@@ -4,8 +4,12 @@
 \alias{influence_weights}
 \title{Influence Weights}
 \usage{
-influence_weights(x, p = 2, margin = seq_along(x$bspline_list),
-  n_polycoef = 20L)
+influence_weights(
+  x,
+  p = 2,
+  margin = seq_along(x$bspline_list),
+  n_polycoef = 20L
+)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} or \code{cpr_cn} object}

@@ -4,9 +4,19 @@
 \alias{plot.cpr_cn}
 \title{Plotting Control Nets}
 \usage{
-\method{plot}{cpr_cn}(x, ..., xlab = "", ylab = "", zlab = "",
-  show_net = TRUE, show_surface = FALSE, get_surface_args, net_args,
-  surface_args, rgl = TRUE)
+\method{plot}{cpr_cn}(
+  x,
+  ...,
+  xlab = "",
+  ylab = "",
+  zlab = "",
+  show_net = TRUE,
+  show_surface = FALSE,
+  get_surface_args,
+  net_args,
+  surface_args,
+  rgl = TRUE
+)
 }
 \arguments{
 \item{x}{a \code{cpr_cn} object}

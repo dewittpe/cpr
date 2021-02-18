@@ -4,7 +4,8 @@
 \name{spdg}
 \alias{spdg}
 \title{Simulated Prognanediol-glucuronid (PDG) Data}
-\format{a \code{data.frame}, carries the \code{\link[dplyr]{tbl_df}} and
+\format{
+a \code{data.frame}, carries the \code{\link[dplyr]{tbl_df}} and
 \code{\link[dplyr]{tbl}} classes from \code{dplyr}. Variables in the data
 set:
 \describe{
@@ -21,7 +22,8 @@ set:
  \item{day}{A scaled day-of-cycle between [-1, 1] with 0 for the DLT.  See
  Details}
  \item{pdg}{A simulated PDG value}
-}}
+}
+}
 \source{
 This is simulated data.  To see the script that generated the data
 set please visit \url{https://github.com/dewittpe/cpr} and look at the
