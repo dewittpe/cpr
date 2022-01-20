@@ -7,10 +7,6 @@
 # Goal: create the spdg data.frame
 #
 ################################################################################
-library(MASS)
-library(dplyr)
-library(cpr)
-
 set.seed(42)
 
 # number of subjects to simulate
@@ -33,14 +29,14 @@ agettm <- with(agettm_kernel,
                {
                  out <- expand.grid(age = x, ttm = y)
                  out$z <- c(z)
-                 dplyr::as_data_frame(out)
+                 as.data.frame(out)
                })
 
 # Need to remove centers out of the convex hull from agettm
 agettm <- agettm[which(sccm::is_in(agettm$age, agettm$ttm, agettm_sccm_ch) == 1), ]
 
 index <- sample(seq_along(agettm$z), SUBJECTS - nrow(agettm_convexhull), replace = TRUE, prob = agettm$z)
-spdg <- dplyr::data_frame(age = agettm$age[index], ttm = agettm$ttm[index])
+spdg <- data.frame(age = agettm$age[index], ttm = agettm$ttm[index])
 
 for(i in 1:nrow(spdg)) {
   repeat {
@@ -56,13 +52,16 @@ for(i in 1:nrow(spdg)) {
 }
 
 spdg <- rbind(spdg, agettm_convexhull)
-spdg <- tibble::add_column(spdg, id = 1:SUBJECTS, .before = 1)
+spdg <- cbind(data.frame(id = 1:SUBJECTS), spdg)
+
 spdg$ethnicity <-
   sample(c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"),
          size    = SUBJECTS,
          replace = TRUE,
-         prob    = c(32, 18, 20, 7, 25)) %>%
-  factor(., levels = c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"))
+         prob    = c(32, 18, 20, 7, 25))
+
+spdg$ethnicity <-
+  factor(spdg$ethnicity, levels = c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"))
 
 # Check, visual check, swan vs spdg
 # par(mfrow = c(2, 2))
@@ -92,30 +91,33 @@ spdg$bmi <-
 index <- sample(seq_along(flll_kernel$z), SUBJECTS, replace = TRUE, prob = flll_kernel$z)
 flll  <- flll_kernel[index, c("fl", "ll")]
 flll  <- 
-  Map(function(id, dfd) { dplyr::data_frame(id = id, day_from_dlt = dfd) },
+  Map(function(id, dfd) { data.frame(id = id, day_from_dlt = dfd) },
       id = 1:SUBJECTS,
-      dfd = apply(flll, 1, function(x) seq(x[1], x[2], by = 1))) %>%
-  dplyr::bind_rows()
+      dfd = apply(flll, 1, function(x) seq(x[1], x[2], by = 1)))
+flll <- do.call(rbind, flll)
 
-spdg <- dplyr::full_join(spdg, flll, by = "id")
+spdg <- merge(spdg, flll, all = TRUE, by = "id")
 
-spdg %<>%
-  dplyr::group_by(id) %>%
-  dplyr::mutate(day_of_cycle = seq_along(day_from_dlt),
-                day = dplyr::if_else(day_from_dlt > 0, day_from_dlt / (max(day_from_dlt)), day_from_dlt / (-min(day_from_dlt)))
-                ) %>%
-  dplyr::ungroup()
-
-dplyr::glimpse(spdg)
-summary(spdg)
+spdg <- split(spdg, f = spdg$id)
+spdg <-
+  lapply(spdg, function(x) { 
+           x$day_of_cycle <- seq_along(x$day_from_dlt)
+           x$day <- NA_real_
+           idx <- which(x$day_from_dlt > 0)
+           x$day[idx] <- x$day_from_dlt[idx] / max(x$day_from_dlt)
+           idx <- which(x$day_from_dlt <= 0)
+           x$day[idx] <- x$day_from_dlt[idx] / -min(x$day_from_dlt)
+           x}
+  )
+spdg <- do.call(rbind, spdg)
 
 ################################################################################
 # the model
 
 X <- model.matrix( ~ 0 + 
-                  btensor(list(day, age, ttm, bmi), 
-                          iknots = list(c(-0.0384, 0.0705), numeric(0), numeric(0), numeric(0)),
-                          order  = list(3, 2, 2, 2)) + 
+                  cpr::btensor(list(day, age, ttm, bmi), 
+                               iknots = list(c(-0.0384, 0.0705), numeric(0), numeric(0), numeric(0)),
+                               order  = list(3, 2, 2, 2)) + 
                   I(ethnicity == "Black") + 
                   I(ethnicity == "Chinese") + 
                   I(ethnicity == "Hispanic") +
@@ -129,8 +131,10 @@ rint  <- rep(runif(SUBJECTS, -0.5, 0.5), times = table(spdg$id))
 
 spdg$pdg <- 10^(apply(cbind(mu, error), 1, function(x) rnorm(1, x[1], 15 * x[2])) + rint)
 
+################################################################################
+# Write out the data
+save(spdg, file = "../data/spdg.rda")
 
-devtools::use_data(spdg, overwrite = TRUE)
 
 ################################################################################
 # end of file

@@ -1,7 +1,7 @@
 
-R version 3.3.3 (2017-03-06) -- "Another Canoe"
-Copyright (C) 2017 The R Foundation for Statistical Computing
-Platform: x86_64-pc-linux-gnu (64-bit)
+R version 4.1.2 (2021-11-01) -- "Bird Hippie"
+Copyright (C) 2021 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -26,25 +26,6 @@ Type 'q()' to quit R.
 > # Goal: create the spdg data.frame
 > #
 > ################################################################################
-> library(MASS)
-> library(dplyr)
-
-Attaching package: ‘dplyr’
-
-The following object is masked from ‘package:MASS’:
-
-    select
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-> library(cpr)
-> 
 > set.seed(42)
 > 
 > # number of subjects to simulate
@@ -68,14 +49,14 @@ The following objects are masked from ‘package:base’:
 +                {
 +                  out <- expand.grid(age = x, ttm = y)
 +                  out$z <- c(z)
-+                  dplyr::as_data_frame(out)
++                  as.data.frame(out)
 +                })
 > 
 > # Need to remove centers out of the convex hull from agettm
 > agettm <- agettm[which(sccm::is_in(agettm$age, agettm$ttm, agettm_sccm_ch) == 1), ]
 > 
 > index <- sample(seq_along(agettm$z), SUBJECTS - nrow(agettm_convexhull), replace = TRUE, prob = agettm$z)
-> spdg <- dplyr::data_frame(age = agettm$age[index], ttm = agettm$ttm[index])
+> spdg <- data.frame(age = agettm$age[index], ttm = agettm$ttm[index])
 > 
 > for(i in 1:nrow(spdg)) {
 +   repeat {
@@ -91,13 +72,16 @@ The following objects are masked from ‘package:base’:
 + }
 > 
 > spdg <- rbind(spdg, agettm_convexhull)
-> spdg <- tibble::add_column(spdg, id = 1:SUBJECTS, .before = 1)
+> spdg <- cbind(data.frame(id = 1:SUBJECTS), spdg)
+> 
 > spdg$ethnicity <-
 +   sample(c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"),
 +          size    = SUBJECTS,
 +          replace = TRUE,
-+          prob    = c(32, 18, 20, 7, 25)) %>%
-+   factor(., levels = c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"))
++          prob    = c(32, 18, 20, 7, 25))
+> 
+> spdg$ethnicity <-
++   factor(spdg$ethnicity, levels = c("Caucasian", "Black", "Chinese", "Hispanic", "Japanese"))
 > 
 > # Check, visual check, swan vs spdg
 > # par(mfrow = c(2, 2))
@@ -127,54 +111,33 @@ The following objects are masked from ‘package:base’:
 > index <- sample(seq_along(flll_kernel$z), SUBJECTS, replace = TRUE, prob = flll_kernel$z)
 > flll  <- flll_kernel[index, c("fl", "ll")]
 > flll  <- 
-+   Map(function(id, dfd) { dplyr::data_frame(id = id, day_from_dlt = dfd) },
++   Map(function(id, dfd) { data.frame(id = id, day_from_dlt = dfd) },
 +       id = 1:SUBJECTS,
-+       dfd = apply(flll, 1, function(x) seq(x[1], x[2], by = 1))) %>%
-+   dplyr::bind_rows()
++       dfd = apply(flll, 1, function(x) seq(x[1], x[2], by = 1)))
+> flll <- do.call(rbind, flll)
 > 
-> spdg <- dplyr::full_join(spdg, flll, by = "id")
+> spdg <- merge(spdg, flll, all = TRUE, by = "id")
 > 
-> spdg %<>%
-+   dplyr::group_by(id) %>%
-+   dplyr::mutate(day_of_cycle = seq_along(day_from_dlt),
-+                 day = dplyr::if_else(day_from_dlt > 0, day_from_dlt / (max(day_from_dlt)), day_from_dlt / (-min(day_from_dlt)))
-+                 ) %>%
-+   dplyr::ungroup()
-> 
-> dplyr::glimpse(spdg)
-Observations: 24,730
-Variables: 8
-$ id           <int> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
-$ age          <dbl> 49.33751, 49.33751, 49.33751, 49.33751, 49.33751, 49.3...
-$ ttm          <dbl> -5.191971, -5.191971, -5.191971, -5.191971, -5.191971,...
-$ ethnicity    <fctr> Hispanic, Hispanic, Hispanic, Hispanic, Hispanic, His...
-$ bmi          <dbl> 36.17436, 36.17436, 36.17436, 36.17436, 36.17436, 36.1...
-$ day_from_dlt <dbl> -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7...
-$ day_of_cycle <int> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,...
-$ day          <dbl> -1.00000000, -0.87500000, -0.75000000, -0.62500000, -0...
-> summary(spdg)
-       id             age             ttm             ethnicity   
- Min.   :  1.0   Min.   :45.92   Min.   :-8.055   Caucasian:7419  
- 1st Qu.:215.0   1st Qu.:47.60   1st Qu.:-6.289   Black    :5040  
- Median :432.0   Median :48.83   Median :-4.971   Chinese  :4256  
- Mean   :431.8   Mean   :48.99   Mean   :-4.952   Hispanic :1632  
- 3rd Qu.:648.0   3rd Qu.:50.25   3rd Qu.:-3.615   Japanese :6383  
- Max.   :864.0   Max.   :52.94   Max.   :-1.821                   
-      bmi         day_from_dlt       day_of_cycle        day          
- Min.   :15.80   Min.   :-38.0000   Min.   : 1.00   Min.   :-1.00000  
- 1st Qu.:22.38   1st Qu.: -7.0000   1st Qu.: 8.00   1st Qu.:-0.53333  
- Median :26.29   Median :  0.0000   Median :15.00   Median : 0.00000  
- Mean   :27.64   Mean   : -0.6318   Mean   :15.22   Mean   :-0.01148  
- 3rd Qu.:31.31   3rd Qu.:  7.0000   3rd Qu.:22.00   3rd Qu.: 0.50000  
- Max.   :61.64   Max.   : 34.0000   Max.   :49.00   Max.   : 1.00000  
+> spdg <- split(spdg, f = spdg$id)
+> spdg <-
++   lapply(spdg, function(x) { 
++            x$day_of_cycle <- seq_along(x$day_from_dlt)
++            x$day <- NA_real_
++            idx <- which(x$day_from_dlt > 0)
++            x$day[idx] <- x$day_from_dlt[idx] / max(x$day_from_dlt)
++            idx <- which(x$day_from_dlt <= 0)
++            x$day[idx] <- x$day_from_dlt[idx] / -min(x$day_from_dlt)
++            x}
++   )
+> spdg <- do.call(rbind, spdg)
 > 
 > ################################################################################
 > # the model
 > 
 > X <- model.matrix( ~ 0 + 
-+                   btensor(list(day, age, ttm, bmi), 
-+                           iknots = list(c(-0.0384, 0.0705), numeric(0), numeric(0), numeric(0)),
-+                           order  = list(3, 2, 2, 2)) + 
++                   cpr::btensor(list(day, age, ttm, bmi), 
++                                iknots = list(c(-0.0384, 0.0705), numeric(0), numeric(0), numeric(0)),
++                                order  = list(3, 2, 2, 2)) + 
 +                   I(ethnicity == "Black") + 
 +                   I(ethnicity == "Chinese") + 
 +                   I(ethnicity == "Hispanic") +
@@ -188,9 +151,10 @@ $ day          <dbl> -1.00000000, -0.87500000, -0.75000000, -0.62500000, -0...
 > 
 > spdg$pdg <- 10^(apply(cbind(mu, error), 1, function(x) rnorm(1, x[1], 15 * x[2])) + rint)
 > 
+> ################################################################################
+> # Write out the data
+> save(spdg, file = "../data/spdg.rda")
 > 
-> devtools::use_data(spdg, overwrite = TRUE)
-Saving spdg as spdg.rda to /home/dewittp/dissertation/cpr/data
 > 
 > ################################################################################
 > # end of file
@@ -198,4 +162,4 @@ Saving spdg as spdg.rda to /home/dewittp/dissertation/cpr/data
 > 
 > proc.time()
    user  system elapsed 
-  2.400   0.456   2.371 
+  1.271   0.152   1.438 

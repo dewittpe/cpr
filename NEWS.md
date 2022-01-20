@@ -1,4 +1,4 @@
-# Version 0.2.3.9003
+# Version 0.2.3.9004
 
 ## New Examples
 * `cpr` has examples
@@ -11,6 +11,10 @@
 ## Other Changes
 * Depends on Rcpp >= 0.12.11 to handle registering native routines.
 * Moves rgl from `Imports` to `Enhances` (re #36)
+* Refactoring base code to eliminate the use of dplyr, tidyr, tibble, etc.
+  Focus on base R methods to reduce install dependencies and improve long term
+  stability of the package.
+* Require R > 3.5.0
 
 # Version 0.2.3
 First public release.
