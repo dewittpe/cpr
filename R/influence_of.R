@@ -14,7 +14,7 @@
 #' @return A \code{cpr_influence_of} object.  This is a list with the following
 #' elements:
 #' \describe{
-#'   \item{weight}{A \code{tibble} (data.frame) showing the influence weight and
+#'   \item{weight}{A \code{data.frame} showing the influence weight and
 #'   relative rank of each internal knot}
 #'   \item{orig_cp}{The original control polygon}
 #'   \item{indices}{The indices of the internal knots assessed.}
@@ -84,11 +84,11 @@ influence_of.cpr_cp <- function(x, indices, ...) {
   reinserted_cp <- Map(cp, theta = reinserted_theta,
                        MoreArgs = list(x = orig_bmat))
 
-  weight <- tibble::add_column(influence_weights(x, ...), 
-                               index = valid_indices,
-                               .before = 1)
-  weight <- dplyr::filter_(weight, .dots = ~ index %in% indices)
-  weight <- dplyr::mutate_(weight, .dots = stats::setNames(list(~ rank(w)), "rank"))
+  weight <- data.frame(index = valid_indices)
+  weight <- cbind(weight, influence_weights(x, ...))
+
+  weight <- subset(weight, weight$index %in% indices)
+  weight$rank <- rank(weight$w)
 
   out <- list(weight = weight, 
               orig_cp = x,
