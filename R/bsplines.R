@@ -92,13 +92,11 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, digits = 2, n = 100) {
   xvec <- seq(min(attr(x, "bknots")), max(attr(x, "bknots")), length = n)
   bmat <- bsplines(xvec, iknots = attr(x, "iknots"), order = attr(x, "order"))
-  plot_data <- do.call(tidyr::gather,
-                       list(data = cbind(as.data.frame(bmat), "x" = xvec),
-                            key = "spline", value = "value",
-                            paste0("V", seq(1, ncol(x), by = 1L))))
 
-  plot_data$spline <- factor(as.numeric(gsub("V(\\d+)", "\\1", plot_data$spline)))
-  plot_data <- dplyr::tbl_df(plot_data)
+  # reshape from wide to long and from matrix to data.frame
+  plot_data <- utils::stack(as.data.frame(bmat))
+  names(plot_data) <- c("value", "spline")
+  plot_data <- cbind(plot_data, data.frame(x = rep(xvec, times = ncol(bmat))))
 
   g <-
     ggplot2::ggplot(plot_data) +
@@ -173,14 +171,14 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 #'
 #' # plot data
 #' plot_data <-
-#'   dplyr::data_frame(x = xvec,
-#'                     Spline = as.numeric(bmat %*% theta),
-#'                     "First Derivative" = as.numeric(bmat1 %*% theta),
-#'                     "Second Derivative" = as.numeric(bmat2 %*% theta))
-#' plot_data <- tidyr::gather(plot_data, key = key, value = value, -x)
+#'   data.frame(Spline            = as.numeric(bmat %*% theta),
+#'              First_Derivative  = as.numeric(bmat1 %*% theta),
+#'              Second_Derivative = as.numeric(bmat2 %*% theta))
+#' plot_data <- stack(plot_data)
+#' plot_data <- cbind(plot_data, data.frame(x = xvec))
 #'
 #' ggplot2::ggplot(plot_data) +
-#' ggplot2::aes(x = x, y = value, color = key) +
+#' ggplot2::aes(x = x, y = values, color = ind) +
 #' ggplot2::geom_line() +
 #' ggplot2::geom_hline(yintercept = 0) +
 #' ggplot2::geom_vline(xintercept = iknots, linetype = 3)

@@ -1,6 +1,6 @@
 Package: cpr
 Title: Control Polygon Reduction
-Version: 0.2.3.9003
+Version: 0.2.3.9004
 Authors@R:
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre")),
       person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),
@@ -22,8 +22,7 @@ Imports:
     plot3D,
     Rcpp (>= 0.12.13),
     rlang,
-    tibble,
-    tidyr
+    tibble
 LinkingTo: Rcpp (>= 0.12.13),
     RcppArmadillo
 Suggests:
@@ -34,8 +33,7 @@ Suggests:
     Matrix,
     qwraps2,
     testthat,
-    rmarkdown
-Enhances:
+    rmarkdown,
     rgl
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
