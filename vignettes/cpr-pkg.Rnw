@@ -842,8 +842,8 @@ The arguments for this function are
 A simple example, fitting the sine function with a cubic B-spline with ten
 internal knots, is below.
 <<calling_cp.formula>>=
-dat <- tibble::data_frame(x = seq(-pi, pi, length = 200),
-                          y = sin(x))
+dat <- data.frame(x = seq(-pi, pi, length = 200))
+dat$y <- sin(dat$x)
 eg_cp2 <- cp(y ~ bsplines(x = x, df = 14), data = dat)
 @
 
