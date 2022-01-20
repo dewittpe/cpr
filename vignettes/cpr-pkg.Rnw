@@ -82,6 +82,7 @@ library(splines)
 library(lme4)
 library(cpr)
 library(plot3D)
+library(dplyr)
 library(ggplot2)
 library(gridExtra)
 
@@ -673,8 +674,9 @@ regression models.
 \pkg{cpr} relies on \pkg{Rcpp}~\citep{eddelbuettel2011rcpp,
 eddelbuettel2013seamless} and
 \pkg{RcppArmadillo}~\citep{eddelbuettel2014rcpparmadillo} to gain computational
-efficiency for several functions and matrix arithmetic.  Two-dimensional
-graphics are generated via
+efficiency for several functions and matrix arithmetic.  Heavy reliance on
+\pkg{dplyr}~\citep{wickham2016dplyr} and \pkg{tidyr}~\citep{wickham2016tidyr}
+for data manipulation.  Two-dimensional graphics are generated via
 \pkg{ggplot2}~\citep{wickham2009ggplot2}. Three-dimensional graphics are
 generated using either \pkg{rgl}~\citep{adler2016rgl} for dynamic iterative
 graphics, or \pkg{plot3D}~\citep{r-plot3D} of static graphics.
@@ -916,7 +918,7 @@ measured from the urine samples.
 
 <<>>=
 str(spdg)
-length(unique(spdg$id))
+dplyr::n_distinct(spdg$id)
 @
 
 \begin{figure}
@@ -935,7 +937,7 @@ ggplot() +
 \end{figure}
 
 The \code{spdg} data set contains \code{pdg} values for one full cycle from
-\Sexpr{length(unique(spdg$id))} subjects.  Subject level variables are
+\Sexpr{dplyr::n_distinct(spdg$id)} subjects.  Subject level variables are
 \code{age} in years, time-to-menopause, \code{ttm}, for years before reaching
 menopause, \code{ethnicity}, and body-mass-index, \code{bmi}.
 \code{day_of_cycle} are positive integers and \code{day_from_dlt} give the day
