@@ -108,16 +108,16 @@ plot.cpr_cn <- function(x, ...,
             c(list(x = unique(.data$cn[[1]]),
                    y = unique(.data$cn[[2]]),
                    z = matrix(.data$cn[[3]],
-                              nrow = dplyr::n_distinct(.data$cn[[1]]),
-                              ncol = dplyr::n_distinct(.data$cn[[2]]))),
+                              nrow = length(unique(.data$cn[[1]])),
+                              ncol = length(unique(.data$cn[[2]])))),
               net_args))
     if (show_surface) {
       do.call(plotter,
               c(list(x = unique(.data$surface[[1]]),
                      y = unique(.data$surface[[2]]),
                      z = matrix(.data$surface[[3]],
-                                nrow = dplyr::n_distinct(.data$surface[[1]]),
-                                ncol = dplyr::n_distinct(.data$surface[[2]]))),
+                                nrow = length(unique(.data$surface[[1]])),
+                                ncol = length(unique(.data$surface[[2]])))),
                 surface_args,
                 add = TRUE))
     }
@@ -126,8 +126,8 @@ plot.cpr_cn <- function(x, ...,
               c(list(x = unique(.data$surface[[1]]),
                      y = unique(.data$surface[[2]]),
                      z = matrix(.data$surface[[3]],
-                                nrow = dplyr::n_distinct(.data$surface[[1]]),
-                                ncol = dplyr::n_distinct(.data$surface[[2]]))),
+                                nrow = length(unique(.data$surface[[1]])),
+                                ncol = length(unique(.data$surface[[2]])))),
                 surface_args))
   } else {
     warning("Nothing to plot.", call. = FALSE)

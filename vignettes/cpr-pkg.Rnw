@@ -918,7 +918,7 @@ measured from the urine samples.
 
 <<>>=
 str(spdg)
-dplyr::n_distinct(spdg$id)
+length(unique(spdg$id))
 @
 
 \begin{figure}
@@ -937,7 +937,7 @@ ggplot() +
 \end{figure}
 
 The \code{spdg} data set contains \code{pdg} values for one full cycle from
-\Sexpr{dplyr::n_distinct(spdg$id)} subjects.  Subject level variables are
+\Sexpr{length(unique(spdg$id))} subjects.  Subject level variables are
 \code{age} in years, time-to-menopause, \code{ttm}, for years before reaching
 menopause, \code{ethnicity}, and body-mass-index, \code{bmi}.
 \code{day_of_cycle} are positive integers and \code{day_from_dlt} give the day

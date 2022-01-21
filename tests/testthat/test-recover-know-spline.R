@@ -1,4 +1,4 @@
-recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100, ...) { 
+recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100, ...) {
 
   if (missing(seed)) {
     seed <- round(stats::runif(1) * 1e9)
@@ -16,8 +16,8 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
 
   true_cp <- cp(true_bmat, true_theta, ...)
 
-  s_data <- dplyr::data_frame(x = xvec, 
-                              y = as.numeric(true_bmat %*% matrix(true_theta, ncol = 1)))
+  s_data <- data.frame(x = xvec,
+                       y = as.numeric(true_bmat %*% matrix(true_theta, ncol = 1)))
 
   initial_iknots <- sort(c(stats::runif(start_with - n_iknots), true_iknots))
 
@@ -29,12 +29,11 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
 
   initial_cp$keep_fit
 
-
   cpr_run <- cpr(initial_cp, progress = FALSE)
 
   found_cp <- cpr_run[[n_iknots + 1L]]
 
-  out <- 
+  out <-
     list(recovered  = isTRUE(all.equal(as.matrix(true_cp$cp), as.matrix(found_cp$cp))),
          call       = match.call(),
          n_iknots   = n_iknots,
@@ -46,13 +45,11 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
          seed       = seed
          )
 
-  # class(out) <- c("cprtesting_recover_spline", class(out))
   out
 }
-# recover_spline(start_with = 40L, progress = FALSE)$recovered
 
 test_that("A known spline can be recovered.",
           {
             set.seed(42)
-            expect_true(recover_spline(start_with = 40L, progress = FALSE)$recovered) 
+            expect_true(recover_spline(start_with = 40L, progress = FALSE)$recovered)
           })
