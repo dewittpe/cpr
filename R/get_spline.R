@@ -39,19 +39,19 @@
 #'
 #' @examples
 #' data(spdg, package = "cpr")
-#' 
+#'
 #' ## Extract the control polygon and spline for plotting.  We'll use base R
 #' ## graphics for this example.
 #' a_cp <- cp(pdg ~ bsplines(day, df = 10), data = spdg)
-#' 
+#'
 #' cp_and_spline <- get_spline(a_cp)
 #' plot(cp_and_spline$cp, type = "b")
 #' points(cp_and_spline$spline, type = "l")
 #' grid()
-#' 
+#'
 #' # compare to the cpr:::plot.cpr_cp method
 #' plot(a_cp, show_spline = TRUE)
-#' 
+#'
 #' @export
 get_spline <- function(x, margin = 1, at, n = 100) {
   UseMethod("get_spline")
@@ -62,7 +62,7 @@ get_spline.cpr_cp <- function(x, margin = 1, at, n = 100) {
   xvec <- seq(min(x$bknots), max(x$bknots), length = n)
   bmat <- bsplines(xvec, iknots = x$iknots, bknots = x$bknots, order = x$order)
   out <- list(cp     = x$cp,
-              spline = dplyr::as_data_frame(data.frame(x = xvec, y = as.numeric(bmat %*% x[["cp"]][["theta"]]))))
+              spline = data.frame(x = xvec, y = as.numeric(bmat %*% x[["cp"]][["theta"]])))
   out
 }
 
@@ -73,9 +73,9 @@ get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
     stop("use get_surface when length(margin) > 1.", call. = FALSE)
   }
 
-  if (missing(at)) { 
+  if (missing(at)) {
     at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
-  } 
+  }
 
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
@@ -86,12 +86,12 @@ get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
   tensor <- build_tensor(mbs[-margin])
   thetas <- apply(array(x$cn$theta, dim = dfs), margin, function(x) x)
   marginal_cp <- cp(x$bspline_list[[margin]], t(tensor %*% thetas))
-  get_spline.cpr_cp(marginal_cp) 
+  get_spline.cpr_cp(marginal_cp)
 }
 
 #' Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets
 #'
-#' 
+#'
 #' @param x a \code{cpr_cn} object
 #' @param margin an integer identifying the marginal of the control net to slice
 #' along.  Only used when working \code{x} is a \code{cpr_cn} object.
@@ -105,17 +105,17 @@ get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
 #' @seealso \code{\link{get_spline}}
 #'
 #' @example examples/get_surface.R
-#' 
+#'
 #' @export
 get_surface <- function(x, margin = 1:2, at, n = 100) {
   UseMethod("get_surface")
-} 
+}
 
 #' @export
 get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
-  if (missing(at)) { 
+  if (missing(at)) {
     at <- lapply(lapply(x$bspline_list, attr, which = "bknots"), mean)
-  } 
+  }
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
   iknots <- lapply(x$bspline_list, attr, which = "iknots")
@@ -123,28 +123,28 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
 
   # The control net
   xvecs <- lapply(x$bspline_list, attr, which = "xi_star")
-  xvecs[-margin] <- at[-margin] 
-  net <- do.call(expand.grid, xvecs) 
+  xvecs[-margin] <- at[-margin]
+  net <- do.call(expand.grid, xvecs)
   tensors <- Map(btensor,
-                 x = split(net, row(net)[, 1]), 
+                 x = split(net, row(net)[, 1]),
                  MoreArgs = list(iknots = iknots,
                                  bknots = bknots,
-                                 order = orders)) 
+                                 order = orders))
   net$z <- do.call(c, Map(`%*%`, x = tensors,
-                          MoreArgs = list(y = x$cn$theta))) 
+                          MoreArgs = list(y = x$cn$theta)))
 
   # the surface
   xvecs <- lapply(bknots, function(x) seq(x[1], x[2], length = 100))
-  xvecs[-margin] <- at[-margin] 
-  surface <- do.call(expand.grid, xvecs) 
+  xvecs[-margin] <- at[-margin]
+  surface <- do.call(expand.grid, xvecs)
   tensors <- Map(btensor,
-                 x = split(surface, row(surface)[, 1]), 
+                 x = split(surface, row(surface)[, 1]),
                  MoreArgs = list(iknots = iknots,
                                  bknots = bknots,
-                                 order = orders)) 
+                                 order = orders))
   surface$z <- do.call(c, Map(`%*%`, x = tensors,
                               MoreArgs = list(y = x$cn$theta)))
 
   list(cn      = net[c(margin, ncol(net))],
        surface = surface[c(margin, ncol(net))])
-} 
+}
