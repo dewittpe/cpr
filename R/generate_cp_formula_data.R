@@ -33,7 +33,7 @@ generate_cp_formula_data <- function(f, .data) {
 
   # get a list of the variables and subset the .data
   vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
-  data_nobsplines_nobars <- dplyr::select_(.data, .dots = vars_nobsplines_nobars)
+  data_nobsplines_nobars <- subset(.data, select = vars_nobsplines_nobars)
 
   # identify any variables which are factors or characters
   factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)}) 
@@ -54,11 +54,12 @@ generate_cp_formula_data <- function(f, .data) {
 
 
   data_nobsplines_nobars <-
-    dplyr::select_(data_nobsplines_nobars, .dots = dplyr::setdiff(names(data_nobsplines_nobars), factors))
+    # dplyr::select_(data_nobsplines_nobars, .dots = dplyr::setdiff(names(data_nobsplines_nobars), factors))
+    subset(data_nobsplines_nobars, select = setdiff(names(data_nobsplines_nobars), factors))
 
   data_bsplines_bars <- 
-    dplyr::select_(.data, .dots = dplyr::setdiff(intersect(all.vars(lme4::subbars(f)), names(.data)),
-                                                 all.vars(f_nobsplines_nobars))) 
+    # dplyr::select_(.data, .dots = dplyr::setdiff(intersect(all.vars(lme4::subbars(f)), names(.data)), all.vars(f_nobsplines_nobars))) 
+    subset(.data, select = setdiff(intersect(all.vars(lme4::subbars(f)), names(.data)), all.vars(f_nobsplines_nobars))) 
 
   # construct the new formula and data set
   if (!is.null(data_factors_only)) { 
@@ -85,7 +86,8 @@ factors_characters_in_f <- function(f, .data) {
 
   # get a list of the variables and subset the .data
   vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
-  data_nobsplines_nobars <- dplyr::select_(.data, .dots = vars_nobsplines_nobars)
+  #data_nobsplines_nobars <- dplyr::select_(.data, .dots = vars_nobsplines_nobars)
+  data_nobsplines_nobars <- subset(.data, select = vars_nobsplines_nobars)
 
   # identify any variables which are factors or characters
   factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)}) 
