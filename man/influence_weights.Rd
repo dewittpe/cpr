@@ -24,7 +24,7 @@ set the number of polynomial coefficients to use in each of the marginal
 calculations.  Ignored for \code{cpr_cp} objects.}
 }
 \value{
-A data_frame with two elements, the internal knots (iknots) and the weights.
+A \code{data.frame} with two elements, the internal knots (iknots) and the weights.
 }
 \description{
 Determine the influence weight of each internal knot on each marginal of a
