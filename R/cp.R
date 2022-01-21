@@ -193,18 +193,9 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = TRUE, color = FALSE, n = 100) {
   nms   <- sapply(match.call()[-1], deparse)
   nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "show_xi", "color", "n"))]
-  cps   <- lapply(list(x, ...), function(x) x$cp)
 
-  rfctr <- lazyeval::interp( ~ factor(row, levels = seq(1, length(cps)), labels = nms))
-  plot_data <- dplyr::mutate_(dplyr::bind_rows(cps, .id = "row"),
-                          .dots = stats::setNames(list(rfctr), "row"))
-  plot_data <- dplyr::rename_(plot_data, .dots =
-                          stats::setNames(list( ~ xi_star, ~ theta),
-                                          c("x", "y")))
-
+  cps       <- lapply(list(x, ...), getElement, "cp")
   knot_data <- lapply(list(x, ...), function(x) {data.frame(x = x$xi)})
-  knot_data <- dplyr::mutate_(dplyr::bind_rows(knot_data, .id = "row"),
-                          .dots = stats::setNames(list(rfctr), "row"))
   spline_data <-
     lapply(list(x, ...), function(xx) {
            b <- xx$bknots
@@ -215,11 +206,24 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
            data.frame(x = seq(b[1], b[2], length = n),
                       y = as.numeric(bmat %*% xx$cp$theta))
                           })
-  spline_data <-
-    dplyr::mutate_(dplyr::bind_rows(spline_data, .id = "row"),
-                   .dots = stats::setNames(list(rfctr), "row"))
 
-  plot_data <- dplyr::bind_rows(plot_data, knot_data, spline_data, .id = 'object')
+  for(i in seq_along(nms)) {
+    cps[[i]]$row <- nms[i]
+    knot_data[[i]]$row <- nms[i]
+    spline_data[[i]]$row <- nms[i]
+  }
+
+  cps <- do.call(rbind, cps)
+  knot_data <- do.call(rbind, knot_data)
+  spline_data <- do.call(rbind, spline_data)
+
+  names(cps) <- c("x", "y", "row")
+
+  cps$row       <- factor(cps$row, levels = nms)
+  knot_data$row <- factor(knot_data$row, levels = nms)
+  spline_data$row <- factor(spline_data$row, levels = nms)
+
+  plot_data <- dplyr::bind_rows(cps, knot_data, spline_data, .id = 'object')
   plot_data$object <- factor(plot_data$object, levels = 1:3, labels = c("cp", "knots", "spline"))
 
   base_plot <-
