@@ -1,4 +1,4 @@
-%\VignetteEngine{knitr::knitr} 
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{The Control Polygon Reduction Package}
 %\VignetteEncoding{UTF-8}
 
@@ -114,7 +114,7 @@ a common tool for approximating functions and surfaces with piece-wise
 polynomials.  The fields of numeric analysis, computer aided graphics and
 design, and statistics, to name only a few, have all benefited from B-splines.
 The richness of the B-spline literature is
-partially due to the 
+partially due to the
 lack of an analytic solution for optimal specification of the knot sequence
 defining the B-splines and the resulting spline functions
 \cite{jupp1978approximation}.
@@ -160,7 +160,7 @@ is provided in Section~\ref{sec:cnr}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Background} \label{sec:background} 
+\section{Background} \label{sec:background}
 Consider the following general model
 \begin{equation}
   \label{eq:cpr_general_model}
@@ -212,11 +212,11 @@ with
   \label{eq:recurrence_relation_null}
   B_{j, k, \bs{\xi}}\left(x\right) = 0 \quad \text{for } x \notin
   \left[\xi_{j}, \xi_{j+k}\right), \quad
-  B_{j, 1, \bs{\xi}}\left(x\right) = 
+  B_{j, 1, \bs{\xi}}\left(x\right) =
   \begin{cases}
     1 & x \in \left[\xi_{j}, \xi_{j+1} \right)\\
     0 & \text{otherwise},
-  \end{cases} 
+  \end{cases}
 \end{equation}
 and
 \begin{equation}
@@ -249,7 +249,7 @@ The spline function, $f \left(x \right) \in \mathbb{S}_{k,
 bmat <- bsplines(x      = seq(0, 6, length = 500),
                  iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
 @
-<<basis_plot, dependson = "eg_bmat", echo = FALSE, results = "hide", fig.width = 2.5, fig.height = 2.5>>=
+<<basis_plot, echo = FALSE, results = "hide", fig.width = 2.5, fig.height = 2.5>>=
 plot(bmat, show_xi = TRUE, show_x = TRUE, color = TRUE, digits = 1) +
   theme(text = element_text(family = "Times", size = 10))
 @
@@ -260,7 +260,7 @@ plot(bmat, show_xi = TRUE, show_x = TRUE, color = TRUE, digits = 1) +
 theta <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
 eg_cp <- cp(bmat, theta)
 @
-<<cp_plot, dependson = "eg_bmat", echo = FALSE, results = "hide", fig.width = 2.5, fig.height = 2.5>>=
+<<cp_plot, echo = FALSE, results = "hide", fig.width = 2.5, fig.height = 2.5>>=
 basis_plot <- plot(bmat, show_x = TRUE, digits = 1)
 
 # cp_plot is the spline and control polygon.  Use the same set up as the basis
@@ -287,7 +287,7 @@ cp_plot0 +
   \bs{\theta}_{\bs{\xi}}$ (solid line), shown within its control polygon
   $\CP_{k, \bs{\xi}, \bs{\theta}_{\bs{\xi}}}$ (dotted line). Both (a) and (b) have the same
   basis, $k = 4$ order spline with knot sequence
-  $\bs{\xi}$ = \{\Sexpr{paste(attr(bmat, "xi"), collapse = ", ")}\}. 
+  $\bs{\xi}$ = \{\Sexpr{paste(attr(bmat, "xi"), collapse = ", ")}\}.
   The abscissae for the control vertices are $\bs{\xi}^{*}$ =
   \{\Sexpr{paste(qwraps2::frmt(attr(bmat, "xi_star"), digits = 2), collapse = ", ")}\} and the
   ordinates are $\bs{\theta}^{T}_{\bs{\xi}}$ = (\Sexpr{paste(theta, collapse = ", ")}).}
@@ -335,7 +335,7 @@ $\bs{B}_{k, \bs{\xi}\cup\bs{\xi}'} \left( \bs{x} \right) \bs{\theta}_{\bs{\xi}
 When refining $\bs{\xi}$ by the insertion of a singleton, $\xi',$ the
 relationship between $\bs{\theta}_{\bs{\xi}}$ and $\bs{\theta}_{\bs{\xi} \cup
 \xi'}$ is defined by the $\left(\card{\bs{\xi}} + 1\right) \times \card{\bs{\xi}}$ lower
-bi-diagonal matrix 
+bi-diagonal matrix
 \begin{equation}
   \label{eq:wmatrix}
   \bs{W}_{k, \bs{\xi}} \left( \xi' \right) =
@@ -375,7 +375,7 @@ $\bs{B}_{k, \bs{\xi}} \left( x \right) \bs{\theta}_{\bs{\xi}}$ then the regressi
 \bs{\theta}_{\bs{\xi}} = \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left( \xi_{j}\right) \bs{\theta}_{\bs{\xi} \backslash \xi_{j}}.
 \end{equation}
 In practice we do not expect this equality to hold.  Instead, we expect to
-observed, under the assumption that $\xi_{j}$ has no influence, 
+observed, under the assumption that $\xi_{j}$ has no influence,
 \begin{equation}
   \bs{\theta}_{\bs{\xi}} = \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
   \bs{\theta}_{\bs{\xi} \backslash \xi_{j}} + \bs{\epsilon}
@@ -383,18 +383,18 @@ observed, under the assumption that $\xi_{j}$ has no influence,
 for some deviations $\bs{\epsilon}.$  As $\bs{\theta}_{\bs{\xi} \backslash
 \xi_{j}}$ is unknown, we may estimate it via least squares, \ie,
 \begin{equation}
-  \bs{\theta}_{\bs{\xi} \backslash \xi_{j}} = 
+  \bs{\theta}_{\bs{\xi} \backslash \xi_{j}} =
   \left(
   \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
   \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
   \right)^{-1}
-  \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right) 
+  \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
   \bs{\theta}_{\bs{\xi}}.
 \end{equation}
 
 \begin{figure}
   \centering
-<<iwp, dependson = c("eg_bmat", "eg_cp.cpr_bs"), echo = FALSE, results = "hide", fig.width = 6, fig.height = 6>>=
+<<iwp, echo = FALSE, results = "hide", fig.width = 6, fig.height = 6>>=
 omit_xi <- influence_of(cp(bmat, theta), c(6, 8))
 
 # influence_data: need to construct this data.frame for plotting.  The version
@@ -402,7 +402,7 @@ omit_xi <- influence_of(cp(bmat, theta), c(6, 8))
 influence_data <-
   bind_rows(rename(eg_cp$cp, x = xi_star, y = theta),
             get_spline(eg_cp)$spline,
-            rename(omit_xi$coarsened_cp[[1]]$cp, x = xi_star, y = theta) , 
+            rename(omit_xi$coarsened_cp[[1]]$cp, x = xi_star, y = theta) ,
             get_spline(omit_xi$coarsened_cp[[1]])$spline,
             rename(omit_xi$coarsened_cp[[2]]$cp, x = xi_star, y = theta),
             get_spline(omit_xi$coarsened_cp[[2]])$spline,
@@ -426,12 +426,12 @@ influence_data <-
             filter(influence_data, object %in% c(1:2, 5:6)),
             filter(influence_data, object %in% c(1:2, 5:6, 9:10)),
             .id = "facets")
- 
+
 influence_data$facets <-
   factor(influence_data$facets,
          levels = 1:4,
          labels = c("Omitting ~ xi[6]", "Reinserting ~ xi[6]",
-                    "Omitting ~ xi[8]", "Reinserting ~ xi[8]")) 
+                    "Omitting ~ xi[8]", "Reinserting ~ xi[8]"))
 
 influence_weight_plot <- plot(bmat, show_x = FALSE)
 influence_weight_plot[[which(names(influence_weight_plot) == "layers")]] <- NULL
@@ -465,13 +465,13 @@ influence_weight_plot %+%
     the original control polygon, the coarsened control polygon, and the control
     polygon after reinsertion of $\xi_j,$ $\CP_{k, \left(\bs{\xi} \backslash \xi_j\right) \cup \xi_j, \bs{\theta}_{\left(\bs{\xi} \backslash \xi_j\right) \cup \xi_j}}.$  The influence
     weights of $\xi_6$ and $\xi_8$ are \Sexpr{omit_xi$weight$w[1]} and
-    \Sexpr{omit_xi$weight$w[2]} respectively.  
+    \Sexpr{omit_xi$weight$w[2]} respectively.
   }
   \label{fig:influence_weight_plots}
 \end{figure}
 
 
-As illustrated in Figure~\ref{fig:influence_weight_plots} the spline 
+As illustrated in Figure~\ref{fig:influence_weight_plots} the spline
 initial spline $\bs{B}_{k, \bs{\xi}}\left(x\right) \bs{\theta}_{\bs{\xi}}$ and $\bs{B}_{k, \bs{\xi}\backslash
 \xi_j}\left( x \right) \bs{\theta}_{\bs{\xi} \backslash \xi_j}$ will differ.  The control polygons help to show the
 differences between these two splines.  A measure of the difference between the
@@ -484,28 +484,28 @@ Again using \eqref{eq:boehm} we find the values of $\bs{\theta}_{\left(\bs{\xi}
 \begin{equation}
   \begin{split}
   \bs{\theta}_{\left( \bs{\xi} \backslash \xi_{j} \right) \cup \xi_{j}} &=
-    \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right) 
+    \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \bs{\theta}_{\bs{\xi} \backslash \xi_{j}} \\
   &=
-    \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right) 
+    \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \left(
     \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \right)^{-1}
-    \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right) 
+    \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \bs{\theta}_{\bs{\xi}}.
   \end{split}
 \end{equation}
 
-By this construction, 
-$\bs{B}_{k, \bs{\xi}\backslash \xi_j]}\left(x\right)\bs{\theta}_{\bs{\xi} \backslash \xi_j} = 
+By this construction,
+$\bs{B}_{k, \bs{\xi}\backslash \xi_j]}\left(x\right)\bs{\theta}_{\bs{\xi} \backslash \xi_j} =
 \bs{B}_{k, \left(\bs{\xi}\backslash \xi_j\right) \cup \xi_j]}\left(x\right)\bs{\theta}_{\left(\bs{\xi} \backslash \xi_j\right) \cup \xi_j}.$
 The control polygons
 $\CP_{k, \bs{\xi}, \bs{\theta}_{\bs{\xi}}}$ and $\CP_{k, \left(\bs{\xi} \backslash \xi_{j} \right) \cup
 \xi_{j}, \bs{\theta}_{\left(\bs{\xi} \backslash \xi_j \right) \cup \xi_j}}$ have the same abscissae but differ in their ordinates.
 The squared length of the residual vector, \ie, the squared Euclidean distance between the ordinates
 $\bs{\theta}_{\bs{\xi}}$ and $\bs{\theta}_{\left( \bs{\xi} \backslash \xi_j
-\right) \cup \xi_j}$ is the influence weight for $\xi_{j}.$  That is, 
+\right) \cup \xi_j}$ is the influence weight for $\xi_{j}.$  That is,
 the influence weight of $\xi_j \in \bs{\xi}$ for $\CP$ is
 \begin{equation}
   \label{eq:influence_weight}
@@ -514,14 +514,14 @@ the influence weight of $\xi_j \in \bs{\xi}$ for $\CP$ is
     &= \left\lVert \bs{\theta}_{\bs{\xi}} - \bs{\theta}_{\left( \bs{\xi} \backslash \xi_j
     \right) \cup \xi_j} \right\rVert_{2} \\
     &=
-    \left\lVert 
-    \left(\bs{I} - 
-    \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right) 
+    \left\lVert
+    \left(\bs{I} -
+    \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \left(
     \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \bs{W}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \right)^{-1}
-    \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right) 
+    \bs{W}^{T}_{k, \bs{\xi}\backslash \xi_{j}}\left(\xi_{j}\right)
     \right)
     \bs{\theta}_{\bs{\xi}}
     \right\rVert_{2}.
@@ -587,7 +587,7 @@ expensive to be done.
 
 Using a backward-step likelihood based selection method requires far fewer
 regression model fits.  For $L$ possible knot locations there are $L(L+1)/2 + 1$
-regression models to fit, that is, 
+regression models to fit, that is,
 $\Sexpr{qwraps2::frmt(as.integer(20 * (21)/2 + 1))}$ models for twenty possible
 locations,
 $\Sexpr{qwraps2::frmt(as.integer(50 * (51)/2 + 1))}$ models for fifty possible
@@ -606,7 +606,7 @@ $L(L+1)/2 + 1$ can be considerable.
   \item Start with a knot sequence with a sufficient large number of interior
     knots, say $L = 50,$ and set $l = L$ to index models.
   \item Use an appropriate regression modeling approach to fit a regression
-    model for~\eqref{eq:cpr_general_model}. 
+    model for~\eqref{eq:cpr_general_model}.
   \item \label{step:build_cp} Construct the control polygon for the current
     $\bs{\xi}^{(l)}$ and $\bs{\theta}^{(l)}$ estimate.
   \item\label{step:weights} Use $\CP_{k, \bs{\xi}^{(l)}, \bs{\theta}^{(l)}}$ and
@@ -648,7 +648,7 @@ stopping criteria.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The cpr Package} \label{sec:cpr_package} 
+\section{The cpr Package} \label{sec:cpr_package}
 The objective of the \pkg{cpr} is to provide a simple, intuitive, and clean API
 for the CPR algorithm.  A four-line script is the foundation of the expected use
 case.
@@ -690,7 +690,7 @@ the basis matrix of B-splines, {\it i.e.} the matrix shown in
 function, \code{cpr::bsplines} for generating B-spline basis matrices with the class
 \code{cpr\_bs}.  The differences in the functional arguments and the attributes
 of the return objects between \code{splines::bs} and \code{cpr::bsplines} are listed in
-Table~\ref{tab:bs_vs_bsplines}. 
+Table~\ref{tab:bs_vs_bsplines}.
 \begin{table}
   \caption{Comparison of the arguments, with default values, for \code{splines::bs} and
     \code{cpr::bsplines}.  The attributes for the resulting \code{splines::bs} and
@@ -748,14 +748,14 @@ specified.  If the end user specifies both, the specified knots take precedence.
 If only \code{df} is specified then \code{df - order} internal knots will be
 generated.
 \code{splines::bs} and \code{cpr::bsplines}.
-For a numeric vector \code{x}, 
+For a numeric vector \code{x},
 \code{splines::bs} will generate a sequence of
-internal knots via a call equivalent to 
+internal knots via a call equivalent to
 <<eval = FALSE, echo = TRUE>>=
 knots <- df + order + (1L - intercept)
 stats::quantile(x,
   probs = seq(0, 1, length = length(knots) + 2L)[-c(1, length(knots) + 2L)])
-@ 
+@
 whereas \code{cpr::bsplines} will generate a sequence  equivalent to
 <<eval = FALSE, echo = TRUE>>=
 stats::quantile(unique(x)[-c(1, length(unique(x)))],
@@ -903,7 +903,7 @@ plot(influence_of(eg_cp, c(6, 8)))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Model Selection via Control Polygon Reduction}
-Here we demonstrate model selection via the CPR algorithm.  
+Here we demonstrate model selection via the CPR algorithm.
 In the
 following example we will use the \code{spdg} data set provided in the \pkg{cpr}
 package to model the progesterone hormone profile expressed during a menstrual
@@ -956,7 +956,7 @@ high quality of fit with fourth order B-splines and fifty internal knots. We wil
 fit a linear mixed model via \code{lmer} from the \pkg{lme4} package~\citep{r-lme4}.
 <<initial_cp4>>=
 initial_cp4 <- cp(log10(pdg) ~ bsplines(day, df = 54) + (1|id),
-                  data = spdg, method = lmer) 
+                  data = spdg, method = lmer)
 @
 Applying the CPR algorithm requires one call to \code{cpr}.
 <<cpr_run4>>=
@@ -976,7 +976,7 @@ be used for selection of a preferable model.  The \code{plot} method returns a
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.48\linewidth}
-<<cpr_run4_plot1, dependson = "cpr_run4", echo = FALSE, fig.width = 4, fig.height = 4>>=
+<<cpr_run4_plot1, echo = FALSE, fig.width = 4, fig.height = 4>>=
 plot(cpr_run4, color = TRUE) + theme(legend.position = "bottom") # Figure \ref{fig:cpr_run4_plot1}
 @
     \caption{}
@@ -984,8 +984,8 @@ plot(cpr_run4, color = TRUE) + theme(legend.position = "bottom") # Figure \ref{f
   \end{subfigure}
   ~
   \begin{subfigure}[t]{0.48\linewidth}
-<<cpr_run4_plot2, dependson = "cpr_run4", echo = FALSE, fig.width = 4, fig.height = 4>>=
-plot(cpr_run4, type = "rmse", to = 10)                           # Figure \ref{fig:cpr_run4_plot2}
+<<cpr_run4_plot2, echo = FALSE, fig.width = 4, fig.height = 4>>=
+#plot(cpr_run4, type = "rmse", to = 10)                           # Figure \ref{fig:cpr_run4_plot2}
 @
     \caption{}
     \label{fig:cpr_run4_plot2}
@@ -1012,7 +1012,7 @@ index, is seen in Figure~\ref{fig:cpr_run4_plot2}.
 After selecting the preferable model you can use the regression fit data
 provided or, easily refit and store the regression model via
 \code{stats::update}.
-<<preferable_cp4, dependson = "cpr_run4">>=
+<<preferable_cp4>>=
 preferable_cp4 <- cpr_run4[[4]]
 str(preferable_cp4)
 class(preferable_cp4$fit)
@@ -1028,9 +1028,9 @@ the end user to quickly modify the \code{cpr::bsplines} call within the
 The modified \code{df} are such that the knot sequences between
 \code{initial_cp4}, \code{initial_cp3}, and \code{initial_cp2} are the same.
 The updated initial control polygons are used to seed to additional CPR runs.
-<<other_cps, eval = FALSE, dependson = "initial_cp4">>=
+<<other_cps, eval = FALSE>>=
 initial_cp3 <- update_bsplines(initial_cp4, df = 53, order = 3)
-initial_cp2 <- update_bsplines(initial_cp4, df = 52, order = 2) 
+initial_cp2 <- update_bsplines(initial_cp4, df = 52, order = 2)
 cpr_run3 <- cpr(initial_cp3)
 cpr_run2 <- cpr(initial_cp2)
 @
@@ -1039,15 +1039,15 @@ cpr_run2 <- cpr(initial_cp2)
 % in Figure~\ref{fig:other_cpr_run_summary}.
 % <<other_cpr_run_summary_uneval, ref.label = "other_cpr_run_summary", eval = FALSE>>=
 % @
-% 
+%
 % \begin{figure}
 %   \centering
-% <<other_cpr_run_summary, dependson = "other_cps", echo = FALSE, fig.width = 5, fig.height = 3>>=
+% <<other_cpr_run_summary, echo = FALSE, fig.width = 5, fig.height = 3>>=
 % list(cpr_run4, cpr_run3, cpr_run2) %>%
 %   lapply(summary) %>%
 %   bind_rows(.id = "order") %>%
 %   mutate(order = factor(order, 1:3, c("4th", "3rd", "2nd"))) %>%
-%   filter(index < 13) %>% 
+%   filter(index < 13) %>%
 %   ggplot() +
 %   theme_bw() +
 %   aes(x = dfs, y = rmse, color = order, linetype = order) +
@@ -1057,11 +1057,11 @@ cpr_run2 <- cpr(initial_cp2)
 % \caption{}
 % \label{fig:other_cpr_run_summary}
 % \end{figure}
-% 
-% 
+%
+%
 % The third order B-spline with five degrees of freedom, that is two internal
 % knots, is the preferable model as it has the lowest RMSE and degrees of freedom.
-% 
+%
 % <<preferable_overall>>=
 % # cpr_run3 with five degrees of freedom: 3rd order + 2 knots = 5 df.  Model
 % # index 3 has two knots.
@@ -1098,19 +1098,19 @@ $\bs{B}_{k_m, \bs{\xi}_m} \left(\bs{x}_m\right),$ as
   f\left( \bs{X} \right) = \mathscr{B}_{\bs{K}, \bs{\Xi}} \left(\bs{X}\right)
   \bs{\theta}_{\bs{\Xi}},
 \end{equation}
-where 
+where
 $\bs{K} = \left\{k_1, k_2, \ldots, k_m \right\}$, denotes the set of polynomial
 orders,
 $\bs{\Xi} = \left\{\bs{\xi}_1, \bs{\xi}_2, \ldots, \bs{\xi}_m \right\},$ is the
-set of knot sequences, 
+set of knot sequences,
 $\bs{\theta}_{\bs{\Xi}}$ is a $\prod_{i=1}^{m}
 \left(\card{\bs{\xi}_i} - k_i \right) \times 1$ column vector of
 regression coefficients,  and
 $\bs{X}$ is the observed data
 \begin{equation}
   \bs{X} = \begin{pmatrix}
-    x_{11} & x_{21} & \cdots & x_{m1} \\ 
-    x_{12} & x_{22} & \cdots & x_{m2} \\ 
+    x_{11} & x_{21} & \cdots & x_{m1} \\
+    x_{12} & x_{22} & \cdots & x_{m2} \\
     \vdots & \vdots & \ddots & \vdots \\
     x_{12} & x_{22} & \cdots & x_{mn}
   \end{pmatrix}.
@@ -1120,11 +1120,11 @@ The basis for multi-variable B-splines is constructed by a recursive algorithm.
 The base case for $m = 2$ is
 \begin{equation}
   \label{eq:tensor_product_base_case}
-  \mathscr{B}_{ \left\{k_1, k_2\right\}, \left\{ \bs{\xi}_1, \bs{\xi}_2 \right\}} \left( \bs{x}_1, \bs{x}_2 \right) = 
+  \mathscr{B}_{ \left\{k_1, k_2\right\}, \left\{ \bs{\xi}_1, \bs{\xi}_2 \right\}} \left( \bs{x}_1, \bs{x}_2 \right) =
   \left(\bs{1}^T_{\card{\bs{\xi}_2} - k_2} \otimes \bs{B}_{k_1, \bs{\xi}_1} \left(\bs{x}_1 \right)  \right) \odot
   \left(\bs{B}_{k_2, \bs{\xi}_2} \left( \bs{x}_2 \right) \otimes
   \bs{1}^{T}_{\card{\bs{\xi}_1} - k_1} \right),
-\end{equation} 
+\end{equation}
 where $\odot$ is the element-wise product, $\otimes$ is a
 Kronecker product, and $\bs{1}_n$ is a $n \times 1$ column vector of 1s.  The
 two Kronecker products define the correct dimensions for the entry-wise product.
@@ -1160,7 +1160,7 @@ summations as follows:
   \bs{B}_{j_m, k_m, \bs{\xi}_m} \left( \bs{x}_m \right)
   \theta_{\bs{\Xi}, j_1, j_2, \ldots, j_m} \\
   & =
-    \sum_{j_1 = 1}^{\card{\bs{\xi}_1} - k_1} \bs{B}_{j_1, k_1, \bs{\xi}_1} \left( \bs{x}_1 \right) 
+    \sum_{j_1 = 1}^{\card{\bs{\xi}_1} - k_1} \bs{B}_{j_1, k_1, \bs{\xi}_1} \left( \bs{x}_1 \right)
   \underbrace{
     \sum_{j_2 = 1}^{\card{\bs{\xi}_2} - k_2}
   \cdots
@@ -1170,7 +1170,7 @@ summations as follows:
   \bs{B}_{j_m, k_m, \bs{\xi}_m} \left( \bs{x}_m \right)
   \theta_{\bs{\Xi}, j_1, j_2, \ldots, j_m}
   }_{\text{polynomial coefficients}} \\
-  & = 
+  & =
   \text{diag}\left(
     \bs{B}_{k_1, \bs{\xi}_1}\left(\bs{x}_1\right)\bs{\theta}_{\bs{\Xi}\backslash \bs{\xi}_1} \left( \bs{X} \backslash \bs{x}_1
     \right)
@@ -1193,7 +1193,7 @@ If we condition on $x_2,$ the two-dimensional B-spline simplifies to a
 uni-variable spline in $x_1,$ \ie,
 \begin{equation}
   \label{eq:conditional_uni_var_bspline}
-  \mathscr{B}_{\bs{K}, \bs{\Xi}} \left(x_1 | x_2 \right) \bs{\theta}_{\bs{\Xi}} = 
+  \mathscr{B}_{\bs{K}, \bs{\Xi}} \left(x_1 | x_2 \right) \bs{\theta}_{\bs{\Xi}} =
   \bs{B}_{k_1, \bs{\xi}_1}\left(x_1\right)\bs{\theta}_{\bs{\Xi}\backslash \bs{\xi}_1}
     \left( x_2 \right).
 \end{equation}
@@ -1209,7 +1209,7 @@ and $\bs{\theta}_{\bs{\Xi} \backslash \left( \left( \bs{\xi}_1 \backslash \xi_{1
   w_{1j | x_2} =
   \left\lVert
     \left(
-      \bs{I} - 
+      \bs{I} -
       \bs{W}_{k_1, \bs{\xi}_1}\left(\xi_{1j}\right)
       \left( \bs{W}_{k_1, \bs{\xi}_1}^{T}\left(\xi_{1j}\right) \bs{W}_{k_1, \bs{\xi}_1}\left(\xi_{1j}\right) \right)^{-1} \bs{W}_{k_1, \bs{\xi}_1}^{T}\left(\xi_{1j}\right)
     \right)
@@ -1237,7 +1237,7 @@ We recommend and have set the default in \pkg{cpr} to use $p = 20$ values for ea
   \item Define the initial $\bs{K}$ and $\bs{\Xi}$ set for
     the initial tensor product.
   \item Use an appropriate regression modeling approach to fit a regression
-    model for~\eqref{eq:cnr_general_model}. 
+    model for~\eqref{eq:cnr_general_model}.
   \item \label{cnr_step:build} Construct the control net for the current
     set of knots sequences and regression coefficients.
   \item Use \eqref{eq:cnr_influence_weight} to find the influence weight
@@ -1254,7 +1254,7 @@ We recommend and have set the default in \pkg{cpr} to use $p = 20$ values for ea
 
 CNR is applied to all margins of interest at once.  The knot with the lowest
 influence weight is omitted at each step, regardless of the margin it originates
-from.  
+from.
 
 
 \subsection{Implementation Issue: Dimensionality}
@@ -1294,7 +1294,7 @@ for \code{age}.
 <<eval = FALSE>>=
 initial_cn44 <-
   cn(log10(pdg) ~ btensor(list(day, age), df = list(24, 24)) + (1 | id),
-     data = spdg, method = lmer) 
+     data = spdg, method = lmer)
 initial_cn34 <- update_btensor(df = list(23, 24), order = list(3, 4))
 cnr_run44 <- cnr(initial_cn44)
 cnr_run34 <- cnr(initial_cn34)
@@ -1317,7 +1317,7 @@ The model space
 searched by CPR is larger than the model space searched by a forward step
 model selection approach. The additional calculations for determining knot
 influence require few computation resources and are done quickly.  Thus, CPR
-requires negligibly more time to run than a forward step selection approach. 
+requires negligibly more time to run than a forward step selection approach.
 
 Compared to a comparable likelihood based backward-step selection approach, CPR
 picks models which are on average equivalent to the likelihood based selected

@@ -151,9 +151,9 @@ print.cpr_cp <- function(x, ...) {
 #' @rdname cp
 summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...){
   out <-
-    list(dfs        = length(object$cp$theta),
+    data.frame(dfs        = length(object$cp$theta),
          n_iknots   = length(object$iknots),
-         iknots     = list(object$iknots),
+         iknots     = I(list(object$iknots)),
          loglik     = object$loglik,
          rmse       = object$rmse)
 

@@ -48,7 +48,9 @@ plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
       to <- length(x)
     }
 
-    ggplot2::ggplot(subset(x, (x$index >= from) & (x$index <= to))) +
+    s <- summary(x)
+
+    ggplot2::ggplot(subset(s, (s$index >= from) & (s$index <= to))) +
     ggplot2::theme_bw() +
     ggplot2::aes_string(x = "index", y = type) +
     ggplot2::geom_point() +

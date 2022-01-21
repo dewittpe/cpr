@@ -24,8 +24,8 @@ preferable_cp <- cpr_run[[4]]
 p <- function(x) { 0.65 * sin(x * 0.70) + 0.3 * cos(x * 4.2) }
 
 set.seed(42)
-sim_data <- dplyr::data_frame(x = runif(2500, 0.00, 4.5),
-                              y = rbinom(2500, 1, p(x)))
+x <- runif(2500, 0.00, 4.5)
+sim_data <- data.frame(x = x, y = rbinom(2500, 1, p(x)))
 
 # Define the initial control polygon
 init_cp <- cp(formula = y ~ bsplines(x, df = 54, bknots = c(0, 4.5)),
@@ -46,7 +46,7 @@ ggplot2::ggplot(pred_data) +
 ggplot2::theme_bw() +
 ggplot2::aes(x = x) +
 ggplot2::geom_point(mapping = ggplot2::aes(y = y), alpha = 0.2) +
-ggplot2::geom_line(mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")) + 
+ggplot2::geom_line(mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")) +
 ggplot2::stat_function(fun = p, mapping = ggplot2::aes(color = 'p(x)'))
 
 ###############################################################################

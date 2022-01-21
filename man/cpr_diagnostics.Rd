@@ -10,7 +10,7 @@
 \item{x}{a \code{cpr_cpr} object}
 
 \item{type}{type of diagnostic plot.  \code{"cps"} for control polygons,
-\code{"loglik"} for the loglikihood by degrees of freedom, 
+\code{"loglik"} for the loglikihood by degrees of freedom,
 \code{"rmse"} for root mean squared residuals by degrees of freedom}
 
 \item{from}{the first index of \code{x} to plot}

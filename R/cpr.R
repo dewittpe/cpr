@@ -87,10 +87,10 @@ print.cpr_cpr <- function(x, ...) {
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
 summary.cpr_cpr <- function(object, ...) {
-  object %>%
-  lapply(summary) %>%
-  dplyr::bind_rows(.id = 'index') %>%
-  dplyr::mutate_(index = ~ as.integer(index)) %>%
-  dplyr::tbl_df()
+  rtn <- lapply(object, summary)
+  for (i in seq_along(object)) {
+    rtn[[i]]$index <- as.integer(i)
+  }
+  do.call(rbind, rtn)
 }
 
