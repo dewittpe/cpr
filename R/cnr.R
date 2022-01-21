@@ -55,7 +55,7 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), 
     out[[i]] <- x
     w <- influence_weights(x, p = p, margin, n_polycoef)
     w <- dplyr::bind_rows(w, .id = "margin")
-    w <- dplyr::filter_(w, ~ rank(`max(.data$w)`, ties.method = "first") > 1)
+    w <- subset(w, rank(w[["max(.data$w)"]], ties.method = "first") > 1)
 
     nkts <- lapply(split(w, factor(w$margin, levels = seq_along(x$bspline_list))), function(xx) xx$iknots)
 
