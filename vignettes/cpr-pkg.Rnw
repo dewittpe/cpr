@@ -842,8 +842,8 @@ The arguments for this function are
 A simple example, fitting the sine function with a cubic B-spline with ten
 internal knots, is below.
 <<calling_cp.formula>>=
-dat <- tibble::data_frame(x = seq(-pi, pi, length = 200),
-                          y = sin(x))
+x <- seq(-pi, pi, length = 200)
+dat <- data.frame(x = x, y = sin(x))
 eg_cp2 <- cp(y ~ bsplines(x = x, df = 14), data = dat)
 @
 
@@ -1294,7 +1294,7 @@ for \code{age}.
 <<eval = FALSE>>=
 initial_cn44 <-
   cn(log10(pdg) ~ btensor(list(day, age), df = list(24, 24)) + (1 | id),
-     data = spdg, method = lmer)
+     data = spdg, method = lme4::lmer)
 initial_cn34 <- update_btensor(df = list(23, 24), order = list(3, 4))
 cnr_run44 <- cnr(initial_cn44)
 cnr_run34 <- cnr(initial_cn34)
