@@ -33,6 +33,9 @@ init_cp <- cp(formula = y ~ bsplines(x, df = 54, bknots = c(0, 4.5)),
               method  = glm,
               data    = sim_data)
 
+#cps <- lapply(list(init_cp, cpr_run[[2]]), getElement, "cp")
+# plot(init_cp, cpr_run[[2]], cpr_run[[8]], color = TRUE)
+
 # run CPR, preferable model is in index 7
 cpr_run <- cpr(init_cp)
 plot(cpr_run, color = TRUE, type = "rmse", to = 15)
