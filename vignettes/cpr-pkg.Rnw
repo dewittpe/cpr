@@ -82,7 +82,6 @@ library(splines)
 library(lme4)
 library(cpr)
 library(plot3D)
-library(dplyr)
 library(ggplot2)
 library(gridExtra)
 
@@ -399,18 +398,18 @@ omit_xi <- influence_of(cp(bmat, theta), c(6, 8))
 
 # influence_data: need to construct this data.frame for plotting.  The version
 # of the influce plots used in section 5 of the manuscript is far simpler.
-influence_data <-
-  bind_rows(rename(eg_cp$cp, x = xi_star, y = theta),
-            get_spline(eg_cp)$spline,
-            rename(omit_xi$coarsened_cp[[1]]$cp, x = xi_star, y = theta) ,
-            get_spline(omit_xi$coarsened_cp[[1]])$spline,
-            rename(omit_xi$coarsened_cp[[2]]$cp, x = xi_star, y = theta),
-            get_spline(omit_xi$coarsened_cp[[2]])$spline,
-            rename(omit_xi$reinserted_cp[[1]]$cp, x = xi_star, y = theta),
-            get_spline(omit_xi$reinserted_cp[[1]])$spline,
-            rename(omit_xi$reinserted_cp[[2]]$cp, x = xi_star, y = theta),
-            get_spline(omit_xi$reinserted_cp[[2]])$spline,
-            .id = "object")
+influence_data <- rbind(
+  cbind(setNames(eg_cp$cp, c("x", "y")), object = 1),
+  cbind(get_spline(eg_cp)$spline,        object = 2),
+  cbind(setNames(omit_xi$coarsened_cp[[1]]$cp, c("x", "y")), object = 3),
+  cbind(get_spline(omit_xi$coarsened_cp[[1]])$spline, object = 4),
+  cbind(setNames(omit_xi$coarsened_cp[[2]]$cp, c("x", "y")), object = 5),
+  cbind(get_spline(omit_xi$coarsened_cp[[2]])$spline, object = 6),
+  cbind(setNames(omit_xi$reinserted_cp[[1]]$cp, c("x", "y")), object = 7),
+  cbind(get_spline(omit_xi$reinserted_cp[[1]])$spline, object= 8),
+  cbind(setNames(omit_xi$reinserted_cp[[2]]$cp, c("x", "y")), object = 9),
+  cbind(get_spline(omit_xi$reinserted_cp[[2]])$spline, object = 10)
+  )
 
 influence_data$CP <- NA
 influence_data$CP <- gsub("^[1-2]$", "Original", influence_data$object)
@@ -421,11 +420,12 @@ influence_data$CP <-
          levels = c("Original", "Omit a knot", "Reinsert the knot"))
 
 influence_data <-
-  bind_rows(filter(influence_data, object %in% c(1:2, 3:4)),
-            filter(influence_data, object %in% c(1:2, 3:4, 7:8)),
-            filter(influence_data, object %in% c(1:2, 5:6)),
-            filter(influence_data, object %in% c(1:2, 5:6, 9:10)),
-            .id = "facets")
+  rbind(
+        cbind(subset(influence_data, object %in% c(1:2, 3:4)), facets = 1),
+        cbind(subset(influence_data, object %in% c(1:2, 3:4, 7:8)), facets = 2),
+        cbind(subset(influence_data, object %in% c(1:2, 5:6)), facets = 3),
+        cbind(subset(influence_data, object %in% c(1:2, 5:6, 9:10)), facets = 4)
+        )
 
 influence_data$facets <-
   factor(influence_data$facets,
@@ -439,17 +439,16 @@ influence_weight_plot[[which(names(influence_weight_plot) == "layers")]] <- NULL
 influence_weight_plot %+%
   influence_data +
   facet_wrap( ~ facets, labeller = label_parsed) +
-  aes(x = x, y = y, color = CP, alpha = CP, shape = CP, linetype = CP,
+  aes(x = x, y = y, color = CP, shape = CP, linetype = CP,
       group = object) +
-  geom_point(data = filter(influence_data, object %in% seq(1, 9, by = 2))) +
+  geom_point(data = subset(influence_data, object %in% seq(1, 9, by = 2))) +
   geom_line() +
-  theme(axis.ticks.y     = element_blank(),
-        axis.text.y      = element_blank(),
+  theme(axis.ticks     = element_blank(),
+        axis.text      = element_blank(),
         panel.grid       = element_blank(),
         legend.position  = "bottom",
         legend.key.width = unit(0.5, "inch"),
         legend.title     = element_blank()) +
-  scale_alpha_discrete(range = c(0.5, 1)) +
   coord_cartesian(ylim = c(-1.3, 4.8)) +
   theme(text = element_text(family = "Times", size = 10))
 @
@@ -674,9 +673,8 @@ regression models.
 \pkg{cpr} relies on \pkg{Rcpp}~\citep{eddelbuettel2011rcpp,
 eddelbuettel2013seamless} and
 \pkg{RcppArmadillo}~\citep{eddelbuettel2014rcpparmadillo} to gain computational
-efficiency for several functions and matrix arithmetic.  Heavy reliance on
-\pkg{dplyr}~\citep{wickham2016dplyr} and \pkg{tidyr}~\citep{wickham2016tidyr}
-for data manipulation.  Two-dimensional graphics are generated via
+efficiency for several functions and matrix arithmetic.  Two-dimensional
+graphics are generated via
 \pkg{ggplot2}~\citep{wickham2009ggplot2}. Three-dimensional graphics are
 generated using either \pkg{rgl}~\citep{adler2016rgl} for dynamic iterative
 graphics, or \pkg{plot3D}~\citep{r-plot3D} of static graphics.
@@ -924,8 +922,7 @@ length(unique(spdg$id))
 \begin{figure}
   \centering
 <<spdg_plot, echo = FALSE, fig.width = 3, fig.height = 3>>=
-filter(spdg, id %in% 1:100) %>%
-ggplot() +
+ggplot(subset(spdg, id %in% 1:100)) +
   theme_bw() +
   aes(x = day, y = pdg, group = id) +
   geom_line(alpha = 0.1) +
