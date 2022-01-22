@@ -10,7 +10,6 @@
 #' @useDynLib cpr, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom graphics plot
-#' @importFrom rlang .data
 #'
 #' @docType package
 #' @name cpr-package

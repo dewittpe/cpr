@@ -81,18 +81,34 @@ cpr_run <- cpr(init_cp)
 plot(cpr_run, color = TRUE, type = "rmse", to = 15)
 
 # plot the fitted spline and the true p(x)
-pred_data <-
-  dplyr::mutate(sim_data,
-                pred_select_p = qwraps2::invlogit(predict(cpr_run[[7]], newdata = sim_data)$pred))
+sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data)$pred)
 
-ggplot2::ggplot(pred_data) +
+ggplot2::ggplot(sim_data) +
 ggplot2::theme_bw() +
 ggplot2::aes(x = x) +
-ggplot2::geom_point(mapping = ggplot2::aes(y = y), alpha = 0.2) +
+ggplot2::geom_point(mapping = ggplot2::aes(y = y), alpha = 0.1) +
 ggplot2::geom_line(mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")) +
 ggplot2::stat_function(fun = p, mapping = ggplot2::aes(color = 'p(x)'))
 
-###############################################################################
+# compare to gam and a binned average
+sim_data$x2 <- round(sim_data$x, digits = 1)
+bin_average <-
+  lapply(split(sim_data, sim_data$x2), function(x) {
+           data.frame(x = x$x2[1], y = mean(x$y))
+         })
+bin_average <- do.call(rbind, bin_average)
+
+ggplot2::ggplot(sim_data) +
+ggplot2::theme_bw() +
+ggplot2::aes(x = x) +
+ggplot2::geom_line(mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")) +
+ggplot2::stat_smooth(mapping = ggplot2::aes(y = y, color = "gam"),
+                     method = "gam",
+                     formula = y ~ s(x, bs = "cs"),
+                     se = FALSE,
+                     n = 1000) +
+ggplot2::geom_line(data = bin_average, mapping = ggplot2::aes(y = y, color = "bin_average"))
+
 }
 \author{
 Peter DeWitt \email{dewittpe@gmail.com}

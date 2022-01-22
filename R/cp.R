@@ -218,12 +218,17 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   spline_data <- do.call(rbind, spline_data)
 
   names(cps) <- c("x", "y", "row")
+  knot_data$y <- NA_real_
 
   cps$row       <- factor(cps$row, levels = nms)
   knot_data$row <- factor(knot_data$row, levels = nms)
   spline_data$row <- factor(spline_data$row, levels = nms)
 
-  plot_data <- dplyr::bind_rows(cps, knot_data, spline_data, .id = 'object')
+  cps$object <- 1
+  knot_data$object <- 2
+  spline_data$object <- 3
+  plot_data <- rbind(cps, knot_data, spline_data)
+
   plot_data$object <- factor(plot_data$object, levels = 1:3, labels = c("cp", "knots", "spline"))
 
   base_plot <-

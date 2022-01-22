@@ -28,7 +28,7 @@ continuous variable.  If, however, \code{x2} is a factor, or coerced to a
 factor, then the model matrix will again be rank deficient as a column for
 all levels of the factor will be generated.  We need to replace the intercept
 column of the model matrix with the bspline.  This also needs to be done for
-a variety of possible model calls, lm, lmer, etc.  
+a variety of possible model calls, lm, lmer, etc.
 
 By returning an explicit \code{formula} and \code{data.frame} for use in the
 fit, we hope to reduce memory use and increase the speed of the cpr method.
