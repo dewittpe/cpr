@@ -71,7 +71,7 @@ plot.cpr_cn <- function(x, ...,
   } else {
     get_surface_args$x <- x
   }
-  .data <- do.call(get_surface, get_surface_args)
+  plot_data <- do.call(get_surface, get_surface_args)
 
   if (rgl & requireNamespace("rgl", quietly = TRUE)) {
     plotter <- match.fun(rgl::persp3d)
@@ -105,33 +105,33 @@ plot.cpr_cn <- function(x, ...,
 
   if (show_net) {
     do.call(plotter,
-            c(list(x = unique(.data$cn[[1]]),
-                   y = unique(.data$cn[[2]]),
-                   z = matrix(.data$cn[[3]],
-                              nrow = length(unique(.data$cn[[1]])),
-                              ncol = length(unique(.data$cn[[2]])))),
+            c(list(x = unique(plot_data$cn[[1]]),
+                   y = unique(plot_data$cn[[2]]),
+                   z = matrix(plot_data$cn[[3]],
+                              nrow = length(unique(plot_data$cn[[1]])),
+                              ncol = length(unique(plot_data$cn[[2]])))),
               net_args))
     if (show_surface) {
       do.call(plotter,
-              c(list(x = unique(.data$surface[[1]]),
-                     y = unique(.data$surface[[2]]),
-                     z = matrix(.data$surface[[3]],
-                                nrow = length(unique(.data$surface[[1]])),
-                                ncol = length(unique(.data$surface[[2]])))),
+              c(list(x = unique(plot_data$surface[[1]]),
+                     y = unique(plot_data$surface[[2]]),
+                     z = matrix(plot_data$surface[[3]],
+                                nrow = length(unique(plot_data$surface[[1]])),
+                                ncol = length(unique(plot_data$surface[[2]])))),
                 surface_args,
                 add = TRUE))
     }
   } else if (!show_net && show_surface) {
       do.call(plotter,
-              c(list(x = unique(.data$surface[[1]]),
-                     y = unique(.data$surface[[2]]),
-                     z = matrix(.data$surface[[3]],
-                                nrow = length(unique(.data$surface[[1]])),
-                                ncol = length(unique(.data$surface[[2]])))),
+              c(list(x = unique(plot_data$surface[[1]]),
+                     y = unique(plot_data$surface[[2]]),
+                     z = matrix(plot_data$surface[[3]],
+                                nrow = length(unique(plot_data$surface[[1]])),
+                                ncol = length(unique(plot_data$surface[[2]])))),
                 surface_args))
   } else {
     warning("Nothing to plot.", call. = FALSE)
   }
 
-  invisible(.data)
+  invisible(plot_data)
 }
