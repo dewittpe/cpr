@@ -57,8 +57,15 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), 
     for(i in seq_along(w)) {
       w[[i]]$margin <- i
     }
+    print("=======================")
+    print("i")
+    print(i)
+    print(w)
     w <- do.call(rbind, w)
-    w <- subset(w, rank(w[["max(.data$w)"]], ties.method = "first") > 1)
+
+    print(w)
+    w <- subset(w, rank(w[["max_w"]], ties.method = "first") > 1)
+    print(w)
 
     nkts <- lapply(split(w, factor(w$margin, levels = seq_along(x$bspline_list))), function(xx) xx$iknots)
 
