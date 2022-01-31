@@ -19,19 +19,19 @@ all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 
 .install_dev_deps.Rout : $(PKG_ROOT)/DESCRIPTION
 	Rscript --vanilla --quiet -e "options(repo = c('$(CRAN)'))" \
-		-e "options(warn = 2)" \
-		-e "invisible(file.create('$(PKG_ROOT)/$@', showWarnings = FALSE))"
+		-e "options(warn = 2)"
+	@touch $@
 
 .document.Rout: $(RFILES) $(SRC) $(EXAMPLES) $(RAWDATAR) $(VIGNETTES) $(PKG_ROOT)/DESCRIPTION
 	if [ -e "$(PKG_ROOT)/data-raw/Makefile" ]; then $(MAKE) -C $(PKG_ROOT)/data-raw/; else echo "Nothing to do"; fi
 	Rscript --vanilla --quiet -e "options(repo = c('$(CRAN)', '$(BIOC)'))" \
 		-e "options(warn = 2)" \
 		-e "pkgload::load_all()" \
-		-e "devtools::document('$(PKG_ROOT)')" \
-		-e "invisible(file.create('$(PKG_ROOT)/$@', showWarnings = FALSE))"
+		-e "devtools::document('$(PKG_ROOT)')"
+	@touch $@
 
 $(PKG_NAME)_$(PKG_VERSION).tar.gz: .install_dev_deps.Rout .document.Rout $(TESTS)
-	R CMD build --md5 $(build-options) $(PKG_ROOT)
+	R CMD build --md5 --compact-vignettes="gs+qpdf" $(build-options) $(PKG_ROOT)
 
 check: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 	R CMD check $(PKG_NAME)_$(PKG_VERSION).tar.gz
