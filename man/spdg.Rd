@@ -5,8 +5,7 @@
 \alias{spdg}
 \title{Simulated Prognanediol-glucuronid (PDG) Data}
 \format{
-a \code{data.frame}, carries the \code{\link[dplyr]{tbl_df}} and
-\code{\link[dplyr]{tbl}} classes from \code{dplyr}. Variables in the data
+a \code{data.frame}. Variables in the data
 set:
 \describe{
  \item{id}{Subject ID}

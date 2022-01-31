@@ -19,8 +19,7 @@
 #' Study of Women's Health across the Nation (SWAN) Daily Hormone Study." The
 #' Journal of Clinical Endocrinology & Metabolism 89.6 (2004): 2622-2631.
 #'
-#' @format a \code{data.frame}, carries the \code{\link[dplyr]{tbl_df}} and
-#' \code{\link[dplyr]{tbl}} classes from \code{dplyr}. Variables in the data
+#' @format a \code{data.frame}. Variables in the data
 #' set:
 #' \describe{
 #'  \item{id}{Subject ID}
