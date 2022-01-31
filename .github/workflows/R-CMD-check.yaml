@@ -55,4 +55,8 @@ jobs:
           tinytex::parse_install(text = "! LaTeX Error: File `filecontents.sty' not found.")
         shell: Rscript {0}
 
+      - name: Install Quartz
+        if: matrix.os == "macOS-latest"
+        run: brew cask install xquartz
+
       - uses: r-lib/actions/check-r-package@v1
