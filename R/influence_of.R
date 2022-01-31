@@ -129,7 +129,11 @@ plot.cpr_influence_of <- function(x, ...) {
            })
   plot_data <- lapply(plots, getElement, name = "data")
 
-  plot_data <- dplyr::bind_rows(plot_data, .id = "index")
+  for(i in seq_along(plot_data)) {
+    plot_data[[i]][["index"]] <- i
+  }
+  plot_data <- do.call(rbind, plot_data)
+
   plot_data$index <- factor(plot_data$index,
                         levels = seq_along(x$indices),
                         labels = sapply(x$weight$index,
