@@ -52,6 +52,7 @@ jobs:
         run: |
           tinytex::parse_install(text = "! LaTeX Error: File `ctable.sty' not found.")
           tinytex::parse_install(text = "! LaTeX Error: File `transparent.sty' not found.")
+          tinytex::parse_install(text = "! LaTeX Error: File `fileconents.sty' not found.")
         shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v1
