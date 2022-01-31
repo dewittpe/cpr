@@ -86,7 +86,7 @@ influence_weights.cpr_cn <- function(x, p = 2, margin = seq_along(x$bspline_list
              # dplyr::summarize(max(.data$w))
            })
 
-  wghts <- lapply(wghts, dplyr::bind_rows)
+  wghts <- lapply(wghts, do.call, what = rbind)
 
   wghts <- lapply(wghts, function(d) dplyr::group_by(d, .data$iknots))
 
