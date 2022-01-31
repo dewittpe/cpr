@@ -80,7 +80,7 @@ cp.cpr_bs <- function(x, theta, ...) {
 #'        used.
 #' @param data a required \code{data.frame}
 #' @param method the regression method such as \code{\link[stats]{lm}},
-#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
+#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
 #' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
 #' If \code{FALSE} the \code{fit} element with be \code{NA}.

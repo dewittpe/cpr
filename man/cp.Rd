@@ -43,7 +43,7 @@ used.}
 \item{data}{a required \code{data.frame}}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...}
+\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
 
 \item{keep_fit}{(logical, default value is \code{FALSE}).  If \code{TRUE} the
 regression model fit is retained and returned in as the \code{fit} element.

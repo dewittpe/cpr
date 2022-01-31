@@ -58,7 +58,7 @@ cn.cpr_bt <- function(x, theta, ...) {
 #'        used.
 #' @param data a required \code{data.frame}
 #' @param method the regression method such as \code{\link[stats]{lm}},
-#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, \code{\link[geepack]{geeglm}}, ...
+#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
 #' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in the the \code{fit} element.
 #' If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.
