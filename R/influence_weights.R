@@ -92,7 +92,7 @@ influence_weights.cpr_cn <- function(x, p = 2, margin = seq_along(x$bspline_list
 
   wghts <- lapply(wghts, function(d) dplyr::summarize(d, max_w = max(.data$w)))
 
-  out <- lapply(iknots, function(ik) data.frame(iknots = ik, `max(w)` = rep(Inf, length(ik))))
+  out <- lapply(iknots, function(ik) data.frame(iknots = ik, max_w = rep(Inf, length(ik))))
   out[seq_along(x$bspline_list) %in% margin] <- wghts
   out
 }
