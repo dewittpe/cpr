@@ -55,19 +55,17 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), 
     out[[i]] <- x
     w <- influence_weights(x, p = p, margin, n_polycoef)
     for(i in seq_along(w)) {
-      w[[i]]$margin <- i
+      if (nrow(w[[i]]) > 0L) {
+        w[[i]]$margin <- i
+      }
     }
-    print("=======================")
-    print("i")
-    print(i)
-    print(w)
     w <- do.call(rbind, w)
 
-    print(w)
     w <- subset(w, rank(w[["max_w"]], ties.method = "first") > 1)
-    print(w)
 
-    nkts <- lapply(split(w, factor(w$margin, levels = seq_along(x$bspline_list))), function(xx) xx$iknots)
+    nkts <- split(w, factor(w$margin, levels = seq_along(x$bspline_list)))
+
+    nkts <- lapply(nkts, function(xx) xx$iknots)
 
     if (i == keep + 1) {
       x <- stats::update(x, keep_fit = TRUE)

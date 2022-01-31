@@ -22,8 +22,11 @@ test_that("influence weights for control polygon is as expected",
 
 test_that("influence_weights for control net are as expected",
           {
+
             initial_cn44 <- cn(log10(pdg) ~ btensor(list(day, age), df = list(24, 24)), data = spdg)
+
             iw <- influence_weights(initial_cn44)
+
             expected <-
               list(structure(list(iknots = c(-0.927941546989166, -0.864279864279864,
                                              -0.801587301587302, -0.733500417710944, -0.673959673959674, -0.606679035250464,
@@ -35,8 +38,7 @@ test_that("influence_weights for control net are as expected",
                                              1.19129143391542, 1.29067977639264, 0.873572057092875, 0.632736079632996,
                                              0.726102116339379, 0.601514092805447, 0.398568429802977, 0.279993212159539,
                                              0.547275122421305, 0.73253425664502, 1.12664314585208, 1.05521482442615,
-                                             0.863703465463413, 0.843797471998719, 0.794531543375414)), class = c("tbl_df",
-                                  "tbl", "data.frame"), row.names = c(NA, -20L)), structure(list(
+                                             0.863703465463413, 0.843797471998719, 0.794531543375414)), class = c("data.frame"), row.names = c(NA, -20L)), structure(list(
             iknots = c(46.5030784738986, 46.8052824384244, 47.054023071138,
                        47.2646954701808, 47.5295600012368, 47.8056655622045, 48.0744195779572,
                        48.2661275459597, 48.4468227265675, 48.7082506308525, 48.9395919576026,
@@ -48,10 +50,10 @@ test_that("influence_weights for control net are as expected",
                        0.192974399799336, 0.238935766674498, 0.331156057062758,
                        0.385613215140317, 0.448096962477517, 0.40302930046861, 0.315590048917218,
                        0.249282186324913, 0.253656972568126, 0.260948477175003,
-                       0.421078875729129, 0.594208247442293, 0.88615763871374)), class = c("tbl_df",
-                                                                     "tbl", "data.frame"), row.names = c(NA, -20L)))
+                       0.421078875729129, 0.594208247442293, 0.88615763871374)), class = c("data.frame"), row.names = c(NA, -20L)))
 
           expect_equal(iw, expected)
+
           }
 )
 

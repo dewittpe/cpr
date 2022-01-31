@@ -4,12 +4,12 @@
 \alias{generate_cp_formula_data}
 \title{Generate Control Polygon Formula and Data}
 \usage{
-generate_cp_formula_data(f, .data)
+generate_cp_formula_data(f, data)
 }
 \arguments{
 \item{f}{a formula}
 
-\item{.data}{the data set containing the variables in the formula}
+\item{data}{the data set containing the variables in the formula}
 }
 \description{
 Construct a \code{data.frame} and \code{formula} to be passed to the
