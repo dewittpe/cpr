@@ -35,9 +35,9 @@ jobs:
         run: |
           if [ "$RUNNER_OS" == "MacOS" ]; then
             brew cask install xquartz
-          elif [ "$RUNNER_OS" == "Linux"]; then
+          elif [ "$RUNNER_OS" == "Linux" ]; then
             echo "No need to install xquartz on $RUNNER_OS"
-          elif [ "$RUNNER_OS" == "Windows"]; then
+          elif [ "$RUNNER_OS" == "Windows" ]; then
             echo "No need to install xquartz on $RUNNER_OS"
           else
             echo "$RUNNER_OS not supported"
