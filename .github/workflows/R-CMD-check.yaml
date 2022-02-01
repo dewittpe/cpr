@@ -31,6 +31,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install Quartz
+        run: |
+          if [ "$RUNNER_OS" == "MacOS" ]; then
+            brew cask install xquartz
+          elif [ "$RUNNER_OS" == "Linux"]; then
+            echo "No need to install xquartz on $RUNNER_OS"
+          elif [ "$RUNNER_OS" == "Windows"]; then
+            echo "No need to install xquartz on $RUNNER_OS"
+          else
+            echo "$RUNNER_OS not supported"
+            exit 1
+          fi
+        shell: bash
+
       - uses: r-lib/actions/setup-tinytex@v2
         env:
           # install full prebuilt version
@@ -54,16 +68,5 @@ jobs:
           tinytex::parse_install(text = "! LaTeX Error: File `transparent.sty' not found.")
           tinytex::parse_install(text = "! LaTeX Error: File `filecontents.sty' not found.")
         shell: Rscript {0}
-
-      - name: Install Quartz
-        run: |
-          echo $RUNNER_OS
-          if [ "$RUNNER_OS" == "MacOS" ]; then
-            brew cask install xquartz
-          else
-            echo "$RUNNER_OS not supported"
-            exit 1
-          fi
-        shell: bash
 
       - uses: r-lib/actions/check-r-package@v1
