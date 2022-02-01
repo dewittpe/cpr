@@ -56,7 +56,14 @@ jobs:
         shell: Rscript {0}
 
       - name: Install Quartz
-        if: matrix.os == 'macOS-latest'
-        run: brew cask install xquartz
+        run: |
+          echo $RUNNER_OS
+          if [ "$RUNNER_OS" == "MacOS" ]; then
+            brew cask install xquartz
+          else
+            echo "$RUNNER_OS not supported"
+            exit 1
+          fi
+        shell: bash
 
       - uses: r-lib/actions/check-r-package@v1
