@@ -149,13 +149,15 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 
     if (show_xi & !show_x) {
       g <- g + ggplot2::scale_x_continuous(breaks = e$breaks,
-                                           labels = e$xi_expr, minor_breaks = NULL)
+                                           labels = parse(text = e$xi_expr),
+                                           minor_breaks = NULL)
     } else if (!show_xi & show_x) {
       g <- g + ggplot2::scale_x_continuous(breaks = e$breaks,
-                                           labels = e$num_expr, minor_breaks = NULL)
+                                           labels = e$num_expr,
+                                           minor_breaks = NULL)
     } else {
       g <- g + ggplot2::scale_x_continuous(breaks = e$breaks,
-                                           labels = e$xi_expr,
+                                           labels = parse(text = e$xi_expr),
                                            minor_breaks = NULL,
                                            sec.axis = ggplot2::sec_axis(~ .,
                                                                         breaks = e$breaks,
