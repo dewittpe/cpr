@@ -85,8 +85,19 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
 #' 6L.
 #' @param \ldots not currently used.
 print.cpr_bs <- function(x, n = 6L, ...) {
-  cat("Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
+  cat("Basis matrix dims: [",
+      paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "),
+      "]\n", sep = "")
+  cat("Order: ", attr(x, "order"), "\n", sep = "")
+  cat("Number of internal knots: ", length(attr(x, "iknots")), "\n\n", sep = "")
+
+  if (n < nrow(x)) {
+    cat("First", n, "rows:\n\n")
+  }
+
   print(x[seq(1, min(nrow(x), abs(n)), by = 1L), ])
+
+  invisible(x)
 }
 
 #' Plot B-splines

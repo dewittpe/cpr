@@ -59,6 +59,7 @@ plot(bmat, show_xi = TRUE,  show_x = TRUE)  # symbols on bottom, numbers on top
 bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0), order = 3L)
 bmat
 plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
+
 }
 \references{
 C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.

@@ -1,5 +1,22 @@
 require(splines)
 
+test_that("print.cpr_bs",
+          {
+
+            bmat <- bsplines(1:100, df = 52)
+            print_bmat <- capture.output(bmat)
+            expect_true(any(grepl("First\\s\\d+\\srows:", print_bmat)))
+            expect_equal(print_bmat[1], "Basis matrix dims: [100 x 52]")
+            expect_equal(print_bmat[2], "Order: 4")
+            expect_equal(print_bmat[3], "Number of internal knots: 48")
+            expect_equal(print_bmat[4], "")
+            expect_equal(print_bmat[5], "First 6 rows:")
+            expect_equal(print_bmat[6], "")
+
+            print_bmat <- capture.output(print(bmat, n = 1000))
+            expect_false(any(grepl("First\\s\\d+\\srows:", print_bmat)))
+          })
+
 test_that("Equivalent Basis Matrix",
           {
             expect_equivalent(unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10), order = 4)),
