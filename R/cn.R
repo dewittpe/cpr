@@ -128,17 +128,20 @@ print.cpr_cn <- function(x, ...) {
 #' @param object a \code{cpr_cn} object
 #' @rdname cn
 summary.cpr_cn <- function(object, ...) {
-  out <-
-    c(list(dfs        = length(object$cn$theta),
-           loglik     = object$loglik,
-           rmse       = object$rmse),
-      stats::setNames(lapply(lapply(object$bspline_list, attr, which = "iknots"), length),
-                      paste0("n_iknots", seq_along(object$bspline_list))),
-      stats::setNames(lapply(lapply(lapply(object$bspline_list, attr, which = "iknots"),
-                                    function(x) if (length(x)) { x } else { NA }),
-                             list),
-                      paste0("iknots", seq_along(object$bspline_list)))
-      )
+  iknots <- lapply(object$bspline_list, attr, which = "iknots")
+  names(iknots) <- paste0("iknots", seq_along(iknots))
 
-  as.data.frame(out)
+  out <-
+    data.frame(dfs        = length(object$cn$theta),
+               loglik     = object$loglik,
+               rmse       = object$rmse)
+
+  for(i in seq_along(iknots)) {
+    nm <- names(iknots)[i]
+    out[[paste0("n_", nm)]] <- length(iknots[[i]])
+    out[[nm]] <- I(iknots[i])
+  }
+
+  out
+
 }
