@@ -1,6 +1,6 @@
 # Check the rank of a matrix
+set.seed(42)
 mat <- matrix(rnorm(25000 * 120), nrow = 25000)
-Matrix::rankMatrix(mat)[1]
 matrix_rank(mat)
 
 # A full rank B-spline basis

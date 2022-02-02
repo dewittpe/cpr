@@ -23,7 +23,6 @@ LinkingTo: Rcpp (>= 0.12.13),
 Suggests:
     covr,
     knitr,
-    Matrix,
     qwraps2,
     testthat,
     rmarkdown,
