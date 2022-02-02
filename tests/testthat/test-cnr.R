@@ -1,8 +1,9 @@
+initial_cn <- cn(log10(pdg) ~ btensor(list(day, age), df = list(8, 9)), data = spdg)
+cnr_run <- cnr(initial_cn)
+s <- summary(cnr_run)
+
 test_that("cnr is as expected",
           {
-            initial_cn <- cn(log10(pdg) ~ btensor(list(day, age), df = list(8, 9)), data = spdg)
-            cnr_run <- cnr(initial_cn)
-            s <- summary(cnr_run)
 
             expect_equal(s$index, seq(1, 10, by = 1))
             expect_equal(s$dfs, c(16, 20, 24, 28, 35, 42, 49, 56, 64, 72))
@@ -57,6 +58,10 @@ test_that("cnr is as expected",
           }
 )
 
+test_that("cnr plotting",
+          {
+            expect_error(plot(cnr_run, type = "not-a-type"))
+          })
 
 ################################################################################
 ### #

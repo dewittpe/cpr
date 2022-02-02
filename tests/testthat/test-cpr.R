@@ -1,9 +1,9 @@
+initial_cp <- cp(log10(pdg) ~ bsplines(day, df = 54), data = spdg)
+cpr_run <- cpr(initial_cp)
+s <- summary(cpr_run)
+
 test_that("cpr is as expected",
           {
-
-            initial_cp <- cp(log10(pdg) ~ bsplines(day, df = 54), data = spdg)
-            cpr_run <- cpr(initial_cp)
-            s <- summary(cpr_run)
 
             expect_equal(object = s$index,    expected = 1:51)
             expect_equal(object = s$dfs,      expected = 4:54)
@@ -123,6 +123,11 @@ test_that("cpr is as expected",
             expect_equal(object = s$iknots[[51L]], expected = expected_iknots)
           }
 )
+
+test_that("cpr plotting",
+          {
+            expect_error(plot(cpr_run, type = "not-a-type"))
+          })
 
 
 ################################################################################
