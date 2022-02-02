@@ -58,10 +58,21 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
 
   if (missing(bknots)) {
     bknots <- lapply(x, range)
+  } else {
+    stopifnot(is.list(bknots))
+    stopifnot(length(bknots) == length(x))
+    stopifnot(all(sapply(bknots, length) == 2))
   }
 
   if (missing(order)) {
     order <- as.list(rep(4L, length(x)))
+  } else {
+    stopifnot(is.list(order))
+    stopifnot(length(order) == length(x))
+    stopifnot(all(sapply(order, length) == 1))
+
+    order <- lapply(order, as.integer)
+    stopifnot(all(sapply(order, is.integer)))
   }
 
   if (is.null(df) & is.null(iknots)) {
