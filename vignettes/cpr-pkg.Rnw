@@ -953,7 +953,7 @@ high quality of fit with fourth order B-splines and fifty internal knots. We wil
 fit a linear mixed model via \code{lmer} from the \pkg{lme4} package~\citep{r-lme4}.
 <<initial_cp4>>=
 initial_cp4 <- cp(log10(pdg) ~ bsplines(day, df = 54) + (1|id),
-                  data = spdg, method = lmer)
+                  data = spdg, method = lme4::lmer)
 @
 Applying the CPR algorithm requires one call to \code{cpr}.
 <<cpr_run4>>=
@@ -974,7 +974,7 @@ be used for selection of a preferable model.  The \code{plot} method returns a
   \centering
   \begin{subfigure}[t]{0.48\linewidth}
 <<cpr_run4_plot1, echo = FALSE, fig.width = 4, fig.height = 4>>=
-plot(cpr_run4, color = TRUE) + theme(legend.position = "bottom") # Figure \ref{fig:cpr_run4_plot1}
+plot(cpr_run4, color = TRUE) + ggplot2::theme(legend.position = "bottom") # Figure \ref{fig:cpr_run4_plot1}
 @
     \caption{}
     \label{fig:cpr_run4_plot1}
@@ -1025,45 +1025,48 @@ the end user to quickly modify the \code{cpr::bsplines} call within the
 The modified \code{df} are such that the knot sequences between
 \code{initial_cp4}, \code{initial_cp3}, and \code{initial_cp2} are the same.
 The updated initial control polygons are used to seed to additional CPR runs.
-<<other_cps, eval = FALSE>>=
+<<other_cps, eval = TRUE>>=
 initial_cp3 <- update_bsplines(initial_cp4, df = 53, order = 3)
 initial_cp2 <- update_bsplines(initial_cp4, df = 52, order = 2)
 cpr_run3 <- cpr(initial_cp3)
 cpr_run2 <- cpr(initial_cp2)
 @
 
-% To select a preferable model we will compare the RMSE by degrees of freedom as
-% in Figure~\ref{fig:other_cpr_run_summary}.
-% <<other_cpr_run_summary_uneval, ref.label = "other_cpr_run_summary", eval = FALSE>>=
-% @
-%
-% \begin{figure}
-%   \centering
-% <<other_cpr_run_summary, echo = FALSE, fig.width = 5, fig.height = 3>>=
-% list(cpr_run4, cpr_run3, cpr_run2) %>%
-%   lapply(summary) %>%
-%   bind_rows(.id = "order") %>%
-%   mutate(order = factor(order, 1:3, c("4th", "3rd", "2nd"))) %>%
-%   filter(index < 13) %>%
-%   ggplot() +
-%   theme_bw() +
-%   aes(x = dfs, y = rmse, color = order, linetype = order) +
-%   geom_path() +
-%   geom_point()
-% @
-% \caption{}
-% \label{fig:other_cpr_run_summary}
-% \end{figure}
-%
-%
-% The third order B-spline with five degrees of freedom, that is two internal
-% knots, is the preferable model as it has the lowest RMSE and degrees of freedom.
-%
-% <<preferable_overall>>=
-% # cpr_run3 with five degrees of freedom: 3rd order + 2 knots = 5 df.  Model
-% # index 3 has two knots.
-% preferable_model <- cpr_run3[[3]]
-% @
+To select a preferable model we will compare the RMSE by degrees of freedom as
+in Figure~\ref{fig:other_cpr_run_summary}.
+<<other_cpr_run_summary_uneval, ref.label = "other_cpr_run_summary", eval = FALSE>>=
+@
+
+\begin{figure}
+  \centering
+<<other_cpr_run_summary, echo = FALSE, fig.width = 5, fig.height = 3>>=
+plot_data <- lapply(list(cpr_run4, cpr_run3, cpr_run2), summary)
+for(i in seq_along(plot_data)) {
+plot_data[[i]][["order"]] <- i
+}
+plot_data <- do.call(rbind, plot_data)
+plot_data$order <- factor(plot_data$order, 1:3, c("4th", "3rd", "2nd"))
+plot_data <- subset(plot_data, index < 13)
+
+ggplot2::ggplot(data = plot_data) +
+  ggplot2::theme_bw() +
+  ggplot2::aes(x = dfs, y = rmse, color = order, linetype = order) +
+  ggplot2::geom_path() +
+  ggplot2::geom_point()
+@
+\caption{}
+\label{fig:other_cpr_run_summary}
+\end{figure}
+
+
+The third order B-spline with five degrees of freedom, that is two internal
+knots, is the preferable model as it has the lowest RMSE and degrees of freedom.
+
+<<preferable_overall>>=
+# cpr_run3 with five degrees of freedom: 3rd order + 2 knots = 5 df.  Model
+# index 3 has two knots.
+preferable_model <- cpr_run3[[3]]
+@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Control Net Reduction} \label{sec:cnr}
