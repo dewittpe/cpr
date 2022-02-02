@@ -30,8 +30,6 @@
 #' \code{iknot_weights} returns a vector with the 'importance weight' of each
 #' of the internal knots in \code{xi}.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @param x the value of the knot to be inserted into the knot vector
 #' @param xi the (whole) knot vector, including the repeated boundary knots.
 #'   Regardless of refinement or coarsening, this vector should be the
@@ -105,8 +103,6 @@ diag_only <- function(A, B) {
 #' of x, max_sv is the maximal singular value of x, and datum::eps is the
 #' difference between 1 and the least value greater than 1 that is
 #' representable.
-#'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a numeric matrix
 #'

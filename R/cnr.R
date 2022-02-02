@@ -11,8 +11,6 @@
 #' \ldots, \code{keep} internal knots) \code{cnr\_cp} objects in the list.  The
 #' limit on the number of stored regression fits is to keep memory usage down.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#;
 #' @param x a \code{cnr_cp} or \code{cnr_tensor} object
 #' @param keep keep (store) the regression fit for the first \code{keep}
 #' \code{cpr_cn} objects in the list returned by \code{cnr}.

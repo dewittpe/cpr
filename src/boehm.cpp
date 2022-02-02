@@ -103,8 +103,6 @@ arma::mat knot_insertion_hat_matrix(double x, const arma::vec& xi, unsigned int 
 //' \code{iknot_weights} returns a vector with the 'importance weight' of each
 //' of the internal knots in \code{xi}.
 //'
-//' @author Peter DeWitt \email{dewittpe@gmail.com}
-//'
 //' @param x the value of the knot to be inserted into the knot vector
 //' @param xi the (whole) knot vector, including the repeated boundary knots.
 //'   Regardless of refinement or coarsening, this vector should be the

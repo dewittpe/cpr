@@ -8,8 +8,6 @@
 #' \code{bknots}, or \code{order}.
 #' @param evaluate If true evaluate the new call else return the call.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @seealso \code{\link[stats]{update}}, \code{\link{bsplines}},
 #' \code{\link{btensor}}
 #'

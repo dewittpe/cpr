@@ -2,8 +2,6 @@
 #'
 #' Tensor products of Matrices.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @param x a matrix, or list of numeric matrices, build the tensor product
 #' @param ... additional numeric matrices to build the tensor product
 #'

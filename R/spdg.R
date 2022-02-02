@@ -11,8 +11,6 @@
 #' been provided for use in examples and instructions for use of the \code{cpr}
 #' package.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @references
 #' Santoro, Nanette, et al. "Body size and ethnicity are associated with
 #' menstrual cycle alterations in women in the early menopausal transition: The

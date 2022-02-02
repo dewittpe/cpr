@@ -16,8 +16,6 @@
 //' difference between 1 and the least value greater than 1 that is
 //' representable.
 //'
-//' @author Peter DeWitt \email{dewittpe@gmail.com}
-//'
 //' @param x a numeric matrix
 //'
 //' @return

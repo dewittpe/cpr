@@ -19,8 +19,6 @@
 #'
 #' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @param x a numeric vector
 #' @param iknots internal knots
 #' @param df degrees of freedom: sum of the order and internal knots.  Ignored

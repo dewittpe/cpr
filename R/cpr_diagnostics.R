@@ -3,12 +3,6 @@
 #' A collection of function for the inspection and evaluation of the control
 #' polygon reduction.
 #'
-#'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
-
-
-
 #' @method plot cpr_cpr
 #' @rdname cpr_diagnostics
 #' @export

@@ -23,8 +23,6 @@
 #' three-plus dimensional control net, or, for generating a useful data set for
 #' plotting the surface of a two-dimensional control net.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @param x a \code{cpr_cp} or \code{cpr_cn} object.
 #' @param margin an integer identifying the marginal of the control net to slice
 #' along.  Only used when working \code{x} is a \code{cpr_cn} object.

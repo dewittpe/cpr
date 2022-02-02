@@ -4,8 +4,6 @@
 #'
 #' \code{cn} generates the control net for the given B-spline function.  There
 #' are several methods for building a control net.
-#"
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
 #'
 #' @param x a \code{cpr_bs} object
 #' @param ... arguments passed to the regression method

@@ -2,8 +2,6 @@
 #'
 #' Model prediction for \code{cpr_cp} and \code{cpr_cn} objects.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @param object a \code{cpr_cp} or \code{cpr_cn} object
 #' @param newdata a \code{data.frame}
 #' @param ... passed to \code{\link[stats]{predict}} from the \code{stats}

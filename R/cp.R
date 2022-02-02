@@ -4,12 +4,8 @@
 #'
 #' \code{cp} generates the control polygon for the given B-spline function.
 #'
-#' @author Peter DeWitt \email{dewittpe@gmail.com}
-#'
 #' @param x a \code{cpr_bs} object
 #' @param ... arguments passed to the regression method
-#'
-#'
 #'
 #' @examples
 #'
