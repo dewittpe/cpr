@@ -22,7 +22,6 @@ LinkingTo: Rcpp (>= 0.12.13),
     RcppArmadillo
 Suggests:
     covr,
-    gridExtra,
     knitr,
     Matrix,
     qwraps2,

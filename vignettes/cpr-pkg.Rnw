@@ -83,7 +83,6 @@ library(lme4)
 library(cpr)
 library(plot3D)
 library(ggplot2)
-library(gridExtra)
 
 set.seed(42)  # don't panic, this is reproducible.
 knitr::opts_chunk$set(echo       = TRUE,
