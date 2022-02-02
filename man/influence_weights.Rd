@@ -30,6 +30,3 @@ A \code{data.frame} with two elements, the internal knots (iknots) and the weigh
 Determine the influence weight of each internal knot on each marginal of a
 tensor product.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

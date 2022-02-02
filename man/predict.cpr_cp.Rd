@@ -17,6 +17,3 @@ package.}
 \description{
 Model prediction for \code{cpr_cp} and \code{cpr_cn} objects.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

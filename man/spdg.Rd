@@ -50,7 +50,4 @@ menstrual cycle alterations in women in the early menopausal transition: The
 Study of Women's Health across the Nation (SWAN) Daily Hormone Study." The
 Journal of Clinical Endocrinology & Metabolism 89.6 (2004): 2622-2631.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}
 \keyword{datasets}

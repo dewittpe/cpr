@@ -61,6 +61,3 @@ tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) :
 
 all.equal(tp2, unclass(tp), check.attributes = FALSE)
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

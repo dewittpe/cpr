@@ -66,6 +66,3 @@ vignette("cpr-pkg", package = "cpr")
 }
 
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

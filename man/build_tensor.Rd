@@ -32,6 +32,3 @@ all.equal(tensor1, tensor2)
 tensor3 <- build_tensor(A, B, B)
 str(tensor3)
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

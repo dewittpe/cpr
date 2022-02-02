@@ -27,6 +27,3 @@ Calculate the integral of the squared second derivative of the spline function.
 \seealso{
 \code{\link{cp}} \code{\link[stats]{integrate}}
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

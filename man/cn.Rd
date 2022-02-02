@@ -68,6 +68,3 @@ Generate the control net for a uni-variable B-spline
 \code{cn} generates the control net for the given B-spline function.  There
 are several methods for building a control net.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

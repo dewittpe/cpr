@@ -31,6 +31,3 @@ vertices of cp1 to the control polygon cp2.
 \description{
 Collection of functions for inspection and analysis of the control polygons
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

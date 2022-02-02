@@ -56,6 +56,3 @@ limit on the number of stored regression fits is to keep memory usage down.
 \code{\link{influence_weights}}, \code{\link{cpr}} for the
 uni-variable version, Control Polygon Reduction.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

@@ -33,6 +33,3 @@ a variety of possible model calls, lm, lmer, etc.
 By returning an explicit \code{formula} and \code{data.frame} for use in the
 fit, we hope to reduce memory use and increase the speed of the cpr method.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

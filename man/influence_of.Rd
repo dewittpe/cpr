@@ -36,6 +36,3 @@ coarsened, and approximated control polygons.
 \seealso{
 \code{\link{plot.cpr_influence_of}}, \code{\link{cp}}
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

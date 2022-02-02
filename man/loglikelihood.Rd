@@ -21,7 +21,7 @@ of a regression object.
 \details{
 This function is used by \code{cpr::cpr} and \code{cpr::cnr} to determine the
 (quasi) log likelihood returned in the \code{cpr_cpr} and \code{cpr_cnr}
-objects.  
+objects.
 
 Generally this function defaults to stats::logLik.  Therefore, if an S3
 method for determining the (quasi) log likelihood exists in the workspace
@@ -33,7 +33,4 @@ default method uses \code{stats::logLik}.
 }
 \seealso{
 \code{\link{cpr}} \code{\link{cnr}} \code{\link[stats]{logLik}}
-}
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
 }

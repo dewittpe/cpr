@@ -74,6 +74,3 @@ See \code{\link{update_bsplines}} for info on a tool for updating a
 \code{cpr_bs} object.  This is a similar method to the
 \code{\link[stats]{update}} function from the \code{stats} package.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

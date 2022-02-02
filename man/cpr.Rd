@@ -110,6 +110,3 @@ ggplot2::stat_smooth(mapping = ggplot2::aes(y = y, color = "gam"),
 ggplot2::geom_line(data = bin_average, mapping = ggplot2::aes(y = y, color = "bin_average"))
 
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

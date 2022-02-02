@@ -64,6 +64,3 @@ plot(a_cp, show_spline = TRUE)
 \seealso{
 \code{\link{get_surface}}
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

@@ -12,6 +12,3 @@ extract_cpr_bsplines(form)
 \description{
 Non-exported function.  Might be depericated.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

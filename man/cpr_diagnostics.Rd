@@ -26,6 +26,3 @@ polygon reduction.
 \seealso{
 \code{\link{plot.cpr_cp}}
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

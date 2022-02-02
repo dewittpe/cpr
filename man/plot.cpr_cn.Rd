@@ -83,6 +83,3 @@ and controlling rgl graphics. \code{\link[plot3D]{persp3D}} for building
 plot3D graphics. \code{\link{get_surface}} for generating the data sets
 needed for the plotting methods.
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}

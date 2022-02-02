@@ -67,6 +67,3 @@ updt_cn <- update_btensor(init_cn, df = list(30, 2), order = list(3, 2))
 \code{\link[stats]{update}}, \code{\link{bsplines}},
 \code{\link{btensor}}
 }
-\author{
-Peter DeWitt \email{dewittpe@gmail.com}
-}
