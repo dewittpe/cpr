@@ -163,7 +163,7 @@ bmat
 
 \subsection{cpr::bsplines vs splines::bs}
 The standard installation of \proglang{R} includes the
-\pkg{splines}~\citep{R-base} package and the \code{splines::bs} function for
+\pkg{splines} package and the \code{splines::bs} function for
 generating the basis matrix of B-splines, \ie, the matrix shown in
 \eqref{eq:basis_matrix}.  The provided \pkg{cpr::bsplines} function
 for generating B-spline basis matrices with the class
@@ -236,10 +236,12 @@ The call to \code{splines::bs} which will generate the same basis matrix as
 bmat_bs <- splines::bs(x = seq(0, 6, length = 500),
                        knots = c(1.0, 1.5, 2.3, 4.0, 4.5),
                        intercept = TRUE)
-
-stopifnot(all.equal(unclass(bmat), unclass(bmat_bs), check.attributes = FALSE))
+all.equal(unclass(bmat), unclass(bmat_bs), check.attributes = FALSE)
 @
 
+<<include = FALSE>>=
+stopifnot(all.equal(unclass(bmat), unclass(bmat_bs), check.attributes = FALSE))
+@
 
 For both \code{splines::bs} and \code{cpr::bsplines} only the degrees of freedom
 or the internal knots need to be specified.  If the end user specifies both, the
@@ -275,24 +277,26 @@ The return object from both \code{splines::bs} and \code{cpr::bsplines} is a mat
 attributes returned include the argument values used to construct the basis.
 The major difference in the attributes between the two objects is that
 \code{cpr::bsplines} returns the full knot sequence, $\bs{\xi},$ in the \code{xi}
-element and the Greville sites, $\bs{\xi}^{*}$ in the \code{xi\_star} element.
-These attributes are used in the construction of control polygons.
+element and the Greville sites, $\bs{\xi}^{*}$ in the \code{xi\_star} element
+which is useful for building control polygons.
 Lastly, the classes for the two objects differ: \code{splines::bs} returns a three
 classes, \code{c("bs", "basis", "matrix")} and \code{cpr::bsplines} returns two
-classes, \code{c("cpr\_bs", "matrix")}.  An example construction and structure
-are below.
-<<eg_bmat_construction>>=
-<<eg_bmat>>
-bmat
-@
+classes, \code{c("cpr\_bs", "matrix")}.
 
 \subsection{Plotting B-spline Bases}
 There is no default method for plotting \code{splines::bs} objects.  If the numeric
 vector \code{x} is sorted, then a minimally useful basis plot can be generated
-via \code{graphics::matplot}.  The \pkg{cpr} package provides an plotting method
-for the \code{cpr\_bs} objects. The plotting method returns a \code{c("gg",
-"ggplot")} object and can be modified by adding additions layers as would be
-done for any other \code{ggplot} object.
+via \code{graphics::matplot}.  The \pkg{cpr} package provides an plotting
+method, built on top of \pkg{ggplot2}~\citep{r-ggplot2},
+for \code{cpr\_bs} objects.
+
+<<>>=
+matplot(bmat_bs)
+@
+<<>>=
+plot(bmat)
+@
+
 
 % \begin{figure}
 % \end{figure}
@@ -304,14 +308,6 @@ print(sessionInfo(), locale = FALSE)
 % ---------------------------------------------------------------------------- %
 % Bib
 \begin{filecontents*}{bsplinerefs.bib}
-
-<<echo = FALSE, results = "asis", include = TRUE>>=
-x <- toBibtex(citation(package = "splines"))
-str(x)
-x[1] <- sub(",$", "R-base,", x[1])
-x
-@
-
 
 @book{deboor2001,
   title     = {A practical guide to splines, revised Edition, Vol. 27 of Applied Mathematical Sciences},

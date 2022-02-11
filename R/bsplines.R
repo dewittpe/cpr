@@ -130,6 +130,10 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
   plot_data <- utils::stack(as.data.frame(bmat))
   names(plot_data) <- c("value", "spline")
   plot_data <- cbind(plot_data, data.frame(x = rep(xvec, times = ncol(bmat))))
+  levels(plot_data$spline) <- sub("V", "B", levels(plot_data$spline))
+  levels(plot_data$spline) <- sub("(\\d+)", 
+                                  paste0("[list(\\1,k==", attr(x, "order"), ",bold(xi))](x)"),
+                                        levels(plot_data$spline))
 
   g <-
     ggplot2::ggplot(plot_data) +
@@ -140,6 +144,8 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 
   if (color) {
     g <- g + ggplot2::aes_string(color = "spline")
+    g <- g + ggplot2::scale_color_discrete(labels = scales::parse_format())
+    print(levels(plot_data$spline))
   } else {
     g <- g + ggplot2::aes_string(group = "spline")
   }
