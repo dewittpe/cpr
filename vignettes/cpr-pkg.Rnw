@@ -412,11 +412,11 @@ influence_data <- rbind(
 
 influence_data$CP <- NA
 influence_data$CP <- gsub("^[1-2]$", "Original", influence_data$object)
-influence_data$CP <- gsub("^[3-6]$", "Omit a knot", influence_data$CP)
-influence_data$CP <- gsub("^([7-9]|10)$", "Reinsert the knot", influence_data$CP)
+influence_data$CP <- gsub("^[3-6]$", "Omit~a~knot", influence_data$CP)
+influence_data$CP <- gsub("^([7-9]|10)$", "Reinsert~the~knot", influence_data$CP)
 influence_data$CP <-
   factor(influence_data$CP,
-         levels = c("Original", "Omit a knot", "Reinsert the knot"))
+         levels = c("Original", "Omit~a~knot", "Reinsert~the~knot"))
 
 influence_data <-
   rbind(
