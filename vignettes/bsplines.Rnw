@@ -257,7 +257,7 @@ For example: the internal knots for a B-spline with 9 degrees of freedom on a
 forth order spline with an intercept, \code{splines::bs} will generate a
 sequence of internal knots via a call equivalent to
 <<>>=
-x = sample(runif(100, 0, 6), 500, replace = TRUE)
+x <- sample(runif(100, 0, 6), 500, replace = TRUE)
 # k <- degrees of freedom - order + (1L - intercept)
 degf <- 9
 ordr <- 4
@@ -270,8 +270,11 @@ whereas \code{cpr::bsplines} will generate a sequence  equivalent to
 stats::quantile(unique(x)[-c(1, length(unique(x)))],
                 probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
 @
-The function \code{cpr::trimmed_quantile} is provided to generate such
+\noindent The function \code{cpr::trimmed_quantile} is provided to generate such
 sequences.
+<<>>=
+trimmed_quantile(x, probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
+@
 
 The return object from both \code{splines::bs} and \code{cpr::bsplines} is a matrix.  The
 attributes returned include the argument values used to construct the basis.

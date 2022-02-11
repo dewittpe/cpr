@@ -18,7 +18,7 @@ values, if false, base the quantiles on all data, after trimming.}
 }
 \description{
 For data X = x1, x2, ..., xn, with order statistics x(1), x(2), ..., x(r) return
-the quantiles for a trimmed data set, e.g., X \ {x(1), x(r)} (trim = 1), or 
+the quantiles for a trimmed data set, e.g., X \ {x(1), x(r)} (trim = 1), or
 X \ {x(1), x(2), x(r-1), x(r)} (trim = 2).
 }
 \examples{
