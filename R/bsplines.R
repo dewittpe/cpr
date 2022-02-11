@@ -145,7 +145,6 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
   if (color) {
     g <- g + ggplot2::aes_string(color = "spline")
     g <- g + ggplot2::scale_color_discrete(labels = scales::parse_format())
-    print(levels(plot_data$spline))
   } else {
     g <- g + ggplot2::aes_string(group = "spline")
   }
