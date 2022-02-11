@@ -7,6 +7,7 @@
 \usepackage{fullpage}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{alltt}
 
 % ---------------------------------------------------------------------------- %
 % Float setup
@@ -37,11 +38,16 @@
 \newcommand{\eg}{{\itshape e.g.}}
 \newcommand{\bs}[1]{\boldsymbol{#1}}
 \newcommand{\card}[1]{\left|#1\right|}
+\newcommand{\CP}{C\!P}  % control polygon, or control point sequence
+\newcommand{\CN}{C\!N}  % control net
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
 % ---------------------------------------------------------------------------- %
 % Bibtex
 \usepackage{filecontents}
 \usepackage[authoryear]{natbib}
+
 
 % ---------------------------------------------------------------------------- %
 % Front Matter
@@ -62,6 +68,12 @@
 
 <<setup, include = FALSE>>=
 # knitr::opts_chunk$set()
+hook_source = knitr::knit_hooks$get('source')
+knitr::knit_hooks$set(source = function(x, options) {
+  txt = hook_source(x, options)
+  # extend the default source hook
+  gsub('\\\\textbackslash\\{\\}ref\\\\\\{(.+)\\\\\\}', '\\\\ref{\\1}', txt)
+})
 @
 
 <<>>=
@@ -131,8 +143,8 @@ The basis is a partition of unity over the support of $\bs{x},$
 \ie, all rows sum to one, and the span of the basis defines a spline
 space $\mathbb{S}_{k, \bs{\xi}} = \text{span } \bs{B}_{k, \bs{\xi}}.$
 
-\subsection{Building B-splines with \code{bsplines}}
-Build B-splines via \code{bsplines}.
+\subsection{Building B-spline basis}
+Build B-spline basis via \code{bsplines}.
 <<>>=
 str(bsplines)
 @
@@ -160,7 +172,8 @@ warning will be given and \code{iknots} will be used in the construction of the
 basis matrix.
 
 <<example_bmat>>=
-bmat <- bsplines(x      = seq(0, 6, length = 500),
+x <- seq(0, 6, length = 500) # will be used again
+bmat <- bsplines(x      = x,
                  iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
 bmat
 @
@@ -261,23 +274,23 @@ For example: the internal knots for a B-spline with 9 degrees of freedom on a
 forth order spline with an intercept, \code{splines::bs} will generate a
 sequence of internal knots via a call equivalent to
 <<>>=
-x <- sample(runif(100, 0, 6), 500, replace = TRUE)
+y <- sample(runif(100, 0, 6), 500, replace = TRUE)
 # k <- degrees of freedom - order + (1L - intercept)
 degf <- 9
 ordr <- 4
 k <- degf - ordr + (1 - as.integer(TRUE))
 p <- seq(0, 1, length = k + 2L)[-c(1, k + 2L)]
-stats::quantile(x, probs = p)
+stats::quantile(y, probs = p)
 @
 \noindent whereas \code{cpr::bsplines} will generate a sequence  equivalent to
 <<>>=
-stats::quantile(unique(x)[-c(1, length(unique(x)))],
+stats::quantile(unique(y)[-c(1, length(unique(y)))],
                 probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
 @
 \noindent The function \code{cpr::trimmed_quantile} is provided to generate such
 sequences.
 <<>>=
-trimmed_quantile(x, probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
+trimmed_quantile(y, probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
 @
 
 The return object from both \code{splines::bs} and \code{cpr::bsplines} is a
@@ -290,22 +303,82 @@ the two objects differ: \code{splines::bs} returns a three classes,
 \code{c("bs", "basis", "matrix")} and \code{cpr::bsplines} returns two classes,
 \code{c("cpr\_bs", "matrix")}.
 
-\subsection{Plotting B-spline Bases}
+\subsection{Plotting B-spline Basis}
 The \pkg{cpr} package provides an plotting
 method, built on top of \pkg{ggplot2}~\citep{R-ggplot2},
-for \code{cpr\_bs} objects, see Figure~\ref{fig:basis_plot}.
+for \code{cpr\_bs} objects.
+<<label = "plot_bmat_basis", eval = FALSE>>=
+plot(bmat, show_x = TRUE) # Figure \ref{fig:basis_plot}
+@
+
+\subsection{Spine Function}
+As noted previously, the B-spline basis is a partition of unity over the support
+of $\bs{x},$
+and the span of the basis defines a spline
+space $\mathbb{S}_{k, \bs{\xi}} = \text{span } \bs{B}_{k, \bs{\xi}}.$
+The spline function, $f \left(x \right) \in \mathbb{S}_{k,
+\bs{\xi}},$ is a convex sum the coefficients $\bs{\theta}_{\bs{\xi}},$
+\begin{equation}
+  \label{eq:bspline_univariable_function}
+  f\left(x \right) = \bs{B}_{k,
+  \bs{\xi}} \left( x \right) \bs{\theta}_{\bs{\xi}} =
+  \sum_{j = 1}^{k + l} B_{j, k, \bs{\xi}} \left( x \right) \theta_{j, \bs{\xi}}.
+\end{equation}
+
+An example spline function using the \code{bmat} is shown in
+Figure~\ref{fig:spline_function}.
+
 
 \begin{figure}
   \centering
-<<out.width = "0.48\\textwidth">>=
-plot(bmat, show_x = TRUE)
+  \begin{subfigure}[t]{0.48\textwidth}
+<<echo = FALSE, results = "hide">>=
+<<plot_bmat_basis>>
 @
   \caption{\label{fig:basis_plot} Plotting each of the basis functions for a
   $k = \Sexpr{attr(bmat, "order")}$ order spline with
   \Sexpr{length(attr(bmat, "iknots"))} internal knots.}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+<<echo = FALSE, results = "hide">>=
+theta <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
+plot(cp(bmat, theta), show_spline = TRUE, show_xi = FALSE) +
+  ggplot2::theme(legend.position = "none")
+@
+    \caption{\label{fig:spline_function}}
+  \end{subfigure}
+    \caption{\label{fig:basis_and_spline}}
 \end{figure}
 
 \section{Control Polygons}
+Control polygons are strong convex hulls about a spline function.  The control
+polygon for a spline
+$\bs{B}_{k, \bs{\xi}} \left(x \right) \bs{\theta}_{\bs{\xi}},$
+is
+$\CP_{k, \bs{\xi}, \bs{\theta}_{\bs{\xi}}},$
+where
+\begin{equation}
+  \label{eq:control_polygon}
+  \CP_{k, \bs{\xi}, \bs{\theta}_{\bs{\xi}}} = \left\{ \left( \xi_{j}^{*},
+  \theta_{j, \bs{\xi}} \right)
+  \right\}_{j = 1}^{k + l}; \quad \xi_{j}^{*} = \frac{1}{k-1}
+\sum_{i=1}^{k-1} \xi_{j + i}.
+\end{equation}
+$\CP_{k, \bs{\xi}, \bs{\theta}_{\bs{\xi}}}$ is a sequence of $k + l$ control
+vertices.  We may interpret the control polygons as a piecewise linear function
+approximating the spline function $\bs{B}_{k, \bs{\xi}} \left( x \right)
+\bs{\theta}_{\bs{\xi}}.$ Changes in convexity and other subtle characteristics
+of the spline function are exaggerated by the control polygon.
+
+
+
+An example
+basis, spline function, and control polygon are shown in
+Figure~\ref{fig:basis_and_cp_plot}.  The control polygons are helpful for
+illustrating the relationship between two splines with $\bs{\xi}_1 \subset
+\bs{\xi}_2.$
+
+
 \section{Tensor Products of B-Splines}
 \section{Control Nets}
 

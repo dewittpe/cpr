@@ -18,7 +18,7 @@
 \newcommand{\bs}[1]{\boldsymbol{#1}}
 \newcommand{\CP}{C\!P}  % control polygon, or control point sequence
 \newcommand{\CN}{C\!N}  % control net
-\newcommand{\card}[1]{n\left(#1\right)} %{\left|#1\right|}
+\newcommand{\card}[1]{\left|#1\right|}
 \DeclareMathOperator*{\argmin}{arg\,min}
 \DeclareMathOperator*{\argmax}{arg\,max}
 
