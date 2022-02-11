@@ -18,6 +18,7 @@ Imports:
     lme4,
     plot3D,
     Rcpp (>= 0.12.13),
+    scales
 LinkingTo: Rcpp (>= 0.12.13),
     RcppArmadillo
 Suggests:
