@@ -1,13 +1,14 @@
-%\VignetteEngine{knitr::knitr} 
+%\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{B-Splines and Control Polygons}
 %\VignetteEncoding{UTF-8}
 
+% ---------------------------------------------------------------------------- %
 \documentclass[10pt]{article}
 \usepackage{fullpage}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
-% ----------------------------------------------------------------------------- %
+% ---------------------------------------------------------------------------- %
 % Float setup
 \usepackage{ctable}
 \usepackage{floatrow}
@@ -55,34 +56,36 @@
   This vignette covers general theory and mathematics of B-Splines and their
   corresponding control polygons.  The use of the \pkg{cpr} package to build and
   work with B-Splines and control polygons is presented to show examples of the
-  general concepts.
-}
+  general concepts.  Additional details about the control polygon reduction
+  approach for finding a parsimonious set of knots for B-spline regression model
+  are presented in \code{vignette(topic = "cpr-pkg", package = "cpr")}.
 
-\section*{Preface}
-Options and packages used in the following examples.
 <<>>=
-options(width = 84, digits = 3)
+set.seed(42)
 library(cpr)
 @
+}
 
 \section{B-Splines}
 \subsection{General Definition}
 Many references are available for B-splines.  Two very good references are
 \citet{deboor2001} and \citet{prautzsch2002}.  The goal of this document is to
-provide a detailed exploration of B-splines in the context that would be used in
+provide a detailed exploration of B-splines in the context useful for
 statistical models.
 
-B-splines get there name from `basis`-splines.  That this, a set of basis
+B-splines get there name from `basis'-splines.  That this, a set of basis
 functions define a B-spline basis and space.  A B-spline basis, $\bs{B}_{k,
-\bs{\xi}} \left(\bs{x}\right)$ is defined by a polynomial order $k,$ knot
-sequence $\bs{\xi}.$  The
-traditional knot sequence construction places $k$ fold boundary knots at
-$\min\left(\bs{x}\right)$ and $\max\left(\bs{x}\right),$  with an additional $l
+\bs{\xi}} \left(\bs{x}\right),$ is defined by a polynomial
+order\footnote{Recall: the order of a polynomial is the degree plus 1, \eg,
+$x^n$ is a $n^{th}$ degree, or $(n+1)^{st}$ order, polynomial.}
+$k$ and knot sequence $\bs{\xi}$ over the range of a numeric vector $\bs{x}.$
+A traditional knot sequence construction places $k$ fold boundary knots at
+$\min\left(\bs{x}\right)$ and $\max\left(\bs{x}\right),$ with an additional $l
 \geq 0$ internal knots located within $\text{range}\left(\bs{x}\right).$
-The basis matrix, $\bs{b}_{k, \bs{\xi}} \left( x\right) \in
+The basis matrix, $\bs{B}_{k, \bs{\xi}} \left( x\right) \in
 \mathbb{R}^{\card{\bs{x}} \times \left(k + l\right)}$ is of the form
 \begin{equation}
-  \label{eq:basis_matrix} 
+  \label{eq:basis_matrix}
   \bs{B}_{k, \bs{\xi}} \left(x \right) =
   \begin{pmatrix}
     B_{1, k, \bs{\xi}}\left(x_1\right) & B_{2, k, \bs{\xi}}\left(x_1\right) & \cdots & B_{k+l, k, \bs{\xi}}\left(x_1\right) \\
@@ -92,27 +95,27 @@ The basis matrix, $\bs{b}_{k, \bs{\xi}} \left( x\right) \in
   \end{pmatrix}
 \end{equation}
 where $B_{j, k, \bs{\xi}} \left( \bs{x} \right)$ is the $j^{th}$ B-spline defined by de Boor's recursive algorithm
-
+%
 \begin{equation}
   \label{eq:deboor_recursion}
   B_{j, k, \bs{\xi}} \left(x\right) =
   \omega_{j, k, \bs{\xi}}\left(x\right) B_{j, k-1, \bs{\xi}}\left(x\right) + \left(1 -
   \omega_{j+1, k, \bs{\xi}} \right) B_{j+1, k-1, \bs{\xi}}\left(x\right),
 \end{equation}
-with 
+with
 \begin{equation}
   \label{eq:recurrence_relation_null}
   B_{j, k, \bs{\xi}}\left(x\right) = 0 \quad \text{for } x \notin
   \left[\xi_{j}, \xi_{j+k}\right), \quad
-  B_{j, 1, \bs{\xi}}\left(x\right) = 
+  B_{j, 1, \bs{\xi}}\left(x\right) =
   \begin{cases}
     1 & x \in \left[\xi_{j}, \xi_{j+1} \right)\\
     0 & \text{otherwise},
-  \end{cases} 
+  \end{cases}
 \end{equation}
 and
 \begin{equation}
-  \label{eq:omega} 
+  \label{eq:omega}
   \omega_{jk}\left(x\right) =
   \begin{cases}
   \hfil 0                                        & \hfil x \leq \xi_{j} \\
@@ -129,7 +132,13 @@ Build B-splines via \code{bsplines}.
 <<>>=
 str(bsplines)
 @
-\noindent There are five arguments for the \code{bsplines} call.
+<<include = FALSE>>=
+stopifnot(length(formals(bsplines)) == 5L)
+# if the above fails verify that the description of the arguments below are
+# correct.
+@
+\noindent There are \Sexpr{length(formals(bsplines))} arguments for the
+\code{bsplines} call.
 \begin{itemize}
   \item \code{x} is a numeric vector as noted in the above notation.
   \item \code{iknots} is a numeric vector of locations for the internal knots.
@@ -146,7 +155,7 @@ You only need to specify \code{iknots} or \code{df}.  If both are provided a
 warning will be given and \code{iknots} will be used in the construction of the
 basis matrix.
 
-<<>>=
+<<example_bmat>>=
 bmat <- bsplines(x      = seq(0, 6, length = 500),
                  iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
 bmat
@@ -154,19 +163,27 @@ bmat
 
 \subsection{cpr::bsplines vs splines::bs}
 The standard installation of \proglang{R} includes the
-\pkg{splines}~\citep{R-base} package and the \code{splines::bs} function for generating
-the basis matrix of B-splines, {\it i.e.} the matrix shown in
-\eqref{eq:basis_matrix}.  The \pkg{cpr} package provides an alternative
-function, \code{cpr::bsplines} for generating B-spline basis matrices with the class
-\code{cpr\_bs}.  The differences in the functional arguments and the attributes
-of the return objects between \code{splines::bs} and \code{cpr::bsplines} are listed in
-Table~\ref{tab:bs_vs_bsplines}. 
+\pkg{splines}~\citep{R-base} package and the \code{splines::bs} function for
+generating the basis matrix of B-splines, \ie, the matrix shown in
+\eqref{eq:basis_matrix}.  The provided \pkg{cpr::bsplines} function
+for generating B-spline basis matrices with the class
+\code{cpr\_bs} has arguments and defaults which are beneficial, and required,
+for the use in the control polygon reduction algorithm.
+The differences in the functional arguments and the attributes
+of the return objects between \code{splines::bs} and \code{cpr::bsplines} are
+listed in Table~\ref{tab:bs_vs_bsplines}.
 \begin{table}
   \caption{Comparison of the arguments, with default values, for \code{splines::bs} and
     \code{cpr::bsplines}.  The attributes for the resulting \code{splines::bs} and
   \code{cpr\_bs} objects are also reported.}
   \label{tab:bs_vs_bsplines}
   \centering
+<<include = FALSE>>=
+stopifnot(
+  names(attributes(bmat)) ==
+    c("dim", "order", "iknots", "bknots", "xi", "xi_star", "class", "call", "environment"))
+@
+
 \begin{tabular}{lll} \hline
            & \code{splines::bs}               & \code{cpr::bsplines}     \\ \hline
  Arguments &                                  &                          \\
@@ -194,42 +211,62 @@ A major difference between the two functions is related to the \code{intercept}
 argument of \code{splines::bs}.  By default, \code{splines::bs} will omit the
 first column of the basis whereas \code{cpr::bsplines} will return the whole
 basis.  The omission of the first column of the basis generated by
-\code{splines::bs} allows for additive \code{splines::bs} calls to be used on the
-right-hand-side of a regression formula and generate a full rank design matrix.
-If additive \code{cpr::bsplines} calls, or additive \code{splines::bs} with \code{intercept =
-TRUE}, are on the right-hand-side of the regression equation the resulting
-design matrix will be rank deficient.  This is a result of the B-splines being a
-partition of unity.  As the CPR algorithm is based on having the whole basis,
-{he \code{cpr::bsplines} function is provided to make it easy to work with the whole
-basis without having to remember to use non-default settings in \code{splines::bs}.
-The default call \code{splines::bs(x)} is replicated
-by \code{cpr::bsplines(x)[, -1]} and the default call \code{cpr::bsplines(x)} is
-replicated \code{splines::bs(x, intercept = TRUE)}.
+\code{splines::bs} allows for additive \code{splines::bs} calls to be used on
+the right-hand-side of a regression formula and generate a full rank design
+matrix. If additive \code{cpr::bsplines} calls, or additive \code{splines::bs}
+with \code{intercept = TRUE}, are on the right-hand-side of the regression
+equation the resulting design matrix will be rank deficient.  This is a result
+of the B-splines being a partition of unity.  As the CPR algorithm is based on
+having the whole basis, {he \code{cpr::bsplines} function is provided to make it
+easy to work with the whole basis without having to remember to use non-default
+settings in \code{splines::bs}. The default call \code{splines::bs(x)} is
+replicated by \code{cpr::bsplines(x)[, -1]} and the default call
+\code{cpr::bsplines(x)} is replicated \code{splines::bs(x, intercept = TRUE)}.
 
 Specifying the polynomial order and knot sequence between the two functions
-differ between \code{splines::bs} and \code{cpr::bsplines}.
-\code{splines::bs} uses the polynomial \code{degree} whereas \code{cpr::bsplines} uses the
+differ between \code{splines::bs} and \code{cpr::bsplines}. \code{splines::bs}
+uses the polynomial \code{degree} whereas \code{cpr::bsplines} uses the
 polynomial \code{order} (order = degree + 1) to define the splines.  The default
-for both \code{splines::bs} and \code{cpr::bsplines} is to generate cubic B-splines.
+for both \code{splines::bs} and \code{cpr::bsplines} is to generate cubic
+B-splines.
 
-For both \code{splines::bs} and
-\code{cpr::bsplines} only the degrees of freedom or the internal knots need to be
-specified.  If the end user specifies both, the specified knots take precedence.
-If only \code{df} is specified then \code{df - order} internal knots will be
-generated.
-\code{splines::bs} and \code{cpr::bsplines}.
-For a numeric vector \code{x}, 
-\code{splines::bs} will generate a sequence of
-internal knots via a call equivalent to 
-<<eval = FALSE, echo = TRUE>>=
-knots <- df + order + (1L - intercept)
-stats::quantile(x,
-  probs = seq(0, 1, length = length(knots) + 2L)[-c(1, length(knots) + 2L)])
-@ 
+The call to \code{splines::bs} which will generate the same basis matrix as
+\code{bmat} above is:
+<<>>=
+bmat_bs <- splines::bs(x = seq(0, 6, length = 500),
+                       knots = c(1.0, 1.5, 2.3, 4.0, 4.5),
+                       intercept = TRUE)
+
+stopifnot(all.equal(unclass(bmat), unclass(bmat_bs), check.attributes = FALSE))
+@
+
+
+For both \code{splines::bs} and \code{cpr::bsplines} only the degrees of freedom
+or the internal knots need to be specified.  If the end user specifies both, the
+specified knots take precedence. If only \code{df} is specified then \code{df -
+order} internal knots will be generated.
+
+There is a very important difference in way \code{splines::bs} and
+\code{cpr::bsplines} build the sequence of internal knots.  \code{splines::bs}
+uses quantiles of the whole numeric vector $\bs{x}$ whereas \code{cpr::bsplines}
+uses quantiles of the unique values of $\bs{x} \backslash \{\min(\bs{x}),
+\max(\bs{x}) \}.$
+For example: the internal knots for a B-spline with 9 degrees of freedom on a
+forth order spline with an intercept, \code{splines::bs} will generate a
+sequence of internal knots via a call equivalent to
+<<>>=
+x = sample(runif(100, 0, 6), 500, replace = TRUE)
+# k <- degrees of freedom - order + (1L - intercept)
+degf <- 9
+ordr <- 4
+k <- degf - ordr + (1 - as.integer(TRUE))
+p <- seq(0, 1, length = k + 2L)[-c(1, k + 2L)]
+stats::quantile(x, probs = p)
+@
 whereas \code{cpr::bsplines} will generate a sequence  equivalent to
-<<eval = FALSE, echo = TRUE>>=
+<<>>=
 stats::quantile(unique(x)[-c(1, length(unique(x)))],
-                probs = seq(1, df - order, by = 1) / (df - order + 1))
+                probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
 @
 The function \code{cpr::trimmed_quantile} is provided to generate such
 sequences.
@@ -267,6 +304,15 @@ print(sessionInfo(), locale = FALSE)
 % ---------------------------------------------------------------------------- %
 % Bib
 \begin{filecontents*}{bsplinerefs.bib}
+
+<<echo = FALSE, results = "asis", include = TRUE>>=
+x <- toBibtex(citation(package = "splines"))
+str(x)
+x[1] <- sub(",$", "R-base,", x[1])
+x
+@
+
+
 @book{deboor2001,
   title     = {A practical guide to splines, revised Edition, Vol. 27 of Applied Mathematical Sciences},
   author    = {de~Boor, Carl},
@@ -279,7 +325,7 @@ print(sessionInfo(), locale = FALSE)
   author    = {Prautzsch, Hartmut and Boehm, Wolfgang and Paluszny, Marco},
   year      = {2002},
   publisher = {Springer Science \& Business Media}
-} 
+}
 \end{filecontents*}
 
 \bibliographystyle{plainnat}
