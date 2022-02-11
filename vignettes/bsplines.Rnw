@@ -60,6 +60,10 @@
   approach for finding a parsimonious set of knots for B-spline regression model
   are presented in \code{vignette(topic = "cpr-pkg", package = "cpr")}.
 
+<<setup, include = FALSE>>=
+# knitr::opts_chunk$set()
+@
+
 <<>>=
 set.seed(42)
 library(cpr)
@@ -265,7 +269,7 @@ k <- degf - ordr + (1 - as.integer(TRUE))
 p <- seq(0, 1, length = k + 2L)[-c(1, k + 2L)]
 stats::quantile(x, probs = p)
 @
-whereas \code{cpr::bsplines} will generate a sequence  equivalent to
+\noindent whereas \code{cpr::bsplines} will generate a sequence  equivalent to
 <<>>=
 stats::quantile(unique(x)[-c(1, length(unique(x)))],
                 probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
@@ -276,33 +280,34 @@ sequences.
 trimmed_quantile(x, probs = seq(1, degf - ordr, by = 1) / (degf - ordr + 1))
 @
 
-The return object from both \code{splines::bs} and \code{cpr::bsplines} is a matrix.  The
-attributes returned include the argument values used to construct the basis.
-The major difference in the attributes between the two objects is that
-\code{cpr::bsplines} returns the full knot sequence, $\bs{\xi},$ in the \code{xi}
-element and the Greville sites, $\bs{\xi}^{*}$ in the \code{xi\_star} element
-which is useful for building control polygons.
-Lastly, the classes for the two objects differ: \code{splines::bs} returns a three
-classes, \code{c("bs", "basis", "matrix")} and \code{cpr::bsplines} returns two
-classes, \code{c("cpr\_bs", "matrix")}.
+The return object from both \code{splines::bs} and \code{cpr::bsplines} is a
+matrix.  The attributes returned include the argument values used to construct
+the basis. The major difference in the attributes between the two objects is
+that \code{cpr::bsplines} returns the full knot sequence, $\bs{\xi},$ in the
+\code{xi} element and the Greville sites, $\bs{\xi}^{*},$ in the \code{xi\_star}
+element which is useful for building control polygons. Lastly, the classes for
+the two objects differ: \code{splines::bs} returns a three classes,
+\code{c("bs", "basis", "matrix")} and \code{cpr::bsplines} returns two classes,
+\code{c("cpr\_bs", "matrix")}.
 
 \subsection{Plotting B-spline Bases}
-There is no default method for plotting \code{splines::bs} objects.  If the numeric
-vector \code{x} is sorted, then a minimally useful basis plot can be generated
-via \code{graphics::matplot}.  The \pkg{cpr} package provides an plotting
-method, built on top of \pkg{ggplot2}~\citep{r-ggplot2},
-for \code{cpr\_bs} objects.
+The \pkg{cpr} package provides an plotting
+method, built on top of \pkg{ggplot2}~\citep{R-ggplot2},
+for \code{cpr\_bs} objects, see Figure~\ref{fig:basis_plot}.
 
-<<>>=
-matplot(bmat_bs)
+\begin{figure}
+  \centering
+<<out.width = "0.48\\textwidth">>=
+plot(bmat, show_x = TRUE)
 @
-<<>>=
-plot(bmat)
-@
+  \caption{\label{fig:basis_plot} Plotting each of the basis functions for a
+  $k = \Sexpr{attr(bmat, "order")}$ order spline with
+  \Sexpr{length(attr(bmat, "iknots"))} internal knots.}
+\end{figure}
 
-
-% \begin{figure}
-% \end{figure}
+\section{Control Polygons}
+\section{Tensor Products of B-Splines}
+\section{Control Nets}
 
 \section{Session Info}
 <<>>=
@@ -311,19 +316,25 @@ print(sessionInfo(), locale = FALSE)
 % ---------------------------------------------------------------------------- %
 % Bib
 \begin{filecontents*}{bsplinerefs.bib}
-
 @book{deboor2001,
   title     = {A practical guide to splines, revised Edition, Vol. 27 of Applied Mathematical Sciences},
   author    = {de~Boor, Carl},
   year      = {2001},
   publisher = {Springer-Verlag, Berlin}
 }
-
 @book{prautzsch2002,
   title     = {B{\'e}zier and B-Spline Techniques},
   author    = {Prautzsch, Hartmut and Boehm, Wolfgang and Paluszny, Marco},
   year      = {2002},
   publisher = {Springer Science \& Business Media}
+}
+@book{R-ggplot2,
+  author = {Hadley Wickham},
+  title = {ggplot2: Elegant Graphics for Data Analysis},
+  publisher = {Springer-Verlag New York},
+  year = {2016},
+  isbn = {978-3-319-24277-4},
+  url = {https://ggplot2.tidyverse.org},
 }
 \end{filecontents*}
 
