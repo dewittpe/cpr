@@ -332,8 +332,7 @@ Figure~\ref{fig:spline_function}.
 \begin{figure}
   \centering
   \begin{subfigure}[t]{0.48\textwidth}
-<<echo = FALSE, results = "hide">>=
-<<plot_bmat_basis>>
+<<label = "plot_bmat_basis", eval = TRUE, echo = FALSE, results = "hide">>=
 @
   \caption{\label{fig:basis_plot} Plotting each of the basis functions for a
   $k = \Sexpr{attr(bmat, "order")}$ order spline with
