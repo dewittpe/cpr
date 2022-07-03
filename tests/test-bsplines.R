@@ -1,44 +1,59 @@
+library(cpr)
 require(splines)
 
-test_that("print.cpr_bs",
-          {
+################################################################################
+# print.cpr_bs
 
-            bmat <- bsplines(1:100, df = 52)
-            print_bmat <- capture.output(bmat)
-            expect_true(any(grepl("First\\s\\d+\\srows:", print_bmat)))
-            expect_equal(print_bmat[1], "Basis matrix dims: [100 x 52]")
-            expect_equal(print_bmat[2], "Order: 4")
-            expect_equal(print_bmat[3], "Number of internal knots: 48")
-            expect_equal(print_bmat[4], "")
-            expect_equal(print_bmat[5], "First 6 rows:")
-            expect_equal(print_bmat[6], "")
+bmat       <- bsplines(1:100, df = 52)
+print_bmat <- capture.output(bmat)
 
-            print_bmat <- capture.output(print(bmat, n = 1000))
-            expect_false(any(grepl("First\\s\\d+\\srows:", print_bmat)))
-          })
+stopifnot(any(grepl("First\\s\\d+\\srows:", print_bmat)))
+stopifnot(print_bmat[1] == "Basis matrix dims: [100 x 52]")
+stopifnot(print_bmat[2] == "Order: 4")
+stopifnot(print_bmat[3] == "Number of internal knots: 48")
+stopifnot(print_bmat[4] == "")
+stopifnot(print_bmat[5] == "First 6 rows:")
+stopifnot(print_bmat[6] == "")
 
-test_that("Equivalent Basis Matrix",
-          {
-            expect_equivalent(unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10), order = 4)),
-                              unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10), intercept = TRUE)))
-          }
+print_bmat <- capture.output(print(bmat, n = 1000))
+stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
+
+################################################################################
+# Equivalent Basis Matrix
+stopifnot(
+  all.equal(
+      current = unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10), order = 4))
+    , target = unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10), intercept = TRUE))
+    , check.attributes = FALSE)
 )
 
-test_that("Knots will be sorted",
-          {
-            xvec <- seq(-1, 1, length = 25)
-            iknots <- c(0.34, -0.23)
+################################################################################
+# knots will be sorted
+xvec <- seq(-1, 1, length = 25)
+iknots <- c(0.34, -0.23)
 
-            expect_warning(bsplines(xvec, iknots = iknots), "Sorting knots")
+x <- tryCatch(bsplines(xvec, iknots = iknots), warning = function(w) {w})
+stopifnot("testing if warning is given when sorting knots" = 
+          class(x) == c("simpleWarning", "warning", "condition"))
+stopifnot("test warning message" = x$message == "Sorting knots")
 
-            expect_equivalent(unclass(suppressWarnings(bsplines(xvec, iknots = c(.34, -.23)))),
-                              unclass(splines::bs(xvec, knots = iknots, intercept = TRUE)))
-          })
+stopifnot("expected bases generated after sorting knots" = 
+  all.equal(
+              current =   unclass(suppressWarnings(bsplines(xvec, iknots = c(.34, -.23))))
+            , target = unclass(splines::bs(xvec, knots = iknots, intercept = TRUE))
+            , check.attributes = FALSE
+            )
+)
 
-test_that("x is not a list",
-          {
-            expect_error(bsplines(list(1:10)), "btensor")
-          })
+################################################################################
+x <- tryCatch(bsplines(list(1:10)), error = function(e) { e })
+stopifnot(class(x) == c("simpleError", "error", "condition"))
+stopifnot("error if list passed to bsplines" = 
+          x$message == "x is a list.  use cpr::btensor instead of cpr::bsplines.")
+
+
+################################################################################
+
 
 test_that("combinations of iknots and df are handled well",
           {
