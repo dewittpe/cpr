@@ -15,6 +15,7 @@
   Focus on base R methods to reduce install dependencies and improve long term
   stability of the package.
 * Require R > 3.5.0
+* Stop using testthat for testing
 
 # Version 0.2.3
 First public release.
