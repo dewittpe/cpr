@@ -195,10 +195,10 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   spline_data <-
     lapply(list(x, ...), function(xx) {
            b <- xx$bknots
-           bmat <- cpr::bsplines(seq(b[1], b[2], length = n),
-                                 iknots = xx$iknots,
-                                 bknots = b,
-                                 order  = xx$order)
+           bmat <- bsplines(seq(b[1], b[2], length = n),
+                            iknots = xx$iknots,
+                            bknots = b,
+                            order  = xx$order)
            data.frame(x = seq(b[1], b[2], length = n),
                       y = as.numeric(bmat %*% xx$cp$theta))
                           })
