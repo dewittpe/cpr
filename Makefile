@@ -8,7 +8,6 @@ CRAN = "https://cran.rstudio.com"
 
 SRC       = $(wildcard $(PKG_ROOT)/src/*.cpp)
 RFILES    = $(wildcard $(PKG_ROOT)/R/*.R)
-EXAMPLES  = $(wildcard $(PKG_ROOT)/examples/*.R)
 TESTS     = $(wildcard $(PKG_ROOT)/tests/testthat/*.R)
 VIGNETTES = $(wildcard $(PKG_ROOT)/vignettes/*)
 RAWDATAR  = $(wildcard $(PKG_ROOT)/data-raw/*.R)
@@ -22,7 +21,7 @@ all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 		-e "options(warn = 2)"
 	@touch $@
 
-.document.Rout: $(RFILES) $(SRC) $(EXAMPLES) $(RAWDATAR) $(VIGNETTES) $(PKG_ROOT)/DESCRIPTION
+.document.Rout: $(RFILES) $(SRC) $(RAWDATAR) $(VIGNETTES) $(PKG_ROOT)/DESCRIPTION
 	if [ -e "$(PKG_ROOT)/data-raw/Makefile" ]; then $(MAKE) -C $(PKG_ROOT)/data-raw/; else echo "Nothing to do"; fi
 	Rscript --vanilla --quiet -e "options(repo = c('$(CRAN)', '$(BIOC)'))" \
 		-e "options(warn = 2)" \

@@ -62,6 +62,7 @@ updt_cp <- update_bsplines(init_cp, df = 5)
 init_cn <- cn(pdg ~ btensor(list(day, age), df = list(30, 4)) + ttm, data = spdg)
 updt_cn <- update_btensor(init_cn, df = list(30, 2), order = list(3, 2))
 
+
 }
 \seealso{
 \code{\link[stats]{update}}, \code{\link{bsplines}},

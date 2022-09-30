@@ -18,7 +18,6 @@ A matrix
 Tensor products of Matrices.
 }
 \examples{
-# see vignette("cpr-pkg", package = "cpr") for details on tensor products.
 
 A <- matrix(1:4, nrow = 10, ncol = 20)
 B <- matrix(1:6, nrow = 10, ncol = 6)
@@ -31,4 +30,8 @@ all.equal(tensor1, tensor2)
 # a three matrix tensor product
 tensor3 <- build_tensor(A, B, B)
 str(tensor3)
+
+}
+\seealso{
+\code{vignette("cpr-pkg", package = "cpr")} for details on tensor products.
 }
