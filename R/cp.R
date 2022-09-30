@@ -35,7 +35,7 @@
 #'
 #' # via formula
 #' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-#' cp3 <- cp(y ~ cpr::bsplines(x) + 0, data = dat)
+#' cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 #'
 #' # plot the control polygon, spline and target data.
 #' plot(cp3, show_spline = TRUE) +
