@@ -8,12 +8,12 @@ bmat       <- bsplines(1:100, df = 52)
 print_bmat <- capture.output(bmat)
 
 stopifnot(any(grepl("First\\s\\d+\\srows:", print_bmat)))
-stopifnot(print_bmat[1] == "Basis matrix dims: [100 x 52]")
-stopifnot(print_bmat[2] == "Order: 4")
-stopifnot(print_bmat[3] == "Number of internal knots: 48")
-stopifnot(print_bmat[4] == "")
-stopifnot(print_bmat[5] == "First 6 rows:")
-stopifnot(print_bmat[6] == "")
+stopifnot(identical(print_bmat[1], "Basis matrix dims: [100 x 52]"))
+stopifnot(identical(print_bmat[2], "Order: 4"))
+stopifnot(identical(print_bmat[3], "Number of internal knots: 48"))
+stopifnot(identical(print_bmat[4], ""))
+stopifnot(identical(print_bmat[5], "First 6 rows:"))
+stopifnot(identical(print_bmat[6], ""))
 
 print_bmat <- capture.output(print(bmat, n = 1000))
 stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
@@ -21,10 +21,13 @@ stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
 ################################################################################
 # Equivalent Basis Matrix
 stopifnot(
-  all.equal(
-      current = unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10), order = 4))
-    , target = unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10), intercept = TRUE))
-    , check.attributes = FALSE)
+  isTRUE(
+    all.equal(
+        current = unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10), order = 4))
+      , target = unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10), intercept = TRUE))
+      , check.attributes = FALSE
+    )
+  )
 )
 
 ################################################################################
