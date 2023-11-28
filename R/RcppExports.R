@@ -2,7 +2,7 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Knot Insertion, Removal, and Reinsertion
-#' 
+#'
 #' Functions for the insertion, removal, and reinsertion of internal knots for
 #' B-splines.
 #'
@@ -24,7 +24,7 @@
 #' in knot insertion matrix.
 #'
 #' Examples for the \code{refine_ordinate}, \code{coarsen_ordinate}, and
-#' \code{hat_ordinate} are best shown in the vignette, 
+#' \code{hat_ordinate} are best shown in the vignette,
 #' \code{vignette("cpr-pkg", package = "cpr")}.
 #'
 #' \code{iknot_weights} returns a vector with the 'importance weight' of each

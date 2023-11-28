@@ -53,7 +53,7 @@ ordinate vector.  The name comes from the the use of a hat matrix based on the
 in knot insertion matrix.
 
 Examples for the \code{refine_ordinate}, \code{coarsen_ordinate}, and
-\code{hat_ordinate} are best shown in the vignette, 
+\code{hat_ordinate} are best shown in the vignette,
 \code{vignette("cpr-pkg", package = "cpr")}.
 
 \code{iknot_weights} returns a vector with the 'importance weight' of each
