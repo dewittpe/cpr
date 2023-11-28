@@ -92,7 +92,7 @@ Continued development should be focused on bug fixes and minor enhancements.
   When plotting multiple control polygons and splines, this option will make it
   easier to view the spline functions.
 
-# Non visible changes:
+# Non visible changes
 * Extended testing scripts.
 
 # Version 0.1.0
