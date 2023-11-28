@@ -71,7 +71,7 @@ function?}
 respective control polygons.}
 
 \item{color}{Boolean (default FALSE) if more than one \code{cpr_cp} object is
-to be plotted, set this value to TRUE to have the graphic in color (linetypes
+to be plotted, set this value to TRUE to have the graphic in color (line types
 will be used regardless of the color setting).}
 
 \item{n}{the number of data points to use for plotting the spline}

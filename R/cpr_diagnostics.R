@@ -8,11 +8,11 @@
 #' @export
 #' @param x a \code{cpr_cpr} object
 #' @param type type of diagnostic plot.  \code{"cps"} for control polygons,
-#' \code{"loglik"} for the loglikihood by degrees of freedom,
+#' \code{"loglik"} for the log likelihood by degrees of freedom,
 #' \code{"rmse"} for root mean squared residuals by degrees of freedom
 #' @param from the first index of \code{x} to plot
 #' @param to the last index of \code{x} to plot
-#' @param ... args passed to \code{cpr::plot.cpr_cp}
+#' @param ... arguments passed to \code{cpr::plot.cpr_cp}
 #' @seealso \code{\link{plot.cpr_cp}}
 plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
 

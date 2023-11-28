@@ -10,14 +10,14 @@
 \item{x}{a \code{cpr_cpr} object}
 
 \item{type}{type of diagnostic plot.  \code{"cps"} for control polygons,
-\code{"loglik"} for the loglikihood by degrees of freedom,
+\code{"loglik"} for the log likelihood by degrees of freedom,
 \code{"rmse"} for root mean squared residuals by degrees of freedom}
 
 \item{from}{the first index of \code{x} to plot}
 
 \item{to}{the last index of \code{x} to plot}
 
-\item{...}{args passed to \code{cpr::plot.cpr_cp}}
+\item{...}{arguments passed to \code{cpr::plot.cpr_cp}}
 }
 \description{
 A collection of function for the inspection and evaluation of the control

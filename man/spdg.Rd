@@ -3,7 +3,7 @@
 \docType{data}
 \name{spdg}
 \alias{spdg}
-\title{Simulated Prognanediol-glucuronid (PDG) Data}
+\title{Simulated Pregnanediol glucuronide (PDG) Data}
 \format{
 a \code{data.frame}. Variables in the data
 set:
@@ -36,7 +36,7 @@ A Simulated data set based on the Study of Women's Health Across the Nation
 (SWAN) Daily Hormone Study (DHS).
 }
 \details{
-Prognanediol-glucuronid (PDG) is the urine metabolite of progesterone.  This
+Pregnanediol glucuronide (PDG) is the urine metabolite of progesterone.  This
 data set was simulated to have similar
 characteristics to a subset of the SWAN DHS data.  The SWAN DHS data was the
 motivating data set for the method development that lead to the \code{cpr}

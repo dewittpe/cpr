@@ -13,7 +13,7 @@ cp_diff(cp1, cp2)
 \item{obj}{a cpr_cp object or \code{data.frame} where the first column is the
 abscissa and the second column is the ordinate for the control polygon vertices.}
 
-\item{x}{absicissa at which to determine the ordinate on control polygon cp}
+\item{x}{abscissa at which to determine the ordinate on control polygon cp}
 
 \item{cp1}{a cpr_cp object}
 
@@ -21,7 +21,7 @@ abscissa and the second column is the ordinate for the control polygon vertices.
 }
 \value{
 \code{cp_value} returns the ordinate on the control polygon line segment for
-the abscissae \code{x} given.  \code{x} could be a control vertex or on a
+the abscissa \code{x} given.  \code{x} could be a control vertex or on a
 line segment defined by two control vertices of the control polygon
 provided.
 

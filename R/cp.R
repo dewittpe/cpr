@@ -182,7 +182,7 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #' \code{\link[ggplot2]{geom_rug}} to show the location of the knots in the
 #' respective control polygons.
 #' @param color Boolean (default FALSE) if more than one \code{cpr_cp} object is
-#' to be plotted, set this value to TRUE to have the graphic in color (linetypes
+#' to be plotted, set this value to TRUE to have the graphic in color (line types
 #' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
 #'
