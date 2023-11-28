@@ -158,7 +158,7 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
     wggl <- try(do.call(wiggle.cpr_cp, c(list(object = object), integrate.args)), silent = TRUE)
 
 
-    if (class(wggl) == "integrate") {
+    if (inherits(x = wggl, what = "integrate")) {
       out$wiggle <- as.numeric(wggl$value)
       attr(out$wiggle, "abs.error") <- wggl$abs.error
       attr(out$wiggle, "subdivisions") <- wggl$subdivisions
