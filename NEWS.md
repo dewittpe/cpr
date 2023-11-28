@@ -1,4 +1,4 @@
-# Version 0.2.4
+# Version 0.3.0
 
 ## New Examples
 * `cpr` has examples
@@ -12,6 +12,8 @@
 * Require R > 3.5.0
 * Stop using testthat for testing
 * Remove use of the tidyr, dplyr
+* Improve documentation
+* Minor bug fixes
 
 # Version 0.2.3
 First public release.
