@@ -2,45 +2,8 @@
 #include <Rcpp.h>
 #include "cpr.h"
 
-bspline::bspline(){}
-
-bspline::bspline(arma::vec & x, unsigned int j_, unsigned int order_, arma::vec & knots_){
-  j = j_;
-  order = order_;
-  knots = knots_;
-  spline.zeros(x.n_elem);
-
-  for (unsigned int i = 0; i < x.n_elem; ++i) {
-    if (x(i) >= knots(j) && x(i) <= knots(j + order)) {
-      spline(i) = B(x(i), j, order);
-    }
-  }
-}
-
-double bspline::w(double x, unsigned int j_, unsigned int k_) {
-  double w = 0.0;
-  if (knots(j_ + k_ - 1) != knots(j_)) {
-    w = (x - knots(j_)) / (knots(j_ + k_ - 1) - knots(j_));
-  }
-
-  return(w);
-}
-
-double bspline::B(double x, unsigned int j_, unsigned int k_) {
-  double rtn;
-
-  if (k_ == 1) {
-    if ((knots(j_) <= x) && (x < knots(j_ + 1))) {
-      rtn = 1.0;
-    } else {
-      rtn = 0.0;
-    }
-  } else {
-    rtn = w(x, j_, k_) * B(x, j_, k_ - 1) + (1.0 - w(x, j_ + 1, k_)) * B(x, j_ + 1, k_ - 1);
-  }
-
-  return(rtn);
-}
+/* ************************************************************************** */
+/*                                   bbasis                                   */
 
 bbasis::bbasis() {
 }
@@ -81,6 +44,52 @@ bbasis::bbasis(arma::vec & x, arma::vec & iknots_, arma::vec & bknots_, unsigned
   bmat(bx, jx).fill(1.0);
 }
 
+/* ************************************************************************** */
+/*                                  bspline                                   */
+
+bspline::bspline(){}
+
+bspline::bspline(arma::vec & x, unsigned int j_, unsigned int order_, arma::vec & knots_){
+  j = j_;
+  order = order_;
+  knots = knots_;
+  spline.zeros(x.n_elem);
+
+  for (unsigned int i = 0; i < x.n_elem; ++i) {
+    if (x(i) >= knots(j) && x(i) <= knots(j + order)) {
+      spline(i) = B(x(i), j, order);
+    }
+  }
+}
+
+double bspline::w(double x, unsigned int j_, unsigned int k_) {
+  double w = 0.0;
+  if (knots(j_ + k_ - 1) != knots(j_)) {
+    w = (x - knots(j_)) / (knots(j_ + k_ - 1) - knots(j_));
+  }
+
+  return(w);
+}
+
+double bspline::B(double x, unsigned int j_, unsigned int k_) {
+  double rtn;
+
+  if (k_ == 1) {
+    if ((knots(j_) <= x) && (x < knots(j_ + 1))) {
+      rtn = 1.0;
+    } else {
+      rtn = 0.0;
+    }
+  } else {
+    rtn = w(x, j_, k_) * B(x, j_, k_ - 1) + (1.0 - w(x, j_ + 1, k_)) * B(x, j_ + 1, k_ - 1);
+  }
+
+  return(rtn);
+}
+
+/* ************************************************************************** */
+/*                               controlpolygon                               */
+
 controlpolygon::controlpolygon(bbasis & bmat_, arma::vec & theta_) {
   bmat = bmat_;
   theta = theta_;
@@ -88,6 +97,8 @@ controlpolygon::controlpolygon(bbasis & bmat_, arma::vec & theta_) {
   xi_star = greville_sites(bmat.knots, bmat.order);
 }
 
+/* ************************************************************************** */
+/*                               greville_sites                               */
 arma::vec greville_sites(arma::vec & xi, unsigned int order) {
   arma::vec xi_star(xi.n_elem - order);
 
@@ -98,6 +109,12 @@ arma::vec greville_sites(arma::vec & xi, unsigned int order) {
   return xi_star;
 }
 
+/* ************************************************************************** */
+/*                                  arma2vec                                  */
 Rcpp::NumericVector arma2vec(const arma::vec & x) {
     return Rcpp::NumericVector(x.begin(), x.end());
 }
+
+/* ************************************************************************** */
+/*                                End of File                                 */
+/* ************************************************************************** */
