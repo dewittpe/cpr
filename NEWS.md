@@ -10,7 +10,7 @@
 
 ## Other Changes
 * Depends on Rcpp >= 0.12.11 to handle registering native routines.
-* Moves rgl from `Imports` to `Enhances` (re #36)
+* Moves rgl from `Imports` to `Suggests` (re #36)
 * Refactoring base code to eliminate the use of dplyr, tidyr, tibble, etc.
   Focus on base R methods to reduce install dependencies and improve long term
   stability of the package.
@@ -48,7 +48,7 @@ Documentation improvements.
 * `is.` a collection of `is.cpr_cp`, `is.cpr_bs`, ... functions added.
 * The dataset `spdg` has been added to the package.
 
-## Non-User Visible Changes
+## Other Changes
 * removed a redundant `build_tensor` definition
 
 # Version 0.2.0
@@ -80,7 +80,7 @@ Continued development should be focused on bug fixes and minor enhancements.
 * `keep` is correctly handled in the `cnr` call.
 * `show_xi` correctly handled in the `plot.cpr_cp` call.
 
-## Non-User visible changes
+## Non visible changes
 * non-exported function `knot_expr` created to help with plotting the knot
   locations in `cpr:::plot.cpr_bs`.
 
@@ -91,7 +91,7 @@ Continued development should be focused on bug fixes and minor enhancements.
   When plotting multiple control polygons and splines, this option will make it
   easier to view the spline functions.
 
-# Non-visible changes:
+# Non visible changes:
 * Extended testing scripts.
 
 # Version 0.1.0
