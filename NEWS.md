@@ -14,6 +14,7 @@
 * Remove use of the tidyr, dplyr
 * Improve documentation
 * Minor bug fixes
+* Depend on Matrix >= 1.6-2, this is to deal with issues realed to lme4
 
 # Version 0.2.3
 First public release.

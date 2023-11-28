@@ -8,7 +8,7 @@ Authors@R:
 Description: Implementation of the Control Polygon Reduction and Control Net
     Reduction methods for finding parsimonious B-spline regression models.
 Depends:
-    R (>= 3.5.0)
+    R (>= 3.5.0), Matrix (>= 1.6-2)
 License: GPL (>= 2)
 Encoding: UTF-8
 URL: https://github.com/dewittpe/cpr/
