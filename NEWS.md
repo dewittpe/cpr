@@ -14,10 +14,6 @@
 * Remove use of the tidyr, dplyr
 * Improve documentation
 * Minor bug fixes
-* Depend on Matrix >= 1.6-2, this is to deal with issues realed to lme4, see
-  https://stat.ethz.ch/pipermail/r-package-devel/2023q4/010051.html.  Adding
-  this dependency will make sure the Matrix package is updated and lme4 can/will
-  be compiled against the updated version.
 
 # Version 0.2.3
 First public release.
