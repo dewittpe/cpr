@@ -43,4 +43,6 @@ clean:
 	$(RM) -rf $(PKG_NAME).Rcheck
 	$(RM) -f .document.Rout
 	$(RM) -f .install_dev_deps.Rout
+	$(RM) -f src/*.o
+	$(RM) -f src/*.so
 
