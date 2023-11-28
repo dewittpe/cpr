@@ -1,4 +1,4 @@
-# Version 0.2.3.9005
+# Version 0.2.4
 
 ## New Examples
 * `cpr` has examples
@@ -9,13 +9,14 @@
 * A new vignette focused on just B-splines has been started.
 
 ## Other Changes
-* Depends on Rcpp >= 0.12.11 to handle registering native routines.
+* Depends on Rcpp >= 0.12.11 (actually moved to >= 1.0.11) to handle registering native routines.
 * Moves rgl from `Imports` to `Suggests` (re #36)
 * Refactoring base code to eliminate the use of dplyr, tidyr, tibble, etc.
   Focus on base R methods to reduce install dependencies and improve long term
   stability of the package.
 * Require R > 3.5.0
 * Stop using testthat for testing
+* Remove use of the tidyr, dplyr
 
 # Version 0.2.3
 First public release.

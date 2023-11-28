@@ -10,7 +10,7 @@ struct bspline {
   arma::vec knots;    // full knot sequence
   unsigned int j;     // jth spline
   unsigned int order; // polynomial order
-  arma::vec spline;       // the jth B-spline
+  arma::vec spline;   // the jth B-spline
 
   // constructors
   bspline();
