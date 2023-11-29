@@ -14,19 +14,17 @@ Encoding: UTF-8
 URL: https://github.com/dewittpe/cpr/
 Language: en-us
 LazyData: true
-Imports:
+Imports: Rcpp (>= 1.0.11)
+LinkingTo: Rcpp, RcppArmadillo
+Suggests:
     ggplot2 (>= 3.0.0),
     lme4,
     plot3D,
-    Rcpp (>= 1.0.11),
-    scales
-LinkingTo: Rcpp (>= 1.0.11),
-    RcppArmadillo
-Suggests:
     covr,
     knitr,
     qwraps2,
     rmarkdown,
-    rgl
+    rgl,
+    scales
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr

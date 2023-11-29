@@ -24,7 +24,6 @@ all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 .document.Rout: $(RFILES) $(SRC) $(RAWDATAR) $(VIGNETTES) $(PKG_ROOT)/DESCRIPTION
 	if [ -e "$(PKG_ROOT)/data-raw/Makefile" ]; then $(MAKE) -C $(PKG_ROOT)/data-raw/; else echo "Nothing to do"; fi
 	Rscript --vanilla --quiet -e "options(repo = c('$(CRAN)', '$(BIOC)'))" \
-		-e "options(warn = 2)" \
 		-e "pkgload::load_all()" \
 		-e "devtools::document('$(PKG_ROOT)')"
 	@touch $@
