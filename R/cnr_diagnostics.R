@@ -8,7 +8,7 @@
 #' @export
 #' @param x a \code{cpr_cnr} object
 #' @param type type of diagnostic plot.
-#' \code{"loglik"} for the loglikihood by degrees of freedom,
+#' \code{"loglik"} for the log likelihood by degrees of freedom,
 #' \code{"rmse"} for root mean squared residuals by model index
 #' @param from the first index of \code{x} to plot
 #' @param to the last index of \code{x} to plot
@@ -30,7 +30,7 @@ plot.cpr_cnr <- function(x, type = "rmse", from = 1, to, ...) {
 
     ggplot2::ggplot(subset(s, (s$index >= from) & (s$index <= to))) +
     ggplot2::theme_bw() +
-    ggplot2::aes_string(x = "index", y = type) +
+    eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("index"), Y = as.name(type)))) +
     ggplot2::geom_point() +
     ggplot2::geom_line() +
     ggplot2::xlab("Index")

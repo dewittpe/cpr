@@ -1,8 +1,10 @@
 #' Trimmed Quantiles
 #'
-#' For data X = x1, x2, ..., xn, with order statistics x(1), x(2), ..., x(r) return
-#' the quantiles for a trimmed data set, e.g., X \ {x(1), x(r)} (trim = 1), or
-#' X \ {x(1), x(2), x(r-1), x(r)} (trim = 2).
+#' For data \eqn{X = x_1, x_2, \ldots, x_n}{X = x1, x2, ..., xn}, with order
+#' statistics \eqn{x_{(1)}, x_{(2)}, \ldots, x_{(r)}}{x(1), x(2), ..., x(r)}
+#' return the quantiles for a trimmed data set, e.g.,
+#' \eqn{\boldsymbol{X} \backslash \{x_{(1)}, x_{(r)}\}}{X \ {x(1), x(r)}} (trim = 1), or
+#' \eqn{\boldsymbol{X} \backslash \{x_{(1)}, x_{(2)}, x_{(r-1)}, x_{(r)}\}}{X \ {x(1), x(2), x(r-1), x(r)}} (trim = 2).
 #'
 #' @param x a numeric vector
 #' @param trim defaults to 1, omitting the min and the max

@@ -1,22 +1,22 @@
 #' Determine the (quasi) Log Likelihood for a regression object.
 #'
-#' Return, via stats::logLik or a custom S3 method, the (quasi) log likelihood
-#' of a regression object.
+#' Return, via \code{\link[stats]{logLik}} or a custom S3 method, the (quasi)
+#' log likelihood of a regression object.
 #'
 #' This function is used by \code{cpr::cpr} and \code{cpr::cnr} to determine the
 #' (quasi) log likelihood returned in the \code{cpr_cpr} and \code{cpr_cnr}
 #' objects.
 #'
-#' Generally this function defaults to stats::logLik.  Therefore, if an S3
+#' Generally this function defaults to \code{\link[stats]{logLik}}.  Therefore, if an S3
 #' method for determining the (quasi) log likelihood exists in the workspace
 #' everything should work.  If an S3 method does not exist you should define
 #' one.
 #'
 #' See \code{methods(loglikelihood)} for a list of the provided methods.  The
-#' default method uses \code{stats::logLik}.
+#' default method uses \code{\link[stats]{logLik}}.
 #'
 #' @param x a regression fit object
-#' @param ... passed through to \code{stats::logLik}
+#' @param ... passed through to \code{\link[stats]{logLik}}
 #'
 #' @return the numeric value of the (quasi) log likelihood.
 #'

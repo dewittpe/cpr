@@ -10,5 +10,5 @@ extract_cpr_bsplines(form)
 \item{form}{a formula}
 }
 \description{
-Non-exported function.  Might be depericated.
+Non-exported function.  Might be depreciated.
 }

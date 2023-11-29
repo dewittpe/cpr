@@ -4,23 +4,24 @@
 #'
 #' @return
 #' \code{cp_value} returns the ordinate on the control polygon line segment for
-#' the abscissae \code{x} given.  \code{x} could be a control vertex or on a
+#' the abscissa \code{x} given.  \code{x} could be a control vertex or on a
 #' line segment defined by two control vertices of the control polygon
 #' provided.
 #'
 #' \code{cp_diff} returns the absolute vertical distance between the control
 #' vertices of cp1 to the control polygon cp2.
 #'
-#' @export
-#' @rdname cp_diagnostics
-#' @param x absicissa at which to determine the ordinate on control polygon cp
+#' @param x abscissa at which to determine the ordinate on control polygon cp
 #' @param obj a cpr_cp object or \code{data.frame} where the first column is the
 #' abscissa and the second column is the ordinate for the control polygon vertices.
+#'
+#' @export
+#' @rdname cp_diagnostics
 cp_value <- function(obj, x) {
   UseMethod("cp_value")
 }
 
-#' @method cp_value cpr_cp
+#' @export
 cp_value.cpr_cp <- function(obj, x) {
   xi_star <- obj$xi_star
   theta   <- obj$theta
@@ -30,7 +31,7 @@ cp_value.cpr_cp <- function(obj, x) {
   unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
 }
 
-#' @method cp_value default
+#' @export
 cp_value.default <- function(obj, x) {
   xi_star <- obj[[1]]
   theta   <- obj[[2]]

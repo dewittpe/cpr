@@ -12,14 +12,14 @@ An R package for implementing the Control Polygon Reduction model
 selection method.  When we are tasked with modeling the functional relationship
 between a response and a continuous predictor, i.e., y = f(x), CPR allows for quick and
 efficient searching of a large model space to find B-spline estimates of the
-function f(x).  
+function f(x).
 
 CPR extends to multiple dimensions and allows one to find good locations for
 knots in a tensor product of B-splines.
 
 ## Learn More About CPR.
-This model selection method was developed as part of Peter DeWitt's PhD
-dissertation work.  
+This model selection method was developed as part of [Peter DeWitt's PhD
+dissertation](https://doi.org/10.25677/awnc-b795) work.
 
 ### Vignettes
 
@@ -36,7 +36,7 @@ Additional vignettes may also be authored soon.
 
 * The CPR method was presented at the 28th International Biometric Conference
   held July 2016, in Victoria, British Columbia, Canada.  The abstract, paper,
-  and talk had the title: 
+  and talk had the title:
   "Parsimonious B-splines Regression Models via Control Polygon
   Reduction."  A bibtex entry for the abstract:
 
@@ -60,7 +60,7 @@ Additional vignettes may also be authored soon.
    (IBS).
 2. "Distinguished Oral Presentation" as part of the student
    paper competition hosted by the Western North American Region
-   (WNAR) of the IBs.
+   (WNAR) of the IBS.
 
 ## Installing CPR
 Options for installing CPR:
@@ -72,23 +72,22 @@ install.packages("cpr", repos = "https://cran.rstudio.com")
 ```
 
 2. Install the developmental version from github.  This will require you to have
-   [devtools](https://github.com/hadley/devtools) installed, and, if you are
+   [remotes](https://cran.r-project.org/package=remotes) installed, and, if you are
    using Windows, you'll need
    [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed as well.
 
 ```
-library(devtools)
-install_github("dewittpe/cpr", build_vignettes = TRUE)
+remotes::install_github("dewittpe/cpr", build_vignettes = TRUE)
 ```
 
-3. Clone the repo and use `GNU make`
+3. Clone the repository and use `GNU make`
 
 ```bash
 make install
 ```
 
 4. Go to the [release page](https://github.com/dewittpe/cpr/releases) and down
-   load the tar.gz file of the version you want to install.
+   load the `cpr_<version>.tar.gz` file of the version you want to install.
 
   * Install from the command line
 
@@ -110,7 +109,7 @@ error, or rather message, of the form:
   font family "sans" not found, using "bitmap"
 ```
 Then there is an easy fix.  You need to get the [FreeType 2 font
-engine](https://www.freetype.org/).  
+engine](https://www.freetype.org/).
 
 On Debian, you can get the library via:
 

@@ -16,3 +16,7 @@ stopifnot(identical(matrix_rank(bmat), 15))
 bmat <- bsplines(seq(0, 1, length = 100), iknots = c(0.001, 0.002))
 stopifnot(identical(ncol(bmat), 6L))
 stopifnot(identical(matrix_rank(bmat), 5))
+
+################################################################################
+##                                End of File                                 ##
+################################################################################

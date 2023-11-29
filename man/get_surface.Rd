@@ -48,6 +48,7 @@ with(cn_and_surface$surface,
                             ncol = length(unique(Var2))),
                      main = "Surface")
      )
+
 }
 \seealso{
 \code{\link{get_spline}}

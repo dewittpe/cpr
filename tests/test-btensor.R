@@ -3,16 +3,16 @@ library(cpr)
 test_warning <- function(x = NULL, msg = NULL) {
   stopifnot(!is.null(x))
   stopifnot(!is.null(msg))
-  stopifnot(class(x) == c("simpleWarning", "warning", "condition"))
-  stopifnot(x$message == msg)
+  stopifnot(identical(class(x), c("simpleWarning", "warning", "condition")))
+  stopifnot(identical(x$message,  msg))
   invisible(TRUE)
 }
 
 test_error <- function(x, msg = NULL) {
   stopifnot(!is.null(x))
   stopifnot(!is.null(msg))
-  stopifnot(class(x) == c("simpleError", "error", "condition"))
-  stopifnot(x$message == msg)
+  stopifnot(identical(class(x), c("simpleError", "error", "condition")))
+  stopifnot(identical(x$message, msg))
   invisible(TRUE)
 }
 
@@ -32,7 +32,7 @@ mm <-
                splines::bs(mtcars$hp, knots = c(100, 150), intercept = TRUE)
   )
 
-stopifnot(all.equal(mm, unclass(bm), check.attributes = FALSE))
+stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
 
 
 ################################################################################
@@ -48,7 +48,7 @@ mm <-
              splines::bs(mtcars$hp, knots = c(100, 150), intercept = TRUE)
   )
 
-stopifnot(all.equal(mm, unclass(bm), check.attributes = FALSE))
+stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
 
 ################################################################################
 # 3D btensor matrix is constructed as expected
@@ -63,7 +63,7 @@ mm <-
              splines::bs(mtcars$hp, knots = c(100, 150), intercept = TRUE) :
              splines::bs(mtcars$mpg, knots = c(12.2, 16.3, 21.9), intercept = TRUE))
 
-stopifnot(all.equal(mm, unclass(bm), check.attributes = FALSE))
+stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
 
 
 ################################################################################
@@ -73,10 +73,11 @@ bm <-
   btensor(x = list(mtcars$disp, mtcars$hp, mtcars$mpg),
           iknots = list(numeric(0), c(100, 150), c(12.2, 16.3, 21.9)))
 
-stopifnot(
+stopifnot(isTRUE(
           all.equal(
                     lapply(attr(bm, "bspline_list"), attr, which = "bknots"),
                     lapply(list(mtcars$disp, mtcars$hp, mtcars$mpg), range)
+          )
           )
 )
 
@@ -94,4 +95,6 @@ test_error(x, "all(sapply(bknots, length) == 2) is not TRUE")
 x <- tryCatch(btensor(x = list(mtcars$disp, mtcars$hp, mtcars$mpg), bknots = list(c(12, 12), c(3, NA))), error = function(e) {e})
 test_error(x, "length(bknots) == length(x) is not TRUE")
 
+################################################################################
+##                                End of File                                 ##
 ################################################################################

@@ -5,22 +5,6 @@
 #ifndef CPR_H
 #define CPR_H
 
-struct bspline {
-  // member objects
-  arma::vec knots;    // full knot sequence
-  unsigned int j;     // jth spline
-  unsigned int order; // polynomial order
-  arma::vec spline;       // the jth B-spline
-
-  // constructors
-  bspline();
-  bspline(arma::vec & x, unsigned int j_, unsigned int order_, arma::vec & knots_);
-
-  // member methods, see de Boor (2001) page .... These 
-  double B(double x, unsigned int j_, unsigned int k_);  
-  double w(double x, unsigned int j_, unsigned int k_);
-};
-
 struct bbasis {
   // member objects
   unsigned int order;   // polynomial order
@@ -33,15 +17,22 @@ struct bbasis {
   // constructors
   bbasis();
   bbasis(arma::vec & x, arma::vec & iknots_, arma::vec & bknots_, unsigned int order_);
+};
 
-  // operators
-  // bbasis &operator =(const bbasis & b) {
-  //   order  = b.order;
-  //   iknots = b.iknots;
-  //   bknots = b.bknots;
-  //   knots  = b.knots;
-  //   bmat   = b.bmat;
-  // } 
+struct bspline {
+  // member objects
+  arma::vec knots;    // full knot sequence
+  unsigned int j;     // jth spline
+  unsigned int order; // polynomial order
+  arma::vec spline;   // the jth B-spline
+
+  // constructors
+  bspline();
+  bspline(arma::vec & x, unsigned int j_, unsigned int order_, arma::vec & knots_);
+
+  // member methods, see de Boor (2001) page .... These
+  double B(double x, unsigned int j_, unsigned int k_);
+  double w(double x, unsigned int j_, unsigned int k_);
 };
 
 struct controlpolygon {
@@ -54,7 +45,7 @@ struct controlpolygon {
   controlpolygon(bbasis & bmat_, arma::vec & theta_);
 };
 
-arma::vec greville_sites(arma::vec & xi, unsigned int order); 
+arma::vec greville_sites(arma::vec & xi, unsigned int order);
 
 Rcpp::NumericVector arma2vec(const arma::vec & x);
 #endif

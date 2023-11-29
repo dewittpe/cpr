@@ -71,7 +71,7 @@ function?}
 respective control polygons.}
 
 \item{color}{Boolean (default FALSE) if more than one \code{cpr_cp} object is
-to be plotted, set this value to TRUE to have the graphic in color (linetypes
+to be plotted, set this value to TRUE to have the graphic in color (line types
 will be used regardless of the color setting).}
 
 \item{n}{the number of data points to use for plotting the spline}
@@ -110,11 +110,11 @@ plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 
 # via formula
 dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-cp3 <- cp(y ~ cpr::bsplines(x) + 0, data = dat)
+cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 
 # plot the control polygon, spline and target data.
 plot(cp3, show_spline = TRUE) +
-  ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "y"),
+  ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y),
                      data = dat, linetype = 2, color = "red")
 
 }

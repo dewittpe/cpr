@@ -12,3 +12,4 @@
 .document.Rout
 .install_dev_deps.Rout
 ^\.github$
+^cran-comments\.md$

@@ -35,11 +35,11 @@
 #'
 #' # via formula
 #' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-#' cp3 <- cp(y ~ cpr::bsplines(x) + 0, data = dat)
+#' cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 #'
 #' # plot the control polygon, spline and target data.
 #' plot(cp3, show_spline = TRUE) +
-#'   ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "y"),
+#'   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y),
 #'                      data = dat, linetype = 2, color = "red")
 #'
 #' @export
@@ -158,7 +158,7 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
     wggl <- try(do.call(wiggle.cpr_cp, c(list(object = object), integrate.args)), silent = TRUE)
 
 
-    if (class(wggl) == "integrate") {
+    if (inherits(x = wggl, what = "integrate")) {
       out$wiggle <- as.numeric(wggl$value)
       attr(out$wiggle, "abs.error") <- wggl$abs.error
       attr(out$wiggle, "subdivisions") <- wggl$subdivisions
@@ -182,7 +182,7 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #' \code{\link[ggplot2]{geom_rug}} to show the location of the knots in the
 #' respective control polygons.
 #' @param color Boolean (default FALSE) if more than one \code{cpr_cp} object is
-#' to be plotted, set this value to TRUE to have the graphic in color (linetypes
+#' to be plotted, set this value to TRUE to have the graphic in color (line types
 #' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
 #'
@@ -195,10 +195,10 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   spline_data <-
     lapply(list(x, ...), function(xx) {
            b <- xx$bknots
-           bmat <- cpr::bsplines(seq(b[1], b[2], length = n),
-                                 iknots = xx$iknots,
-                                 bknots = b,
-                                 order  = xx$order)
+           bmat <- bsplines(seq(b[1], b[2], length = n),
+                            iknots = xx$iknots,
+                            bknots = b,
+                            order  = xx$order)
            data.frame(x = seq(b[1], b[2], length = n),
                       y = as.numeric(bmat %*% xx$cp$theta))
                           })
@@ -230,7 +230,7 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   base_plot <-
     ggplot2::ggplot(plot_data) +
     ggplot2::theme_bw() +
-    ggplot2::aes_string(x = "x", y = "y") +
+    eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("x"), Y = as.name("y")))) +
     ggplot2::theme(axis.title = ggplot2::element_blank())
 
   if (show_xi) {
@@ -255,14 +255,14 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   if (length(cps) > 1) {
     base_plot <-
       base_plot +
-      ggplot2::aes_string(linetype = "row") +
+      eval(substitute(ggplot2::aes(linetype = LTY), list(LTY = as.name("row")))) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 
   if (color) {
     base_plot <-
       base_plot +
-      ggplot2::aes_string(color = "row") +
+      eval(substitute(ggplot2::aes(color = CLR), list(CLR = as.name("row")))) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 

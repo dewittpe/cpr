@@ -53,3 +53,6 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
 
 set.seed(42)
 stopifnot(recover_spline(start_with = 40L, progress = FALSE)$recovered)
+################################################################################
+##                                End of File                                 ##
+################################################################################

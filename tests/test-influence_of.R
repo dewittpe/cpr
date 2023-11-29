@@ -6,8 +6,8 @@ bmat <- bsplines(x      = seq(0, 6, length = 500),
                  iknots = c(1.0, 1.5, 2.3, 4.0, 4.5))
 theta <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
 omit_xi <- influence_of(cp(bmat, theta), c(6, 8))
-stopifnot(all.equal(omit_xi$weight$w[1], 0.5391355923))   #sprintf("%.10f", omit_xi$weight$w[1])
-stopifnot(all.equal(omit_xi$weight$w[2], 0.2775424520))
+stopifnot(isTRUE(all.equal(omit_xi$weight$w[1], 0.5391355923)))   #sprintf("%.10f", omit_xi$weight$w[1])
+stopifnot(isTRUE(all.equal(omit_xi$weight$w[2], 0.2775424520)))
 
 ################################################################################
 # test that influence weights for control polygon is as expected
@@ -16,7 +16,7 @@ bmat <- bsplines(x      = seq(0, 6, length = 500),
 theta <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
 iw <- influence_weights(cp(bmat, theta))
 expected <- structure(list(iknots = c(1, 1.5, 2.3, 4, 4.5), w = c(1.28320371711094, 0.539135592305278, 0.558614618870046, 0.277542452002693, 0.647979474076723)), class = "data.frame", row.names = c(NA, -5L))
-stopifnot(all.equal(iw, expected))
+stopifnot(isTRUE(all.equal(iw, expected)))
 
 ################################################################################
 # test that influence_weights for control net are as expected
@@ -50,6 +50,9 @@ expected <-
                  )
     )
 
-stopifnot(all.equal(iw, expected))
+stopifnot(isTRUE(all.equal(iw, expected)))
 
 
+################################################################################
+##                                End of File                                 ##
+################################################################################
