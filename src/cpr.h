@@ -31,8 +31,8 @@ struct bbasis {
 
   // member methods, see de Boor (2001) page 90, used to define bmat via
   // recursion
-  arma::vec B(unsigned int j_, unsigned int k_);
-  arma::vec w(unsigned int j_, unsigned int k_);
+  double B(unsigned int i_, unsigned int j_, unsigned int k_);
+  double w(unsigned int i_, unsigned int j_, unsigned int k_);
 };
 
 struct controlpolygon {

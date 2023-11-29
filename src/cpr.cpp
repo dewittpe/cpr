@@ -18,7 +18,6 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
   xi_star.resize(xi.n_elem - order);
   bmat.resize(x.n_elem, iknots.n_elem + order);
 
-
   unsigned int i,j; // indices in for loops to follow
 
   // define the knot sequence in two for loops, the boundary knots and then the
@@ -42,33 +41,38 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
   }
 
   // define the basis matrix
-  //for(j = 0; j < order + iknots.n_elem; ++j) {
-  //  bmat.col(j) = B(j, order);
-  //}
+  for(i = 0; i < x.n_elem; ++i) {
+    for(j = 0; j < order + iknots.n_elem; ++j) {
+      bmat(i,j) = B(i, j, order);
+    }
+  }
 
-  //arma::uvec bx = arma::find(x == bknots(1));
-  //arma::uvec jx(bx.n_elem); jx.fill(j - 1);
-  //bmat(bx, jx).fill(1.0);
+  arma::uvec bx = arma::find(x == bknots(1));
+  arma::uvec jx(bx.n_elem); jx.fill(j - 1);
+  bmat(bx, jx).ones();
 }
 
-arma::vec bbasis::w(unsigned int j_, unsigned int k_) {
-  arma::vec w(x.n_elem, arma::fill::zeros);
+double bbasis::w(unsigned int i_, unsigned int j_, unsigned int k_) {
+  double w = 0.0;
 
   if ((xi(j_ + k_ - 1) - xi(j_)) > std::sqrt(arma::datum::eps)) {
-    w = (x - xi(j_)) / (xi(j_ + k_ - 1) - xi(j_));
+    w = (x(i_) - xi(j_)) / (xi(j_ + k_ - 1) - xi(j_));
   }
 
   return(w);
 }
 
-arma::vec bbasis::B(unsigned int j_, unsigned int k_) {
-  arma::vec rtn(x.n_elem);
+double bbasis::B(unsigned int i_, unsigned int j_, unsigned int k_) {
+  double rtn;
 
   if (k_ == 1) {
-    rtn.fill(0.0);
-    rtn.elem( arma::find( (xi(j_) <= x) && (x < xi(j_ + 1)) ) ).ones();
+    if ((xi(j_) <= x(i_)) && (x(i_) < xi(j_ + 1))) {
+      rtn = 1.0;
+    } else {
+      rtn = 0.0;
+    }
   } else {
-    rtn = w(j_, k_) * B(j_, k_ - 1) + (1.0 - w(j_ + 1, k_)) * B(j_ + 1, k_ - 1);
+    rtn = w(i_, j_, k_) * B(i_, j_, k_ - 1) + (1.0 - w(i_, j_ + 1, k_)) * B(i_, j_ + 1, k_ - 1);
   }
 
   return(rtn);
