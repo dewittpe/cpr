@@ -60,6 +60,7 @@
 #' # run CPR, preferable model is in index 7
 #' cpr_run <- cpr(init_cp)
 #' plot(cpr_run, color = TRUE, type = "rmse", to = 15)
+#' plot(cpr_run, color = TRUE, from = 11, to = 15, show_spline = TRUE)
 #'
 #' # plot the fitted spline and the true p(x)
 #' sim_data$pred_select_p <-

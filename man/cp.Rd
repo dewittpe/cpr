@@ -114,7 +114,7 @@ cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 
 # plot the control polygon, spline and target data.
 plot(cp3, show_spline = TRUE) +
-  ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "y"),
+  ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y),
                      data = dat, linetype = 2, color = "red")
 
 }

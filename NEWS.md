@@ -14,6 +14,7 @@
 * Remove use of the tidyr, dplyr
 * Improve documentation
 * Minor bug fixes
+* Replace use of now deprecated `ggplot2::aes_string`
 
 # Version 0.2.3
 First public release.

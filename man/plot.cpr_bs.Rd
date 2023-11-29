@@ -32,6 +32,8 @@ plot(bmat, show_xi = TRUE,  show_x = TRUE)
 plot(bmat, show_xi = FALSE, show_x = TRUE)
 plot(bmat, show_xi = TRUE,  show_x = FALSE)  ## Default
 plot(bmat, show_xi = FALSE, show_x = FALSE)
+plot(bmat, show_xi = FALSE, show_x = FALSE)
+plot(bmat, show_xi = FALSE, show_x = FALSE, color = FALSE)
 }
 \seealso{
 \code{\link{bsplines}}

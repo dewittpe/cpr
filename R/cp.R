@@ -39,7 +39,7 @@
 #'
 #' # plot the control polygon, spline and target data.
 #' plot(cp3, show_spline = TRUE) +
-#'   ggplot2::geom_line(mapping = ggplot2::aes_string(x = "x", y = "y"),
+#'   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y),
 #'                      data = dat, linetype = 2, color = "red")
 #'
 #' @export
@@ -230,7 +230,7 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   base_plot <-
     ggplot2::ggplot(plot_data) +
     ggplot2::theme_bw() +
-    ggplot2::aes_string(x = "x", y = "y") +
+    eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("x"), Y = as.name("y")))) +
     ggplot2::theme(axis.title = ggplot2::element_blank())
 
   if (show_xi) {
@@ -255,14 +255,14 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   if (length(cps) > 1) {
     base_plot <-
       base_plot +
-      ggplot2::aes_string(linetype = "row") +
+      eval(substitute(ggplot2::aes(linetype = LTY), list(LTY = as.name("row")))) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 
   if (color) {
     base_plot <-
       base_plot +
-      ggplot2::aes_string(color = "row") +
+      eval(substitute(ggplot2::aes(color = CLR), list(CLR = as.name("row")))) +
       ggplot2::theme(legend.title = ggplot2::element_blank())
   }
 

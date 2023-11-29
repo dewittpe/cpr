@@ -120,6 +120,8 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 #' plot(bmat, show_xi = FALSE, show_x = TRUE)
 #' plot(bmat, show_xi = TRUE,  show_x = FALSE)  ## Default
 #' plot(bmat, show_xi = FALSE, show_x = FALSE)
+#' plot(bmat, show_xi = FALSE, show_x = FALSE)
+#' plot(bmat, show_xi = FALSE, show_x = FALSE, color = FALSE)
 #' @method plot cpr_bs
 #' @export
 plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, digits = 2, n = 100) {
@@ -138,15 +140,15 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
   g <-
     ggplot2::ggplot(plot_data) +
     ggplot2::theme_bw() +
-    ggplot2::aes_string(x = "x", y = "value") +
+    eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("x"), Y = as.name("value")))) +
     ggplot2::geom_line() +
     ggplot2::theme(axis.title = ggplot2::element_blank())
 
   if (color) {
-    g <- g + ggplot2::aes_string(color = "spline")
+    g <- g + eval(substitute(ggplot2::aes(color = GRP), list(GRP = as.name("spline"))))
     g <- g + ggplot2::scale_color_discrete(labels = scales::parse_format())
   } else {
-    g <- g + ggplot2::aes_string(group = "spline")
+    g <- g + eval(substitute(ggplot2::aes(group = GRP), list(GRP = as.name("spline"))))
   }
 
   if (show_xi | show_x) {

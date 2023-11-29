@@ -46,7 +46,7 @@ plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
 
     ggplot2::ggplot(subset(s, (s$index >= from) & (s$index <= to))) +
     ggplot2::theme_bw() +
-    ggplot2::aes_string(x = "index", y = type) +
+    eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("index"), Y = as.name(type)))) +
     ggplot2::geom_point() +
     ggplot2::geom_line() +
     ggplot2::xlab("Index")
