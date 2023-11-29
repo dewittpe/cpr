@@ -14,6 +14,8 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
   iknots = iknots_;
   bknots = bknots_;
 
+  df = order + iknots.n_elem;
+
   xi.resize(iknots.n_elem + 2 * order);
   xi_star.resize(xi.n_elem - order);
   bmat.resize(x.n_elem, iknots.n_elem + order);

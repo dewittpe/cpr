@@ -16,6 +16,7 @@
 struct bbasis {
   // member objects
   unsigned int order;   // polynomial order
+  unsigned int df;      // degrees of freedom
   arma::vec iknots;     // internal knots
   arma::vec bknots;     // boundary knot values
   arma::vec xi;         // full knot sequence including the order-fold boundary knots

@@ -72,6 +72,7 @@ Rcpp::NumericMatrix bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, un
 
   Rcpp::NumericMatrix out = Rcpp::wrap(bb.bmat);
   out.attr("order")   = bb.order;
+  out.attr("df")      = bb.df;
   out.attr("iknots")  = arma2vec(bb.iknots);
   out.attr("bknots")  = arma2vec(bb.bknots);
   out.attr("xi")      = arma2vec(bb.xi);
