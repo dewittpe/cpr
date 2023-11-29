@@ -20,7 +20,7 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
   xi_star.resize(xi.n_elem - order);
   bmat.resize(x.n_elem, iknots.n_elem + order);
 
-  unsigned int i,j; // indices in for loops to follow
+  unsigned int i = 0, j = 0; // indices in for loops to follow
 
   // define the knot sequence in two for loops, the boundary knots and then the
   // interior knots.
@@ -34,11 +34,11 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
   }
 
   if (!xi.is_sorted()) {
-    Rf_error("Knots are not sorted");
+    Rf_error("Knots are not sorted.");
   }
 
   // define xi_star
-  for (unsigned int i = 0; i < xi_star.n_elem; ++i) {
+  for (i = 0; i < xi_star.n_elem; ++i) {
     xi_star(i) = arma::sum(xi(arma::span(i + 1, i + order - 1))) / double (order - 1);
   }
 

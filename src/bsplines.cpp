@@ -3,71 +3,8 @@
 #include <Rcpp.h>
 #include "cpr.h"
 
-//' @title B-Splines
-//'
-//' @description An implementation of Carl de Boor's recursive algorithm for
-//' building B-splines.
-//'
-//' @details The difference between this function and \code{splines::bs} come in the
-//' attributes associated with the output and default options.  The
-//' \code{cpr::bsplines} call is intended to simplify the work needed with
-//' respect to the control polygon reduction.  Further, the implementation of
-//' \code{cpr::bsplines} is in C++ and tends to be faster than
-//' \code{splines::bs}.
-//'
-//' See the \code{vignette("bsplines", package = "cpr")} for a detailed
-//' comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls
-//' and notes about B-splines in general.
-//'
-//' @references
-//' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
-//'
-//' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
-//'
-//' @param x a numeric vector
-//' @param iknots internal knots
-//' @param df degrees of freedom: sum of the order and internal knots.  Ignored
-//' if \code{iknots} is specified.
-//' @param bknots boundary knot locations, defaults to \code{range(x)}.
-//' @param order order of the piecewise polynomials, defaults to 4L.
-//'
-//' @seealso \code{\link{plot.cpr_bs}} for plotting the basis,
-//' \code{\link{bsplineD}} for building the basis matrices for the first and
-//' second derivative of a B-spline.
-//'
-//' See \code{\link{update_bsplines}} for info on a tool for updating a
-//' \code{cpr_bs} object.  This is a similar method to the
-//' \code{\link[stats]{update}} function from the \code{stats} package.
-//'
-//' @examples
-//' # build a vector of values to transform
-//' xvec <- seq(-3, 5, length = 100)
-//'
-//' # cubic b-spline
-//' bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0))
-//' bmat
-//'
-//' # plot the splines
-//' plot(bmat)                # each spline will be colored by default
-//' plot(bmat, color = FALSE) # black and white plot
-//' plot(bmat, color = FALSE) + ggplot2::aes(linetype = spline) # add a linetype
-//'
-//' # Axes
-//' # The x-axis, by default, show the knot locations.  Other options are numeric
-//' # values, and/or to use a second x-axis
-//'
-//' plot(bmat, show_xi = TRUE,  show_x = FALSE) # default, knot, symbols, on lower axis
-//' plot(bmat, show_xi = FALSE, show_x = TRUE)  # Numeric value for the knot locations
-//' plot(bmat, show_xi = TRUE,  show_x = TRUE)  # symbols on bottom, numbers on top
-//'
-//' # quadratic splines
-//' bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0), order = 3L)
-//' bmat
-//' plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
-//'
-//' @export
 // [[Rcpp::export]]
-Rcpp::NumericMatrix bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) {
+Rcpp::NumericMatrix cpp_bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) {
   bbasis bb(x, iknots, bknots, order);
 
   Rcpp::NumericMatrix out = Rcpp::wrap(bb.bmat);
