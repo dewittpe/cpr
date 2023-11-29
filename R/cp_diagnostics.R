@@ -21,7 +21,7 @@ cp_value <- function(obj, x) {
   UseMethod("cp_value")
 }
 
-#' @method cp_value cpr_cp
+#' @export
 cp_value.cpr_cp <- function(obj, x) {
   xi_star <- obj$xi_star
   theta   <- obj$theta
@@ -31,7 +31,7 @@ cp_value.cpr_cp <- function(obj, x) {
   unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
 }
 
-#' @method cp_value default
+#' @export
 cp_value.default <- function(obj, x) {
   xi_star <- obj[[1]]
   theta   <- obj[[2]]
