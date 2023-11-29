@@ -25,7 +25,7 @@
 #' @examples
 #' #############################################################################
 #' # Example 1: find a model for log10(pdg) = f(day) from the spdg data set
-#' \donttest{
+#' \dontrun{
 #' # need the lme4 package to fit a mixed effect model
 #' require(lme4)
 #'
