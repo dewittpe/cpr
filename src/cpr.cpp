@@ -50,7 +50,7 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
   }
 
   arma::uvec bx = arma::find(x == bknots(1));
-  arma::uvec jx(bx.n_elem); jx.fill(j - 1);
+  arma::uvec jx(bx.n_elem); jx.fill(bmat.n_cols - 1);
   bmat(bx, jx).ones();
 }
 

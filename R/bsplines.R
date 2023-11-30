@@ -177,81 +177,72 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 ###   g
 ### }
 ###
-### #' B-spline Derivatives
-### #'
-### #' Generate the first and second derivatives of a B-spline Basis.
-### #'
-### #' @references
-### #' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
-### #'
-### #' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
-### #'
-### #' @param x a numeric vector
-### #' @param iknots internal knots
-### #' @param df degrees of freedom: sum of the order and internal knots.  Ignored
-### #' if \code{iknots} is specified.
-### #' @param bknots boundary knot locations, defaults to \code{range(x)}.
-### #' @param order order of the piecewise polynomials, defaults to 4L.
-### #' @param derivative, (integer) first or second derivative
-### #'
-### #' @seealso \code{\link{bsplines}}
-### #'
-### #' @examples
-### #'
-### #' set.seed(42)
-### #'
-### #' xvec <- seq(0.1, 9.9, length = 1000)
-### #' iknots <- sort(runif(rpois(1, 3), 1, 9))
-### #' bknots <- c(0, 10)
-### #'
-### #' # basis matrix and the first and second derivatives thereof, for cubic (order =
-### #' # 4) b-splines
-### #' bmat  <- bsplines(xvec, iknots, bknots = bknots)
-### #' bmat1 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 1)
-### #' bmat2 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 2)
-### #'
-### #' # control polygon ordinates
-### #' theta <- runif(length(iknots) + 4L, -5, 5)
-### #'
-### #' # plot data
-### #' plot_data <-
-### #'   data.frame(Spline            = as.numeric(bmat %*% theta),
-### #'              First_Derivative  = as.numeric(bmat1 %*% theta),
-### #'              Second_Derivative = as.numeric(bmat2 %*% theta))
-### #' plot_data <- stack(plot_data)
-### #' plot_data <- cbind(plot_data, data.frame(x = xvec))
-### #'
-### #' ggplot2::ggplot(plot_data) +
-### #' ggplot2::aes(x = x, y = values, color = ind) +
-### #' ggplot2::geom_line() +
-### #' ggplot2::geom_hline(yintercept = 0) +
-### #' ggplot2::geom_vline(xintercept = iknots, linetype = 3)
-### #'
-### #' @export
-### #' @rdname bsplineD
-### bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L, derivative = 1L) {
-###
-###   iknots <- iknots_or_df(x, iknots, df, order)
-###
-###   xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order))
-###
-###
-###   if (derivative == 1L) {
-###     rtn <- mapply(bsplineD1__impl,
-###                   j = seq(0L, length(iknots) + order - 1L, by = 1L),
-###                   MoreArgs = list(x = x, order = order, knots = xi),
-###                   SIMPLIFY = FALSE)
-###   } else if (derivative == 2L) {
-###     rtn <- mapply(bsplineD2__impl,
-###                   j = seq(0L, length(iknots) + order - 1L, by = 1L),
-###                   MoreArgs = list(x = x, order = order, knots = xi),
-###                   SIMPLIFY = FALSE)
-###   } else {
-###     stop("Only first and second derivatives are supported")
-###   }
-###
-###   do.call(cbind, rtn)
-### }
+
+#' B-spline Derivatives
+#'
+#' Generate the first and second derivatives of a B-spline Basis.
+#'
+#' @references
+#' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
+#'
+#' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
+#'
+#' @param x a numeric vector
+#' @param iknots internal knots
+#' @param df degrees of freedom: sum of the order and internal knots.  Ignored
+#' if \code{iknots} is specified.
+#' @param bknots boundary knot locations, defaults to \code{range(x)}.
+#' @param order order of the piecewise polynomials, defaults to 4L.
+#' @param derivative, (integer) first or second derivative
+#'
+#' @seealso \code{\link{bsplines}}
+#'
+#' @examples
+#'
+#' set.seed(42)
+#'
+#' xvec <- seq(0.1, 9.9, length = 1000)
+#' iknots <- sort(runif(rpois(1, 3), 1, 9))
+#' bknots <- c(0, 10)
+#'
+#' # basis matrix and the first and second derivatives thereof, for cubic (order =
+#' # 4) b-splines
+#' bmat  <- bsplines(xvec, iknots, bknots = bknots)
+#' bmat1 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 1)
+#' bmat2 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 2)
+#'
+#' # control polygon ordinates
+#' theta <- runif(length(iknots) + 4L, -5, 5)
+#'
+#' # plot data
+#' plot_data <-
+#'   data.frame(Spline            = as.numeric(bmat %*% theta),
+#'              First_Derivative  = as.numeric(bmat1 %*% theta),
+#'              Second_Derivative = as.numeric(bmat2 %*% theta))
+#' plot_data <- stack(plot_data)
+#' plot_data <- cbind(plot_data, data.frame(x = xvec))
+#'
+#' ggplot2::ggplot(plot_data[plot_data$ind == "Spline", ]) +
+#' ggplot2::aes(x = x, y = values, color = ind) +
+#' ggplot2::geom_line() +
+#' ggplot2::geom_hline(yintercept = 0) +
+#' ggplot2::geom_vline(xintercept = iknots, linetype = 3)
+#'
+#' @export
+#' @rdname bsplineD
+bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L, derivative = 1L) {
+
+  iknots <- iknots_or_df(x, iknots, df, order)
+
+  if (derivative == 1L) {
+    rtn <- cpp_bsplinesD1(x = x, iknots = iknots, bknots = bknots, order = order)
+  } else if (derivative == 2L) {
+    rtn <- cpp_bsplinesD2(x = x, iknots = iknots, bknots = bknots, order = order)
+  } else {
+    stop("Only first and second derivatives are supported")
+  }
+  rtn
+}
 
 iknots_or_df <- function(x, iknots, df, order) {
   if (is.null(iknots) & is.null(df)) {

@@ -1,4 +1,4 @@
-library(cpr)
+#library(cpr)
 require(splines)
 
 ################################################################################
@@ -6,11 +6,16 @@ stopifnot("Equivalent Basis Matrix between cpr and splines::bs" =
   isTRUE(
     all.equal(
         current = unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10), order = 4))
-      , target = unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10), intercept = TRUE))
+      ,
+      target = unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10), intercept = TRUE))
       , check.attributes = FALSE
     )
   )
 )
+
+for (j in 1:ncol(current)) {
+  print(all.equal(target[, j], current[, j]))
+}
 
 ################################################################################
 # print.cpr_bs
@@ -103,29 +108,41 @@ f2 <- function(x) {
   6 * x - 4
 }
 
+
 x <- seq(-3, 5, length = 100)
-plot(x, f0(x), type = "l")
 bmat <- bsplines(x)
 theta <- coef(lm(f0(x) ~ bsplines(x) + 0) )
-points(x, bmat %*% theta, col = 'red')
 
-plot(x, f1(x), type = "l")
-baseD1 <- spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(1, length(x)))$design
+baseD1 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(1, length(x)))$design
 cprD1 <- bsplineD(x)
-points(x, baseD1 %*% theta, col = 'red')
-points(x, cprD1 %*% theta, pch = 2, col = 'blue')
 
-plot(x, f2(x), type = "l")
-baseD2 <- spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(2, length(x)))$design
-cprD2 <- bsplineD(x)
-points(x, baseD2 %*% theta, col = 'red')
-points(x, cprD2 %*% theta, pch = 2, col = 'blue')
+baseD2 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(2, length(x)))$design
+cprD2 <- bsplineD(x, derivative = 2L)
 
+# verify that I can get cubic correct
+stopifnot(isTRUE(all.equal(f0(x), as.numeric(bmat %*% theta))))
 
+# verify that I can get the first derivative correct
+stopifnot(isTRUE(all.equal(f1(x)[-100], as.numeric(cprD1 %*% theta)[-100])))
 
+# verify that I can get the second derivative correct
+stopifnot(isTRUE(all.equal(f2(x)[-100], as.numeric(cprD2 %*% theta)[-100])))
 
+if (interactive()) {
+  par(mfrow = c(1, 3))
+  plot(x, f0(x), type = "l")
+  points(x, bmat %*% theta, pch = 2, col = 'blue')
 
+  plot(x, f1(x), type = "l")
+  points(x, baseD1 %*% theta, pch = 16, col = 'red', cex = 0.7)
+  points(x, cprD1 %*% theta, pch = 2, col = 'blue')
 
+  plot(x, f2(x), type = "l")
+  points(x, baseD2 %*% theta, pch = 16, col = 'red', cex = 0.7)
+  points(x, cprD2 %*% theta, pch = 2, col = 'blue')
+}
+
+# another set of tests
 xvec <- seq(-1, 5, length = 100)
 iknots <- c(-0.8, 0.2, 2.3, 2.5)
 
@@ -134,10 +151,16 @@ xi <- sort(c(rep(range(xvec), 4), iknots))
 baseD1 <- spline.des(xi, xvec, derivs = rep(1, length(xvec)))$design
 baseD2 <- spline.des(xi, xvec, derivs = rep(2, length(xvec)))$design
 
-cprD1 <- bsplineD(xvec, iknots = iknots)
+cprD1 <- bsplineD(xvec, iknots = iknots, derivative = 1L)
 cprD2 <- bsplineD(xvec, iknots = iknots, derivative = 2L)
 
-stopifnot(isTRUE( all.equal(cprD1[-100, ], baseD1[-100, ])))
+stopifnot(isTRUE(
+                 all.equal(
+                           cprD1[-100, ]
+                           ,
+                           baseD1[-100, ]
+                 )
+                 ))
 stopifnot(isTRUE( all.equal(cprD2[-100, ], baseD2[-100, ])))
 
 x <- tryCatch(bsplineD(xvec, derivative = 1.5), error = function(e) {e})
