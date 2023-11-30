@@ -11,9 +11,9 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// bsplines
-Rcpp::NumericMatrix bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
-RcppExport SEXP _cpr_bsplines(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
+// cpp_bsplines
+Rcpp::NumericMatrix cpp_bsplines(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
+RcppExport SEXP _cpr_cpp_bsplines(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,13 +21,43 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
-    rcpp_result_gen = Rcpp::wrap(bsplines(x, iknots, bknots, order));
+    rcpp_result_gen = Rcpp::wrap(cpp_bsplines(x, iknots, bknots, order));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_bsplinesD1
+Rcpp::NumericMatrix cpp_bsplinesD1(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
+RcppExport SEXP _cpr_cpp_bsplinesD1(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_bsplinesD1(x, iknots, bknots, order));
+    return rcpp_result_gen;
+END_RCPP
+}
+// cpp_bsplinesD2
+Rcpp::NumericMatrix cpp_bsplinesD2(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order);
+RcppExport SEXP _cpr_cpp_bsplinesD2(SEXP xSEXP, SEXP iknotsSEXP, SEXP bknotsSEXP, SEXP orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec >::type x(xSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type iknots(iknotsSEXP);
+    Rcpp::traits::input_parameter< arma::vec >::type bknots(bknotsSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type order(orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(cpp_bsplinesD2(x, iknots, bknots, order));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_cpr_bsplines", (DL_FUNC) &_cpr_bsplines, 4},
+    {"_cpr_cpp_bsplines", (DL_FUNC) &_cpr_cpp_bsplines, 4},
+    {"_cpr_cpp_bsplinesD1", (DL_FUNC) &_cpr_cpp_bsplinesD1, 4},
+    {"_cpr_cpp_bsplinesD2", (DL_FUNC) &_cpr_cpp_bsplinesD2, 4},
     {NULL, NULL, 0}
 };
 

@@ -1,4 +1,4 @@
-#library(cpr)
+library(cpr)
 require(splines)
 
 ################################################################################
@@ -12,10 +12,6 @@ stopifnot("Equivalent Basis Matrix between cpr and splines::bs" =
     )
   )
 )
-
-for (j in 1:ncol(current)) {
-  print(all.equal(target[, j], current[, j]))
-}
 
 ################################################################################
 # print.cpr_bs
