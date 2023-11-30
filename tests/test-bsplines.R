@@ -91,6 +91,41 @@ stopifnot(isTRUE(all.equal(x, y, check.attributes = FALSE)))
 
 ################################################################################
 # derivatives are as expected
+
+f0 <- function(x) {
+  #(x + 2) * (x - 1) * (x - 3)
+  x^3 - 2 * x^2 - 5 * x + 6
+}
+f1 <- function(x) {
+  3 * x^2 - 4 * x - 5
+}
+f2 <- function(x) {
+  6 * x - 4
+}
+
+x <- seq(-3, 5, length = 100)
+plot(x, f0(x), type = "l")
+bmat <- bsplines(x)
+theta <- coef(lm(f0(x) ~ bsplines(x) + 0) )
+points(x, bmat %*% theta, col = 'red')
+
+plot(x, f1(x), type = "l")
+baseD1 <- spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(1, length(x)))$design
+cprD1 <- bsplineD(x)
+points(x, baseD1 %*% theta, col = 'red')
+points(x, cprD1 %*% theta, pch = 2, col = 'blue')
+
+plot(x, f2(x), type = "l")
+baseD2 <- spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(2, length(x)))$design
+cprD2 <- bsplineD(x)
+points(x, baseD2 %*% theta, col = 'red')
+points(x, cprD2 %*% theta, pch = 2, col = 'blue')
+
+
+
+
+
+
 xvec <- seq(-1, 5, length = 100)
 iknots <- c(-0.8, 0.2, 2.3, 2.5)
 

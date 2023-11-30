@@ -19,6 +19,65 @@ Rcpp::NumericMatrix cpp_bsplines(arma::vec x, arma::vec iknots, arma::vec bknots
   return out;
 }
 
+// [[Rcpp::export]]
+Rcpp::NumericMatrix cpp_bsplinesD1(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) {
+  bbasis B0(x, iknots, bknots, order);
+  arma::vec iknots1(iknots.n_elem + 2);
+
+  Rcpp::Rcout << "Okay 1\n";
+  iknots1(0)                            = B0.xi(order - 1);
+  Rcpp::Rcout << "Okay 2\n";
+  //iknots1.subvec(1, iknots1.n_elem - 2) = iknots;
+  for (unsigned int i = 0; i < iknots.n_elem; ++i) {
+    iknots1(i + 1) = iknots(i);
+  }
+  Rcpp::Rcout << "Okay 3\n";
+  iknots1(iknots1.n_elem - 1)           = B0.xi(iknots.n_elem + order);
+  Rcpp::Rcout << "Okay 4\n";
+
+  bbasis B1(x, iknots1, bknots, order - 1);
+  arma::mat D(x.n_elem, iknots.n_elem + order);
+  arma::vec A1(x.n_elem), A2(x.n_elem);
+
+  for (unsigned int j = 0; j < D.n_cols; ++j) {
+    //Rcpp::Rcout << "in cpp_bsplinesD1; j = " << j << "\n";
+    //Rcpp::Rcout << "mat: " << D << "\n";
+    //Rcpp::Rcout << "B0.xi(j + order - 1) = " << B0.xi(j + order - 1) << "\n";
+    //Rcpp::Rcout << "B0.xi(j) = " << B0.xi(j) << "\n";
+    //Rcpp::Rcout << "B0.xi(j + order) = " << B0.xi(j + order) << "\n";
+    //Rcpp::Rcout << "B0.xi(j + 1) = " << B0.xi(j + 1) << "\n";
+    //Rcpp::Rcout << "B1.bmat.col(j): " << B1.bmat.col(j) << "\n";
+    //Rcpp::Rcout << "B1.bmat.col(j + 1): " << B1.bmat.col(j + 1) << "\n";
+    //
+
+    if (B0.xi(j + order - 1) - B0.xi(j) != 0) {
+      A1 = double(order - 1) / (B0.xi(j + order - 1) - B0.xi(j)) * B1.bmat.col(j);
+    } else {
+      A1.zeros();
+    }
+
+    if (B0.xi(j + order) - B0.xi(j + 1) != 0) {
+      A2 = double(order - 1) / (B0.xi(j + order) - B0.xi(j + 1)) * B1.bmat.col(j + 1);
+    } else {
+      A2.zeros();
+    }
+
+    D.col(j) = A1 - A2;
+  }
+
+  Rcpp::NumericMatrix out = Rcpp::wrap(D);
+  //out.attr("order")   = B.order;
+  //out.attr("df")      = B.df;
+  //out.attr("iknots")  = arma2vec(B.iknots);
+  //out.attr("bknots")  = arma2vec(B.bknots);
+  //out.attr("xi")      = arma2vec(B.xi);
+  //out.attr("xi_star") = arma2vec(B.xi_star);
+  //out.attr("derivative") = 1;
+  out.attr("class")   = "cpr_bsD1";
+
+  return out;
+}
+
 //Rcpp::NumericVector bsplineD1__impl(arma::vec x, unsigned int j, unsigned int order, arma::vec knots) {
 //
 //  arma::vec A1;
