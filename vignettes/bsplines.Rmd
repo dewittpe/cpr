@@ -178,12 +178,20 @@ piecewise linear function approximating the spline function.  Changes in
 convexity and other subtle characteristics of the spline function are
 exaggerated by the control polygon.
 
-For example, using the basis matrix defined above and the coefficients
+For example, using the basis matrix defined above and the following
+coefficients we can easily define a spline function and control polygon.
 
 ```{r label = "define theta"}
 theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
-bmat %*% theta
-cp
+cp(bmat, theta)
+```
+
+
+Plotting the control polygon and the corresponding spline:
+
+
+```{r label = "plot cp", fig.width = 7, fig.height = 4}
+plot(cp(bmat, theta), show_spline = TRUE)
 ```
 
 
