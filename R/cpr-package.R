@@ -11,10 +11,13 @@
 #' variation in daily hormone profiles during the menopausal transition.}
 #' (2017).
 #'
-#' @useDynLib cpr, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
-#' @importFrom graphics plot
-#'
 #' @docType package
 #' @name cpr-package
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
+#' @useDynLib cpr
+#' @importFrom Rcpp sourceCpp
+## usethis namespace: end
 NULL

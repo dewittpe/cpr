@@ -135,6 +135,7 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
 #' @rdname cp
 print.cpr_cp <- function(x, ...) {
   print(x$cp, ...)
+  invisible(x)
 }
 
 #' @export
@@ -152,7 +153,6 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
          iknots     = I(list(object$iknots)),
          loglik     = object$loglik,
          rmse       = object$rmse)
-
 
   if (wiggle) {
     wggl <- try(do.call(wiggle.cpr_cp, c(list(object = object), integrate.args)), silent = TRUE)
@@ -185,10 +185,47 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #' to be plotted, set this value to TRUE to have the graphic in color (line types
 #' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
+#' @param comparative when \code{TRUE} use \code{color} to distinquish one spline from
+#' another, when \code{FALSE} \use{color} to highight the control polygon and
+#' spline with different colors, and plot the knots the way
+#' \code{\link{plot.cpr_bs}} does.  When missing, the default if \code{TRUE} if
+#' more than one \code{cpr_cp} object is passed in, and \code{FALSE} is only one
+#' \code{cpr_cp} object is passed.
+#' @param digits number of digits to the right of the decimal place to report
+#' for the value of each knot. Only used when plotting on control polygon with
+#' \code{comparative = FALSE}.
 #'
-plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = TRUE, color = FALSE, n = 100) {
-  nms   <- sapply(match.call()[-1], deparse)
-  nms   <- nms[!(names(nms) %in% c("show_cp", "show_spline", "show_xi", "color", "n"))]
+#' @return a ggplot
+#'
+#' @examples
+#'
+#' x <- seq(0, 6, length = 500)
+#' bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5))
+#' theta1 <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
+#' theta2 <- theta1 + c(-0.15, -1.01, 0.37, 0.19, -0.53, -0.84, -0.19, 1.15, 0.17)
+#' cp1 <- cp(bmat, theta1)
+#' cp2 <- cp(bmat, theta2)
+#'
+#' # compare two control polygons on one plot
+#' plot(cp1, cp2)
+#' plot(cp1, cp2, color = TRUE)
+#' plot(cp1, cp2, color = TRUE, show_spline = TRUE)
+#' plot(cp1, cp2, color = TRUE, show_cp = FALSE, show_spline = TRUE)
+#'
+#' # Show one control polygon with knots on the axis instead of the rug and
+#' # color/linetype for the control polygon and spline, instead of different
+#' # control polygons
+#' plot(cp1, comparative = FALSE)
+#' plot(cp1, comparative = FALSE, show_spline = TRUE)
+#' plot(cp1, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
+#' plot(cp2, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
+#'
+#'
+plot.cpr_cp <- function(x, ..., comparative, show_cp = TRUE, show_spline = FALSE, show_xi = TRUE, color = FALSE, n = 100, show_x = FALSE, digits = 2) {
+
+  nms <- as.list(match.call(expand.dots = FALSE))
+  nms <- unlist(c(nms["x"], nms["..."]))
+  nms <- sapply(nms, deparse)
 
   cps       <- lapply(list(x, ...), getElement, "cp")
   knot_data <- lapply(list(x, ...), function(x) {data.frame(x = x$xi)})
@@ -207,6 +244,15 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
     cps[[i]]$row <- nms[i]
     knot_data[[i]]$row <- nms[i]
     spline_data[[i]]$row <- nms[i]
+  }
+
+  if (missing(comparative)) {
+    comparative <- length(cps) > 1L
+  }
+
+  if (length(cps) > 1L & !comparative) {
+    warning("More than one control polygon to plot, forcing comparative to TRUE")
+    comparative <- TRUE
   }
 
   cps <- do.call(rbind, cps)
@@ -228,16 +274,10 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
   plot_data$object <- factor(plot_data$object, levels = 1:3, labels = c("cp", "knots", "spline"))
 
   base_plot <-
-    ggplot2::ggplot(plot_data) +
+    ggplot2::ggplot(data = plot_data) +
     ggplot2::theme_bw() +
     eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("x"), Y = as.name("y")))) +
     ggplot2::theme(axis.title = ggplot2::element_blank())
-
-  if (show_xi) {
-    base_plot <-
-      base_plot +
-      ggplot2::geom_rug(data = subset(plot_data, plot_data$object == "knots"))
-  }
 
   if (show_cp) {
     base_plot <-
@@ -252,19 +292,64 @@ plot.cpr_cp <- function(x, ..., show_cp = TRUE, show_spline = FALSE, show_xi = T
       ggplot2::geom_line(data = subset(plot_data, plot_data$object == "spline"))
   }
 
-  if (length(cps) > 1) {
+  if (comparative) {
+    if (show_xi) {
+      base_plot <-
+        base_plot +
+        ggplot2::geom_rug(data = subset(plot_data, plot_data$object == "knots"))
+    }
+
+    if (length(cps) > 1) {
+      base_plot <-
+        base_plot +
+        eval(substitute(ggplot2::aes(linetype = LTY), list(LTY = as.name("row")))) +
+        ggplot2::theme(legend.title = ggplot2::element_blank())
+    }
+
+    if (color) {
+      base_plot <-
+        base_plot +
+        eval(substitute(ggplot2::aes(color = CLR), list(CLR = as.name("row")))) +
+        ggplot2::theme(legend.title = ggplot2::element_blank())
+    }
+  } else {
     base_plot <-
       base_plot +
-      eval(substitute(ggplot2::aes(linetype = LTY), list(LTY = as.name("row")))) +
-      ggplot2::theme(legend.title = ggplot2::element_blank())
+      eval(substitute(ggplot2::aes(linetype = GRP), list(GRP = as.name("object"))))
+
+    if (color) {
+      base_plot <-
+        base_plot +
+        eval(substitute(ggplot2::aes(linetype = GRP, color = GRP), list(GRP = as.name("object")))) +
+        ggplot2::scale_color_discrete(labels = scales::parse_format())
+    } else {
+      base_plot <-
+        base_plot +
+        eval(substitute(ggplot2::aes(linetype = GRP), list(GRP = as.name("object"))))
+    }
+
+    if (show_xi | show_x) {
+      e <- knot_expr(x, digits)
+      if (show_xi & !show_x) {
+        base_plot <-
+          base_plot + ggplot2::scale_x_continuous(breaks = e$breaks,
+                                                  labels = parse(text = e$xi_expr),
+                                                  minor_breaks = NULL)
+      } else if (!show_xi & show_x) {
+        base_plot <- base_plot + ggplot2::scale_x_continuous(breaks = e$breaks,
+                                                             labels = e$num_expr,
+                                                             minor_breaks = NULL)
+      } else {
+        base_plot <- base_plot + ggplot2::scale_x_continuous(breaks = e$breaks,
+                                                             labels = parse(text = e$xi_expr),
+                                                             minor_breaks = NULL,
+                                                             sec.axis = ggplot2::sec_axis(~ .,
+                                                                                          breaks = e$breaks,
+                                                                                          labels = e$num_expr))
+      }
+    }
   }
 
-  if (color) {
-    base_plot <-
-      base_plot +
-      eval(substitute(ggplot2::aes(color = CLR), list(CLR = as.name("row")))) +
-      ggplot2::theme(legend.title = ggplot2::element_blank())
-  }
 
   base_plot
 }

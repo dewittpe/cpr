@@ -1,0 +1,201 @@
+---
+title: "B-Splines and Control Polygons"
+author: "Peter E. DeWitt"
+output:
+ rmarkdown::html_vignette:
+   toc: true
+   number_sections: true
+bibliography: references.bib
+vignette: >
+ %\VignetteIndexEntry{B-Splines and Control Polygons}
+ %\VignetteEngine{knitr::rmarkdown}
+ %\VignetteEncoding{UTF-8}
+---
+
+<style type="text/css">
+window.MathJax = {
+   tex: {
+     tags: 'ams'
+   }
+};
+</style>
+
+
+```{r label = "setup", include = FALSE}
+library(qwraps2)
+options(qwraps2_markup = "markdown")
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+
+
+```{r}
+library(cpr)
+packageVersion("cpr")
+```
+
+
+The term "spline" is likely derived from shipwright or draftsmen splines,
+thin wood strips, held in place by weights, used to define curves.  These
+splines naturally minimize strain energy and the use of additional weights at
+strategic locations on the spline are needed to achieve specific curvatures.
+Cubic B-splines are not dissimilar.
+
+Splines are piecewise polynomial curves that are differentiable up to a
+prescribed order. B-splines are based on a _basis_ of polynomial functions.
+
+Definitions and notation for uni-variable and multi-variable B-splines and
+the associated control polygons and control nets are presented in the
+following.  Two very good references for splines are @deboor2001 and
+@prautzsch2002 if you wish to dig into the details.
+
+# Uni-variable B-splines and Control Polygons
+
+A curve defined by $f\left(x\right)$ is a spline of order $k$ (degree $k
+-1$), with knots $\xi_1, \xi_2, \ldots, \xi_m$ where $\xi_i \leq x_{i+1}$ and
+$\xi_{i} < \xi_{i + k} \forall i$ if $f\left(x\right)$ is $k-r-1$ times
+differentiable at any $r$-fold knot, and $f\left(x\right)$ is a polynomial of
+order $\leq k$ over each interval $x \in \left[\xi_i, \xi_{i+1}\right]$ for
+$i = 0, \ldots, m - 1.$
+
+In particular, B-splines, are defined as an affine combination:
+
+\begin{equation}
+  f \left( x \right) =
+  \sum_{j} \theta_j B_{j,k,\boldsymbol{\xi}}\left(x\right) =
+  \boldsymbol{B}_{k, \boldsymbol{\xi}} \left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi}}
+  \label{eq:f}
+\end{equation}
+
+where $B_{j,k,\boldsymbol{\xi}}\left(x\right)$ is the $j^{th}$ basis spline
+function, $\boldsymbol{\xi}$ is a sequence of knots with $k$-fold boundary knots
+and $l \geq 0$ interior knots, i.e.,
+
+$$ \xi_1 = \xi_2 = \cdots = \xi_k < \xi_{k+1} \leq \cdots \leq \xi_{k + l} =
+\xi_{k + l + 1} = \cdots \xi_{2k + l}.$$
+
+The $j^{th}$ B-spline is defined as:
+
+\begin{equation}
+B_{j,k,\boldsymbol{\xi}}\left(x\right) =
+ \omega_{j,k,\boldsymbol{\xi}} \left(x\right)
+ B_{j,k-1,\boldsymbol{\xi}}\left(x\right) +
+ \left(1 - \omega_{j+1,k,\boldsymbol{\xi}} \right)
+ B_{j+1,k-1,\boldsymbol{\xi}}\left(x\right),
+\end{equation}
+where
+\begin{equation}
+B_{j,k,\boldsymbol{\xi}}\left(x\right) = 0 \quad \text{for} \quad x \notin
+\left[\xi_j, \xi_{j+k} \right), \quad \quad
+B_{j,1,\boldsymbol{\xi}}\left(x\right) = \begin{cases}
+1 & x \in \left[\xi_j, \xi_{j+k}\right) \\ 0 & \text{otherwise},
+\end{cases}
+\end{equation}
+and
+\begin{equation}
+\omega_{j,k,\boldsymbol{\xi}}\left(x\right) = \begin{cases}
+0 & x \leq \xi_j \\ \frac{x-\xi_j}{\xi_{j+k-1} - \xi_{j}} & \xi_j < x < \xi_{j+k-1} \\
+1 & \xi_{j+k-1} \leq x.
+\end{cases}
+\end{equation}
+
+For a set of observations, $\boldsymbol{x} = x_1, \ldots, x_n,$ the basis
+functions defined above generalize to a matrix:
+
+\begin{equation}
+  \boldsymbol{B}_{k, \boldsymbol{\xi}} \left(\boldsymbol{x}\right) =
+  \begin{pmatrix}
+    B_{1, k, \boldsymbol{\xi}} \left(x_1\right) &
+    B_{2, k, \boldsymbol{\xi}} \left(x_1\right) &
+    \ldots &
+    B_{k + l, k, \boldsymbol{\xi}} \left(x_1\right) \\
+    \vdots & \vdots & \ddots & \vdots \\
+    B_{1, k, \boldsymbol{\xi}} \left(x_n\right) &
+    B_{2, k, \boldsymbol{\xi}} \left(x_n\right) &
+    \ldots &
+    B_{k + l, k, \boldsymbol{\xi}} \left(x_n\right).
+  \end{pmatrix}
+\end{equation}
+
+Within the cpr package we can generate a basis matrix thusly:
+
+```{r label = "basis_matrix"}
+x <- seq(0, 6, length = 500)
+bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5))
+bmat
+```
+
+
+Note: the default order for
+`r backtick(bsplines) `
+is 4, and the default for the boundary knots is the range of
+`r backtick(x) %s% "." `
+
+A couple of many important properties of the basis function is that for any value
+of $x \in \left[\xi_1, \xi_{2k+l}\right]$
+
+* $B_{j,k,\boldsymbol{xi}} \left(x\right) \in \left[0, 1\right],$ and
+* $\sum_j B_{j,k,\boldsymbol{xi}} \left(x\right) = 1.$
+
+
+```{r label = "row sums to 1"}
+all(bmat >= 0)
+all(bmat <= 1)
+all.equal(rowSums(bmat), rep(1, nrow(bmat)))
+```
+
+
+We can quickly view the plot of each of these spline functions as well.
+
+```{r label = "plot bmat", fig.width = 7, fig.height = 4}
+plot(bmat, show_xi = TRUE, show_x = TRUE)
+```
+
+
+The spline $f\left(\boldsymbol{x}\right) = \boldsymbol{B}_{k,\boldsymbol{\xi}}\left(\boldsymbol{x}\right)$
+is a convex sum of the coefficients $\boldsymbol{\theta}_{\boldsymbol{\xi}}.$
+A meaningful geometric
+relationship between $\boldsymbol{\xi}$ and
+$\boldsymbol{\theta}_{\boldsymbol{\xi}}$ exist in the form of a
+__control polygon__,
+$CP_{k,\boldsymbol{\xi},\boldsymbol{\theta}_{\boldsymbol{\xi}}},$ a strong
+convex hull for
+$\boldsymbol{B}_{k,\boldsymbol{\xi}}\left(\boldsymbol{x}\right)
+\boldsymbol{\theta}_{\boldsymbol{\xi}}.$
+
+\begin{equation}
+CP_{k,\boldsymbol{\xi},\boldsymbol{\theta}_{\xi}} =
+\left\{ \left( \xi_{j}^{*}, \theta_{j,\boldsymbol{\xi}} \right) \right
+\}_{j=1}^{\left\lvert\boldsymbol{\theta}_{\boldsymbol{\xi}}\right\rvert};
+\quad \quad
+\xi_{j}^{*} = \frac{1}{k-1} \sum_{i = 1}^{k-1} \xi_{j + i}.
+\end{equation}
+
+$CP_{k,\boldsymbol{\xi},\boldsymbol{\theta}_{\boldsymbol{\xi}}}$ is a
+sequence of $\left\lvert \boldsymbol{\theta}_{\boldsymbol{\xi}} \right\rvert
+= k + l$ control vertices.  The control polygon can be thought of as a
+piecewise linear function approximating the spline function.  Changes in
+convexity and other subtle characteristics of the spline function are
+exaggerated by the control polygon.
+
+For example, using the basis matrix defined above and the coefficients
+
+```{r label = "define theta"}
+theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
+bmat %*% theta
+cp
+```
+
+
+
+
+
+# References
+<div id="refs"></div>
+
+# Session Info
+
+```{r label = "sessioninfo"}
+sessionInfo()
+```
+
