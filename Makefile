@@ -41,6 +41,13 @@ $(PKG_ROOT)/vignettes/%.Rmd : $(PKG_ROOT)/vignette-spinners/%.R
 	R --vanilla --quiet -e "knitr::spin(hair = '$<', knit = FALSE)"
 	mv $(basename $<).Rmd $@
 
+# for testing a vignette without having to install the package
+%.html : vignettes/%.Rmd
+	R -e "setwd('vignettes')"\
+		-e "devtools::load_all()"\
+		-e "rmarkdown::render('$(addsuffix .Rmd, $(basename $(notdir $<)))')"
+	mv $(addsuffix .html, $(basename $<)) $@
+
 ################################################################################
 clean:
 	$(RM) -f  $(PKG_NAME)_$(PKG_VERSION).tar.gz

@@ -11,3 +11,4 @@ vignettes/figure
 vignettes/background.Rnw
 cpr.Rcheck/
 *.Rout
+*.html
