@@ -1,3 +1,16 @@
+# Version 0.3.0.9000
+
+## New Features
+
+* `plot.cpr_cp` gains the argument `comparitive` which, when set to `FALSE` and
+  only one `cpr_cp` is passed in for plotting, the graphic will appear more like
+  the `plot.cpr_bs` results.  When `comparitive = TRUE` or more than one
+  `cpr_cp` is present, the behavior from v0.3.0 is retained.
+
+## Other Changes
+* Refactor of c++ defining basis functions, derivatives of basis functions,
+  b-splines structures
+
 # Version 0.3.0
 
 ## New Examples
