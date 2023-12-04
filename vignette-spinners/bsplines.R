@@ -183,8 +183,9 @@ plot(cp(bmat, theta), show_spline = TRUE)
 
 
 #'
+#' # Differences between cpr::bslines and splines::bs
 #'
-#'
+#' There is a ma
 #'
 #' # References
 #'<div id="refs"></div>

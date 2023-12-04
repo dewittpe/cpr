@@ -49,14 +49,9 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
     }
   }
 
-  // The following three lines are a hack to get the basis matrix created here to
-  // match the basis matrix created by splines::bs.  However, this hack should
-  // not be used.  The splines::bs is designed to allow for extrapolation, and
-  // the cpr package and method uses strick definitions of an, given the
-  // definitions, the bsplines should be right-continuous.
-  //arma::uvec bx = arma::find(x == bknots(1));
-  //arma::uvec jx(bx.n_elem); jx.fill(bmat.n_cols - 1);
-  //bmat(bx, jx).ones();
+  arma::uvec bx = arma::find(x == bknots(1));
+  arma::uvec jx(bx.n_elem); jx.fill(bmat.n_cols - 1);
+  bmat(bx, jx).ones();
 }
 
 double bbasis::w(unsigned int i_, unsigned int j_, unsigned int k_) {
