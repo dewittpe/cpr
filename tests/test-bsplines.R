@@ -2,14 +2,15 @@ library(cpr)
 require(splines)
 
 ################################################################################
-stopifnot("Equivalent Basis Matrix between cpr and splines::bs" =
+base_bs <- unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10.2), intercept = TRUE))
+cpr_bspline <-  unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10.2), order = 4))
+
+base_bs |> tail()
+cpr_bspline |> tail()
+
+stopifnot("Equivalent Basis Matrix between cpr and splines::bs when all(x < max(bknots)" =
   isTRUE(
-    all.equal(
-        current = unclass(bsplines(0:10, iknots = c(2, 2.6, 7.8), bknots = c(0, 10), order = 4))
-      ,
-      target = unclass(splines::bs(0:10, knots = c(2, 2.6, 7.8), Boundary.knots = c(0, 10), intercept = TRUE))
-      , check.attributes = FALSE
-    )
+    all.equal(current = cpr_bspline, target = base_bs, check.attributes = FALSE)
   )
 )
 
@@ -105,24 +106,32 @@ f2 <- function(x) {
 }
 
 
-x <- seq(-3, 5, length = 100)
-bmat <- bsplines(x)
-theta <- coef(lm(f0(x) ~ bsplines(x) + 0) )
+#x <- seq(-3, 5, length = 100)
+x <- sort(runif(n = 100, min = -3, max = 5))
+bknots = c(-3, 5)
+bmat <- bsplines(x, bknots = bknots)
+theta <- coef(lm(f0(x) ~ bsplines(x, bknots = bknots) + 0) )
 
 baseD1 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(1, length(x)))$design
-cprD1 <- bsplineD(x)
+cprD1 <- bsplineD(x, bknots = bknots, derivative = 1L)
+
+head(baseD1); head(cprD1)
+tail(baseD1); tail(cprD1)
 
 baseD2 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(2, length(x)))$design
-cprD2 <- bsplineD(x, derivative = 2L)
+cprD2 <- bsplineD(x, bknots = bknots, derivative = 2L)
 
 # verify that I can get cubic correct
 stopifnot(isTRUE(all.equal(f0(x), as.numeric(bmat %*% theta))))
 
-# verify that I can get the first derivative correct
-stopifnot(isTRUE(all.equal(f1(x)[-100], as.numeric(cprD1 %*% theta)[-100])))
+# verify that I can get the first derivative correct -- this is different from
+# base R in that, by my construction, the derivative at the boundardy knots
+# should be NA, as the k-fold knots should result in no differentiability at
+# these points.
+stopifnot(isTRUE(all.equal(f1(x), as.numeric(cprD1 %*% theta))))
 
 # verify that I can get the second derivative correct
-stopifnot(isTRUE(all.equal(f2(x)[-100], as.numeric(cprD2 %*% theta)[-100])))
+stopifnot(isTRUE(all.equal(f2(x), as.numeric(cprD2 %*% theta))))
 
 if (interactive()) {
   par(mfrow = c(1, 3))

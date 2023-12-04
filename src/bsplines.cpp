@@ -36,7 +36,6 @@ Rcpp::NumericMatrix cpp_bsplinesD1(arma::vec x, arma::vec iknots, arma::vec bkno
   iknots1(iknots1.n_elem - 1) = B0.xi(iknots.n_elem + order);
 
   bbasis B1(x, iknots1, bknots, order - 1);
-  Rcpp::Rcout << "B1.bmat.tail_rows(6)" << B1.bmat.tail_rows(6) << "\n";
   arma::mat D(x.n_elem, iknots.n_elem + order);
   arma::vec A1(x.n_elem), A2(x.n_elem);
 
@@ -55,6 +54,7 @@ Rcpp::NumericMatrix cpp_bsplinesD1(arma::vec x, arma::vec iknots, arma::vec bkno
     }
 
     D.col(j) = A1 - A2;
+
   }
 
   Rcpp::NumericMatrix out = Rcpp::wrap(D);

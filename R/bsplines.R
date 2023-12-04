@@ -67,6 +67,8 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
     stop("x is a list.  use cpr::btensor instead of cpr::bsplines.")
   }
 
+  stopifnot(length(bknots) == 2L)
+
   iknots <- iknots_or_df(x, iknots, df, order)
 
   rtn <- cpp_bsplines(x = x, iknots = iknots, bknots = bknots, order = order)
