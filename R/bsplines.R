@@ -129,13 +129,14 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 #' @method plot cpr_bs
 #' @export
 plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, digits = 2, n = 100) {
-  xvec <- seq(min(attr(x, "bknots")), max(attr(x, "bknots")), length = n)
-  bmat <- bsplines(xvec, iknots = attr(x, "iknots"), order = attr(x, "order"))
 
   # reshape from wide to long and from matrix to data.frame
-  plot_data <- utils::stack(as.data.frame(bmat))
+  plot_data <- utils::stack(as.data.frame(x))
   names(plot_data) <- c("value", "spline")
-  plot_data <- cbind(plot_data, data.frame(x = rep(xvec, times = ncol(bmat))))
+
+  xvec <- seq(attr(x, "bknots")[1], attr(x, "bknots")[2], length = nrow(x))
+  plot_data <- cbind(plot_data, data.frame(x = rep(xvec, times = ncol(x))))
+
   levels(plot_data$spline) <- sub("V", "B", levels(plot_data$spline))
   levels(plot_data$spline) <- sub("(\\d+)",
                                   paste0("[list(\\1,k==", attr(x, "order"), ",bold(xi))](x)"),
@@ -235,6 +236,7 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L, derivative = 1L) {
 
   iknots <- iknots_or_df(x, iknots, df, order)
+  stopifnot(length(bknots) == 2L)
 
   if (derivative == 1L) {
     rtn <- cpp_bsplinesD1(x = x, iknots = iknots, bknots = bknots, order = order)

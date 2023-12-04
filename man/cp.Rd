@@ -22,11 +22,14 @@ cp(x, ...)
 \method{plot}{cpr_cp}(
   x,
   ...,
+  comparative,
   show_cp = TRUE,
   show_spline = FALSE,
   show_xi = TRUE,
   color = FALSE,
-  n = 100
+  n = 100,
+  show_x = FALSE,
+  digits = 2
 )
 }
 \arguments{
@@ -61,6 +64,13 @@ derivative of the spline function will be calculated via
 \item{integrate.args}{a list of arguments passed to \code{cpr::wiggle} and
 ultimately \code{stats::integrate}.}
 
+\item{comparative}{when \code{TRUE} use \code{color} to distinquish one spline from
+another, when \code{FALSE} \code{color} to highight the control polygon and
+spline with different colors, and plot the knots the way
+\code{\link{plot.cpr_bs}} does.  When missing, the default if \code{TRUE} if
+more than one \code{cpr_cp} object is passed in, and \code{FALSE} is only one
+\code{cpr_cp} object is passed.}
+
 \item{show_cp}{logical (default \code{TRUE}), show the control polygon(s)?}
 
 \item{show_spline}{logical (default \code{FALSE}) to plot the spline
@@ -75,6 +85,13 @@ to be plotted, set this value to TRUE to have the graphic in color (line types
 will be used regardless of the color setting).}
 
 \item{n}{the number of data points to use for plotting the spline}
+
+\item{digits}{number of digits to the right of the decimal place to report
+for the value of each knot. Only used when plotting on control polygon with
+\code{comparative = FALSE}.}
+}
+\value{
+a ggplot
 }
 \description{
 Generate the control polygon for a uni-variable B-spline
@@ -116,5 +133,28 @@ cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 plot(cp3, show_spline = TRUE) +
   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y),
                      data = dat, linetype = 2, color = "red")
+
+
+x <- seq(0, 6, length = 500)
+bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5))
+theta1 <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
+theta2 <- theta1 + c(-0.15, -1.01, 0.37, 0.19, -0.53, -0.84, -0.19, 1.15, 0.17)
+cp1 <- cp(bmat, theta1)
+cp2 <- cp(bmat, theta2)
+
+# compare two control polygons on one plot
+plot(cp1, cp2)
+plot(cp1, cp2, color = TRUE)
+plot(cp1, cp2, color = TRUE, show_spline = TRUE)
+plot(cp1, cp2, color = TRUE, show_cp = FALSE, show_spline = TRUE)
+
+# Show one control polygon with knots on the axis instead of the rug and
+# color/linetype for the control polygon and spline, instead of different
+# control polygons
+plot(cp1, comparative = FALSE)
+plot(cp1, comparative = FALSE, show_spline = TRUE)
+plot(cp1, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
+plot(cp2, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
+
 
 }

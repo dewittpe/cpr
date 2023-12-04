@@ -120,8 +120,15 @@ functions defined above generalize to a matrix:
 Within the cpr package we can generate a basis matrix thusly:
 
 ```{r label = "basis_matrix"}
-x <- seq(0, 6, length = 500)
-bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5))
+right_continuous_seq <- function(from, to, ..., right_nudge = sqrt(.Machine$double.eps)) {
+  x <- seq(from = from, to = to - right_nudge, ...)
+  attr(x, "from") = from
+  attr(x, "to") = to
+  x
+}
+
+x <- right_continuous_seq(0, 6, length.out = 5000)
+bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
 bmat
 ```
 
@@ -195,6 +202,65 @@ plot(cp(bmat, theta), show_spline = TRUE)
 ```
 
 
+## Right-Continuity and Implimentation
+
+By definition, B-splines are right continuous.  This has several
+
+## Derivatives
+
+
+```{r}
+# derivatives are as expected
+
+f0 <- function(x) {
+  #(x + 2) * (x - 1) * (x - 3)
+  x^3 - 2 * x^2 - 5 * x + 6
+}
+f1 <- function(x) {
+  3 * x^2 - 4 * x - 5
+}
+f2 <- function(x) {
+  6 * x - 4
+}
+
+
+#x <- seq(-3, 5, length = 100)
+x <- sort(runif(n = 100, min = -3, max = 5))
+bknots = c(-3, 5)
+bmat <- bsplines(x, bknots = bknots)
+theta <- coef(lm(f0(x) ~ bsplines(x, bknots = bknots) + 0) )
+
+baseD1 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(1, length(x)))$design
+cprD1 <- bsplineD(x, bknots = bknots, derivative = 1L)
+
+
+baseD2 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(2, length(x)))$design
+cprD2 <- bsplineD(x, bknots = bknots, derivative = 2L)
+
+# verify that I can get cubic correct
+#stopifnot(isTRUE(all.equal(f0(x), as.numeric(bmat %*% theta))))
+
+# verify that I can get the first derivative correct -- this is different from
+# base R in that, by my construction, the derivative at the boundardy knots
+# should be NA, as the k-fold knots should result in no differentiability at
+# these points.
+#stopifnot(isTRUE(all.equal(f1(x), as.numeric(cprD1 %*% theta))))
+
+# verify that I can get the second derivative correct
+#stopifnot(isTRUE(all.equal(f2(x), as.numeric(cprD2 %*% theta))))
+
+par(mfrow = c(1, 3))
+plot(x, f0(x), type = "l")
+points(x, bmat %*% theta, pch = 2, col = 'blue')
+
+plot(x, f1(x), type = "l")
+points(x, baseD1 %*% theta, pch = 16, col = 'red', cex = 0.7)
+points(x, cprD1 %*% theta, pch = 2, col = 'blue')
+
+plot(x, f2(x), type = "l")
+points(x, baseD2 %*% theta, pch = 16, col = 'red', cex = 0.7)
+points(x, cprD2 %*% theta, pch = 2, col = 'blue')
+```
 
 
 

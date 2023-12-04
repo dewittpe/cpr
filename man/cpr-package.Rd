@@ -2,6 +2,7 @@
 % Please edit documentation in R/cpr-package.R
 \docType{package}
 \name{cpr-package}
+\alias{cpr}
 \alias{cpr-package}
 \title{cpr: Control Polygon Reduction}
 \description{
@@ -15,3 +16,21 @@ control polygon and control net reduction for identifying factors explaining
 variation in daily hormone profiles during the menopausal transition.}
 (2017).
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/dewittpe/cpr/}
+}
+
+}
+\author{
+\strong{Maintainer}: Peter DeWitt \email{dewittpe@gmail.com} (\href{https://orcid.org/0000-0002-6391-0795}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Samantha MaWhinney \email{sam.mawhinney@ucdenver.edu} [thesis advisor]
+  \item Nichole Carlson \email{nichole.carlson@ucdenver.edu} [thesis advisor]
+}
+
+}
+\keyword{internal}

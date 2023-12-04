@@ -49,9 +49,14 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
     }
   }
 
-  arma::uvec bx = arma::find(x == bknots(1));
-  arma::uvec jx(bx.n_elem); jx.fill(bmat.n_cols - 1);
-  bmat(bx, jx).ones();
+  // The following three lines were a hack to get a non-zero b-spline when x =
+  // bknots(1).  This works, but has some conceptual issues.  First, the
+  // B-splines are right continuous and this work forces left continuity at
+  // bknots(1).  By omitting this code and returning a warning it is left to the
+  // end user to define the boundary knots well, or to .  I'm cons
+  //arma::uvec bx = arma::find(x == bknots(1));
+  //arma::uvec jx(bx.n_elem); jx.fill(bmat.n_cols - 1);
+  //bmat(bx, jx).ones();
 }
 
 double bbasis::w(unsigned int i_, unsigned int j_, unsigned int k_) {
@@ -68,7 +73,7 @@ double bbasis::B(unsigned int i_, unsigned int j_, unsigned int k_) {
   double rtn;
 
   if (k_ == 1) {
-    if ((xi(j_) <= x(i_)) && (x(i_) < xi(j_ + 1))) {
+    if ( ((xi(j_) <= x(i_)) && (x(i_) < xi(j_ + 1)))) {
       rtn = 1.0;
     } else {
       rtn = 0.0;

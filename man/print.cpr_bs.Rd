@@ -14,6 +14,9 @@
 
 \item{\ldots}{not currently used.}
 }
+\value{
+the object \code{x} is returned invisibly
+}
 \description{
 Print bsplines
 }

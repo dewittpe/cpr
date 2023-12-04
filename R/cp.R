@@ -186,7 +186,7 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
 #' @param comparative when \code{TRUE} use \code{color} to distinquish one spline from
-#' another, when \code{FALSE} \use{color} to highight the control polygon and
+#' another, when \code{FALSE} \code{color} to highight the control polygon and
 #' spline with different colors, and plot the knots the way
 #' \code{\link{plot.cpr_bs}} does.  When missing, the default if \code{TRUE} if
 #' more than one \code{cpr_cp} object is passed in, and \code{FALSE} is only one
@@ -232,11 +232,11 @@ plot.cpr_cp <- function(x, ..., comparative, show_cp = TRUE, show_spline = FALSE
   spline_data <-
     lapply(list(x, ...), function(xx) {
            b <- xx$bknots
-           bmat <- bsplines(seq(b[1], b[2], length = n),
+           bmat <- bsplines(seq(b[1], b[2] - 1/n, length = n),
                             iknots = xx$iknots,
                             bknots = b,
                             order  = xx$order)
-           data.frame(x = seq(b[1], b[2], length = n),
+           data.frame(x = seq(b[1], b[2] - 1/n, length = n),
                       y = as.numeric(bmat %*% xx$cp$theta))
                           })
 
