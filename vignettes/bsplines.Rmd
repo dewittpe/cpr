@@ -51,6 +51,8 @@ following.  Two very good references for splines are @deboor2001 and
 
 # Uni-variable B-splines and Control Polygons
 
+## B-splines
+
 A curve defined by $f\left(x\right)$ is a spline of order $k$ (degree $k
 -1$), with knots $\xi_1, \xi_2, \ldots, \xi_m$ where $\xi_i \leq x_{i+1}$ and
 $\xi_{i} < \xi_{i + k} \forall i$ if $f\left(x\right)$ is $k-r-1$ times
@@ -68,11 +70,17 @@ In particular, B-splines, are defined as an affine combination:
 \end{equation}
 
 where $B_{j,k,\boldsymbol{\xi}}\left(x\right)$ is the $j^{th}$ basis spline
-function, $\boldsymbol{\xi}$ is a sequence of knots with $k$-fold boundary knots
-and $l \geq 0$ interior knots, i.e.,
+function, $\boldsymbol{\xi}$ is a sequence of $l$ interior knots and a total
+of $2k$ boundary knots, i.e., $\left\lvert \boldsymbol{\xi}
+\right\rvert| = 2k + l.$ The value of the $k$ boundary knots is arbitrary,
+but a common choice is to use $k$-fold knots on the boundary:
 
 $$ \xi_1 = \xi_2 = \cdots = \xi_k < \xi_{k+1} \leq \cdots \leq \xi_{k + l} =
 \xi_{k + l + 1} = \cdots \xi_{2k + l}.$$
+
+Alternative boundary knots can be used so long as the sequence
+$\boldsymbol{\xi}$ is non-decreasing.  More on the implications of $k$-fold
+boundary knots follow in the next section.
 
 The $j^{th}$ B-spline is defined as:
 
@@ -117,17 +125,17 @@ functions defined above generalize to a matrix:
   \end{pmatrix}
 \end{equation}
 
+A couple of many important properties of the basis function is that for any value
+of $x \in \left[\xi_1, \xi_{2k+l}\right]$
+
+* $B_{j,k,\boldsymbol{xi}} \left(x\right) \in \left[0, 1\right],$
+* $ B_{j,k,\boldsymbol{\xi}} \left(x) > 0 \quad \text{for} \quad x \in \left(\xi_{j}, \xi_{j+k}\right),$ and
+* $\sum_j B_{j,k,\boldsymbol{xi}} \left(x\right) = 1.$
+
 Within the cpr package we can generate a basis matrix thusly:
 
 ```{r label = "basis_matrix"}
-right_continuous_seq <- function(from, to, ..., right_nudge = sqrt(.Machine$double.eps)) {
-  x <- seq(from = from, to = to - right_nudge, ...)
-  attr(x, "from") = from
-  attr(x, "to") = to
-  x
-}
-
-x <- right_continuous_seq(0, 6, length.out = 5000)
+x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)
 bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
 bmat
 ```
@@ -137,12 +145,6 @@ Note: the default order for
 `r backtick(bsplines) `
 is 4, and the default for the boundary knots is the range of
 `r backtick(x) %s% "." `
-
-A couple of many important properties of the basis function is that for any value
-of $x \in \left[\xi_1, \xi_{2k+l}\right]$
-
-* $B_{j,k,\boldsymbol{xi}} \left(x\right) \in \left[0, 1\right],$ and
-* $\sum_j B_{j,k,\boldsymbol{xi}} \left(x\right) = 1.$
 
 
 ```{r label = "row sums to 1"}
@@ -158,6 +160,8 @@ We can quickly view the plot of each of these spline functions as well.
 plot(bmat, show_xi = TRUE, show_x = TRUE)
 ```
 
+
+## Spline Function Control Polygons
 
 The spline $f\left(\boldsymbol{x}\right) = \boldsymbol{B}_{k,\boldsymbol{\xi}}\left(\boldsymbol{x}\right)$
 is a convex sum of the coefficients $\boldsymbol{\theta}_{\boldsymbol{\xi}}.$
@@ -202,64 +206,71 @@ plot(cp(bmat, theta), show_spline = TRUE)
 ```
 
 
-## Right-Continuity and Implimentation
+## Continuity and Knots
 
-By definition, B-splines are right continuous.  This has several
+All the basis functions are, by definition, right-continuous.  The spline
+function has at most $k$ continuity conditions.  That, is, for a value of $x$
+such that $\xi_1 < x < \xi
 
-## Derivatives
+The knots sequence is a representation of the desired smoothness of
+$f\left(x\right).$  For any point $\xi_1 < x < \xi_{2k + l}} and $\notexists
+i s.t. x = \xi_i,$ the function $f\left(x\right)$ has $k$ continuity
+conditions, $(k -1)^{st}-$ through $0^{th}$-order differentiable.  At a knot,
+there number of continuity conditions decreases for the number of knots at
+that point.  Overall, the number of continuity conditions at a point $x$ plut
+the number of knots at $x$ equals $k.$
 
+For an example, we will use a $k = 4$ order spline (a cubic spline) to
+perfectly fit a cubic function.  We'll define the function, first, and second
+derivatives
 
 ```{r}
-# derivatives are as expected
-
-f0 <- function(x) {
+f <- function(x) {
   #(x + 2) * (x - 1) * (x - 3)
   x^3 - 2 * x^2 - 5 * x + 6
 }
-f1 <- function(x) {
+
+fprime <- function(x) { # first derivatives of f(x)
   3 * x^2 - 4 * x - 5
 }
-f2 <- function(x) {
+
+fdoubleprime <- function(x) { # second derivatives of f(x)
   6 * x - 4
 }
+```
 
 
-#x <- seq(-3, 5, length = 100)
-x <- sort(runif(n = 100, min = -3, max = 5))
+We'll look at the function over
+
+```{r}
 bknots = c(-3, 5)
-bmat <- bsplines(x, bknots = bknots)
-theta <- coef(lm(f0(x) ~ bsplines(x, bknots = bknots) + 0) )
 
-baseD1 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(1, length(x)))$design
-cprD1 <- bsplineD(x, bknots = bknots, derivative = 1L)
+x     <- seq(-3 + 1/100, 5 - 1/100, length.out = 100)
+bmat  <- bsplines(x, bknots = bknots)
+theta <- matrix(coef(lm(f(x) ~ bmat + 0)), ncol = 1)
 
+bmatD1 <- bsplineD(x, bknots = bknots, derivative = 1L)
+bmatD2 <- bsplineD(x, bknots = bknots, derivative = 2L)
 
-baseD2 <- splines::spline.des(c(-3, -3, -3, -3, 5, 5, 5, 5), x, derivs = rep(2, length(x)))$design
-cprD2 <- bsplineD(x, bknots = bknots, derivative = 2L)
+# check that the function f(x) is recovered
+all.equal(f(x), as.numeric(bmat %*% theta))
 
-# verify that I can get cubic correct
-#stopifnot(isTRUE(all.equal(f0(x), as.numeric(bmat %*% theta))))
+# check that the first derivative is recovered
+all.equal(fprime(x), as.numeric(bmatD1 %*% theta))
 
-# verify that I can get the first derivative correct -- this is different from
-# base R in that, by my construction, the derivative at the boundardy knots
-# should be NA, as the k-fold knots should result in no differentiability at
-# these points.
-#stopifnot(isTRUE(all.equal(f1(x), as.numeric(cprD1 %*% theta))))
+# check that the second derivative is recovered
+all.equal(fdoubleprime(x), as.numeric(bmatD2 %*% theta))
 
-# verify that I can get the second derivative correct
-#stopifnot(isTRUE(all.equal(f2(x), as.numeric(cprD2 %*% theta))))
-
+# Plot the results
 par(mfrow = c(1, 3))
-plot(x, f0(x), type = "l")
-points(x, bmat %*% theta, pch = 2, col = 'blue')
+plot(x, f(x), type = "l")
+points(x, bmat %*% theta, col = 'blue')
 
-plot(x, f1(x), type = "l")
-points(x, baseD1 %*% theta, pch = 16, col = 'red', cex = 0.7)
-points(x, cprD1 %*% theta, pch = 2, col = 'blue')
+plot(x, fprime(x), type = "l")
+points(x, bmatD1 %*% theta, col = 'blue')
 
-plot(x, f2(x), type = "l")
-points(x, baseD2 %*% theta, pch = 16, col = 'red', cex = 0.7)
-points(x, cprD2 %*% theta, pch = 2, col = 'blue')
+plot(x, fdoubleprime(x), type = "l")
+points(x, bmatD2 %*% theta, col = 'blue')
 ```
 
 
