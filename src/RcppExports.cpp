@@ -80,6 +80,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// coarsen_theta
+arma::vec coarsen_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta);
+RcppExport SEXP _cpr_coarsen_theta(SEXP jSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(coarsen_theta(j, xi, k, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// hat_theta
+Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta);
+RcppExport SEXP _cpr_hat_theta(SEXP jSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(hat_theta(j, xi, k, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cpr_cpp_bsplines", (DL_FUNC) &_cpr_cpp_bsplines, 4},
@@ -87,6 +115,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_cpr_cpp_bsplinesD2", (DL_FUNC) &_cpr_cpp_bsplinesD2, 4},
     {"_cpr_W", (DL_FUNC) &_cpr_W, 3},
     {"_cpr_refine_theta", (DL_FUNC) &_cpr_refine_theta, 4},
+    {"_cpr_coarsen_theta", (DL_FUNC) &_cpr_coarsen_theta, 4},
+    {"_cpr_hat_theta", (DL_FUNC) &_cpr_hat_theta, 4},
     {NULL, NULL, 0}
 };
 

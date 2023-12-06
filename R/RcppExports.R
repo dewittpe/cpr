@@ -21,3 +21,11 @@ refine_theta <- function(xi_prime, xi, k, theta) {
     .Call('_cpr_refine_theta', PACKAGE = 'cpr', xi_prime, xi, k, theta)
 }
 
+coarsen_theta <- function(j, xi, k, theta) {
+    .Call('_cpr_coarsen_theta', PACKAGE = 'cpr', j, xi, k, theta)
+}
+
+hat_theta <- function(j, xi, k, theta) {
+    .Call('_cpr_hat_theta', PACKAGE = 'cpr', j, xi, k, theta)
+}
+

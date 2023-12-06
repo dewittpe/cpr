@@ -157,6 +157,45 @@ arma::vec refine_theta(double xi_prime, const arma::vec& xi, unsigned int k, con
   return(W(xi_prime, xi, k) * theta);
 }
 
+// [[Rcpp::export]]
+arma::vec coarsen_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta){
+
+  arma::vec xi_sans_j(xi.n_elem - 1);
+  for (unsigned int i = 0; i < xi_sans_j.n_elem; ++i) {
+    if (i < j) {
+      xi_sans_j(i) = xi(i);
+    } else if (i >= j) {
+      xi_sans_j(i) = xi(i + 1);
+    }
+  }
+
+  arma::mat w = W(xi(j), xi_sans_j, k);
+
+  return ((w.t() * w).i() * w.t() * theta);
+}
+
+// [[Rcpp::export]]
+Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta) {
+  arma::vec xi_sans_j(xi.n_elem - 1);
+  for (unsigned int i = 0; i < xi_sans_j.n_elem; ++i) {
+    if (i < j) {
+      xi_sans_j(i) = xi(i);
+    } else if (i >= j) {
+      xi_sans_j(i) = xi(i + 1);
+    }
+  }
+
+  arma::mat w = W(xi(j), xi_sans_j, k);
+
+  return (
+    Rcpp::List::create(
+        Rcpp::Named("theta") = (w * (w.t() * w).i() * w.t() * theta),
+        Rcpp::Named("d") = theta - (w * (w.t() * w).i() * w.t() * theta),
+        Rcpp::Named("influence") = arma::sum( arma::pow(theta - (w * (w.t() * w).i() * w.t() * theta), 2))
+        )
+  );
+}
+
 /* ************************************************************************** */
 /*                                End of File                                 */
 /* ************************************************************************** */

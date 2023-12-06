@@ -103,4 +103,36 @@ arma::mat W(double xi_prime, const arma::vec& xi, unsigned int k);
  */
 arma::vec refine_theta(double xi_prime, const arma::vec& xi, unsigned int k, const arma::vec& theta);
 
+/* coarsen_theta
+ *
+ * theta_{xi \ xi_j} = (W^T W)^{-1} W^{T} \theta_xi
+ *
+ * Arguments:
+ *   j : the index of xi to omit
+ *   xi: full knot sequence
+ *   k: polynomial order
+ *   theta: theta_xi
+ *
+ * Return:
+ *   a vector, theta_{xi \ xi_j}
+ */
+arma::vec coarsen_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta);
+
+/* hat theta
+ *
+ * \hat{theta}_{xi,j} = W(W^T W)^{-1} W^{T} \theta_xi after omitting and
+ * reinserting xi_j
+ *
+ * Arguments:
+ *   j : the index of xi to omit
+ *   xi: full knot sequence
+ *   k: polynomial order
+ *   theta: theta_xi
+ *
+ * Return:
+ *   a R list with the theta_hat, d for the difference from intial to hat
+ *
+ */
+Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta);
+
 #endif

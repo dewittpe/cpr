@@ -99,7 +99,9 @@ print.cpr_bs <- function(x, n = 6L, ...) {
     cat("First", n, "rows:\n\n")
   }
 
-  print(x[seq(1, min(nrow(x), abs(n)), by = 1L), ])
+  if (nrow(x) > 0L) {
+    print(x[seq(1, min(nrow(x), abs(n)), by = 1L), ])
+  } 
 
   invisible(x)
 }
