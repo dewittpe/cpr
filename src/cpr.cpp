@@ -1,3 +1,4 @@
+// [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 #include <Rcpp.h>
 #include "cpr.h"
@@ -117,6 +118,38 @@ controlpolygon::controlpolygon(bbasis& bmat_, arma::vec& theta_) {
 /*                                  arma2vec                                  */
 Rcpp::NumericVector arma2vec(const arma::vec & x) {
     return Rcpp::NumericVector(x.begin(), x.end());
+}
+
+/* ************************************************************************** */
+/*                                   omega                                    */
+double omega(double x, unsigned int j, const arma::vec& xi, unsigned int k) {
+  if (x <= xi(j)) {
+    return(0);
+  }
+  else if (x >= xi(j + k - 1)) {
+    return(1);
+  }
+  else {
+    return((x - xi(j)) / (xi(j + k - 1) - xi(j)));
+  }
+}
+
+/* ************************************************************************** */
+/*                          Knot Insertion Matrices                           */
+// [[Rcpp::export]]
+arma::mat W(double x, const arma::vec& xi, unsigned int k) {
+  double w;
+  int r = xi.n_elem - k;
+
+  arma::mat M(r + 1, r, arma::fill::zeros);
+  M(0, 0) = 1.0;
+  M(r, r - 1) = 1.0;
+  for (int i = 1; i < r; ++i) {
+    w           = omega(x, i, xi, k);
+    M(i, i - 1) = 1.0 - w;
+    M(i, i)     = w;
+  }
+  return(M);
 }
 
 /* ************************************************************************** */

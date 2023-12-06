@@ -49,7 +49,7 @@ the associated control polygons and control nets are presented in the
 following.  Two very good references for splines are @deboor2001 and
 @prautzsch2002 if you wish to dig into the details.
 
-# Uni-variable B-splines and Control Polygons
+# B-splines and Control Polygons
 
 ## B-splines
 
@@ -71,9 +71,10 @@ In particular, B-splines, are defined as an affine combination:
 
 where $B_{j,k,\boldsymbol{\xi}}\left(x\right)$ is the $j^{th}$ basis spline
 function, $\boldsymbol{\xi}$ is a sequence of $l$ interior knots and a total
-of $2k$ boundary knots, i.e., $\left\lvert \boldsymbol{\xi}
-\right\rvert| = 2k + l.$ The value of the $k$ boundary knots is arbitrary,
-but a common choice is to use $k$-fold knots on the boundary:
+of $2k$ boundary knots, i.e., the cardinality of the knot sequence is
+$\left\lvert \boldsymbol{\xi} \right\rvert| = 2k + l.$ The value of the $k$
+boundary knots is arbitrary, but a common choice is to use $k$-fold knots on
+the boundary:
 
 $$ \xi_1 = \xi_2 = \cdots = \xi_k < \xi_{k+1} \leq \cdots \leq \xi_{k + l} =
 \xi_{k + l + 1} = \cdots \xi_{2k + l}.$$
@@ -161,7 +162,7 @@ plot(bmat, show_xi = TRUE, show_x = TRUE)
 ```
 
 
-## Spline Function Control Polygons
+## Control Polygons
 
 The spline $f\left(\boldsymbol{x}\right) = \boldsymbol{B}_{k,\boldsymbol{\xi}}\left(\boldsymbol{x}\right)$
 is a convex sum of the coefficients $\boldsymbol{\theta}_{\boldsymbol{\xi}}.$
@@ -194,7 +195,7 @@ coefficients we can easily define a spline function and control polygon.
 
 ```{r label = "define theta"}
 theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
-cp(bmat, theta)
+cp0 <- cp(bmat, theta)
 ```
 
 
@@ -202,7 +203,7 @@ Plotting the control polygon and the corresponding spline:
 
 
 ```{r label = "plot cp", fig.width = 7, fig.height = 4}
-plot(cp(bmat, theta), show_spline = TRUE)
+plot(cp0, show_spline = TRUE)
 ```
 
 
@@ -262,6 +263,8 @@ all.equal(fprime(x), as.numeric(bmatD1 %*% theta))
 all.equal(fdoubleprime(x), as.numeric(bmatD2 %*% theta))
 
 # Plot the results
+```
+```{r label = "plot derivatives", fig.width = 7, fig.height = 4}
 par(mfrow = c(1, 3))
 plot(x, f(x), type = "l")
 points(x, bmat %*% theta, col = 'blue')
@@ -273,6 +276,103 @@ plot(x, fdoubleprime(x), type = "l")
 points(x, bmatD2 %*% theta, col = 'blue')
 ```
 
+
+# Knot Influence
+
+## Spline Spaces
+
+Consider two knot sequences $\boldsymbol{\xi}$ and $\boldsymbol{\xi} \cup
+\boldsymbol{\xi}'.$  Then, for a given polynomial order $k,$ the spline space
+$\mathbb{S}_{k,\boldsymbol{\xi}} \subset \mathbb{S}_{k,\boldsymbol{\xi} \cup
+\boldsymbol{\xi}'}$ [@deboor2001,pg135]. Given this relationship between
+spline spaces, and the convex sums generating spline functions, @boehm1980
+presented a method for inserting a knots into the knot sequence such that the
+spline function is unchanged.  Specifically, for
+$$
+\boldsymbol{\xi}' = \left\{\left. \xi_{j}' \right|
+\min\left(\boldsymbol{\xi}\right) < \xi_j <
+\max\left(\boldsymbol{\xi}\right) \quad \forall j\right\},
+$$
+then there exist a $\boldsymbol{\theta}_{\boldsymbol{\xi} \cup
+\boldsymbol{\xi}'}$ such that
+$$
+\boldsymbol{B}_{k,\boldsymbol{\xi}} \left(x\right)\boldsymbol{\theta}_{\boldsymbol{\xi}} =
+\boldsymbol{B}_{k,\boldsymbol{\xi}\cup\boldsymbol{\xi}'}\left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi} \cup \boldsymbol{\xi}'}
+\quad \forall x \in \left[\min\left(\boldsymbol{\xi}\right), \max\left(\boldsymbol{\xi} \right) \right].
+$$
+
+When inserting a singleton $\xi'$ into $\boldsymbol{\xi},$ then
+$$
+\boldsymbol{\theta}_{\boldsymbol{\xi} \cup \xi'} = \boldsymbol{W}_{k,
+\boldsymbol{\xi}}\left(\xi'\right) \boldsymbol{\theta}_{\boldsymbol{\xi}}
+$$
+where $\boldsymbol{W}_{k,\boldsymbol{\xi}}\left(\xi'\right)$
+is a $\left(
+\left\lvert \boldsymbol{\theta} \right\rvert + 1\right) \times \left\lvert
+\boldsymbol{\theta} \right\rvert$ lower bi-diagonal matrix
+$$
+\boldsymbol{W}_{k,\boldsymbol{\xi}}\left(\xi'\right) =
+\begin{pmatrix}
+1 & 0 & \cdots & 0 \\
+1 - \omega_{1, k, \boldsymbol{\xi}}\left(\xi'\right) & \omega_{1, k, \boldsymbol{\xi}} \left(\xi'\right) & \cdots & 0 \\
+0 & 1 - \omega_{2, k, \boldsymbol{\xi}}\left(\xi'\right) & \cdots 0 \\
+\vdots & \vdots & \ddots & \vdots \\
+0 & 0 & 1 - \omega_{\left\lvert \boldsymbol{\theta} \right\rvert - 1, k, \boldsymbol{\xi}} \left(\xi'\right) & \omega_{\left\lvert \boldsymbol{\theta} \right\rvert - 1, k, \boldsymbol{\xi}} \left(\xi'\right) \\
+0 & 0 & 0 & 1
+\end{pmatrix},
+$$
+with $\omega_{j,k,\boldsymbol{\xi}}\left(x\right)$ as defined above in the
+de~Boor recursive algorithm. Through recursion we can insert as many knots
+into $\boldsymbol{\xi}$ without changing the value of the spline function.
+
+For an example, insert a knot $\xi' = 3$ into the control polygon defined
+above.
+
+```{r label = "insert xi_prime = 3", fig.width = 7, fig.width = 4}
+cp1 <- insert_a_knot(cp0, xi_prime = 3)
+plot(cp0, cp1, color = TRUE, show_spline = TRUE)
+```
+
+
+## Assessing influence of $\xi_j$
+
+Here we derivate a metric for assessing how much influence $\xi_j \in
+\boldsymbol{\xi}$ has on $\boldsymbol{B}_{k,\boldsymbol{\xi}}
+\left(x\right)\boldsymbol{\theta}_{\boldsymbol{\xi}}.$ Using the relationship
+defined by @boehm1980, we can derivate a metric for the influence of $\xi_j$
+on the spline function.
+
+Start with an defined $k, \boldsymbol{\xi},$ and
+$\boldsymbol{\theta}_{k,\boldsymbol{\xi}}.$ The relationship
+$$
+\boldsymbol{\theta}_{\boldsymbol{\xi}} =
+\boldsymbol{W}_{k,\boldsymbol{\xi}\backslash\xi_{j}}\left(\xi_{j}\right)
+\boldsymbol{\theta}_{\boldsymbol{\xi}\backslash\xi_{j}}
+$$
+holds if $\xi_j$ has zero influence.  However, in practice, we would expect
+that the relationship is
+$$
+\boldsymbol{\theta}_{\boldsymbol{\xi}} =
+\boldsymbol{W}_{k,\boldsymbol{\xi}\backslash\xi_{j}}\left(\xi_{j}\right)
+\boldsymbol{\theta}_{\boldsymbol{\xi}\backslash\xi_{j}} + \boldsymbol{d}
+$$
+for a set of deviations $\boldsymbol{d}$ which would be equal to
+$\boldsymbol{0}$ if $\xi_j$ has no influence on the spline.
+
+We can estimate $\boldsymbol{d}$ via least squares.  To simplify the notation
+in the following we drop some of the subscripts and parenthesis, that is, let
+$\boldsymbol{W} =
+\boldsymbol{W}_{k,\boldsymbol{\xi}\backslash\xi_{j}}\left(\xi_{j}\right).$
+
+$$
+\begin{align}
+\boldsymbol{d} &= \boldsymbol{\theta}_{\boldsymbol{\xi}} - \boldsymbol{W} \boldsymbol{\theta}_{\boldsymbol{\xi}\backslash\xi_{j}} \\
+               &= \boldsymbol{\theta}_{\boldsymbol{\xi}} - \boldsymbol{W} \left(\boldsymbol{W}^{T}\boldsymbol{W}\right)^{-1}\boldsymbol{W}^{T}        \boldsymbol{\theta}_{\boldsymbol{\xi}} \\
+               &= \left(\boldsymbol{I}                   - \boldsymbol{W} \left(\boldsymbol{W}^{T}\boldsymbol{W}\right)^{-1}\boldsymbol{W}^{T}\right) \boldsymbol{\theta}_{\boldsymbol{\xi}} \\
+\end{align}
+$$
+
+Let's look at the influence of knots on the spline used in the above section.
 
 
 # References

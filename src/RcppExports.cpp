@@ -53,11 +53,25 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// W
+arma::mat W(double x, const arma::vec& xi, unsigned int k);
+RcppExport SEXP _cpr_W(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(W(x, xi, k));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cpr_cpp_bsplines", (DL_FUNC) &_cpr_cpp_bsplines, 4},
     {"_cpr_cpp_bsplinesD1", (DL_FUNC) &_cpr_cpp_bsplinesD1, 4},
     {"_cpr_cpp_bsplinesD2", (DL_FUNC) &_cpr_cpp_bsplinesD2, 4},
+    {"_cpr_W", (DL_FUNC) &_cpr_W, 3},
     {NULL, NULL, 0}
 };
 

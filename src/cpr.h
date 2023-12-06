@@ -53,4 +53,35 @@ struct controlpolygon {
 //arma::vec greville_sites(arma::vec & xi, unsigned int order);
 
 Rcpp::NumericVector arma2vec(const arma::vec & x);
+
+/* omega
+ *
+ * weight used in the recursion definition of B-splines (alternative defined
+ * within bbasis).  This version will be used extensively when building the W
+ * matrix used for inserting a knot into a knot sequence without changing the
+ * spline function.
+ *
+ * Arguments:
+ *   x: value of the knot to be inserted
+ *   j: index of for the knot vector
+ *   k: order of the spline
+ *   xi: knot vector
+ * Return:
+ *   a double between 0 and 1 inclusive
+ */
+double omega(double x, unsigned int j, const arma::vec& xi, unsigned int k);
+
+/* W
+ *
+ * knot insertion matrix, i.e., theta_{xi U xi'} = W theta_{xi}
+ *
+ * Arguments:
+ *   x: value of the knot to be inserted
+ *   k: order of the spline
+ *   xi: knot vector into which x is to be inserted
+ * Return:
+ *   a matrix
+ */
+arma::mat W(double x, const arma::vec& xi, unsigned int k);
+
 #endif

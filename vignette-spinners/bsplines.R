@@ -185,13 +185,13 @@ plot(bmat, show_xi = TRUE, show_x = TRUE)
 #' coefficients we can easily define a spline function and control polygon.
 #+ label = "define theta"
 theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
-cp(bmat, theta)
+cp0 <- cp(bmat, theta)
 
 #'
 #' Plotting the control polygon and the corresponding spline:
 #'
 #+ label = "plot cp", fig.width = 7, fig.height = 4
-plot(cp(bmat, theta), show_spline = TRUE)
+plot(cp0, show_spline = TRUE)
 
 #'
 #' ## Continuity and Knots
@@ -305,6 +305,13 @@ points(x, bmatD2 %*% theta, col = 'blue')
 #' de~Boor recursive algorithm. Through recursion we can insert as many knots
 #' into $\boldsymbol{\xi}$ without changing the value of the spline function.
 #'
+#' For an example, insert a knot $\xi' = 3$ into the control polygon defined
+#' above.
+#+ label = "insert xi_prime = 3", fig.width = 7, fig.width = 4
+cp1 <- insert_a_knot(cp0, xi_prime = 3)
+plot(cp0, cp1, color = TRUE, show_spline = TRUE)
+
+#'
 #' ## Assessing influence of $\xi_j$
 #'
 #' Here we derivate a metric for assessing how much influence $\xi_j \in
@@ -338,12 +345,14 @@ points(x, bmatD2 %*% theta, col = 'blue')
 #' $$
 #' \begin{align}
 #' \boldsymbol{d} &= \boldsymbol{\theta}_{\boldsymbol{\xi}} - \boldsymbol{W} \boldsymbol{\theta}_{\boldsymbol{\xi}\backslash\xi_{j}} \\
-#'                &= \boldsymbol{\theta}_{\boldsymbol{\xi}} - \boldsymbol{W} \left(\boldsymbol{W}^{T}\boldsymbol{W}\right)^{-1}\boldsymbol{W}\boldsymbol{\theta}_{\boldsymbol{\xi}} \\
-#'                &= \left(\boldsymbol{I} - \boldsymbol{W} \left(\boldsymbol{W}^{T}\boldsymbol{W}\right)^{-1}\boldsymbol{W}\right)\boldsymbol{\theta}_{\boldsymbol{\xi}} \\
+#'                &= \boldsymbol{\theta}_{\boldsymbol{\xi}} - \boldsymbol{W} \left(\boldsymbol{W}^{T}\boldsymbol{W}\right)^{-1}\boldsymbol{W}^{T}        \boldsymbol{\theta}_{\boldsymbol{\xi}} \\
+#'                &= \left(\boldsymbol{I}                   - \boldsymbol{W} \left(\boldsymbol{W}^{T}\boldsymbol{W}\right)^{-1}\boldsymbol{W}^{T}\right) \boldsymbol{\theta}_{\boldsymbol{\xi}} \\
 #' \end{align}
 #' $$
 #'
+#' Let's look at the influence of knots on the spline used in the above section.
 #'
+
 #'
 #' # References
 #'<div id="refs"></div>
