@@ -54,15 +54,29 @@ BEGIN_RCPP
 END_RCPP
 }
 // W
-arma::mat W(double x, const arma::vec& xi, unsigned int k);
-RcppExport SEXP _cpr_W(SEXP xSEXP, SEXP xiSEXP, SEXP kSEXP) {
+arma::mat W(double xi_prime, const arma::vec& xi, unsigned int k);
+RcppExport SEXP _cpr_W(SEXP xi_primeSEXP, SEXP xiSEXP, SEXP kSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< double >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type xi_prime(xi_primeSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(W(x, xi, k));
+    rcpp_result_gen = Rcpp::wrap(W(xi_prime, xi, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// refine_theta
+arma::vec refine_theta(double xi_prime, const arma::vec& xi, unsigned int k, const arma::vec& theta);
+RcppExport SEXP _cpr_refine_theta(SEXP xi_primeSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type xi_prime(xi_primeSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
+    rcpp_result_gen = Rcpp::wrap(refine_theta(xi_prime, xi, k, theta));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -72,6 +86,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_cpr_cpp_bsplinesD1", (DL_FUNC) &_cpr_cpp_bsplinesD1, 4},
     {"_cpr_cpp_bsplinesD2", (DL_FUNC) &_cpr_cpp_bsplinesD2, 4},
     {"_cpr_W", (DL_FUNC) &_cpr_W, 3},
+    {"_cpr_refine_theta", (DL_FUNC) &_cpr_refine_theta, 4},
     {NULL, NULL, 0}
 };
 

@@ -137,7 +137,7 @@ double omega(double x, unsigned int j, const arma::vec& xi, unsigned int k) {
 /* ************************************************************************** */
 /*                          Knot Insertion Matrices                           */
 // [[Rcpp::export]]
-arma::mat W(double x, const arma::vec& xi, unsigned int k) {
+arma::mat W(double xi_prime, const arma::vec& xi, unsigned int k) {
   double w;
   int r = xi.n_elem - k;
 
@@ -145,11 +145,16 @@ arma::mat W(double x, const arma::vec& xi, unsigned int k) {
   M(0, 0) = 1.0;
   M(r, r - 1) = 1.0;
   for (int i = 1; i < r; ++i) {
-    w           = omega(x, i, xi, k);
+    w           = omega(xi_prime, i, xi, k);
     M(i, i - 1) = 1.0 - w;
     M(i, i)     = w;
   }
   return(M);
+}
+
+// [[Rcpp::export]]
+arma::vec refine_theta(double xi_prime, const arma::vec& xi, unsigned int k, const arma::vec& theta){
+  return(W(xi_prime, xi, k) * theta);
 }
 
 /* ************************************************************************** */

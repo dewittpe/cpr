@@ -13,7 +13,11 @@ cpp_bsplinesD2 <- function(x, iknots, bknots, order) {
     .Call('_cpr_cpp_bsplinesD2', PACKAGE = 'cpr', x, iknots, bknots, order)
 }
 
-W <- function(x, xi, k) {
-    .Call('_cpr_W', PACKAGE = 'cpr', x, xi, k)
+W <- function(xi_prime, xi, k) {
+    .Call('_cpr_W', PACKAGE = 'cpr', xi_prime, xi, k)
+}
+
+refine_theta <- function(xi_prime, xi, k, theta) {
+    .Call('_cpr_refine_theta', PACKAGE = 'cpr', xi_prime, xi, k, theta)
 }
 

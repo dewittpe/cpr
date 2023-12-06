@@ -21,7 +21,8 @@ insert_a_knot <- function(x, xi, ...) {
 #' @export
 insert_a_knot.cpr_cp <- function(x, xi_prime, ...) {
   bmat_prime <- bsplines(numeric(0), iknots = sort(c(x$iknots, xi_prime)), bknots = x$bknots, order = x$order)
-  theta_prime <- W(x = xi_prime, xi = sort(c(rep(x$bknots, x$order), x$iknots)), k = x$order) %*% x$cp$theta
+  #theta_prime <- W(xi_prime = xi_prime, xi = sort(c(rep(x$bknots, x$order), x$iknots)), k = x$order) %*% x$cp$theta
+  theta_prime <- refine_theta(xi_prime = xi_prime, xi = sort(c(rep(x$bknots, x$order), x$iknots)), k = x$order, x$cp$theta)
   cp(bmat_prime, theta_prime)
 }
 

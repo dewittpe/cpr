@@ -76,12 +76,31 @@ double omega(double x, unsigned int j, const arma::vec& xi, unsigned int k);
  * knot insertion matrix, i.e., theta_{xi U xi'} = W theta_{xi}
  *
  * Arguments:
- *   x: value of the knot to be inserted
+ *   xi_prime: value of the knot to be inserted
  *   k: order of the spline
- *   xi: knot vector into which x is to be inserted
+ *   xi: knot vector into which xi_prime is to be inserted
  * Return:
  *   a matrix
  */
-arma::mat W(double x, const arma::vec& xi, unsigned int k);
+arma::mat W(double xi_prime, const arma::vec& xi, unsigned int k);
+
+/* refine theta
+ *
+ * Refine the ordinate of a control polygon by inserting a knot
+ *
+ * theta_{xi U xi'} = W theta_{xi}
+ * |              |   |          |
+ * \.. return  ../    \. input ./
+ *
+ * Arguments:
+ *   xi_prime: value of the knot to be inserted
+ *   k: order of the spline
+ *   xi: knot vector into which xi_prime is to be inserted
+ *   theta: ordinate vector
+ *
+ * Return
+ *   a vector
+ */
+arma::vec refine_theta(double xi_prime, const arma::vec& xi, unsigned int k, const arma::vec& theta);
 
 #endif
