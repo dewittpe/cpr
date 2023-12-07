@@ -108,6 +108,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// matrix_rank
+double matrix_rank(Rcpp::NumericMatrix x);
+RcppExport SEXP _cpr_matrix_rank(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(matrix_rank(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cpr_cpp_bsplines", (DL_FUNC) &_cpr_cpp_bsplines, 4},
@@ -117,6 +128,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_cpr_refine_theta", (DL_FUNC) &_cpr_refine_theta, 4},
     {"_cpr_coarsen_theta", (DL_FUNC) &_cpr_coarsen_theta, 4},
     {"_cpr_hat_theta", (DL_FUNC) &_cpr_hat_theta, 4},
+    {"_cpr_matrix_rank", (DL_FUNC) &_cpr_matrix_rank, 1},
     {NULL, NULL, 0}
 };
 

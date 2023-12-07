@@ -48,12 +48,12 @@ struct controlpolygon {
 };
 
 /* ************************************************************************** */
-/*                                 Functions                                  */
-
-//arma::vec greville_sites(arma::vec & xi, unsigned int order);
+/*                             Utility Functions                              */
 
 Rcpp::NumericVector arma2vec(const arma::vec & x);
 
+/* ************************************************************************** */
+/*                          Boehm related functions                           */
 /* omega
  *
  * weight used in the recursion definition of B-splines (alternative defined

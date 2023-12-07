@@ -103,18 +103,6 @@ controlpolygon::controlpolygon(bbasis& bmat_, arma::vec& theta_) {
 }
 
 /* ************************************************************************** */
-/*                               greville_sites                               */
-//arma::vec greville_sites(arma::vec & xi, unsigned int order) {
-//  arma::vec xi_star(xi.n_elem - order);
-//
-//  for (unsigned int i = 0; i < xi_star.n_elem; ++i) {
-//    xi_star(i) = arma::sum(xi(arma::span(i + 1, i + order - 1))) / double (order - 1);
-//  }
-//
-//  return xi_star;
-//}
-
-/* ************************************************************************** */
 /*                                  arma2vec                                  */
 Rcpp::NumericVector arma2vec(const arma::vec & x) {
     return Rcpp::NumericVector(x.begin(), x.end());
