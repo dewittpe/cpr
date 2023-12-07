@@ -11,6 +11,10 @@
 * Refactor of c++ defining basis functions, derivatives of basis functions,
   b-splines structures
 
+## Defunct Functions
+* A major refactor of the internal code as since v0.3.0 has resulted in several
+  functions becoming defunct, see `help(cpr-defunct)` for details.
+
 # Version 0.3.0
 
 ## New Examples
