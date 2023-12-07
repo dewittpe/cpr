@@ -6,52 +6,52 @@
 #'
 #' @param ... pass through
 #'
-#' @name Defunct
+#' @name cpr-defunct
 NULL
 
-#' @rdname Defunct
+#' @rdname cpr-defunct
 #' @export
 refine_ordinate <- function(...) {
   .Defunct(new = "insert_a_knot")
   # v0.3.0 defined this in src/boehm.cpp
 }
 
-#' @rdname Defunct
+#' @rdname cpr-defunct
 #' @export
 coarsen_ordinate <- function(...) {
   .Defunct(new = "influence_of_iknots")
   # v0.3.0 defined this in src/boehm.cpp
 }
 
-#' @rdname Defunct
+#' @rdname cpr-defunct
 #' @export
 hat_ordinate <- function(...) {
   .Defunct(new = "influence_of_iknots")
   # v0.3.0 defined this in src/boehm.cpp
 }
 
-#' @rdname Defunct
+#' @rdname cpr-defunct
 #' @export
 insertion_matrix <- function(...) {
   .Defunct(new = "influence_of_iknots")
   # v0.3.0 defined this in src/boehm.cpp
 }
 
-#' @rdname Defunct
+#' @rdname cpr-defunct
 #' @export
 wiegh_iknots <- function(...) {
   .Defunct(new = "influence_of_iknots")
   # v0.3.0 defined this in src/boehm.cpp
 }
 
-#' @rdname Defunct
+#' @rdname cpr-defunct
 #' @export
 influence_of <- function(...) {
   .Defunct(new = "influence_of_iknots")
   # v0.3.0 defined this S3 method in R/influence_of.R
 }
 
-#' @rdname Defunct
+#' @rdname cpr-defunct
 #' @export
 influence_weights <- function(...) {
   .Defunct("influence_of_iknots")
