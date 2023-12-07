@@ -350,8 +350,55 @@ plot(cp0, cp1, color = TRUE, show_spline = TRUE)
 #' \end{align}
 #' $$
 #'
+#' Finally, we define the influence of $\xi_j$ on
+#' $CP_{k,\boldsymbol{\xi},\boldsymbol{\theta}_{\boldsymbol{\xi}}}$ as
+#' $$ w_j = \left\lVert \boldsymbol{d} \right\rVert_{2}^{2}. $$
+#'
 #' Let's look at the influence of knots on the spline used in the above section.
 #'
+#+ fig.width = 7, fig.height = 7
+x <- influence_of_iknots(cp0)
+summary(x)
+
+#'
+#' Let's look at the following plots to explore the influence of $\xi_{7}$ (the
+#' third interior knot so j = 3 in the code below) on the spline.  In panel (a)
+#' we see the original control polygon and spline along with the coarsened
+#' control polygon and spline. Note that the there are fewer control points, and
+#' the spline deviates from the original. In panel (b) we see that the restored
+#' control polygon is the result of inserting $\xi_7$ into the coarsened control
+#' polygon of panel (a).  These plots are also a good example of the local
+#' support and strong convexity of the control polygons as there are only $k + 1 = 5$ control points which are
+#' impacted by the removal and re-insertion of $\xi_7.$  Lastly, in panel (c) we
+#' see all three control polygons plotted together.
+#+ fig.width = 7, fig.height = 4
+ggpubr::ggarrange(
+    plot(x, j = 3, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , plot(x, j = 3, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , plot(x, j = 3, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , labels = c("(a)", "(b)", "(c)")
+  , nrow = 1
+)
+
+#'
+#' Next, consider the influence of $\xi_8,$ the fourth interior knot.  By the
+#' influence metric defined above, this is the least influential knot in the
+#' sequence.  This can be seen easily as the spline between the original and the
+#' coarsened spline are very similar, this is despite the apparent large
+#' difference in the magnitude of the control point ordinates between the
+#' original and coarsened control polygons.  However, when re-inserting $\xi_8$
+#' the recovered control polygon is very similar to the original, hence the low
+#' influence of $\xi_8.$
+#+ fig.width = 7, fig.height = 4
+ggpubr::ggarrange(
+    plot(x, j = 4, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , plot(x, j = 4, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , plot(x, j = 4, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , labels = c("(a)", "(b)", "(c)")
+  , nrow = 1
+)
+
+
 
 #'
 #' # References
