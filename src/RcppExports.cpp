@@ -95,8 +95,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // hat_theta
-Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta);
-RcppExport SEXP _cpr_hat_theta(SEXP jSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP) {
+Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta, bool calculate_F, const arma::mat& Sigma);
+RcppExport SEXP _cpr_hat_theta(SEXP jSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP, SEXP calculate_FSEXP, SEXP SigmaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -104,7 +104,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
-    rcpp_result_gen = Rcpp::wrap(hat_theta(j, xi, k, theta));
+    Rcpp::traits::input_parameter< bool >::type calculate_F(calculate_FSEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
+    rcpp_result_gen = Rcpp::wrap(hat_theta(j, xi, k, theta, calculate_F, Sigma));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -127,7 +129,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_cpr_W", (DL_FUNC) &_cpr_W, 3},
     {"_cpr_refine_theta", (DL_FUNC) &_cpr_refine_theta, 4},
     {"_cpr_coarsen_theta", (DL_FUNC) &_cpr_coarsen_theta, 4},
-    {"_cpr_hat_theta", (DL_FUNC) &_cpr_hat_theta, 4},
+    {"_cpr_hat_theta", (DL_FUNC) &_cpr_hat_theta, 6},
     {"_cpr_matrix_rank", (DL_FUNC) &_cpr_matrix_rank, 1},
     {NULL, NULL, 0}
 };

@@ -5,7 +5,7 @@
 #' \code{cp} generates the control polygon for the given B-spline function.
 #'
 #' @param x a \code{cpr_bs} object
-#' @param ... arguments passed to the regression method
+#' @param ... pass through
 #'
 #' @examples
 #'
@@ -34,13 +34,13 @@
 #' plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 #'
 #' # via formula
-#' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
+#' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))))
 #' cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 #'
-#' # plot the control polygon, spline and target data.
-#' plot(cp3, show_spline = TRUE) +
-#'   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y),
-#'                      data = dat, linetype = 2, color = "red")
+#' # plot the spline and target data.
+#' plot(cp3, show_cp = FALSE, show_spline = TRUE) +
+#'   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y, color = "Target"),
+#'                      data = dat, linetype = 2)
 #'
 #' @export
 #' @rdname cp
@@ -62,6 +62,9 @@ cp.cpr_bs <- function(x, theta, ...) {
               call   = match.call(),
               keep_fit = NA,
               fit    = NA,
+              theta_vcov = NA,
+              coefficients = NA,
+              vcov = NA,
               loglik = NA,
               rmse   = NA)
 
@@ -73,19 +76,23 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @export
 #' @rdname cp
 #' @param formula a formula that is appropriate for regression method being
-#'        used.
+#' used.
 #' @param data a required \code{data.frame}
 #' @param method the regression method such as \code{\link[stats]{lm}},
-#'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
+#' \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
+#' @param method.args a list of additional arguments to pass to the regression
+#' method.
 #' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
 #' If \code{FALSE} the \code{fit} element with be \code{NA}.
 #' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check
 #' that the design matrix is full rank.
-cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE, check_rank = TRUE) {
+cp.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = FALSE, check_rank = TRUE, ...) {
+
   # check for some formula specification issues
-  if (sum(grepl("bsplines", attr(stats::terms(formula), "term.labels"))) != 1) {
-    stop("cpr::bsplines() must appear once, with no effect modifiers, on the right hand side of the formula.")
+  rhs_check <- grepl("bsplines", attr(stats::terms(formula), "term.labels"))
+  if ( !rhs_check[1] | any(rhs_check[-1]) ) {
+    stop("bsplines() must appear once, with no effect modifiers, as the first term on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment
@@ -93,10 +100,13 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   generate_cp_formula_data(formula, data)
 
   regression <- match.fun(method)
-  cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "check_rank")))]
-  cl$formula <- as.name("f_for_use")
-  cl$data <- as.name("data_for_use")
+  #cl <- as.list(match.call())
+  #cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "check_rank")))]
+  #cl$formula <- as.name("f_for_use")
+  #cl$data <- as.name("data_for_use")
+  cl <- list(formula = as.name("f_for_use"),
+             data = as.name("data_for_use"))
+  cl <- c(cl, method.args)
 
   fit <- do.call(regression, cl)
 
@@ -122,6 +132,7 @@ cp.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   out$call         <- cl
   out$keep_fit     <- keep_fit
   out$fit          <- if (keep_fit) { fit } else {NA}
+  out$theta_vcov   <- SIGMA(fit)[1:length(out$cp$theta), 1:length(out$cp$theta)]
   out$coefficients <- BETA(fit)
   out$vcov         <- SIGMA(fit)
   out$loglik       <- loglikelihood(fit)

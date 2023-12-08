@@ -7,9 +7,15 @@
   the `plot.cpr_bs` results.  When `comparitive = TRUE` or more than one
   `cpr_cp` is present, the behavior from v0.3.0 is retained.
 
+* `cp.formula` gains the `methods.args` argument to pass arguments to the
+  regression method instead of relying on `...`.
+
 ## Other Changes
 * Refactor of c++ defining basis functions, derivatives of basis functions,
   b-splines structures
+
+* `cp.formula` checks the `formula` and requires that `bsplines` is used once
+  and is the first term on the right hand side of the formula.
 
 ## Defunct Functions
 * A major refactor of the internal code as since v0.3.0 has resulted in several

@@ -13,7 +13,15 @@ cp(x, ...)
 
 \method{cp}{cpr_bs}(x, theta, ...)
 
-\method{cp}{formula}(formula, data, method = stats::lm, ..., keep_fit = FALSE, check_rank = TRUE)
+\method{cp}{formula}(
+  formula,
+  data,
+  method = stats::lm,
+  method.args = list(),
+  keep_fit = FALSE,
+  check_rank = TRUE,
+  ...
+)
 
 \method{print}{cpr_cp}(x, ...)
 
@@ -35,7 +43,7 @@ cp(x, ...)
 \arguments{
 \item{x}{a \code{cpr_bs} object}
 
-\item{...}{arguments passed to the regression method}
+\item{...}{pass through}
 
 \item{theta}{a vector of (regression) coefficients, the ordinates of the
 control polygon.}
@@ -47,6 +55,9 @@ used.}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
+
+\item{method.args}{a list of additional arguments to pass to the regression
+method.}
 
 \item{keep_fit}{(logical, default value is \code{FALSE}).  If \code{TRUE} the
 regression model fit is retained and returned in as the \code{fit} element.
@@ -126,13 +137,13 @@ plot(cp1, cp2, color = TRUE)
 plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 
 # via formula
-dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
+dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))))
 cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 
-# plot the control polygon, spline and target data.
-plot(cp3, show_spline = TRUE) +
-  ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y),
-                     data = dat, linetype = 2, color = "red")
+# plot the spline and target data.
+plot(cp3, show_cp = FALSE, show_spline = TRUE) +
+  ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y, color = "Target"),
+                     data = dat, linetype = 2)
 
 
 x <- seq(0, 6, length = 500)

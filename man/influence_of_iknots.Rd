@@ -20,7 +20,7 @@ bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
 theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
 cp0 <- cp(bmat, theta)
 
-icp0 <- influence_of_knots(cp0)
+icp0 <- influence_of_iknots(cp0)
 
 plot(cp0, icp0$coarsened_cps[[1]], icp0$restored_cps[[1]], color = TRUE, show_spline = TRUE)
 plot(cp0, icp0$restored_cps[[1]], color = TRUE, show_spline = TRUE)
@@ -36,5 +36,10 @@ plot(cp0, icp0$restored_cps[[4]], color = TRUE, show_spline = TRUE)
 
 plot(cp0, icp0$coarsened_cps[[5]], icp0$restored_cps[[5]], color = TRUE, show_spline = TRUE)
 plot(cp0, icp0$restored_cps[[5]], color = TRUE, show_spline = TRUE)
+
+# When the cp was defined by regression
+df <- data.frame(x = x, y = as.numeric(bmat \%*\% theta) + rnorm(5000, sd = 0.2))
+cp1 <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4, 4.5), bknots = c(0, 6)), data = df)
+icp1 <- influence_of_iknots(cp1)
 
 }

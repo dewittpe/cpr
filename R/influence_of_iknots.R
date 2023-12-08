@@ -9,7 +9,7 @@
 #' theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
 #' cp0 <- cp(bmat, theta)
 #'
-#' icp0 <- influence_of_knots(cp0)
+#' icp0 <- influence_of_iknots(cp0)
 #'
 #' plot(cp0, icp0$coarsened_cps[[1]], icp0$restored_cps[[1]], color = TRUE, show_spline = TRUE)
 #' plot(cp0, icp0$restored_cps[[1]], color = TRUE, show_spline = TRUE)
@@ -25,6 +25,11 @@
 #'
 #' plot(cp0, icp0$coarsened_cps[[5]], icp0$restored_cps[[5]], color = TRUE, show_spline = TRUE)
 #' plot(cp0, icp0$restored_cps[[5]], color = TRUE, show_spline = TRUE)
+#'
+#' # When the cp was defined by regression
+#' df <- data.frame(x = x, y = as.numeric(bmat %*% theta) + rnorm(5000, sd = 0.2))
+#' cp1 <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4, 4.5), bknots = c(0, 6)), data = df)
+#' icp1 <- influence_of_iknots(cp1)
 #'
 #' @export
 influence_of_iknots <- function(x, ...) {
@@ -59,7 +64,15 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
                        FUN = hat_theta,
                        xi = x$xi,
                        k = x$order,
-                       theta = x$cp$theta)
+                       theta = x$cp$theta,
+                       calculate_F = is.matrix(x$theta_vcov),
+                       Sigma = if (is.matrix(x$theta_vcov)) {x$theta_vcov} else {matrix(numeric(1))}
+  )
+
+  #w <- W(3.0, c(0,0,0,0, 1.0, 1.5, 2.3, 4.0, 4.5, 6, 6, 6, 6), 4)
+  #IHAT <- diag(10) - (w %*% solve(t(w) %*% w) %*% t(w))
+  #theta <- matrix(x$cp$theta, ncol = 1)
+  #t(IHAT %*% theta ) %*% MASS::ginv( IHAT %*% Sigma %*% t(IHAT) ) %*% (IHAT %*% theta )
 
   restored_cps <- mapply(function(x, hat_theta) {cp(x, hat_theta$theta)}, hat_theta = hat_thetas, MoreArgs = list(x = bmat0), SIMPLIFY = FALSE)
 
@@ -68,7 +81,8 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
               coarsened_cps = coarsened_cps,
               restored_cps  = restored_cps,
               d             = lapply(hat_thetas, getElement, "d"),
-              influence     = sapply(hat_thetas, getElement, "influence")
+              influence     = sapply(hat_thetas, getElement, "influence"),
+              chisq         = sapply(hat_thetas, getElement, "chisq")
               )
 
   class(rtn) <- "cpr_influence_of_iknots"
@@ -86,7 +100,9 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
              #iknot = paste0("xi_", seq(x$original_cp$order + 1, x$original_cp$order + length(x$original_cp$iknots))) ,
              iknot = x$original_cp$iknots,
              influence = x$influence,
-             rank = rank(x$influence, ties.method = "first")
+             influence_rank = rank(x$influence, ties.method = "first"),
+             chisq = x$chisq,
+             chisq_rank = rank(x$chisq, na.last = "keep")
         )
 
 }
