@@ -307,7 +307,7 @@ points(x, bmatD2 %*% theta, col = 'blue')
 #'
 #' For an example, insert a knot $\xi' = 3$ into the control polygon defined
 #' above.
-#+ label = "insert xi_prime = 3", fig.width = 7, fig.width = 4
+#+ label = "insert xi_prime = 3", fig.width = 7, fig.height = 4
 cp1 <- insert_a_knot(cp0, xi_prime = 3)
 plot(cp0, cp1, color = TRUE, show_spline = TRUE)
 
@@ -352,7 +352,7 @@ plot(cp0, cp1, color = TRUE, show_spline = TRUE)
 #'
 #' Finally, we define the influence of $\xi_j$ on
 #' $CP_{k,\boldsymbol{\xi},\boldsymbol{\theta}_{\boldsymbol{\xi}}}$ as
-#' $$ w_j = \left\lVert \boldsymbol{d} \right\rVert_{2}^{2}. $$
+#' $$ w_j = \left\lVert \boldsymbol{d} \right\rVert_{2}. $$
 #'
 #' Let's look at the influence of knots on the spline used in the above section.
 #'
@@ -371,13 +371,19 @@ summary(x)
 #' support and strong convexity of the control polygons as there are only $k + 1 = 5$ control points which are
 #' impacted by the removal and re-insertion of $\xi_7.$  Lastly, in panel (c) we
 #' see all three control polygons plotted together.
-#+ fig.width = 7, fig.height = 4
+#+ fig.width = 7, fig.height = 7
 ggpubr::ggarrange(
-    plot(x, j = 3, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
-  , plot(x, j = 3, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
-  , plot(x, j = 3, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
-  , labels = c("(a)", "(b)", "(c)")
+  ggpubr::ggarrange(
+    plot(x, j = 3, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+  , plot(x, j = 3, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+  , labels = c("(a)", "(b)")
   , nrow = 1
+  )
+  , plot(x, j = 3, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , labels = c("", "(c)")
+  , nrow = 2
+  , ncol = 1
+  , heights = c(1, 2)
 )
 
 #'
@@ -389,17 +395,205 @@ ggpubr::ggarrange(
 #' original and coarsened control polygons.  However, when re-inserting $\xi_8$
 #' the recovered control polygon is very similar to the original, hence the low
 #' influence of $\xi_8.$
-#+ fig.width = 7, fig.height = 4
+#+ fig.width = 7, fig.height = 7
 ggpubr::ggarrange(
-    plot(x, j = 4, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
-  , plot(x, j = 4, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
-  , plot(x, j = 4, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
-  , labels = c("(a)", "(b)", "(c)")
+  ggpubr::ggarrange(
+    plot(x, j = 4, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+  , plot(x, j = 4, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+  , labels = c("(a)", "(b)")
   , nrow = 1
+  )
+  , plot(x, j = 4, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , labels = c("", "(c)")
+  , nrow = 2
+  , ncol = 1
+  , heights = c(1, 2)
 )
 
+#'
+#' If you were required to omit an internal knot, it would be preferable to omit
+#' $\xi_8$ over $\xi_5, \xi_6, \xi_7,$ or $\xi_9$ as that will have the least
+#' impact on the spline approximation of the original functional form.
+#'
+#' ## Fitting B-splines to noisy data
+#'
+#' Start with the spline we have been using and add some noise to it.
+#+ fig.width = 7, fig.height = 4
+set.seed(42)
+x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 100)
+bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
+theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
+DF <- data.frame(x = x, truth = as.numeric(bmat %*% theta))
+DF$y <- as.numeric(bmat %*% theta + rnorm(nrow(bmat), sd = 0.3))
 
+ggplot2::ggplot(DF) +
+  ggplot2::aes(x = x) +
+  ggplot2::geom_line(mapping = ggplot2::aes(y = truth)) +
+  ggplot2::geom_point(mapping = ggplot2::aes(y = y))
 
+#'
+#' To fit a spline and control polygon to the noisy data use a formula statement
+#' in the
+{{qwraps2::backtick(cp)}}
+#' call.  In this example we will use the known internal knots and add one
+#' extra.
+#+ fig.width = 7, fig.height = 4
+initial_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3.0, 4, 4.5), bknots = c(0, 6))
+     , data = DF
+     , keep_fit = TRUE # default is FALSE
+  )
+
+original_data_ggplot_layers <-
+  list(
+    ggplot2::geom_point(data = DF
+                        , mapping = ggplot2::aes(x = x, y = y)
+                        , inherit.aes = FALSE
+                        , color = "red"
+                        , alpha = 0.2)
+    ,
+    ggplot2::geom_line(data = DF
+                       , mapping = ggplot2::aes(x = x, y = truth)
+                       , inherit.aes = FALSE
+                       , color = "red"
+                       , alpha = 0.8)
+  )
+
+plot(initial_cp, show_spline = TRUE) + original_data_ggplot_layers
+
+#'
+#' The plot above shows the fitted spline is does well at approximating the true
+#' spline function.  Just to make it perfectly clear, the regression
+#' coefficients are the estimates of the ordinates for the control polygon:
+initial_cp$fit |> coef() |> unname()
+initial_cp$cp$theta
+
+#'
+#' Let's now look at the influence of the internal knots on the fit
+#+
+summary(influence_of_iknots(initial_cp))
+
+#'
+#' The least influential knot is $\xi_8 = 3.0,$ the extra know inserted.  Good,
+#' we this is the expected result.
+#'
+#' How would someone determine if the influence was significant?  That is, how
+#' can we test the null hypothesis $$H_0: w_{j}^{2} = 0$$
+#'
+#' Under the null hypothesis that the knot has zero influence and under standard
+#' ordinary least squares regression assumptions the regression coefficients,
+#' (the ordinates of the control polygon are the regression coefficients), are
+#' realisations of a Gaussian random variable. Then
+#'
+#' $$
+#' X =
+#' \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
+#' \left[
+#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
+#'   \boldsymbol{\Sigma}
+#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
+#' \right]^{+}
+#' \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
+#' $$
+#' where $\boldsymbol{H} = W (W^{T}W)^{-1} W^{T},$ $\boldsymbol{\Sigma}$ is
+#' the variance-covariance matrix for the regression coefficients, and $+$
+#' denotes the Moore-Penrose inverse of the matrix.  By construction,
+#' $\left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right) \boldsymbol{\Sigma} \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}$
+#' is singular and thus the standard inverse does not exist and a generalized
+#' inverse is necessary. Lastly,
+#' $$ X \sim \chi_{1}^{2}$$
+#' and we can generate a p-value for the hypothesis test.  This p-value is
+#' reported in the summary of the call to
+{{ qwraps2::backtick(influence_of_iknots) %s% "." }}
+summary(influence_of_iknots(initial_cp))
+
+#'
+#' It is worth highlighting that _all_ of the p-values in the above are greater
+#' than $0.10$ and would, in most cases, a failure to reject the null
+#' hypothesis.  Recalling that the failure to reject the null does not mean the
+#' null is true, just that we lack sufficient evidence to reject the null. At
+#' the very least we can say $\xi_8 = 3.0$ may not be influential.  So let's refit the
+#' model without it.
+first_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
+     , data = DF
+     , keep_fit = TRUE # default is FALSE
+  )
+summary(influence_of_iknots(first_reduction_cp))
+
+#'
+#' After omitting one knot and refitting the model we see that $\xi = 1.5" is
+#' the least influential.  Just for fun, let's omit that knot, and refit.  Let's
+#' continue that process all the way down to zero knots.
+second_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4, 4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(second_reduction_cp))
+
+third_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(third_reduction_cp))
+
+fourth_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(fourth_reduction_cp))
+
+fifth_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(fifth_reduction_cp))
+
+sixth_reduction_cp <-
+  cp(y ~ bsplines(x, bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(six_reduction_cp))
+
+#'
+#' Some plots to compare all the fits:
+#+ fig.height = 7, fig.width = 7
+plot(initial_cp
+     , first_reduction_cp
+     , second_reduction_cp
+     , third_reduction_cp
+     , fourth_reduction_cp
+     , fifth_reduction_cp
+     , sixth_reduction_cp
+     , show_spline = TRUE
+     , show_cp = TRUE
+     , color = TRUE
+     )
+
+plot(initial_cp
+     , first_reduction_cp
+     , second_reduction_cp
+     , third_reduction_cp
+#     , fourth_reduction_cp
+#     , fifth_reduction_cp
+#     , sixth_reduction_cp
+     , show_spline = TRUE
+     , show_cp = TRUE
+     , color = TRUE
+     )
+
+ggpubr::ggarrange(
+    plot(initial_cp, show_spline = TRUE)          + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(first_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(second_reduction_cp, show_spline = TRUE) + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(third_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(fourth_reduction_cp, show_spline = TRUE) + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(fifth_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(sixth_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , common.legend = TRUE
+  )
+
+#'
+#' # Control Polygon Reduction
+#'
+#' The exercise above of manually identifying and omitting the knot with the
+#' smallest influence in each model would be tedious to say the least when
+#' working with a large set of initial knots.  Fortunately, the process has been
+#' automated.
+#'
+#cpr(initial_cp)
+#'
+#'
 #'
 #' # References
 #'<div id="refs"></div>

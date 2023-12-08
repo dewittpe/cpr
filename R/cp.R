@@ -290,20 +290,22 @@ plot.cpr_cp <- function(x, ..., comparative, show_cp = TRUE, show_spline = FALSE
     eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("x"), Y = as.name("y")))) +
     ggplot2::theme(axis.title = ggplot2::element_blank())
 
-  if (show_cp) {
-    base_plot <-
-      base_plot +
-      ggplot2::geom_point(data = subset(plot_data, plot_data$object == "cp")) +
-      ggplot2::geom_line(data = subset(plot_data, plot_data$object == "cp"))
-  }
-
-  if (show_spline) {
-    base_plot <-
-      base_plot +
-      ggplot2::geom_line(data = subset(plot_data, plot_data$object == "spline"))
-  }
-
   if (comparative) {
+    if (show_cp) {
+      base_plot <-
+        base_plot +
+        eval(substitute(ggplot2::aes(shape = PCH), list(PCH = as.name("row")))) +
+        ggplot2::geom_point(data = subset(plot_data, plot_data$object == "cp")) +
+        ggplot2::geom_line(data = subset(plot_data, plot_data$object == "cp"))
+    }
+
+    if (show_spline) {
+      base_plot <-
+        base_plot +
+        ggplot2::geom_line(data = subset(plot_data, plot_data$object == "spline"))
+    }
+
+
     if (show_xi) {
       base_plot <-
         base_plot +
@@ -328,11 +330,24 @@ plot.cpr_cp <- function(x, ..., comparative, show_cp = TRUE, show_spline = FALSE
       base_plot +
       eval(substitute(ggplot2::aes(linetype = GRP), list(GRP = as.name("object"))))
 
+    if (show_cp) {
+      base_plot <-
+        base_plot +
+        ggplot2::geom_point(data = subset(plot_data, plot_data$object == "cp")) +
+        ggplot2::geom_line(data = subset(plot_data, plot_data$object == "cp"))
+    }
+
+    if (show_spline) {
+      base_plot <-
+        base_plot +
+        ggplot2::geom_line(data = subset(plot_data, plot_data$object == "spline"))
+    }
+
+
     if (color) {
       base_plot <-
         base_plot +
-        eval(substitute(ggplot2::aes(linetype = GRP, color = GRP), list(GRP = as.name("object")))) +
-        ggplot2::scale_color_discrete(labels = scales::parse_format())
+        eval(substitute(ggplot2::aes(linetype = GRP, color = GRP), list(GRP = as.name("object"))))
     } else {
       base_plot <-
         base_plot +

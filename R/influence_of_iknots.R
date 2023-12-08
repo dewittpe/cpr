@@ -96,13 +96,14 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
     return(invisible(x))
   }
 
-  data.frame(#iknot_idx = seq_along(x$influence)
-             #iknot = paste0("xi_", seq(x$original_cp$order + 1, x$original_cp$order + length(x$original_cp$iknots))) ,
+  data.frame(
+             j = x$original_cp$order + seq_along(x$original_cp$iknots),
              iknot = x$original_cp$iknots,
              influence = x$influence,
              influence_rank = rank(x$influence, ties.method = "first"),
              chisq = x$chisq,
-             chisq_rank = rank(x$chisq, na.last = "keep")
+             chisq_rank = rank(x$chisq, na.last = "keep"),
+             p_value = 1.0 - stats::pchisq(x$chisq, df = 1)
         )
 
 }
@@ -141,6 +142,18 @@ plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRU
       plots <- c(plots, list(plot(Original, ...)))
     }
   }
+
+  plots <- lapply(plots, function(g) {
+                    cp_colors <- c("Original" = "#A2AAAD", "Coarsened" = "#236192", "Restored" = "#6F263D")
+                    cp_pch    <- c("Original" = 1,         "Coarsened" = 2,         "Restored" = 3)
+                    cp_lty    <- c("Original" = 1,         "Coarsened" = 2,         "Restored" = 3)
+                    g +
+                      ggplot2::theme_bw() +
+                      ggplot2::theme(axis.title = ggplot2::element_blank()) +
+                      ggplot2::scale_color_manual(name = "", values = cp_colors, labels = scales::parse_format()) +
+                      ggplot2::scale_linetype_manual(name = "", values = cp_lty, labels = scales::parse_format()) +
+                      ggplot2::scale_shape_manual(name = "", values = cp_pch, labels = scales::parse_format()) 
+        })
 
   if (length(j) == 1) {
     plots[[1]]
