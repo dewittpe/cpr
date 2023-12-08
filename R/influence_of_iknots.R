@@ -108,9 +108,19 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
 
 }
 
+
+
 #' @export
 print.cpr_influence_of_iknots <- function(x, ...) {
-  x$influence
+  if (length(x$original_cp$iknots) > 0L) {
+    print(setNames(x$influence,
+                   paste0("xi_", x$original_cp$order + 
+                   seq(1, length(x$original_cp$iknots), by = 1)))
+    )
+  } else {
+    message("no internal knots")
+  }
+  invisible(x)
 }
 
 #' @export

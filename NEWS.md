@@ -10,6 +10,11 @@
 * `cp.formula` gains the `methods.args` argument to pass arguments to the
   regression method instead of relying on `...`.
 
+* `d_order_statistic` and `p_order_statistic` were added.  These functions allow
+  you to get the density of distribution function for the jth order statisitic
+  from a sample of size n from a distribution with defined density and
+  distribution functions within R.
+
 ## Other Changes
 * Refactor of c++ defining basis functions, derivatives of basis functions,
   b-splines structures
