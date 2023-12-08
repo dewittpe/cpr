@@ -119,8 +119,8 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x
-    w    <- influence_weights(x, p = p)
-    nkts <- w$iknots[rank(w$w, ties.method = "first") > 1]
+    w <- summary(influence_of_iknots(out[[i]]))
+    nkts <- w$iknot[ w$influence_rank > 1 ]
 
     if (i == keep + 1) {
       x <- stats::update(x, keep_fit = TRUE)
@@ -131,6 +131,7 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)
     }
+
   }
 
   out[[1]] <- x

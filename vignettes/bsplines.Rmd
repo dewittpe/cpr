@@ -475,17 +475,22 @@ initial_cp <-
      , keep_fit = TRUE # default is FALSE
   )
 
-plot(initial_cp, show_spline = TRUE) +
-  ggplot2::geom_point(data = DF
-                      , mapping = ggplot2::aes(x = x, y = y)
-                      , inherit.aes = FALSE
-                      , color = "red"
-                      , alpha = 0.2) +
-  ggplot2::geom_line(data = DF
-                     , mapping = ggplot2::aes(x = x, y = truth)
-                     , inherit.aes = FALSE
-                     , color = "red"
-                     , alpha = 0.8)
+original_data_ggplot_layers <-
+  list(
+    ggplot2::geom_point(data = DF
+                        , mapping = ggplot2::aes(x = x, y = y)
+                        , inherit.aes = FALSE
+                        , color = "red"
+                        , alpha = 0.2)
+    ,
+    ggplot2::geom_line(data = DF
+                       , mapping = ggplot2::aes(x = x, y = truth)
+                       , inherit.aes = FALSE
+                       , color = "red"
+                       , alpha = 0.8)
+  )
+
+plot(initial_cp, show_spline = TRUE) + original_data_ggplot_layers
 ```
 
 
@@ -502,7 +507,7 @@ initial_cp$cp$theta
 Let's now look at the influence of the internal knots on the fit
 
 ```{r}
-influence_of_iknots(initial_cp) |> summary() 
+summary(influence_of_iknots(initial_cp))
 ```
 
 
@@ -529,12 +534,119 @@ X =
 $$
 where $\boldsymbol{H} = W (W^{T}W)^{-1} W^{T},$ $\boldsymbol{\Sigma}$ is
 the variance-covariance matrix for the regression coefficients, and $+$
-denotes the Moore-Penrose inverse of the matrix.  By construction, 
+denotes the Moore-Penrose inverse of the matrix.  By construction,
 $\left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right) \boldsymbol{\Sigma} \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}$
 is singular and thus the standard inverse does not exist and a generalized
-inverse is necessary. Lastly, 
+inverse is necessary. Lastly,
 $$ X \sim \chi_{1}^{2}$$
-and we can generate a p-value for the
+and we can generate a p-value for the hypothesis test.  This p-value is
+reported in the summary of the call to
+`r  qwraps2::backtick(influence_of_iknots) %s% "."  `
+
+```{r}
+summary(influence_of_iknots(initial_cp))
+```
+
+
+It is worth highlighting that _all_ of the p-values in the above are greater
+than $0.10$ and would, in most cases, a failure to reject the null
+hypothesis.  Recalling that the failure to reject the null does not mean the
+null is true, just that we lack sufficient evidence to reject the null. At
+the very least we can say $\xi_8 = 3.0$ may not be influential.  So let's refit the
+model without it.
+
+```{r}
+first_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
+     , data = DF
+     , keep_fit = TRUE # default is FALSE
+  )
+summary(influence_of_iknots(first_reduction_cp))
+```
+
+
+After omitting one knot and refitting the model we see that $\xi = 1.5" is
+the least influential.  Just for fun, let's omit that knot, and refit.  Let's
+continue that process all the way down to zero knots.
+
+```{r}
+second_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4, 4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(second_reduction_cp))
+
+third_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(third_reduction_cp))
+
+fourth_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(1, 4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(fourth_reduction_cp))
+
+fifth_reduction_cp <-
+  cp(y ~ bsplines(x, iknots = c(4.5), bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(fifth_reduction_cp))
+
+sixth_reduction_cp <-
+  cp(y ~ bsplines(x, bknots = c(0, 6)), data = DF)
+summary(influence_of_iknots(sixth_reduction_cp))
+```
+
+
+Some plots to compare all the fits:
+
+```{r fig.height = 7, fig.width = 7}
+plot(initial_cp
+     , first_reduction_cp
+     , second_reduction_cp
+     , third_reduction_cp
+     , fourth_reduction_cp
+     , fifth_reduction_cp
+     , sixth_reduction_cp
+     , show_spline = TRUE
+     , show_cp = TRUE
+     , color = TRUE
+     )
+
+plot(initial_cp
+     , first_reduction_cp
+     , second_reduction_cp
+     , third_reduction_cp
+#     , fourth_reduction_cp
+#     , fifth_reduction_cp
+#     , sixth_reduction_cp
+     , show_spline = TRUE
+     , show_cp = TRUE
+     , color = TRUE
+     )
+
+ggpubr::ggarrange(
+    plot(initial_cp, show_spline = TRUE)          + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(first_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(second_reduction_cp, show_spline = TRUE) + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(third_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(fourth_reduction_cp, show_spline = TRUE) + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(fifth_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , plot(sixth_reduction_cp, show_spline = TRUE)  + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+  , common.legend = TRUE
+  )
+```
+
+
+# Control Polygon Reduction
+
+The exercise above of manually identifying and omitting the knot with the
+smallest influence in each model would be tedious to say the least when
+working with a large set of initial knots.  Fortunately, the process has been
+automated.
+
+
+```{r fig.width = 7, fig.height = 7}
+cpr0 <- cpr(initial_cp)
+cpr0 |> plot()
+cpr0 |> plot(type = "rmse")
+```
+
+
 
 
 # References

@@ -543,7 +543,7 @@ summary(influence_of_iknots(fifth_reduction_cp))
 
 sixth_reduction_cp <-
   cp(y ~ bsplines(x, bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(six_reduction_cp))
+summary(influence_of_iknots(sixth_reduction_cp))
 
 #'
 #' Some plots to compare all the fits:
@@ -591,7 +591,11 @@ ggpubr::ggarrange(
 #' working with a large set of initial knots.  Fortunately, the process has been
 #' automated.
 #'
-#cpr(initial_cp)
+#+ fig.width = 7, fig.height = 7
+cpr0 <- cpr(initial_cp)
+cpr0 |> plot()
+cpr0 |> plot(type = "rmse")
+
 #'
 #'
 #'
