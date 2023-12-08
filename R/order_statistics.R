@@ -70,7 +70,8 @@ NULL
 d_order_statistic <- function(x, n, j, distribution, ...) {
   n <- as.integer(n)
   j <- as.integer(j)
-  stopifnot(n >= j, j >= 1)
+
+  stopifnot(length(n) == 1, length(q) == length(j), !is.na(n), n >= na.omit(j), na.omit(j) >= 1)
 
   dfun <- match.fun(FUN = paste0("d", distribution))
   pfun <- match.fun(FUN = paste0("p", distribution))
@@ -87,14 +88,18 @@ d_order_statistic <- function(x, n, j, distribution, ...) {
 p_order_statistic <- function(q, n, j, distribution, ...) {
   n <- as.integer(n)
   j <- as.integer(j)
-  stopifnot(n >= j, j >= 1)
+  stopifnot(length(n) == 1, length(q) == length(j), !is.na(n), n >= na.omit(j), na.omit(j) >= 1)
+
   pfun <- match.fun(FUN = paste0("p", distribution))
   p <- do.call(pfun, list(q = q, ...))
+
   rtn <-
-    sapply(p,
-           function(p) {
-             sum(stats::dbinom(x = j:n, size = n, prob = p))
-           })
-  rtn
+    mapply(dbinom,
+           x = 
+             lapply(j, function(from) if(is.na(from)) {from} else { seq(from = from, to = n, by = 1)}) ,
+           prob = p,
+           MoreArgs = list(size = n))
+
+  sapply(rtn, sum)
 }
 

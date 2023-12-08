@@ -96,16 +96,25 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
     return(invisible(x))
   }
 
-  data.frame(
-             j = x$original_cp$order + seq_along(x$original_cp$iknots),
-             iknot = x$original_cp$iknots,
-             influence = x$influence,
-             influence_rank = rank(x$influence, ties.method = "first"),
-             chisq = x$chisq,
-             chisq_rank = rank(x$chisq, na.last = "keep"),
-             p_value = 1.0 - stats::pchisq(x$chisq, df = 1)
-        )
+  rtn <-
+    data.frame(
+               j = x$original_cp$order + seq_along(x$original_cp$iknots),
+               iknot = x$original_cp$iknots,
+               influence = x$influence,
+               influence_rank = rank(x$influence, ties.method = "first"),
+               chisq = x$chisq,
+               chisq_rank = rank(x$chisq, ties.method = "first", na.last = "keep"),
+               p_value = 1.0 - stats::pchisq(x$chisq, df = 1)
+               )
 
+  rtn$os_p_value = 1 - 
+    p_order_statistic(q = rtn$chisq
+                      , n = length(rtn$chisq)
+                      , j = rtn$chisq_rank
+                      , distribution = "chisq"
+                      , df = 1)
+
+  rtn
 }
 
 
