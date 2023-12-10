@@ -90,6 +90,13 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
   rtn
 }
 
+#' @export
+influence_of_iknots.cpr_cpr <- function(x, ...) {
+  rtn <- lapply(x, influence_of_iknots)
+  class(rtn) <- c("cpr_influence_of_iknots_cpr", class(rtn))
+  rtn
+}
+
 
 #' @export
 print.cpr_influence_of_iknots <- function(x, ...) {
@@ -187,6 +194,17 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
 }
 
 #' @export
+summary.cpr_influence_of_iknots_cpr <- function(x, ...) {
+  rtn <- lapply(x, summary)
+  rws <- sapply(rtn, nrow)
+  idx <- rep(rws + 1, times = rws)
+  rtn <- do.call(rbind, rtn)
+  rtn$index <- idx
+  class(rtn) <- c("cpr_influence_of_iknots_cpr_summary", class(rtn))
+  rtn
+}
+
+#' @export
 print.cpr_influence_of_iknots_summary <- function(x, ...) {
   if (nrow(x) == 0) {
     message("no internal knots")
@@ -202,3 +220,12 @@ print.cpr_influence_of_iknots_summary <- function(x, ...) {
   invisible(x)
 }
 
+#' @export
+plot.cpr_influence_of_iknots_cpr_summary <- function(x, alpha = 0.05, ...) {
+  ggplot2::ggplot(x) +
+    ggplot2::aes(x = index, y = os_p_value, color = os_p_value < alpha) +
+    ggplot2::geom_point() +
+    ggplot2::geom_hline(yintercept = alpha) +
+    ggplot2::scale_y_log10() +
+    ggplot2::annotation_logticks(sides = "l")
+}

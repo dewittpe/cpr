@@ -606,18 +606,42 @@ ggpubr::ggarrange(
 #' The exercise above of manually identifying and omitting the knot with the
 #' smallest influence in each model would be tedious to say the least when
 #' working with a large set of initial knots.  Fortunately, the process has been
-#' automated.
+#' automated.  Calling
+{{ qwraps2::backtick(cpr) }}
+#' on a 
+{{ qwraps2::backtick(cpr_cp) }}
+#' object defined by a function will automatically omit the internal know with
+#' the lowest influence.
 #'
 #+ fig.width = 7, fig.height = 7
 cpr0 <- cpr(initial_cp)
 summary(cpr0)
+
+x <-
+  influence_of_iknots(cpr0) |>
+  summary() 
+
+plot(x)
+
+
+
+
+cpr0[[4]] |> str()
+
 plot(cpr0, from = 1, to = length(initial_cp$iknots) + 1) # defaults: from = 1, to = 6
 plot(cpr0, type = "rmse")
 
 influences <- lapply(cpr0, influence_of_iknots)
 
-influences[[7]] |> summary()
+summaries <- lapply(influences, summary)
+ps <- 
+  summaries |> 
+  lapply(function(x) { x$os_p_value[x$chisq_rank == 1]}) |>
+  do.call(c, args = _)
 
+which(ps < 0.05) |> max()
+
+cpr0[[3]]
 
 #'
 #'

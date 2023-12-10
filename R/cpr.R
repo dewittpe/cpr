@@ -155,11 +155,19 @@ print.cpr_cpr <- function(x, ...) {
 #' @export
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
-summary.cpr_cpr <- function(object, ...) {
+summary.cpr_cpr <- function(object, alpha = 0.05, ...) {
+
   rtn <- lapply(object, summary)
   for (i in seq_along(object)) {
     rtn[[i]]$index <- as.integer(i)
   }
-  do.call(rbind, rtn)
+  rtn <- do.call(rbind, rtn)
+
+  influence_summary <- summary(influence_of_iknots(object))
+  influence_summary <- influence_summary[influence_summary$chisq_rank == 1, ]
+
+  
+
+
 }
 
