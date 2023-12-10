@@ -89,6 +89,9 @@ p_order_statistic <- function(q, n, j, distribution, ...) {
   n <- as.integer(n)
   j <- as.integer(j)
   stopifnot(length(n) == 1, length(q) == length(j), !is.na(n), n >= na.omit(j), na.omit(j) >= 1)
+  if (length(q) == 0) {
+    return( numeric(0) )
+  }
 
   pfun <- match.fun(FUN = paste0("p", distribution))
   p <- do.call(pfun, list(q = q, ...))

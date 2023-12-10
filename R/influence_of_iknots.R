@@ -89,34 +89,6 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
 
   rtn
 }
-#' @export
-summary.cpr_influence_of_iknots <- function(x, ...) {
-  if (length(x$original_cp$iknots) == 0L) {
-    message("no internal knots")
-    return(invisible(x))
-  }
-
-  rtn <-
-    data.frame(
-               j = x$original_cp$order + seq_along(x$original_cp$iknots),
-               iknot = x$original_cp$iknots,
-               influence = x$influence,
-               influence_rank = rank(x$influence, ties.method = "first"),
-               chisq = x$chisq,
-               chisq_rank = rank(x$chisq, ties.method = "first", na.last = "keep"),
-               p_value = 1.0 - stats::pchisq(x$chisq, df = 1)
-               )
-
-  rtn$os_p_value = 1 - 
-    p_order_statistic(q = rtn$chisq
-                      , n = length(rtn$chisq)
-                      , j = rtn$chisq_rank
-                      , distribution = "chisq"
-                      , df = 1)
-
-  rtn
-}
-
 
 
 #' @export
@@ -179,5 +151,49 @@ plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRU
   } else {
     plots
   }
+}
+
+#' @export
+summary.cpr_influence_of_iknots <- function(x, ...) {
+  if (length(x$original_cp$iknots) == 0L) {
+    message("no internal knots")
+    i <- numeric(0)
+    chisq <- numeric(0)
+  } else {
+    i <- x$influence
+    chisq <- x$chisq
+  }
+
+  rtn <-
+    data.frame(
+                 j = x$original_cp$order + seq_along(x$original_cp$iknots)
+               , iknot = x$original_cp$iknots
+               , influence = i
+               , influence_rank = rank(i, ties.method = "first", na.last = "keep")
+               , chisq = chisq
+               , chisq_rank = rank(chisq, ties.method = "first", na.last = "keep")
+               #, p_value = 1.0 - stats::pchisq(x$chisq, df = 1)
+               )
+
+  rtn$p_value = 1 - 
+    p_order_statistic(q = rtn$chisq
+                      , n = length(rtn$chisq)
+                      , j = rtn$chisq_rank
+                      , distribution = "chisq"
+                      , df = 1)
+
+  class(rtn) <- c("cpr_influence_of_iknots_summary", class(rtn))
+
+  rtn
+}
+
+#' @export
+print.cpr_influence_of_iknots_summary <- function(x, ...) {
+  if (all(is.na(x$chisq) )) {
+    print.data.frame(x[, c("j", "iknot", "influence", "influence_rank")])
+  } else {
+    print.data.frame(x)
+  }
+  invisible(x)
 }
 

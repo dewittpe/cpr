@@ -352,7 +352,7 @@ plot(cp0, cp1, color = TRUE, show_spline = TRUE)
 #'
 #' Finally, we define the influence of $\xi_j$ on
 #' $CP_{k,\boldsymbol{\xi},\boldsymbol{\theta}_{\boldsymbol{\xi}}}$ as
-#' $$ w_j = \left\lVert \boldsymbol{d} \right\rVert_{2}. $$
+#' $$ w_j = \left\lVert \boldsymbol{d} \right\rVert_{2}^{2}. $$
 #'
 #' Let's look at the influence of knots on the spline used in the above section.
 #'
@@ -472,29 +472,6 @@ initial_cp$cp$theta
 #' Let's now look at the influence of the internal knots on the fit
 #+
 summary(influence_of_iknots(initial_cp))
-
-d_order_statistic <- function(x, n, j, distribution, ...) {
-  aa <- lgamma(n+1) - lgamma(j) - lgamma(n - j + 1)
-  dfun <- match.fun(FUN = paste0("d", distribution))
-  pfun <- match.fun(FUN = paste0("p", distribution))
-  bb <- do.call(dfun, c(list(x = x), ...))
-  cc <- do.call(pfun, c(list(q = x), ...))
-  exp( aa + log(bb) + (j - 1) * log(cc) + (n - j) * log(1 - cc) )
-}
-p_order_statistic <- function(q, n, j, distribution, ...) {
-  pfun <- match.fun(FUN = paste0("p", distribution))
-  rtn <-
-    sapply(j:n,
-           function(k) {
-             exp(log(choose(n, k)) + (k) * log(do.call(pfun, list(q = q, ...))) + (n - k) * log(1 - do.call(pfun, list(q = q, ...))))
-           }) 
-  sum(rtn)
-}
-d_order_statistic(x = 3.8, n = 8, j = 1, distribution = "chisq", df = 1)
-d_order_statistic(x = -3, n = 8, j = 1, distribution = "chisq", df = 1)
-p_order_statistic(q = 0.2, n = 7, j = 1, distribution = "chisq", df = 1)
-
-
 
 #'
 #' The least influential knot is $\xi_8 = 3.0,$ the extra know inserted.  Good,
@@ -620,13 +597,13 @@ summary(cpr0)
 plot(cpr0, from = 1, to = length(initial_cp$iknots) + 1) # defaults: from = 1, to = 6
 plot(cpr0, type = "rmse")
 
-influences <- lapply(cpr0, influence_of_iknots) 
+influences <- lapply(cpr0, influence_of_iknots)
 
-influences[[7]] |> str()
+influences[[7]] |> summary()
 
 
 #'
-#' 
+#'
 
 #'
 #'

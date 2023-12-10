@@ -189,7 +189,8 @@ Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const 
     Rcpp::List::create(
         Rcpp::Named("theta") = (HAT * theta),
         Rcpp::Named("d") = IHAT * theta,
-        Rcpp::Named("influence") = arma::norm(IHAT * theta, 2),
+        //Rcpp::Named("influence") = arma::norm(IHAT * theta, 2),
+        Rcpp::Named("influence") = arma::sum(arma::pow(IHAT * theta, 2)),
         Rcpp::Named("chisq") = chisq
         )
   );
