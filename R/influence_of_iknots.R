@@ -95,7 +95,7 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
 print.cpr_influence_of_iknots <- function(x, ...) {
   if (length(x$original_cp$iknots) > 0L) {
     print(setNames(x$influence,
-                   paste0("xi_", x$original_cp$order + 
+                   paste0("xi_", x$original_cp$order +
                    seq(1, length(x$original_cp$iknots), by = 1)))
     )
   } else {
@@ -143,7 +143,7 @@ plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRU
                       ggplot2::theme(axis.title = ggplot2::element_blank()) +
                       ggplot2::scale_color_manual(name = "", values = cp_colors, labels = scales::parse_format()) +
                       ggplot2::scale_linetype_manual(name = "", values = cp_lty, labels = scales::parse_format()) +
-                      ggplot2::scale_shape_manual(name = "", values = cp_pch, labels = scales::parse_format()) 
+                      ggplot2::scale_shape_manual(name = "", values = cp_pch, labels = scales::parse_format())
         })
 
   if (length(j) == 1) {
@@ -156,7 +156,6 @@ plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRU
 #' @export
 summary.cpr_influence_of_iknots <- function(x, ...) {
   if (length(x$original_cp$iknots) == 0L) {
-    message("no internal knots")
     i <- numeric(0)
     chisq <- numeric(0)
   } else {
@@ -172,10 +171,10 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
                , influence_rank = rank(i, ties.method = "first", na.last = "keep")
                , chisq = chisq
                , chisq_rank = rank(chisq, ties.method = "first", na.last = "keep")
-               #, p_value = 1.0 - stats::pchisq(x$chisq, df = 1)
+               , p_value = 1.0 - stats::pchisq(chisq, df = 1)
                )
 
-  rtn$p_value = 1 - 
+  rtn$os_p_value = 1 -
     p_order_statistic(q = rtn$chisq
                       , n = length(rtn$chisq)
                       , j = rtn$chisq_rank
@@ -189,10 +188,16 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
 
 #' @export
 print.cpr_influence_of_iknots_summary <- function(x, ...) {
+  if (nrow(x) == 0) {
+    message("no internal knots")
+    return(invisible(x))
+  }
+
   if (all(is.na(x$chisq) )) {
-    print.data.frame(x[, c("j", "iknot", "influence", "influence_rank")])
+    #print.data.frame(x[, c("j", "iknot", "influence", "influence_rank")])
+    NextMethod(x[, c("j", "iknot", "influence", "influence_rank")])
   } else {
-    print.data.frame(x)
+    NextMethod(x)
   }
   invisible(x)
 }

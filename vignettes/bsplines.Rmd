@@ -374,9 +374,9 @@ $$
 
 Finally, we define the influence of $\xi_j$ on
 $CP_{k,\boldsymbol{\xi},\boldsymbol{\theta}_{\boldsymbol{\xi}}}$ as
-$$ w_j = \left\lVert \boldsymbol{d} \right\rVert_{2}. $$
+$$ w_j = \left\lVert \boldsymbol{d} \right\rVert_{2}^{2}. $$
 
-Let's look at the influence of knots on the spline used in the above section.
+The influence of knots on the spline used in the above section.
 
 
 ```{r fig.width = 7, fig.height = 7}
@@ -386,7 +386,7 @@ summary(x)
 
 
 Let's look at the following plots to explore the influence of $\xi_{7}$ (the
-third interior knot so j = 3 in the code below) on the spline.  In panel (a)
+third interior knot in a $k=4$ order spline) on the spline.  In panel (a)
 we see the original control polygon and spline along with the coarsened
 control polygon and spline. Note that the there are fewer control points, and
 the spline deviates from the original. In panel (b) we see that the restored
@@ -399,10 +399,10 @@ see all three control polygons plotted together.
 ```{r fig.width = 7, fig.height = 7}
 ggpubr::ggarrange(
   ggpubr::ggarrange(
-    plot(x, j = 3, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
-  , plot(x, j = 3, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
-  , labels = c("(a)", "(b)")
-  , nrow = 1
+      plot(x, j = 3, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+    , plot(x, j = 3, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+    , labels = c("(a)", "(b)")
+    , nrow = 1
   )
   , plot(x, j = 3, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
   , labels = c("", "(c)")
@@ -425,10 +425,10 @@ influence of $\xi_8.$
 ```{r fig.width = 7, fig.height = 7}
 ggpubr::ggarrange(
   ggpubr::ggarrange(
-    plot(x, j = 4, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
-  , plot(x, j = 4, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
-  , labels = c("(a)", "(b)")
-  , nrow = 1
+      plot(x, j = 4, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+    , plot(x, j = 4, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+    , labels = c("(a)", "(b)")
+    , nrow = 1
   )
   , plot(x, j = 4, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
   , labels = c("", "(c)")
@@ -508,27 +508,6 @@ Let's now look at the influence of the internal knots on the fit
 
 ```{r}
 summary(influence_of_iknots(initial_cp))
-
-d_order_statistic <- function(x, n, j, distribution, ...) {
-  aa <- lgamma(n+1) - lgamma(j) - lgamma(n - j + 1)
-  dfun <- match.fun(FUN = paste0("d", distribution))
-  pfun <- match.fun(FUN = paste0("p", distribution))
-  bb <- do.call(dfun, c(list(x = x), ...))
-  cc <- do.call(pfun, c(list(q = x), ...))
-  exp( aa + log(bb) + (j - 1) * log(cc) + (n - j) * log(1 - cc) )
-}
-p_order_statistic <- function(q, n, j, distribution, ...) {
-  pfun <- match.fun(FUN = paste0("p", distribution))
-  rtn <-
-    sapply(j:n,
-           function(k) {
-             exp(log(choose(n, k)) + (k) * log(do.call(pfun, list(q = q, ...))) + (n - k) * log(1 - do.call(pfun, list(q = q, ...))))
-           }) 
-  sum(rtn)
-}
-d_order_statistic(x = 3.8, n = 8, j = 1, distribution = "chisq", df = 1)
-d_order_statistic(x = -3, n = 8, j = 1, distribution = "chisq", df = 1)
-p_order_statistic(q = 0.2, n = 7, j = 1, distribution = "chisq", df = 1)
 ```
 
 
@@ -536,7 +515,7 @@ The least influential knot is $\xi_8 = 3.0,$ the extra know inserted.  Good,
 we this is the expected result.
 
 How would someone determine if the influence was significant?  That is, how
-can we test the null hypothesis $$H_0: w_{j}^{2} = 0$$
+can we test the null hypothesis $$H_0: w_{j} = 0$$
 
 Under the null hypothesis that the knot has zero influence and under standard
 ordinary least squares regression assumptions the regression coefficients,
@@ -544,7 +523,7 @@ ordinary least squares regression assumptions the regression coefficients,
 realisations of a Gaussian random variable. Then
 
 $$
-X =
+w_j =
 \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 \left[
   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
@@ -558,11 +537,25 @@ the variance-covariance matrix for the regression coefficients, and $+$
 denotes the Moore-Penrose inverse of the matrix.  By construction,
 $\left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right) \boldsymbol{\Sigma} \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}$
 is singular and thus the standard inverse does not exist and a generalized
-inverse is necessary. Lastly,
-$$ X \sim \chi_{1}^{2}$$
-and we can generate a p-value for the hypothesis test.  This p-value is
-reported in the summary of the call to
+inverse is necessary. This yields the test statistic following a chi-square
+distribuiton with one degree of freedom,
+$$ w_j \sim \chi_{1}^{2}.$$
+
+Now, if we are interested in removing the knot with the lowest influnce we
+are interestd in the the minimum.  So the hypothesis test we are actually
+interested in is
+$$ H_0: w_{(1)} = 0 $$ which follows the distribution
+$$ \Pr \left[ w_{(1)} > w \right] = \sum_{j = 1}^{k+l} \binom{n+l}{j}
+\left(F_{\chi_{1}^{2}}\left(w\right)\right)^{j} \left( 1 -
+F_{\chi_{1}^{2}}\left(w\right) \right)^{k+l-j}$$
+where $F_{\chi_{1}^{2}}\left(w\right)$ is the distribution function of the
+chi-square distribution with one degree of freedom.
+
+The results generated by calling
 `r  qwraps2::backtick(influence_of_iknots) %s% "."  `
+report two sets of p-values.  The first is the p-value is the probability of
+observed chisq value greater than reported, and the second p-value is the
+probability of the rank order statisitic exceeding the observed value.
 
 ```{r}
 summary(influence_of_iknots(initial_cp))
@@ -570,7 +563,7 @@ summary(influence_of_iknots(initial_cp))
 
 
 It is worth highlighting that _all_ of the p-values in the above are greater
-than $0.10$ and would, in most cases, a failure to reject the null
+than $0.05$ and would, in most cases, a failure to reject the null
 hypothesis.  Recalling that the failure to reject the null does not mean the
 null is true, just that we lack sufficient evidence to reject the null. At
 the very least we can say $\xi_8 = 3.0$ may not be influential.  So let's refit the
@@ -612,6 +605,9 @@ sixth_reduction_cp <-
 summary(influence_of_iknots(sixth_reduction_cp))
 ```
 
+
+The third_reduction_cp has the first set of internal knots where the
+minimumal influence weight is significantly different from zero.
 
 Some plots to compare all the fits:
 
@@ -667,9 +663,9 @@ summary(cpr0)
 plot(cpr0, from = 1, to = length(initial_cp$iknots) + 1) # defaults: from = 1, to = 6
 plot(cpr0, type = "rmse")
 
-influences <- lapply(cpr0, influence_of_iknots) 
+influences <- lapply(cpr0, influence_of_iknots)
 
-influences[[7]] |> str()
+influences[[7]] |> summary()
 ```
 
 

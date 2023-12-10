@@ -43,7 +43,7 @@ $(PKG_ROOT)/vignettes/%.Rmd : $(PKG_ROOT)/vignette-spinners/%.R
 # for testing a vignette without having to install the package
 %.html : vignettes/%.Rmd
 	R -e "setwd('vignettes')"\
-		-e "devtools::load_all()"\
+		-e "devtools::document()"\
 		-e "rmarkdown::render('$(addsuffix .Rmd, $(basename $(notdir $<)))')"
 	mv $(addsuffix .html, $(basename $<)) $@
 
