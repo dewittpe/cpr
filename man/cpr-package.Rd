@@ -2,8 +2,8 @@
 % Please edit documentation in R/cpr-package.R
 \docType{package}
 \name{cpr-package}
-\alias{cpr}
 \alias{cpr-package}
+\alias{_PACKAGE}
 \title{cpr: Control Polygon Reduction}
 \description{
 The cpr package implements the control polygon reduction and control net

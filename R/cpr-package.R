@@ -12,8 +12,8 @@
 #' (2017).
 #'
 #' @docType package
-#' @name cpr-package
 #' @keywords internal
+#' @aliases cpr-package
 "_PACKAGE"
 
 ## usethis namespace: start
