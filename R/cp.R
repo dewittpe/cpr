@@ -34,7 +34,7 @@
 #' plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 #'
 #' # via formula
-#' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))))
+#' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
 #' cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 #'
 #' # plot the spline and target data.
@@ -202,6 +202,7 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 #' \code{\link{plot.cpr_bs}} does.  When missing, the default if \code{TRUE} if
 #' more than one \code{cpr_cp} object is passed in, and \code{FALSE} is only one
 #' \code{cpr_cp} object is passed.
+#' @param show_x boolean, so x-values
 #' @param digits number of digits to the right of the decimal place to report
 #' for the value of each knot. Only used when plotting on control polygon with
 #' \code{comparative = FALSE}.

@@ -121,6 +121,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// tensor_product
+arma::mat tensor_product(const arma::mat& A, const arma::mat& B);
+RcppExport SEXP _cpr_tensor_product(SEXP ASEXP, SEXP BSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::mat& >::type A(ASEXP);
+    Rcpp::traits::input_parameter< const arma::mat& >::type B(BSEXP);
+    rcpp_result_gen = Rcpp::wrap(tensor_product(A, B));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_cpr_cpp_bsplines", (DL_FUNC) &_cpr_cpp_bsplines, 4},
@@ -131,6 +143,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_cpr_coarsen_theta", (DL_FUNC) &_cpr_coarsen_theta, 4},
     {"_cpr_hat_theta", (DL_FUNC) &_cpr_hat_theta, 6},
     {"_cpr_matrix_rank", (DL_FUNC) &_cpr_matrix_rank, 1},
+    {"_cpr_tensor_product", (DL_FUNC) &_cpr_tensor_product, 2},
     {NULL, NULL, 0}
 };
 

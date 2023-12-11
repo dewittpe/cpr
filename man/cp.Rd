@@ -97,6 +97,8 @@ will be used regardless of the color setting).}
 
 \item{n}{the number of data points to use for plotting the spline}
 
+\item{show_x}{boolean, so x-values}
+
 \item{digits}{number of digits to the right of the decimal place to report
 for the value of each knot. Only used when plotting on control polygon with
 \code{comparative = FALSE}.}
@@ -137,7 +139,7 @@ plot(cp1, cp2, color = TRUE)
 plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 
 # via formula
-dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))))
+dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
 cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
 
 # plot the spline and target data.

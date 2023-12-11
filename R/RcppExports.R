@@ -75,3 +75,7 @@ matrix_rank <- function(x) {
     .Call('_cpr_matrix_rank', PACKAGE = 'cpr', x)
 }
 
+tensor_product <- function(A, B) {
+    .Call('_cpr_tensor_product', PACKAGE = 'cpr', A, B)
+}
+

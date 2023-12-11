@@ -7,7 +7,7 @@
 \usage{
 cpr(x, keep = -1, p = 2, progress = interactive(), ...)
 
-\method{summary}{cpr_cpr}(object, alpha = 0.05, ...)
+\method{summary}{cpr_cpr}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} object}

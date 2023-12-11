@@ -101,7 +101,7 @@ influence_of_iknots.cpr_cpr <- function(x, ...) {
 #' @export
 print.cpr_influence_of_iknots <- function(x, ...) {
   if (length(x$original_cp$iknots) > 0L) {
-    print(setNames(x$influence,
+    print(stats::setNames(x$influence,
                    paste0("xi_", x$original_cp$order +
                    seq(1, length(x$original_cp$iknots), by = 1)))
     )
@@ -220,12 +220,3 @@ print.cpr_influence_of_iknots_summary <- function(x, ...) {
   invisible(x)
 }
 
-#' @export
-plot.cpr_influence_of_iknots_cpr_summary <- function(x, alpha = 0.05, ...) {
-  ggplot2::ggplot(x) +
-    ggplot2::aes(x = index, y = os_p_value, color = os_p_value < alpha) +
-    ggplot2::geom_point() +
-    ggplot2::geom_hline(yintercept = alpha) +
-    ggplot2::scale_y_log10() +
-    ggplot2::annotation_logticks(sides = "l")
-}

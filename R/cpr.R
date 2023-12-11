@@ -155,7 +155,7 @@ print.cpr_cpr <- function(x, ...) {
 #' @export
 #' @param object a \code{cpr_cpr} object
 #' @rdname cpr
-summary.cpr_cpr <- function(object, alpha = 0.05, ...) {
+summary.cpr_cpr <- function(object, ...) {
 
   rtn <- lapply(object, summary)
   #for (i in seq_along(object)) {
@@ -166,8 +166,6 @@ summary.cpr_cpr <- function(object, alpha = 0.05, ...) {
   selected_index <- summary(influence_of_iknots(object))
   selected_index <- selected_index$os_p_value[selected_index$chisq_rank == 1]
   selected_index <- c(NA_real_, selected_index)
-  #selected_index <- which(selected_index < alpha)
-  #selected_index <- max(c(1, selected_index))
   rtn[["Pr(>w_(1))"]] <- selected_index
 
   # find the elbow in the rmse by n_iknots plot
@@ -189,7 +187,7 @@ print.cpr_cpr_summary <- function(x, ...) {
   y <- x
   #y[["Pr(>w_(1))"]] <- qwraps2::frmtp(y[["Pr(>w_(1))"]])
   pv <- y[["Pr(>w_(1))"]]
-  sstars <- symnum(pv, corr = FALSE, na = TRUE,
+  sstars <- stats::symnum(pv, corr = FALSE, na = TRUE,
                   cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
                   symbols = c("***", "**", "*", ".", " "))
   sleg <- attr(sstars, "legend")

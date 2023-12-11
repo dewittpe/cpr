@@ -4,14 +4,14 @@
 \alias{insert_a_knot}
 \title{Insert a Knot into a Control Polygon}
 \usage{
-insert_a_knot(x, xi, ...)
+insert_a_knot(x, xi_prime, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} object}
 
-\item{...}{not currently used}
-
 \item{xi_prime}{the value of the knot to insert}
+
+\item{...}{not currently used}
 }
 \description{
 Insert a knot into a control polygon without changing the spline
