@@ -566,15 +566,12 @@ It is worth highlighting that _all_ of the p-values in the above are greater
 than $0.05$ and would, in most cases, a failure to reject the null
 hypothesis.  Recalling that the failure to reject the null does not mean the
 null is true, just that we lack sufficient evidence to reject the null. At
-the very least we can say $\xi_8 = 3.0$ may not be influential.  So let's refit the
+the very least we can say $\xi_9 = 4.0$ may not be influential.  So let's refit the
 model without it.
 
 ```{r}
 first_reduction_cp <-
-  cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
-     , data = DF
-     , keep_fit = TRUE # default is FALSE
-  )
+  cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4.5), bknots = c(0, 6)), data = DF)
 summary(influence_of_iknots(first_reduction_cp))
 ```
 
@@ -585,11 +582,11 @@ continue that process all the way down to zero knots.
 
 ```{r}
 second_reduction_cp <-
-  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4, 4.5), bknots = c(0, 6)), data = DF)
+  cp(y ~ bsplines(x, iknots = c(1, 1.5, 3, 4.5), bknots = c(0, 6)), data = DF)
 summary(influence_of_iknots(second_reduction_cp))
 
 third_reduction_cp <-
-  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4.5), bknots = c(0, 6)), data = DF)
+  cp(y ~ bsplines(x, iknots = c(1, 3, 4.5), bknots = c(0, 6)), data = DF)
 summary(influence_of_iknots(third_reduction_cp))
 
 fourth_reduction_cp <-
@@ -654,18 +651,64 @@ ggpubr::ggarrange(
 The exercise above of manually identifying and omitting the knot with the
 smallest influence in each model would be tedious to say the least when
 working with a large set of initial knots.  Fortunately, the process has been
-automated.
+automated.  Calling
+`r  qwraps2::backtick(cpr)  `
+on a
+`r  qwraps2::backtick(cpr_cp)  `
+object defined by a function will automatically omit the internal know with
+the lowest influence.
 
 
 ```{r fig.width = 7, fig.height = 7}
 cpr0 <- cpr(initial_cp)
+cpr0
+```
+
+
+There are
+`r  length(cpr0)  `
+elements of the
+`r  backtick(cpr_cpr)  `
+object,
+`r  backtick(length(initial_cp$iknots) + 1) %s% "." `
+The indexing is set such at that the $i^{th}$ element has $i-1$ internal
+knots.
+
+Before exploring the results, let's just verify that the results of the call
+to
+`r  backtick(cpr)  `
+are the same as the manual results found about.
+There are some differences in the metadata of the objects, but the important
+parts, like the control polygons, are the same.
+
+```{r}
+all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])
+all.equal( cpr0[[6]],  first_reduction_cp)
+call_idx <- which(names(cpr0[[6]]) == "call")
+all.equal( cpr0[[6]][-call_idx],  first_reduction_cp[-call_idx])
+all.equal( cpr0[[5]][-call_idx],  second_reduction_cp[-call_idx])
+all.equal( cpr0[[4]][-call_idx],  third_reduction_cp[-call_idx])
+all.equal( cpr0[[3]][-call_idx],  fourth_reduction_cp[-call_idx])
+all.equal( cpr0[[2]][-call_idx],  fifth_reduction_cp[-call_idx])
+all.equal( cpr0[[1]][-call_idx],  sixth_reduction_cp[-call_idx])
+```
+
+
+In the manual process we found that the
+`r  backtick(third_reduction_cp)  `
+was the first where all the internal knots had influence weights
+significantly greater than zero.  For the
+`r  backtick(cpr0)  `
+object we can quickly see a simmilar result:
+
+```{r}
 summary(cpr0)
+
+
 plot(cpr0, from = 1, to = length(initial_cp$iknots) + 1) # defaults: from = 1, to = 6
 plot(cpr0, type = "rmse")
 
-influences <- lapply(cpr0, influence_of_iknots)
-
-influences[[7]] |> summary()
+summary( influence_of_iknots(cpr0) )
 ```
 
 

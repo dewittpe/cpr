@@ -526,13 +526,10 @@ summary(influence_of_iknots(initial_cp))
 #' than $0.05$ and would, in most cases, a failure to reject the null
 #' hypothesis.  Recalling that the failure to reject the null does not mean the
 #' null is true, just that we lack sufficient evidence to reject the null. At
-#' the very least we can say $\xi_8 = 3.0$ may not be influential.  So let's refit the
+#' the very least we can say $\xi_9 = 4.0$ may not be influential.  So let's refit the
 #' model without it.
 first_reduction_cp <-
-  cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
-     , data = DF
-     , keep_fit = TRUE # default is FALSE
-  )
+  cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4.5), bknots = c(0, 6)), data = DF)
 summary(influence_of_iknots(first_reduction_cp))
 
 #'
@@ -540,11 +537,11 @@ summary(influence_of_iknots(first_reduction_cp))
 #' the least influential.  Just for fun, let's omit that knot, and refit.  Let's
 #' continue that process all the way down to zero knots.
 second_reduction_cp <-
-  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4, 4.5), bknots = c(0, 6)), data = DF)
+  cp(y ~ bsplines(x, iknots = c(1, 1.5, 3, 4.5), bknots = c(0, 6)), data = DF)
 summary(influence_of_iknots(second_reduction_cp))
 
 third_reduction_cp <-
-  cp(y ~ bsplines(x, iknots = c(1, 2.3, 4.5), bknots = c(0, 6)), data = DF)
+  cp(y ~ bsplines(x, iknots = c(1, 3, 4.5), bknots = c(0, 6)), data = DF)
 summary(influence_of_iknots(third_reduction_cp))
 
 fourth_reduction_cp <-
@@ -603,50 +600,87 @@ ggpubr::ggarrange(
 #'
 #' # Control Polygon Reduction
 #'
+#' ## Example with known knots
+#'
 #' The exercise above of manually identifying and omitting the knot with the
 #' smallest influence in each model would be tedious to say the least when
 #' working with a large set of initial knots.  Fortunately, the process has been
 #' automated.  Calling
 {{ qwraps2::backtick(cpr) }}
-#' on a 
+#' on a
 {{ qwraps2::backtick(cpr_cp) }}
 #' object defined by a function will automatically omit the internal know with
 #' the lowest influence.
 #'
 #+ fig.width = 7, fig.height = 7
 cpr0 <- cpr(initial_cp)
+cpr0
+
+#'
+#' There are
+{{ length(cpr0) }}
+#' elements of the
+{{ backtick(cpr_cpr) }}
+#' object,
+{{ backtick(length(initial_cp$iknots) + 1) %s% "."}}
+#' The indexing is set such at that the $i^{th}$ element has $i-1$ internal
+#' knots.
+#'
+#' Before exploring the results, let's just verify that the results of the call
+#' to
+{{ backtick(cpr) }}
+#' are the same as the manual results found about.
+#' There are some differences in the metadata of the objects, but the important
+#' parts, like the control polygons, are the same.
+all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])
+all.equal( cpr0[[6]],  first_reduction_cp)
+call_idx <- which(names(cpr0[[6]]) == "call")
+all.equal( cpr0[[6]][-call_idx],  first_reduction_cp[-call_idx])
+all.equal( cpr0[[5]][-call_idx],  second_reduction_cp[-call_idx])
+all.equal( cpr0[[4]][-call_idx],  third_reduction_cp[-call_idx])
+all.equal( cpr0[[3]][-call_idx],  fourth_reduction_cp[-call_idx])
+all.equal( cpr0[[2]][-call_idx],  fifth_reduction_cp[-call_idx])
+all.equal( cpr0[[1]][-call_idx],  sixth_reduction_cp[-call_idx])
+
+#'
+#' In the manual process we found that the
+{{ backtick(third_reduction_cp) }}
+#' was the first where all the internal knots had influence weights
+#' significantly greater than zero.  For the
+{{ backtick(cpr0) }}
+#' object we can quickly see a similar result:
 summary(cpr0)
 
-x <-
-  influence_of_iknots(cpr0) |>
-  summary() 
-
-plot(x)
-
-
-
-
-cpr0[[4]] |> str()
 
 plot(cpr0, from = 1, to = length(initial_cp$iknots) + 1) # defaults: from = 1, to = 6
 plot(cpr0, type = "rmse")
 
-influences <- lapply(cpr0, influence_of_iknots)
+summary( influence_of_iknots(cpr0) )
 
-summaries <- lapply(influences, summary)
-ps <- 
-  summaries |> 
-  lapply(function(x) { x$os_p_value[x$chisq_rank == 1]}) |>
-  do.call(c, args = _)
-
-which(ps < 0.05) |> max()
-
-cpr0[[3]]
 
 #'
+#' ## Example when knots are unknown
 #'
+#' In practice it is be extremely unlikely to know where knots should be placed.
+#'
+#' @deboor2001??????  - non-repeated knots are good, small deviations in a knot
+#' have little impact on the spline
+#'
+#' @jupp1978approximation found no optimal solution
+#'
+#' Start with a large set of internal knots.  Specify, use the
+{{ backtick(df) }}
+#' argument in 
+{{ backtick(bsplines) }}
+#' to specify the degrees of freedom $(k + l)$ of the spline.
+initial_cp <- cp(y ~ bsplines(x, df = 54, bknots = c(0, 6)), data = DF)
+plot(initial_cp, show_cp = TRUE, show_spline = TRUE)
+cpr1 <- cpr(initial_cp)
+summary(cpr1) |> head()
+plot(cpr1, type = "rmse")
 
-#'
+plot(cpr1[[5]], show_cp = TRUE, show_spline = TRUE)
+
 #'
 #'
 #' # References

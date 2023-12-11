@@ -43,6 +43,7 @@ plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
     }
 
     s <- summary(x)
+    s$index <- seq_along(s[[type]])
 
     ggplot2::ggplot(subset(s, (s$index >= from) & (s$index <= to))) +
     ggplot2::theme_bw() +

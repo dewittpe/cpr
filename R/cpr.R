@@ -158,16 +158,51 @@ print.cpr_cpr <- function(x, ...) {
 summary.cpr_cpr <- function(object, alpha = 0.05, ...) {
 
   rtn <- lapply(object, summary)
-  for (i in seq_along(object)) {
-    rtn[[i]]$index <- as.integer(i)
-  }
+  #for (i in seq_along(object)) {
+  #  rtn[[i]]$index <- as.integer(i)
+  #}
   rtn <- do.call(rbind, rtn)
 
-  influence_summary <- summary(influence_of_iknots(object))
-  influence_summary <- influence_summary[influence_summary$chisq_rank == 1, ]
+  selected_index <- summary(influence_of_iknots(object))
+  selected_index <- selected_index$os_p_value[selected_index$chisq_rank == 1]
+  selected_index <- c(NA_real_, selected_index)
+  #selected_index <- which(selected_index < alpha)
+  #selected_index <- max(c(1, selected_index))
+  rtn[["Pr(>w_(1))"]] <- selected_index
 
-  
+  class(rtn) <- c("cpr_cpr_summary", class(rtn))
+  rtn
+}
 
+#' @export
+print.cpr_cpr_summary <- function(x, ...) {
+  y <- x
+  #y[["Pr(>w_(1))"]] <- qwraps2::frmtp(y[["Pr(>w_(1))"]])
+  pv <- y[["Pr(>w_(1))"]]
+  sstars <- symnum(pv, corr = FALSE, na = TRUE,
+                  cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
+                  symbols = c("***", "**", "*", ".", " "))
+  sleg <- attr(sstars, "legend")
+  sstars <- as.character(sstars)
 
+  ms <- max(sapply(sstars, nchar))
+  for (i in seq_along(sstars)) {
+    if (sstars[i] < ms) {
+      sstars[i] <- paste(sstars[i], paste(rep(" ", ms - nchar(sstars[i])), collapse = ""))
+    }
+  }
+
+  dig.tst = 5L#max(1L, min(5L, digits - 1L))
+  eps.Pvalue = .Machine$double.eps
+  y[["Pr(>w_(1))"]] <- format.pval(pv, digits = dig.tst, eps = eps.Pvalue)
+  y[["Pr(>w_(1))"]] <- paste(y[["Pr(>w_(1))"]], sstars)
+  print.data.frame(y)
+  #NextMethod(generic = "print", object = y)
+
+  if ((w <- getOption("width")) < nchar(sleg))
+    sleg <- strwrap(sleg, width = w - 2, prefix = "  ")
+  cat("---\nSignif. codes:  ", sleg, sep = "", fill = w +
+      4 + max(nchar(sleg, "bytes") - nchar(sleg)))
+  invisible(x)
 }
 
