@@ -670,16 +670,52 @@ summary( influence_of_iknots(cpr0) )
 #'
 #' Start with a large set of internal knots.  Specify, use the
 {{ backtick(df) }}
-#' argument in 
+#' argument in
 {{ backtick(bsplines) }}
 #' to specify the degrees of freedom $(k + l)$ of the spline.
 initial_cp <- cp(y ~ bsplines(x, df = 54, bknots = c(0, 6)), data = DF)
 plot(initial_cp, show_cp = TRUE, show_spline = TRUE)
 cpr1 <- cpr(initial_cp)
-summary(cpr1) |> head()
+x <- summary(cpr1)
+x
 plot(cpr1, type = "rmse")
 
 plot(cpr1[[5]], show_cp = TRUE, show_spline = TRUE)
+
+x |> head()
+
+brkpt <- 0
+fit <- lm(rmse ~ pmax(0, brkpt - 1 - n_iknots) + I(pmax(0, brkpt - 1 - n_iknots)^2) + pmax(0, n_iknots - brkpt) + I(pmax(0, n_iknots - brkpt)^2), data = x)
+plot(cpr1, type = "rmse") +
+  ggplot2::geom_line(mapping = ggplot2::aes(y = predict(fit)), color = "red") +
+  ggplot2::geom_point(mapping = ggplot2::aes(y = predict(fit)), color = "red") +
+  ggplot2::ggtitle(paste("breakpoint =", brkpt))
+
+out <- list()
+for (brkpt in seq(1, length(initial_cp$iknots))) {
+  y <- cp(
+     formula = rmse ~ bsplines(n_iknots, iknots = c(brkpt), bknots = c(0, 51), order = 3)
+     ,
+     data = x
+     )
+ out[[brkpt]] <- data.frame(n_knots = brkpt, rmse = y$rmse)
+}
+out <- do.call(rbind, out)
+which.min(out$rmse)
+
+cpr1[[3]] |> plot(show_spline = TRUE) + original_data_ggplot_layers
+
+cpr0[[3]] |> plot(show_spline = TRUE) + original_data_ggplot_layers
+
+plot(cpr1[[3]], cpr0[[3]], show_spline = TRUE, color = TRUE)
+plot(cpr1[[4]], cpr0[[4]], show_spline = TRUE, color = TRUE)
+
+plot(y, show_spline = TRUE, show_cp = FALSE) +
+  ggplot2::geom_line(data = x, mapping = ggplot2::aes(x = n_iknots, y = rmse), color = "red", inherit.aes = F) +
+  ggplot2::geom_point(data = x, mapping = ggplot2::aes(x = n_iknots, y = rmse), color = "red", inherit.aes = F) +
+  ggplot2::ggtitle(paste("breakpoint =", brkpt))
+
+
 
 #'
 #'

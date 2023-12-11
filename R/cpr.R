@@ -170,6 +170,16 @@ summary.cpr_cpr <- function(object, alpha = 0.05, ...) {
   #selected_index <- max(c(1, selected_index))
   rtn[["Pr(>w_(1))"]] <- selected_index
 
+  # find the elbow in the rmse by n_iknots plot
+  elbow <- numeric(0)
+  for (brkpt in seq(1, length(object[[length(object)]]$iknot), by = 1)) {
+    y <- cp(rmse ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 3),
+            data = rtn)
+    elbow <- c(elbow, y$rmse)
+  }
+  elbow <- which.min(elbow) + 1
+  rtn$elbow <- as.integer(rtn$n_iknots == elbow)
+
   class(rtn) <- c("cpr_cpr_summary", class(rtn))
   rtn
 }
@@ -196,6 +206,8 @@ print.cpr_cpr_summary <- function(x, ...) {
   eps.Pvalue = .Machine$double.eps
   y[["Pr(>w_(1))"]] <- format.pval(pv, digits = dig.tst, eps = eps.Pvalue)
   y[["Pr(>w_(1))"]] <- paste(y[["Pr(>w_(1))"]], sstars)
+
+  y[["elbow"]] <- sub("0", "", sub("1", "<<<", as.character(y[["elbow"]])))
   print.data.frame(y)
   #NextMethod(generic = "print", object = y)
 
