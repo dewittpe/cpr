@@ -14,7 +14,7 @@
 #' cp1 <- insert_a_knot(x = cp0, xi_prime = 3)
 #' plot(cp0, cp1, color = TRUE, show_spline = TRUE)
 #' @export
-insert_a_knot <- function(x, xi, ...) {
+insert_a_knot <- function(x, xi_prime, ...) {
   UseMethod("insert_a_knot")
 }
 

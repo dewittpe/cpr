@@ -161,19 +161,19 @@ plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRU
 }
 
 #' @export
-summary.cpr_influence_of_iknots <- function(x, ...) {
-  if (length(x$original_cp$iknots) == 0L) {
+summary.cpr_influence_of_iknots <- function(object, ...) {
+  if (length(object$original_cp$iknots) == 0L) {
     i <- numeric(0)
     chisq <- numeric(0)
   } else {
-    i <- x$influence
-    chisq <- x$chisq
+    i <- object$influence
+    chisq <- object$chisq
   }
 
   rtn <-
     data.frame(
-                 j = x$original_cp$order + seq_along(x$original_cp$iknots)
-               , iknot = x$original_cp$iknots
+                 j = object$original_cp$order + seq_along(object$original_cp$iknots)
+               , iknot = object$original_cp$iknots
                , influence = i
                , influence_rank = rank(i, ties.method = "first", na.last = "keep")
                , chisq = chisq
@@ -194,8 +194,8 @@ summary.cpr_influence_of_iknots <- function(x, ...) {
 }
 
 #' @export
-summary.cpr_influence_of_iknots_cpr <- function(x, ...) {
-  rtn <- lapply(x, summary)
+summary.cpr_influence_of_iknots_cpr <- function(object, ...) {
+  rtn <- lapply(object, summary)
   rws <- sapply(rtn, nrow)
   idx <- rep(rws + 1, times = rws)
   rtn <- do.call(rbind, rtn)
