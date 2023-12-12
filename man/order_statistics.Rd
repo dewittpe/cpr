@@ -76,6 +76,54 @@ p <- p_order_statistic(x, n = 12, j = 4, distribution = "chisq", df = 3)
 hist(os4, freq = FALSE); points(x, d, type = "l", col = "red")
 plot(ecdf(os4)); points(x, p, col = "red")
 
+# Example 3
+# For a set of j observations, find the values for each of the j order
+# statistics
+simulated_data <- matrix(rnorm(n = 6 * 5000), ncol = 6)
+simulated_data <- apply(simulated_data, 1, sort)
+xs <- apply(simulated_data, 1, range)
+xs <- apply(xs, 2, function(x) {seq(x[1], x[2], length.out = 100)})
+ds <- apply(xs, 1, d_order_statistic, n = 6, j = 1:6, distribution = "norm")
+ps <- apply(xs, 1, p_order_statistic, n = 6, j = 1:6, distribution = "norm")
+
+old_par <- par() # save current settings
+
+par(mfrow = c(2, 3))
+for (i in 1:6) {
+  hist(simulated_data[i, ]
+       , freq = FALSE
+       , main = substitute(Density~of~X[(ii)], list(ii = i))
+       , xlab = ""
+  )
+  points(xs[, i], ds[i, ], type = "l", col = "red")
+}
+
+for (i in 1:6) {
+  plot(ecdf(simulated_data[i, ])
+       , main = substitute(CDF~of~X[(ii)], list(ii = i))
+       , ylab = ""
+       , xlab = ""
+       )
+  points(xs[, i], ps[i, ], type = "p", col = "red")
+}
+
+par(mfrow = c(1, 1))
+plot(xs[, 1], ps[1, ], type = "l", col = 1, xlim = range(xs), ylab = "", xlab = "")
+for(i in 2:6) {
+  points(xs[, i], ps[i, ], type = "l", col = i)
+}
+legend("topleft", col = 1:6, lty = 1, legend =
+       c(
+         expression(CDF~of~X[(1)]),
+         expression(CDF~of~X[(2)]),
+         expression(CDF~of~X[(3)]),
+         expression(CDF~of~X[(4)]),
+         expression(CDF~of~X[(5)]),
+         expression(CDF~of~X[(5)])
+         ))
+
+par(old_par) # reset par to setting prior to running this example
+
 }
 \references{
 Casella G, Berger RL (2002). Statistical Inference. 2nd edition. Duxbury Thomson Learning.
