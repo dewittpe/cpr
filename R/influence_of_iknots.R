@@ -60,21 +60,30 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
 
   bmat0 <- bsplines(numeric(0), iknots = x$iknots, bknots = x$bknots, order = x$order)
 
-  hat_thetas <- lapply(X = seq(x$order, x$order + length(x$iknots) - 1),
-                       FUN = hat_theta,
-                       xi = x$xi,
-                       k = x$order,
-                       theta = x$cp$theta,
-                       calculate_F = is.matrix(x$vcov_theta),
-                       Sigma = if (is.matrix(x$vcov_theta)) {x$vcov_theta} else {matrix(numeric(1))}
-  )
+  if (isTRUE(nrow(x$vcov_theta) > 0L)) {
+    hat_thetas <- lapply(X = seq(x$order, x$order + length(x$iknots) - 1),
+                         FUN = hat_theta,
+                         xi = x$xi,
+                         k = x$order,
+                         theta = x$cp$theta,
+                         calculate_F = TRUE,
+                         Sigma = x$vcov_theta
+    )
+  } else {
+    hat_thetas <- lapply(X = seq(x$order, x$order + length(x$iknots) - 1),
+                         FUN = hat_theta,
+                         xi = x$xi,
+                         k = x$order,
+                         theta = x$cp$theta,
+                         calculate_F = FALSE,
+                         Sigma = matrix(numeric(0)) # place holder
+    )
+  }
 
-  #w <- W(3.0, c(0,0,0,0, 1.0, 1.5, 2.3, 4.0, 4.5, 6, 6, 6, 6), 4)
-  #IHAT <- diag(10) - (w %*% solve(t(w) %*% w) %*% t(w))
-  #theta <- matrix(x$cp$theta, ncol = 1)
-  #t(IHAT %*% theta ) %*% MASS::ginv( IHAT %*% Sigma %*% t(IHAT) ) %*% (IHAT %*% theta )
-
-  restored_cps <- mapply(function(x, hat_theta) {cp(x, hat_theta$theta)}, hat_theta = hat_thetas, MoreArgs = list(x = bmat0), SIMPLIFY = FALSE)
+  restored_cps <- mapply(function(x, hat_theta) {cp(x, hat_theta$theta)}
+                         , hat_theta = hat_thetas
+                         , MoreArgs = list(x = bmat0)
+                         , SIMPLIFY = FALSE)
 
   rtn <- list(
               original_cp   = x,

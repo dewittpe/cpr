@@ -22,7 +22,7 @@ with(e, {
   stopifnot(identical(coef(fit), LETTERS))
   x <- tryCatch(cpr:::coef_vcov(fit), error = function(e) e)
   stopifnot(inherits(x, "error"))
-  stopifnot(identical(x$message, "Attemped to extract regression coefficients and variance-covariance matrix via stats::coef and stats::vcov respectivly.  This has failed.  Define S3 methods for the regression tool you are using."))
+  stopifnot(identical(x$message, "Attemped to extract variance-covariance matrix via stats::vcov for an object of class list ,.  This has failed."))
 })
 
 ################################################################################

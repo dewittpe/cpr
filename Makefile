@@ -8,7 +8,7 @@ CRAN = "https://cran.rstudio.com"
 
 SRC       = $(wildcard $(PKG_ROOT)/src/*.cpp)
 RFILES    = $(wildcard $(PKG_ROOT)/R/*.R)
-TESTS     = $(wildcard $(PKG_ROOT)/tests/testthat/*.R)
+TESTS     = $(wildcard $(PKG_ROOT)/tests/*.R)
 RAWDATAR  = $(wildcard $(PKG_ROOT)/data-raw/*.R)
 
 VIGNETTES  = $(PKG_ROOT)/vignettes/bsplines.Rmd
