@@ -62,6 +62,7 @@ cp.cpr_bs <- function(x, theta, ...) {
               call   = match.call(),
               keep_fit = NA,
               fit    = NA,
+              theta = NA,
               theta_vcov = NA,
               coefficients = NA,
               vcov = NA,
@@ -109,10 +110,11 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- c(cl, method.args)
 
   fit <- do.call(regression, cl)
+  COEF_VCOV <- coef_vcov(fit)
 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
-    if (matrix_rank(m) != ncol(m) | any(is.na(BETA(fit)))) {
+    if (matrix_rank(m) != ncol(m) | any(is.na(COEF_VCOV$coef))) {
       warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
               call. = FALSE,
               immediate. = TRUE)
@@ -127,14 +129,15 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   Bmat <- stats::model.frame(fit)
   Bmat <- Bmat[[which(grepl("bsplines", names(Bmat)))]]
 
-  out <- cp.cpr_bs(Bmat, as.vector(theta(fit)))
+  out <- cp.cpr_bs(Bmat, as.vector(COEF_VCOV$theta))
 
   out$call         <- cl
   out$keep_fit     <- keep_fit
   out$fit          <- if (keep_fit) { fit } else {NA}
-  out$theta_vcov   <- SIGMA(fit)[1:length(out$cp$theta), 1:length(out$cp$theta)]
-  out$coefficients <- BETA(fit)
-  out$vcov         <- SIGMA(fit)
+  out$theta        <- COEF_VCOV$theta
+  out$vcov_theta   <- COEF_VCOV$vcov_theta
+  out$coefficients <- COEF_VCOV$coef
+  out$vcov         <- COEF_VCOV$vcov
   out$loglik       <- loglikelihood(fit)
   out$rmse         <- sqrt(mean(stats::residuals(fit)^2))
 

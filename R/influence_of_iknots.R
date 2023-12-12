@@ -65,8 +65,8 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
                        xi = x$xi,
                        k = x$order,
                        theta = x$cp$theta,
-                       calculate_F = is.matrix(x$theta_vcov),
-                       Sigma = if (is.matrix(x$theta_vcov)) {x$theta_vcov} else {matrix(numeric(1))}
+                       calculate_F = is.matrix(x$vcov_theta),
+                       Sigma = if (is.matrix(x$vcov_theta)) {x$vcov_theta} else {matrix(numeric(1))}
   )
 
   #w <- W(3.0, c(0,0,0,0, 1.0, 1.5, 2.3, 4.0, 4.5, 6, 6, 6, 6), 4)

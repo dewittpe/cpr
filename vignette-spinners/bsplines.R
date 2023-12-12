@@ -651,13 +651,6 @@ all.equal( cpr0[[1]][-call_idx],  sixth_reduction_cp[-call_idx])
 #' object we can quickly see a similar result:
 summary(cpr0)
 
-
-plot(cpr0, from = 1, to = length(initial_cp$iknots) + 1) # defaults: from = 1, to = 6
-plot(cpr0, type = "rmse")
-
-summary( influence_of_iknots(cpr0) )
-
-
 #'
 #' ## Example when knots are unknown
 #'

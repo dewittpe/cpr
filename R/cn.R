@@ -81,10 +81,11 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   cl$data <- as.name("data_for_use")
 
   fit <- do.call(regression, cl)
+  COEF_VCOV <- coef_vcov(fit)
 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
-    if (matrix_rank(m) != ncol(m) | any(is.na(BETA(fit)))) {
+    if (matrix_rank(m) != ncol(m) | any(is.na(COEF_VCOV$coef))) {
       warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
               call. = FALSE,
               immediate. = TRUE)
@@ -101,13 +102,15 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
 
   out <-
     list(cn      = data.frame(cbind(do.call(expand.grid, xi_stars),
-                                 theta   = as.vector(theta(fit)))),
+                                 theta   = as.vector(COEF_VCOV$theta))),
          bspline_list = attr(Bmat, "bspline_list"),
          call    = cl,
          keep_fit = keep_fit,
          fit     = if (keep_fit) { fit } else { NA },
-         coefficients = BETA(fit),
-         vcov = SIGMA(fit),
+         theta = COEF_VCOV$theta,
+         vcov_theta = COEF_VCOV$vcov_theta,
+         coefficients = COEF_VCOV$coef,
+         vcov = COEF_VCOV$vcov,
          loglik  = loglikelihood(fit),
          rmse    = sqrt(mean(stats::residuals(fit)^2)))
   class(out) <- c("cpr_cn", class(out))

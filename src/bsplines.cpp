@@ -58,13 +58,13 @@ Rcpp::NumericMatrix cpp_bsplinesD1(arma::vec x, arma::vec iknots, arma::vec bkno
   }
 
   Rcpp::NumericMatrix out = Rcpp::wrap(D);
-  //out.attr("order")   = B.order;
-  //out.attr("df")      = B.df;
-  //out.attr("iknots")  = arma2vec(B.iknots);
-  //out.attr("bknots")  = arma2vec(B.bknots);
-  //out.attr("xi")      = arma2vec(B.xi);
-  //out.attr("xi_star") = arma2vec(B.xi_star);
-  //out.attr("derivative") = 1;
+  out.attr("order")   = B0.order;
+  out.attr("df")      = B0.df;
+  out.attr("iknots")  = arma2vec(B0.iknots);
+  out.attr("bknots")  = arma2vec(B0.bknots);
+  out.attr("xi")      = arma2vec(B0.xi);
+  out.attr("xi_star") = arma2vec(B0.xi_star);
+  out.attr("derivative") = 1;
   out.attr("class")   = "cpr_bsD1";
 
   return out;
@@ -91,9 +91,6 @@ Rcpp::NumericMatrix cpp_bsplinesD2(arma::vec x, arma::vec iknots, arma::vec bkno
   bbasis B2(x, iknots1, bknots, order - 2);
   arma::vec A0(x.n_elem), A1(x.n_elem), A2(x.n_elem);
   arma::mat D(x.n_elem, iknots.n_elem + order);
-
-  //Rcpp::Rcout << "B0.xi:" << B0.xi << "\n";
-  //Rcpp::Rcout << "B2.xi:" << B2.xi << "\n";
 
   double a,b;
 
@@ -139,55 +136,14 @@ Rcpp::NumericMatrix cpp_bsplinesD2(arma::vec x, arma::vec iknots, arma::vec bkno
   }
 
   Rcpp::NumericMatrix out = Rcpp::wrap(D);
+  out.attr("order")   = B0.order;
+  out.attr("df")      = B0.df;
+  out.attr("iknots")  = arma2vec(B0.iknots);
+  out.attr("bknots")  = arma2vec(B0.bknots);
+  out.attr("xi")      = arma2vec(B0.xi);
+  out.attr("xi_star") = arma2vec(B0.xi_star);
+  out.attr("derivative") = 2;
   out.attr("class")   = "cpr_bsD2";
 
   return out;
 }
-
-//Rcpp::NumericVector bsplineD2__impl(arma::vec x, unsigned int j, unsigned int order, arma::vec knots) {
-//
-//  double a = 0.0;
-//  double b = 0.0;
-//  arma::vec A1;
-//  arma::vec A2;
-//  arma::vec A3;
-//  arma::vec A4;
-//  A1.zeros(x.n_elem);
-//  A2.zeros(x.n_elem);
-//  A3.zeros(x.n_elem);
-//  A4.zeros(x.n_elem);
-//
-//  a = knots(j + order) - knots(j + 2);
-//  if (a != 0.0) {
-//    bspline Aj(x, j + 2, order - 2, knots);
-//    A1 = -1.0 * Aj.spline / a;
-//  }
-//
-//  a = knots(j + order - 1) - knots(j + 1);
-//  if (a != 0.0) {
-//    bspline Bj(x, j + 1, order - 2, knots);
-//    A2 = Bj.spline / a;
-//  }
-//
-//  a = knots(j + order - 2) - knots(j);
-//  if (a != 0.0) {
-//    bspline Cj(x, j, order - 2, knots);
-//    A3 = Cj.spline / a;
-//  }
-//
-//  a = knots(j + order) - knots(j + 1);
-//  if (a != 0.0) {
-//    a = -1.0 / a;
-//  }
-//
-//  b = knots(j + order - 1) - knots(j);
-//  if (b != 0.0) {
-//    b = 1.0 / b;
-//  }
-//
-//  A4 = double(order - 1) * double(order - 2) * (a * (A1 + A2) + b * (A3 - A2));
-//
-//  Rcpp::NumericVector out = arma2vec(A4);
-//  return out;
-//}
-//
