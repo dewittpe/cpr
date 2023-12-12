@@ -65,6 +65,8 @@ clean:
 	$(RM) -f .document.Rout
 	$(RM) -f src/*.o
 	$(RM) -f src/*.so
+	$(RM) -f vignettes/*.html
+	$(RM) -f *.html
 
 ################################################################################
 ## End of File

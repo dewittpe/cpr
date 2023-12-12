@@ -22,11 +22,15 @@
 #' }
 #'
 #' @seealso \code{\link[stats]{coef}} \code{\link{cp}} \code{\link{cn}}
-
 coef_vcov <- function(fit) {
   UseMethod("coef_vcov")
 }
 
+# IMPORTANT NOTE: for the S3 methods to work they need to be registerd.  The
+# generic does not need to be exported, but the methods do.
+# https://github.com/r-lib/devtools/issues/2293#issuecomment-721357042
+
+#' @export
 coef_vcov.default <- function(fit) {
   COEF <- tryCatch(stats::coef(fit), warning = function(w) w, error = function(e) e)
   VCOV <- tryCatch(stats::vcov(fit), warning = function(w) w, error = function(e) e)
@@ -39,9 +43,10 @@ coef_vcov.default <- function(fit) {
 
 }
 
+#' @export
 coef_vcov.lmerMod <- function(fit) {
   #COEF <- lme4::fixef(fit)
-  COEF <- fit@beta
+  COEF <- stats::setNames(fit@beta, dimnames(fit@pp@.xData$X)[[2]])
   VCOV <- as.matrix(stats::vcov(fit))
 
   coef_vcov_formater(COEF, VCOV)
