@@ -68,6 +68,10 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
   }
 
   stopifnot(length(bknots) == 2L)
+  order <- as.integer(order)
+  if (order <= 1) {
+    stop("order needs to be an integer value >= 2.")
+  }
 
   iknots <- iknots_or_df(x, iknots, df, order)
 
@@ -101,7 +105,7 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 
   if (nrow(x) > 0L) {
     print(x[seq(1, min(nrow(x), abs(n)), by = 1L), ])
-  } 
+  }
 
   invisible(x)
 }
@@ -239,6 +243,10 @@ bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L,
 
   iknots <- iknots_or_df(x, iknots, df, order)
   stopifnot(length(bknots) == 2L)
+  order <- as.integer(order)
+  if (order <= 1) {
+    stop("order needs to be an integer value >= 2.")
+  }
 
   if (derivative == 1L) {
     rtn <- cpp_bsplinesD1(x = x, iknots = iknots, bknots = bknots, order = order)
