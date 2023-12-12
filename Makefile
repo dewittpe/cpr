@@ -13,7 +13,7 @@ RAWDATAR  = $(wildcard $(PKG_ROOT)/data-raw/*.R)
 
 VIGNETTES  = $(PKG_ROOT)/vignettes/bsplines.Rmd
 
-.PHONY: all check install clean
+.PHONY: all check install clean covr
 
 all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 
@@ -48,23 +48,15 @@ $(PKG_ROOT)/vignettes/%.Rmd : $(PKG_ROOT)/vignette-spinners/%.R
 	mv $(addsuffix .html, $(basename $<)) $@
 
 ################################################################################
-covr-report-tests.html : $(PKG_NAME)_$(PKG_VERSION).tar.gz
-	R --vanilla --quiet -e 'x <- covr::package_coverage(type = c("tests"), function_exclusions = c("plot\\\\."), line_exclusions = list("R/cpr-defunct.R", "R/zzz.R"))'\
-		-e 'covr::report(x, file = "covr-report-tests.html")'
-
-covr-report-vignettes.html : $(PKG_NAME)_$(PKG_VERSION).tar.gz
-	R --vanilla --quiet -e 'x <- covr::package_coverage(type = c("vignettes"), line_exclusions = list("R/cpr-defunct.R", "R/zzz.R"))'\
-		-e 'covr::report(x, file = "covr-report-vignettes.html")'
-
-covr-report-examples.html : $(PKG_NAME)_$(PKG_VERSION).tar.gz
-	R --vanilla --quiet -e 'x <- covr::package_coverage(type = c("examples"), line_exclusions = list("R/cpr-defunct.R", "R/zzz.R"))'\
-		-e 'covr::report(x, file = "covr-report-examples.html")'
-
-covr-report-combined.html : $(PKG_NAME)_$(PKG_VERSION).tar.gz
-	R --vanilla --quiet -e 'x <- covr::package_coverage(type = c("tests", "vignettes", "examples"), line_exclusions = list("R/cpr-defunct.R", "R/zzz.R"))'\
-		-e 'covr::report(x, file = "covr-report-examples.html")'
-
-covr : covr-report-tests.html covr-report-vignettes.html covr-report-examples.html covr-report-combined.html
+covr :
+	R --vanilla --quiet \
+		-e 'library(covr)'\
+		-e 'x <- package_coverage(type = "all", combine_types = FALSE)'\
+		-e 'report(x[["tests"]], file = "covr-report-tests.html")'\
+		-e 'report(x[["vignettes"]], file = "covr-report-vignettes.html")'\
+		-e 'report(x[["examples"]], file = "covr-report-examples.html")'\
+		-e 'x <- package_coverage(type = "all", combine_types = TRUE)'\
+		-e 'report(x, file = "covr-report-all.html")'\
 
 ################################################################################
 clean:
