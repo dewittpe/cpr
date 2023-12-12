@@ -26,25 +26,16 @@ struct bbasis {
   arma::mat bmat;       // basis matrix
 
   // constructors
-  // @param x data
-  bbasis();
+  // @param x_       data
+  // @param iknots_  internal knots
+  // @param bknots_  boundary knots, expected to be length 2 and will be extended to order_-fold
+  // @param order_   polynomial order
   bbasis(arma::vec& x_, arma::vec& iknots_, arma::vec& bknots_, unsigned int order_);
 
   // member methods, see de Boor (2001) page 90, used to define bmat via
   // recursion
   double B(unsigned int i_, unsigned int j_, unsigned int k_);
   double w(unsigned int i_, unsigned int j_, unsigned int k_);
-};
-
-struct controlpolygon {
-  // member objects
-  bbasis bmat;
-  arma::vec xi_star;
-  arma::vec theta;
-  arma::vec spline;
-
-  // constructors
-  controlpolygon(bbasis& bmat_, arma::vec& theta_);
 };
 
 /* ************************************************************************** */

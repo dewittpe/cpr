@@ -6,9 +6,6 @@
 /* ************************************************************************** */
 /*                                   bbasis                                   */
 
-bbasis::bbasis() {
-}
-
 bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned int order_) {
   x = x_;
   order = order_;
@@ -84,22 +81,6 @@ double bbasis::B(unsigned int i_, unsigned int j_, unsigned int k_) {
   }
 
   return(rtn);
-}
-
-/* ************************************************************************** */
-/*                               controlpolygon                               */
-
-controlpolygon::controlpolygon(bbasis& bmat_, arma::vec& theta_) {
-  bmat = bmat_;
-  theta = theta_;
-
-  xi_star.resize(bmat.xi.n_elem - bmat.order);
-
-  for (unsigned int i = 0; i < xi_star.n_elem; ++i) {
-    xi_star(i) = arma::sum(bmat.xi(arma::span(i + 1, i + bmat.order - 1))) / double (bmat.order - 1);
-  }
-
-  //spline = bmat * theta;
 }
 
 /* ************************************************************************** */
