@@ -47,18 +47,9 @@ See \code{vignette("cpr-pkg", package = "cpr")} for more details.
 }
 \examples{
 tp <- with(mtcars,
-           btensor(x = list(disp, hp, mpg),
+           btensor(x = list(d = disp, h = hp, m = mpg),
                    iknots = list(numeric(0), c(100, 150), numeric(0)))
            )
 tp
-utils::str(tp)
-
-# The equivalent matrix is could be generated as follows
-tp2 <- model.matrix( ~ splines::bs(disp, intercept = TRUE) :
-                       splines::bs(hp, knots = c(100, 150), intercept = TRUE) :
-                       splines::bs(mpg, intercept = TRUE) + 0,
-                    data = mtcars)
-
-all.equal(tp2, unclass(tp), check.attributes = FALSE)
 
 }

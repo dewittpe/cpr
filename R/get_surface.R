@@ -58,11 +58,19 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
   xvecs <- lapply(x$bspline_list, attr, which = "xi_star")
   xvecs[-margin] <- at[-margin]
   net <- do.call(expand.grid, xvecs)
-  tensors <- Map(btensor,
-                 x = split(net, row(net)[, 1]),
-                 MoreArgs = list(iknots = iknots,
-                                 bknots = bknots,
-                                 order = orders))
+
+  tensors <-
+    Map(function(x, ...) {
+          do.call(btensor, list(x = unname(x), iknots = iknots, bknots = bknots, order = orders))
+        }
+        ,
+        x = lapply(split(net, row(net)[, 1]), lapply, unname)
+        ,
+        MoreArgs = list(iknots = iknots,
+                        bknots = bknots,
+                        order = orders)
+    )
+
   net$z <- do.call(c, Map(`%*%`, x = tensors,
                           MoreArgs = list(y = x$cn$theta)))
 
@@ -70,11 +78,22 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
   xvecs <- lapply(bknots, function(x) seq(x[1], x[2], length = 100))
   xvecs[-margin] <- at[-margin]
   surface <- do.call(expand.grid, xvecs)
-  tensors <- Map(btensor,
-                 x = split(surface, row(surface)[, 1]),
-                 MoreArgs = list(iknots = iknots,
-                                 bknots = bknots,
-                                 order = orders))
+  #tensors <- Map(btensor,
+  #               x = split(surface, row(surface)[, 1]),
+  #               MoreArgs = list(iknots = iknots,
+  #                               bknots = bknots,
+  #                               order = orders))
+  tensors <-
+    Map(function(x, ...) {
+          do.call(btensor, list(x = unname(x), iknots = iknots, bknots = bknots, order = orders))
+        }
+        ,
+        x = lapply(split(surface, row(surface)[, 1]), lapply, unname)
+        ,
+        MoreArgs = list(iknots = iknots,
+                        bknots = bknots,
+                        order = orders)
+    )
   surface$z <- do.call(c, Map(`%*%`, x = tensors,
                               MoreArgs = list(y = x$cn$theta)))
 

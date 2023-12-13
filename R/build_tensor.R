@@ -2,8 +2,11 @@
 #'
 #' Tensor products of Matrices.
 #'
-#' @param x a matrix, or list of numeric matrices, build the tensor product
+#' @param x a matrix
+#' @param y a matrix
 #' @param ... additional numeric matrices to build the tensor product
+#'
+#' @return a matrix
 #'
 #' @seealso
 #' \code{vignette("cpr-pkg", package = "cpr")} for details on tensor products.
@@ -18,7 +21,7 @@
 #'
 #' # Two ways of building the same tensor product
 #' tensor1 <- build_tensor(A, B)
-#' tensor2 <- build_tensor(list(A, B))
+#' tensor2 <- do.call(build_tensor, list(A, B))
 #' all.equal(tensor1, tensor2)
 #'
 #' # a three matrix tensor product
@@ -26,21 +29,36 @@
 #' str(tensor3)
 #'
 #' @export
-build_tensor <- function(x, ...) {
+build_tensor <- function(x = NULL, y = NULL, ...) {
   UseMethod("build_tensor")
 }
 
 #' @export
-build_tensor.list <- function(x, ...) {
-  if (length(x) == 1) {
-    return(x[[1]])
-  } else  {
-    build_tensor.list(c(list(tensor_product(x[[1]], x[[2]])), x[-(1:2)]))
-  }
-}
+build_tensor.matrix <- function(x = NULL, y = NULL, ...) {
+  matrices <- c(as.list(environment()), list(...))
+  matrices <- Filter(f = function(x) !is.null(x), matrices)
 
-#' @export
-build_tensor.matrix <- function(x, ...) {
-  m <- c(list(x), list(...))
-  build_tensor.list(c(list(tensor_product(m[[1]], m[[2]])), m[-(1:2)]))
+  if (!all(sapply(matrices, inherits, "matrix"))) {
+    stop("All arguments passed to build_tensor need to be matrices.")
+  }
+
+  if (length(matrices) == 1) {
+    return(matrices[[1]])
+  }
+
+  tp <- tensor_product(matrices[[1]], matrices[[2]])
+
+  if (length(matrices) == 2L) {
+    return(tp)
+  }
+
+  a <- list(x = tp, y = matrices[[3]])
+
+  if (length(matrices) >= 4L) {
+    for( i in seq(4, length(matrices), by = 1)) {
+      a <- c(a, list(matrices[[i]]))
+    }
+  }
+
+  do.call(what = build_tensor, args = a)
 }

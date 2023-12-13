@@ -4,14 +4,18 @@
 \alias{build_tensor}
 \title{Build Tensor}
 \usage{
-build_tensor(x, ...)
+build_tensor(x = NULL, y = NULL, ...)
 }
 \arguments{
-\item{x}{a matrix, or list of numeric matrices, build the tensor product}
+\item{x}{a matrix}
+
+\item{y}{a matrix}
 
 \item{...}{additional numeric matrices to build the tensor product}
 }
 \value{
+a matrix
+
 A matrix
 }
 \description{
@@ -24,7 +28,7 @@ B <- matrix(1:6, nrow = 10, ncol = 6)
 
 # Two ways of building the same tensor product
 tensor1 <- build_tensor(A, B)
-tensor2 <- build_tensor(list(A, B))
+tensor2 <- do.call(build_tensor, list(A, B))
 all.equal(tensor1, tensor2)
 
 # a three matrix tensor product

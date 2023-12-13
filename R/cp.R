@@ -101,10 +101,6 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   generate_cp_formula_data(formula, data)
 
   regression <- match.fun(method)
-  #cl <- as.list(match.call())
-  #cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "check_rank")))]
-  #cl$formula <- as.name("f_for_use")
-  #cl$data <- as.name("data_for_use")
   cl <- list(formula = as.name("f_for_use"),
              data = as.name("data_for_use"))
   cl <- c(cl, method.args)
@@ -379,7 +375,6 @@ plot.cpr_cp <- function(x, ..., comparative, show_cp = TRUE, show_spline = FALSE
       }
     }
   }
-
 
   base_plot
 }
