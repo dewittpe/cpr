@@ -17,7 +17,7 @@
 
 \item{to}{the last index of \code{x} to plot}
 
-\item{...}{arguments passed to \code{cpr::plot.cpr_cp}}
+\item{...}{arguments passed to \code{plot.cpr_cp}}
 }
 \description{
 A collection of function for the inspection and evaluation of the control

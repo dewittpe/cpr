@@ -13,8 +13,8 @@
 #' xvec <- seq(0, 6, length = 500)
 #'
 #' # Define the basis matrix
-#' bmat1 <- cpr::bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
-#' bmat2 <- cpr::bsplines(x = xvec)
+#' bmat1 <- bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
+#' bmat2 <- bsplines(x = xvec)
 #'
 #' # Define the control vertices ordinates
 #' theta1 <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
@@ -35,7 +35,7 @@
 #'
 #' # via formula
 #' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-#' cp3 <- cp(y ~ cpr::bsplines(x), data = dat)
+#' cp3 <- cp(y ~ bsplines(x), data = dat)
 #'
 #' # plot the spline and target data.
 #' plot(cp3, show_cp = FALSE, show_spline = TRUE) +
@@ -157,7 +157,7 @@ print.cpr_cp <- function(x, ...) {
 #' @param wiggle logical, if \code{TRUE} then the integral of the squared second
 #' derivative of the spline function will be calculated via
 #' \code{stats::integrate}.
-#' @param integrate.args a list of arguments passed to \code{cpr::wiggle} and
+#' @param integrate.args a list of arguments passed to \code{\link{wiggle}} and
 #' ultimately \code{stats::integrate}.
 #' @rdname cp
 summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...){

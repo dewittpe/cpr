@@ -16,7 +16,7 @@ Construct a \code{data.frame} and \code{formula} to be passed to the
 regression modeling tool to generate a control polygon.
 }
 \details{
-This function is expected to be called from within the \code{cpr::cp}
+This function is expected to be called from within the \code{cp}
 function and is not expected to be called by the end user directly.
 
 \code{generate_cp_data} exists because of the need to build what could be

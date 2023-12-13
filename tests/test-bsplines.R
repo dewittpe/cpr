@@ -70,7 +70,7 @@ e <- new.env()
 with(e, {
   x <- tryCatch(bsplines(list(1:10)), error = function(e) { e })
   stopifnot(inherits(x, "simpleError"))
-  stopifnot("error if list passed to bsplines" = identical(x$message, "x is a list.  use cpr::btensor instead of cpr::bsplines."))
+  stopifnot("error if list passed to bsplines" = identical(x$message, "x is a list. Use btensor instead of bsplines."))
 })
 
 ################################################################################

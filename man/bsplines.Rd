@@ -23,12 +23,19 @@ An implementation of Carl de Boor's recursive algorithm for building
 B-splines.
 }
 \details{
-The difference between this function and \code{splines::bs} come in the
-attributes associated with the output and default options.  The
-\code{cpr::bsplines} call is intended to simplify the work needed with
-respect to the control polygon reduction.  Further, the implementation of
-\code{cpr::bsplines} is in C++ and tends to be faster than
-\code{splines::bs}.
+There are several differences between this function and \code{\link[splines]{bs}}.
+
+The most important difference is how the two methods treat the right-hand end
+of the support.  \code{\link[splines]{bs}} uses a pivot method to allow for
+extrapolation and thus returns a basis matrix where non-zero values exist on
+the \code{max(Boundary.knots)} (\code{\link[splines]{bs}} version of
+\code{bsplines}'s \code{bknots}).  \code{bsplines} use a strict definition of
+the splines where the support is open on the right hand side, that is,
+\code{bsplines} return right-continuous functions.
+
+Additioanlly, the attributes of the object returned by \code{bsplines} are
+different from the attributes of the object returned by
+\code{\link[splines]{bs}}.
 
 See the \code{vignette("bsplines", package = "cpr")} for a detailed
 comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls

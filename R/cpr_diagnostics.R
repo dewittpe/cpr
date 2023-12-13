@@ -12,7 +12,7 @@
 #' \code{"rmse"} for root mean squared residuals by degrees of freedom
 #' @param from the first index of \code{x} to plot
 #' @param to the last index of \code{x} to plot
-#' @param ... arguments passed to \code{cpr::plot.cpr_cp}
+#' @param ... arguments passed to \code{plot.cpr_cp}
 #' @seealso \code{\link{plot.cpr_cp}}
 plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
 

@@ -57,7 +57,7 @@ plot(cp_and_spline$cp, type = "b")
 points(cp_and_spline$spline, type = "l")
 grid()
 
-# compare to the cpr:::plot.cpr_cp method
+# compare to the plot.cpr_cp method
 plot(a_cp, show_spline = TRUE)
 
 }

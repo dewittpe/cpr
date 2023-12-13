@@ -67,7 +67,7 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   fterms <- stats::terms(formula)
   fterms
   if (sum(grepl("btensor", attr(fterms, "term.labels"))) != 1) {
-    stop("cpr::btensor() must appear once, with no effect modifiers, on the right hand side of the formula.")
+    stop("btensor() must appear once, with no effect modifiers, on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment

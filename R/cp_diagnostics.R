@@ -15,6 +15,8 @@
 #' @param obj a cpr_cp object or \code{data.frame} where the first column is the
 #' abscissa and the second column is the ordinate for the control polygon vertices.
 #'
+#' @examples
+#'
 #' @export
 #' @rdname cp_diagnostics
 cp_value <- function(obj, x) {
@@ -32,21 +34,15 @@ cp_value.cpr_cp <- function(obj, x) {
 }
 
 #' @export
-cp_value.default <- function(obj, x) {
-  xi_star <- obj[[1]]
-  theta   <- obj[[2]]
-
-  idx <- min(which(xi_star >= x)) + as.numeric(x == min(xi_star))
-
-  unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
-}
-
-
-#' @export
 #' @rdname cp_diagnostics
 #' @param cp1 a cpr_cp object
 #' @param cp2 a cpr_cp object
 cp_diff <- function(cp1, cp2) {
-  unname(abs(sapply(cp1$xi_star, function(x) {cp_value(obj = cp2, x)}) - cp1$theta))
+  UseMethod("cp_diff")
 }
 
+#' @export
+cp_diff.cpr_cp <- function(cp1, cp2) {
+  stopifnot(inherits(cp2, "cpr_cp"))
+  unname(abs(sapply(cp1$xi_star, function(x) {cp_value(obj = cp2, x)}) - cp1$theta))
+}

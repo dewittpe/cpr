@@ -19,7 +19,7 @@ Return, via \code{\link[stats]{logLik}} or a custom S3 method, the (quasi)
 log likelihood of a regression object.
 }
 \details{
-This function is used by \code{cpr::cpr} and \code{cpr::cnr} to determine the
+This function is used by \code{cpr} and \code{cnr} to determine the
 (quasi) log likelihood returned in the \code{cpr_cpr} and \code{cpr_cnr}
 objects.
 
