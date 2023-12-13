@@ -185,34 +185,15 @@ summary.cpr_cpr <- function(object, ...) {
 #' @export
 print.cpr_cpr_summary <- function(x, ...) {
   y <- x
-  #y[["Pr(>w_(1))"]] <- qwraps2::frmtp(y[["Pr(>w_(1))"]])
-  pv <- y[["Pr(>w_(1))"]]
-  sstars <- stats::symnum(pv, corr = FALSE, na = TRUE,
-                  cutpoints = c(0, 0.001, 0.01, 0.05, 0.1, 1),
-                  symbols = c("***", "**", "*", ".", " "))
-  sleg <- attr(sstars, "legend")
-  sstars <- as.character(sstars)
-
-  ms <- max(sapply(sstars, nchar))
-  for (i in seq_along(sstars)) {
-    if (sstars[i] < ms) {
-      sstars[i] <- paste(sstars[i], paste(rep(" ", ms - nchar(sstars[i])), collapse = ""))
-    }
-  }
 
   dig.tst = 5L#max(1L, min(5L, digits - 1L))
   eps.Pvalue = .Machine$double.eps
   y[["Pr(>w_(1))"]] <- format.pval(pv, digits = dig.tst, eps = eps.Pvalue)
-  y[["Pr(>w_(1))"]] <- paste(y[["Pr(>w_(1))"]], sstars)
 
   y[["elbow"]] <- sub("0", "", sub("1", "<<<", as.character(y[["elbow"]])))
   print.data.frame(y)
   #NextMethod(generic = "print", object = y)
 
-  if ((w <- getOption("width")) < nchar(sleg))
-    sleg <- strwrap(sleg, width = w - 2, prefix = "  ")
-  cat("---\nSignif. codes:  ", sleg, sep = "", fill = w +
-      4 + max(nchar(sleg, "bytes") - nchar(sleg)))
   invisible(x)
 }
 
