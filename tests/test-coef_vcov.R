@@ -22,7 +22,28 @@ with(e, {
   stopifnot(identical(coef(fit), LETTERS))
   x <- tryCatch(cpr:::coef_vcov(fit), error = function(e) e)
   stopifnot(inherits(x, "error"))
-  stopifnot(identical(x$message, "Attemped to extract variance-covariance matrix via stats::vcov for an object of class list ,.  This has failed."))
+})
+
+e <- new.env()
+with(e, {
+  fit <- list(coefficients = LETTERS, vcov = matrix(1:10))
+  class(fit) <- c("cpr_testing_class", class(fit))
+  vcov.cpr_testing_class <- function(x) { x$vcov }
+  stopifnot(identical(coef(fit), LETTERS))
+  stopifnot(identical(vcov(fit), matrix(1:10)))
+  x <- tryCatch(cpr:::coef_vcov(fit), error = function(e) e)
+  stopifnot(inherits(x, "error"))
+})
+
+e <- new.env()
+with(e, {
+  fit <- list(coefficients = 1:10, vcov = (1:10))
+  class(fit) <- c("cpr_testing_class", class(fit))
+  vcov.cpr_testing_class <- function(x) { x$vcov }
+  stopifnot(identical(coef(fit), 1:10))
+  stopifnot(identical(vcov(fit), (1:10)))
+  x <- tryCatch(cpr:::coef_vcov(fit), error = function(e) e)
+  stopifnot(inherits(x, "error"))
 })
 
 ################################################################################

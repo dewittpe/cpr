@@ -4,6 +4,11 @@ A <- matrix(1:4, nrow = 10, ncol = 20)
 B <- matrix(1:6, nrow = 10, ncol = 6)
 
 # verify that passing in one matrix returns that matrix
+x <- tryCatch(build_tensor(A, 1:10), error = function(e) e)
+stopifnot(inherits(x, "error"))
+stopifnot(identical(x$message, "All arguments passed to build_tensor need to be matrices."))
+
+# verify that passing in one matrix returns that matrix
 tA <- build_tensor(A)
 stopifnot(identical(tA, A))
 

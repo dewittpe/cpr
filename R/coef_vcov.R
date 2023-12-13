@@ -35,15 +35,11 @@ coef_vcov.default <- function(fit) {
   COEF <- tryCatch(stats::coef(fit), warning = function(w) w, error = function(e) e)
   VCOV <- tryCatch(stats::vcov(fit), warning = function(w) w, error = function(e) e)
 
-  assign("COEF", COEF, .GlobalEnv)
-  assign("VCOV", VCOV, .GlobalEnv)
-
-
   if (inherits(COEF, "error")) {
-    stop(sprintf("Attemped to extract regression coefficients via stats::coef for an object of class %s.  This has failed.", paste(class(fit), colapse = ",")))
+    stop(sprintf("Attemped to extract regression coefficients via stats::coef for an object of class %s.  This has failed.", paste(class(fit), collapse = ", ")))
   }
   if (inherits(VCOV, "error")) {
-    stop(sprintf("Attemped to extract variance-covariance matrix via stats::vcov for an object of class %s.  This has failed.", paste(class(fit), colapse = ",")))
+    stop(sprintf("Attemped to extract variance-covariance matrix via stats::vcov for an object of class %s.  This has failed.", paste(class(fit), collapse = ", ")))
   }
 
   if (inherits(VCOV, "warning")) {
@@ -52,16 +48,16 @@ coef_vcov.default <- function(fit) {
     }
   }
 
-  if (!inherits(COEF, "numeric")) {
+  if (!inherits(COEF, "numeric") & !inherits(COEF, "integer")) {
     stop(sprintf("Attemped to extract regression coefficients via stats::coef for an object of class %s.  This has failed - expected numeric vector, got %s."
-                 , paste(class(fit), colapse = ",")
-                 , paste(class(COEF), colapse = ",")
+                 , paste(class(fit), collapse = ", ")
+                 , paste(class(COEF), collapse = ", ")
                  ))
   }
   if (!inherits(VCOV, "matrix")) {
     stop(sprintf("Attemped to extract variance-covariance matrix via stats::vcov for an object of class %s.  This has failed - expected numeric matrix, got %s."
-                 , paste(class(fit), colapse = ",")
-                 , paste(class(VCOV), colapse = ",")
+                 , paste(class(fit), collapse = ", ")
+                 , paste(class(VCOV), collapse = ", ")
                  ))
   }
 
