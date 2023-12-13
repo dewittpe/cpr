@@ -10,10 +10,12 @@ knot_expr <- function(x, digits) {
   UseMethod("knot_expr")
 }
 
+#' @export
 knot_expr.cpr_cp <- function(x, digits) {
   generate_knot_expression(x$xi, digits)
 }
 
+#' @export
 knot_expr.cpr_bs <- function(x, digits) {
   generate_knot_expression(attr(x, "xi"), digits)
 }
