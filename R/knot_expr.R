@@ -38,7 +38,7 @@ generate_knot_expression <- function(xi, digits) {
   xi_expr <- lapply(j,
                     function(x) {
                       if (length(x) > 1) {
-                        bquote(group("{", xi[j], "}")[j == .(min(x))]^{.(max(x))})
+                        bquote(group("{", xi[j], "}")[j == .(min(x))]^.(max(x)))
                       } else {
                         bquote(xi[.(x)])
                       }

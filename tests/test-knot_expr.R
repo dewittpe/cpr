@@ -22,12 +22,12 @@ with(e, {
   stopifnot(inherits(ke$xi_expr, "list"))
   stopifnot(identical(length(ke$xi_expr), 2L + length(attr(bmat, "iknots"))))
 
-  stopifnot(identical(ke$xi_expr[[1]], bquote(group("{", xi[j], "}")[j == 1]^{4})))
+  stopifnot(identical(ke$xi_expr[[1]], bquote(group("{", xi[j], "}")[j == 1]^4)))
   stopifnot(identical(ke$xi_expr[[2]], bquote(xi[5])))
   stopifnot(identical(ke$xi_expr[[3]], bquote(xi[6])))
   stopifnot(identical(ke$xi_expr[[4]], bquote(xi[7])))
   stopifnot(identical(ke$xi_expr[[5]], bquote(xi[8])))
-  stopifnot(identical(ke$xi_expr[[6]], bquote(group("{", xi[j], "}")[j == 9]^{12})))
+  stopifnot(identical(ke$xi_expr[[6]], bquote(group("{", xi[j], "}")[j == 9]^12)))
 
 })
 
@@ -44,12 +44,12 @@ with(e, {
   stopifnot(inherits(ke$xi_expr, "list"))
   stopifnot(identical(length(ke$xi_expr), 2L + length(attr(bmat, "iknots"))))
 
-  stopifnot(identical(ke$xi_expr[[1]], bquote(group("{", xi[j], "}")[j == 1]^{4})))
+  stopifnot(identical(ke$xi_expr[[1]], bquote(group("{", xi[j], "}")[j == 1]^4)))
   stopifnot(identical(ke$xi_expr[[2]], bquote(xi[5])))
   stopifnot(identical(ke$xi_expr[[3]], bquote(xi[6])))
   stopifnot(identical(ke$xi_expr[[4]], bquote(xi[7])))
   stopifnot(identical(ke$xi_expr[[5]], bquote(xi[8])))
-  stopifnot(identical(ke$xi_expr[[6]], bquote(group("{", xi[j], "}")[j == 9]^{12})))
+  stopifnot(identical(ke$xi_expr[[6]], bquote(group("{", xi[j], "}")[j == 9]^12)))
 
 })
 
