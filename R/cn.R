@@ -114,7 +114,7 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
          vcov = COEF_VCOV$vcov,
          loglik  = loglikelihood(fit))
   out$rss <- stats::residuals(fit)^2
-  out$rse <- sqrt(stats::residuals(fit)^2 / (nrow(dat) - length(COEF_VCOV$coef)))
+  out$rse <- sqrt(stats::residuals(fit)^2 / (nrow(data) - length(COEF_VCOV$coef)))
   class(out) <- c("cpr_cn", class(out))
 
   out
