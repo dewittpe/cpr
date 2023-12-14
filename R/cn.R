@@ -22,7 +22,7 @@
 #'  mixed effects model was used.}
 #'  \item{vcov}{The variance-covariance matrix for the \code{coefficients}}
 #'  \item{loglik}{The log-likelihood for the regression model}
-#'  \item{rmse}{The root mean squared error for the regression models}
+#'  \item{rse}{the residual standard error for the regression models}
 #'  }
 #'
 #' @export
@@ -45,7 +45,8 @@ cn.cpr_bt <- function(x, theta, ...) {
          keep_fit = NA,
          fit     = NA,
          loglik  = NA,
-         rmse    = NA)
+         rss     = NA,
+         rse     = NA)
   class(out) <- c("cpr_cn", class(out))
   out
 }
@@ -111,8 +112,9 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
          vcov_theta = COEF_VCOV$vcov_theta,
          coefficients = COEF_VCOV$coef,
          vcov = COEF_VCOV$vcov,
-         loglik  = loglikelihood(fit),
-         rmse    = sqrt(mean(stats::residuals(fit)^2)))
+         loglik  = loglikelihood(fit))
+  out$rss <- stats::residuals(fit)^2
+  out$rse <- sqrt(stats::residuals(fit)^2 / (nrow(dat) - length(COEF_VCOV$coef)))
   class(out) <- c("cpr_cn", class(out))
 
   out
@@ -135,7 +137,8 @@ summary.cpr_cn <- function(object, ...) {
   out <-
     data.frame(dfs        = length(object$cn$theta),
                loglik     = object$loglik,
-               rmse       = object$rmse)
+               rss        = object$rss,
+               rse        = object$rse )
 
   for(i in seq_along(iknots)) {
     nm <- names(iknots)[i]

@@ -115,11 +115,12 @@ Generate the control polygon for a uni-variable B-spline
 \examples{
 
 # Support
-xvec <- seq(0, 6, length = 500)
+xvec <- seq(0, 5.9999, length = 500)
+bknots <- c(0, 6)
 
 # Define the basis matrix
-bmat1 <- bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
-bmat2 <- bsplines(x = xvec)
+bmat1 <- bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = bknots)
+bmat2 <- bsplines(x = xvec, bknots = bknots)
 
 # Define the control vertices ordinates
 theta1 <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
@@ -140,7 +141,7 @@ plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 
 # via formula
 dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-cp3 <- cp(y ~ bsplines(x), data = dat)
+cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = dat)
 
 # plot the spline and target data.
 plot(cp3, show_cp = FALSE, show_spline = TRUE) +

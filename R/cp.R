@@ -10,11 +10,12 @@
 #' @examples
 #'
 #' # Support
-#' xvec <- seq(0, 6, length = 500)
+#' xvec <- seq(0, 5.9999, length = 500)
+#' bknots <- c(0, 6)
 #'
 #' # Define the basis matrix
-#' bmat1 <- bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
-#' bmat2 <- bsplines(x = xvec)
+#' bmat1 <- bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = bknots)
+#' bmat2 <- bsplines(x = xvec, bknots = bknots)
 #'
 #' # Define the control vertices ordinates
 #' theta1 <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
@@ -35,7 +36,7 @@
 #'
 #' # via formula
 #' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-#' cp3 <- cp(y ~ bsplines(x), data = dat)
+#' cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = dat)
 #'
 #' # plot the spline and target data.
 #' plot(cp3, show_cp = FALSE, show_spline = TRUE) +
@@ -67,7 +68,8 @@ cp.cpr_bs <- function(x, theta, ...) {
               coefficients = NA,
               vcov = NA,
               loglik = NA,
-              rmse   = NA)
+              rss    = NA,
+              rse    = NA)
 
   class(out) <- c("cpr_cp", class(out))
 
@@ -135,7 +137,8 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   out$coefficients <- COEF_VCOV$coef
   out$vcov         <- COEF_VCOV$vcov
   out$loglik       <- loglikelihood(fit)
-  out$rmse         <- sqrt(mean(stats::residuals(fit)^2))
+  out$rss          <- sum(stats::residuals(fit)^2)
+  out$rse          <- sqrt(sum(stats::residuals(fit)^2) / (nrow(data) - length(COEF_VCOV$coef)))
 
   out
 }
@@ -162,7 +165,8 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
          n_iknots   = length(object$iknots),
          iknots     = I(list(object$iknots)),
          loglik     = object$loglik,
-         rmse       = object$rmse)
+         rss        = object$rss,
+         rse        = object$rse)
 
   if (wiggle) {
     wggl <- try(do.call(wiggle.cpr_cp, c(list(object = object), integrate.args)), silent = TRUE)

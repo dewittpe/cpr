@@ -782,7 +782,8 @@ between the fits.
 
 Thus, I would argue that the third reduction is the preferable model as it
 has the fewest degrees of freedom while providing a good quality of fit.
-This conclusion is supported by looking at the residual sum of squares.
+This conclusion is supported by looking at the residual standard error (rse)
+$$ rse = \sqrt{ \sum_{i=1}^{n} \left(y_i - f\left(x_i\right)\right)^2}.$$
 
 ```{r}
 summary_mannual_process <-
@@ -872,71 +873,147 @@ summary(cpr0)
 ```
 
 
-The summary above reports two additional columns,
-`r  backtick("Pr(>w_(1))", dequote = TRUE) %s% " and " %s% backtick(elbow) %s% "." `
-The former is the p-value for testing is the knot with the lowest influence
-has a non-zero influence.  The latter is the "elbow" in a plot of the
-residual sum of squares by index.
+The summary above reports some model fit statistics, the log-likelihood
+(loglik), the residual sum of squares (rss) and residual standard error
+(rse).  The
+`r  backtick("loglik_elbow", dequote = TRUE) %s% " and " %s% backtick(rse_elbow) %s% "." `
+columns indicate a location in the plot for either the loglik or rse by model
+index (degrees of freedom) where the trade-off between additional degrees of
+freedom and improvement in the fix statistic is negligible.  See plot below.
+This is determined by finding the breakpoint such that a continuous, but not
+differentiable at breakpoint, quadratic spline fits the plot with minimal
+residual standard error.
+
+```{r}
+ggpubr::ggarrange(
+    plot(cpr0, type = "cps", color = TRUE)
+  , plot(cpr0, type = "cps", show_cp = FALSE, show_spline = TRUE, color = TRUE)
+  , plot(cpr0, type = "loglik")
+  , plot(cpr0, type = "rse")
+  , ncol =2
+  , nrow = 2
+  , labels = c("(a)", "(b)", "(c)", "(d)")
+  , common.legend = TRUE
+)
+```
+
 
 ## Example when knots are unknown
 
 In practice it is be extremely unlikely to know where knots should be placed.
+Analytic solutions are difficult, if not impossible to derive
+[@jupp1978approximation].
+However, an optimal solution may not be necessary.
 
-@deboor2001??????  - non-repeated knots are good, small deviations in a knot
-have little impact on the spline
+From @deboor2001 (page 106)
+<quote>
+...a B-spline doesn't change much if one changes its $k+1$ knots a little
+bit. Therefore, if one has multiple knots, then it is very easy to find
+B-spline almost like with simple knots: Simply replace knot of multiplicity
+$r > 1$ by $r$ simple knots nearby.
+</quote>
 
-@jupp1978approximation found no optimal solution
+That is,
 
-Start with a large set of internal knots.  Specify, use the
-`r  backtick(df)  `
-argument in
-`r  backtick(bsplines)  `
-to specify the degrees of freedom $(k + l)$ of the spline.
+$$
+  \boldsymbol{B}_{k, \boldsymbol{\xi}}\left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi}} \approx
+  \boldsymbol{B}_{k, \boldsymbol{\xi'}}\left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi'}} \approx
+$$
+where
+$$
+\left\lvert \xi_j - \xi_j' \right\rvert < \delta \quad \text{for small} \quad \delta > 0.
+$$
+
+So, in the case when we are looking for a good set of knots (a good set of
+knots should be parsimonious, and provide a good model fit) we start with an
+initial knot sequence with a high cardinality, this is not without precedent
+[@eilers1996,@eilers2010].
+We then apply the CPR algorithm to find a good set of knots.
+
+For example we will use 50 internal knots. Not surprisingly we have a fit
+that is more "connect-the-dots" than a smooth fit.
 
 ```{r}
 initial_cp <- cp(y ~ bsplines(x, df = 54, bknots = c(0, 6)), data = DF)
-plot(initial_cp, show_cp = TRUE, show_spline = TRUE)
-cpr1 <- cpr(initial_cp)
-x <- summary(cpr1)
-x
-plot(cpr1, type = "rmse")
 
-plot(cpr1[[5]], show_cp = TRUE, show_spline = TRUE)
-
-x |> head()
-
-brkpt <- 0
-fit <- lm(rmse ~ pmax(0, brkpt - 1 - n_iknots) + I(pmax(0, brkpt - 1 - n_iknots)^2) + pmax(0, n_iknots - brkpt) + I(pmax(0, n_iknots - brkpt)^2), data = x)
-plot(cpr1, type = "rmse") +
-  ggplot2::geom_line(mapping = ggplot2::aes(y = predict(fit)), color = "red") +
-  ggplot2::geom_point(mapping = ggplot2::aes(y = predict(fit)), color = "red") +
-  ggplot2::ggtitle(paste("breakpoint =", brkpt))
-
-out <- list()
-for (brkpt in seq(1, length(initial_cp$iknots))) {
-  y <- cp(
-     formula = rmse ~ bsplines(n_iknots, iknots = c(brkpt), bknots = c(0, 51), order = 3)
-     ,
-     data = x
-     )
- out[[brkpt]] <- data.frame(n_knots = brkpt, rmse = y$rmse)
-}
-out <- do.call(rbind, out)
-which.min(out$rmse)
-
-cpr1[[3]] |> plot(show_spline = TRUE) + original_data_ggplot_layers
-
-cpr0[[3]] |> plot(show_spline = TRUE) + original_data_ggplot_layers
-
-plot(cpr1[[3]], cpr0[[3]], show_spline = TRUE, color = TRUE)
-plot(cpr1[[4]], cpr0[[4]], show_spline = TRUE, color = TRUE)
-
-plot(y, show_spline = TRUE, show_cp = FALSE) +
-  ggplot2::geom_line(data = x, mapping = ggplot2::aes(x = n_iknots, y = rmse), color = "red", inherit.aes = F) +
-  ggplot2::geom_point(data = x, mapping = ggplot2::aes(x = n_iknots, y = rmse), color = "red", inherit.aes = F) +
-  ggplot2::ggtitle(paste("breakpoint =", brkpt))
+ggpubr::ggarrange(
+  plot(initial_cp, show_cp = TRUE, show_spline = FALSE) + original_data_ggplot_layers
+  ,
+  plot(initial_cp, show_cp = FALSE, show_spline = TRUE) + original_data_ggplot_layers
+)
 ```
 
+
+Apply CPR to the
+`r  backtick(initial_cp)  `
+and look at the summary
+
+```{r}
+cpr1 <- cpr(initial_cp)
+x <- summary(cpr1)
+head(x, 10)
+```
+
+
+From this, the preferable model is suggested to be index 5, the model with
+four internal knots.  Inspection of the rse by index plot, I would argue from
+a manual selection that index 5 is preferable overall. Further, if index 4 is
+the "elbow" then I would argue that index 3 would be preferable as there is
+little to gain with the extra knot.
+
+```{r}
+plot(cpr1, type = "rse")
+```
+
+
+Let's compare the models in indices 3, 4, and 5.
+
+```{r}
+ggpubr::ggarrange(
+  plot(cpr1[[3]], cpr1[[4]], cpr1[[5]], show_cp = TRUE, show_spline = FALSE, color = TRUE)
+  ,
+  plot(cpr1[[3]], cpr1[[4]], cpr1[[5]], show_cp = FALSE, show_spline = TRUE, color = TRUE)
+  ,
+  common.legend = TRUE
+)
+```
+
+
+The noticeable differences are, for the most part, located on the left side
+of the support between between 0 and 1.  For the fifth index, there is change
+in convexity of the spline. Knowing that the models at index 3 and 4 are good
+fits too, then it would be easy not select index 5 due to extra "wiggle" in
+the spline.  Wiggle is defined as
+$$ \int_{\xi_1}^{\xi_{2k+l}} \left( \frac{d}{dx} f\left(x\right) \right)^2
+dx,$$ and the wiggle for these splines are:
+
+```{r}
+wiggle(cpr1[[3]])
+wiggle(cpr1[[4]])
+wiggle(cpr1[[5]])
+```
+
+
+In practice I would likely pick the model in index 4 to minimize wiggle and
+rse.  Compare the selected model to the original data.
+
+
+```{r}
+plot(cpr1[[4]], show_cp = TRUE, show_spline = TRUE) +
+  original_data_ggplot_layers
+```
+
+
+# Extensions to higher dimensions
+
+CPR works for uni-variable B-splines.  By taking tensor products of
+B-splines, and building a control-net, the higher-dimensional analog of a
+control polygon, we can apply similar methods to estimate a surface.
+Details on the Control Net Reduction method are presented in
+
+```{r echo = TRUE, eval = FALSE}
+vignette(topic = "cnr", package = "cpr")
+```
 
 
 # References

@@ -77,32 +77,33 @@ with(e, {
 # combinations of iknots and df are handled well
 e <- new.env()
 with(e, {
-  xvec <- seq(-1, 1, length = 25)
+  xvec <- seq(-1, 1-1e-5, length = 25)
+  bknots <- c(-1, 1)
 
-  x <- tryCatch(bsplines(xvec, df = 2), warning = function(w) {w})
+  x <- tryCatch(bsplines(xvec, df = 2, bknots = bknots), warning = function(w) {w})
   stopifnot(identical(class(x), c("simpleWarning", "warning", "condition")))
   stopifnot(identical(x$message, "df being set to order"))
 
-  x <- suppressWarnings(bsplines(xvec, df = 2))
-  y <- bsplines(xvec, df = 4)
+  x <- suppressWarnings(bsplines(xvec, df = 2, bknots = bknots))
+  y <- bsplines(xvec, df = 4, bknots = bknots)
   stopifnot(isTRUE(all.equal(x, y, check.attributes = FALSE)))
 
-  x <- suppressWarnings(bsplines(xvec, df = 4, order = 5))
-  y <- bsplines(xvec, df = 5, order = 5)
-  z <- bsplines(xvec, order = 5)
+  x <- suppressWarnings(bsplines(xvec, df = 4, order = 5, bknots = bknots))
+  y <- bsplines(xvec, df = 5, order = 5, bknots = bknots)
+  z <- bsplines(xvec, order = 5, bknots = bknots)
   stopifnot(isTRUE(all.equal(x, y, check.attributes = FALSE)))
   stopifnot(isTRUE(all.equal(x, z, check.attributes = FALSE)))
 
-  x <- tryCatch(bsplines(xvec, iknots = 0.2, df = 6), warning = function(w) {w})
+  x <- tryCatch(bsplines(xvec, iknots = 0.2, df = 6, bknots = bknots), warning = function(w) {w})
   stopifnot(identical(class(x), c("simpleWarning", "warning", "condition")))
   stopifnot(identical(x$message, "Both iknots and df defined, using iknots"))
 
-  x <- suppressWarnings(bsplines(xvec, iknots = 0.2, df = 6))
-  y <- bsplines(xvec, iknots = 0.2)
+  x <- suppressWarnings(bsplines(xvec, iknots = 0.2, df = 6, bknots = bknots))
+  y <- bsplines(xvec, iknots = 0.2, bknots = bknots)
   stopifnot(isTRUE(all.equal(x, y, check.attributes = FALSE)))
 
-  x <- bsplines(xvec, df = 7)
-  y <- bsplines(xvec, iknots = trimmed_quantile(xvec, probs = 1:3/4))
+  x <- bsplines(xvec, df = 7, bknots = bknots)
+  y <- bsplines(xvec, iknots = trimmed_quantile(xvec, probs = 1:3/4), bknots = bknots)
   stopifnot(isTRUE(all.equal(x, y, check.attributes = FALSE)))
 })
 
