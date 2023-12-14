@@ -15,11 +15,9 @@
 #'
 #' Additioanlly, the attributes of the object returned by \code{bsplines} are
 #' different from the attributes of the object returned by
-#' \code{\link[splines]{bs}}.
-#'
-#' See the \code{vignette("bsplines", package = "cpr")} for a detailed
-#' comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls
-#' and notes about B-splines in general.
+#' \code{\link[splines]{bs}}. See the \code{vignette(topic = "cpr", package =
+#' "cpr")} for a detailed comparison between the \code{bsplines} and
+#' \code{\link[splines]{bs}} calls and notes about B-splines in general.
 #'
 #' @references
 #' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
@@ -40,6 +38,9 @@
 #' See \code{\link{update_bsplines}} for info on a tool for updating a
 #' \code{cpr_bs} object.  This is a similar method to the
 #' \code{\link[stats]{update}} function from the \code{stats} package.
+#'
+#' \code{vignette(topic = "cpr", package = "cpr")} for details on B-splines and
+#' the control polygon reduction method.
 #'
 #' @examples
 #' # build a vector of values to transform

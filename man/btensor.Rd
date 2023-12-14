@@ -43,7 +43,7 @@ cycle the quickest, followed by Y, and then Z.  This would be the same result
 as
 \code{ model.matrix( ~ bsplines(X) : bsplines(Y) : bsplines(Z) + 0) }.
 
-See \code{vignette("cpr-pkg", package = "cpr")} for more details.
+See \code{vignette(topic = "cnr", package = "cpr")} for more details.
 }
 \examples{
 tp <- with(mtcars,
@@ -52,4 +52,7 @@ tp <- with(mtcars,
            )
 tp
 
+}
+\seealso{
+\code{\link{bsplines}}, \code{vignette(topic = "cnr", package = "cpr")}
 }

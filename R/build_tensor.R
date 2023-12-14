@@ -9,7 +9,7 @@
 #' @return a matrix
 #'
 #' @seealso
-#' \code{vignette("cpr-pkg", package = "cpr")} for details on tensor products.
+#' \code{vignette("cnr", package = "cpr")} for details on tensor products.
 #'
 #' @return
 #' A matrix

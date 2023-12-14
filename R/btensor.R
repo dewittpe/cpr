@@ -14,7 +14,7 @@
 #' as
 #' \code{ model.matrix( ~ bsplines(X) : bsplines(Y) : bsplines(Z) + 0) }.
 #'
-#' See \code{vignette("cpr-pkg", package = "cpr")} for more details.
+#' See \code{vignette(topic = "cnr", package = "cpr")} for more details.
 #'
 #' @param x a list of variables to build B-spline transforms of.  The tensor
 #' product of these B-splines will be returned.
@@ -31,6 +31,8 @@
 #'
 #' @return
 #' A matrix with a class cpr_bt
+#'
+#' @seealso \code{\link{bsplines}}, \code{vignette(topic = "cnr", package = "cpr")}
 #'
 #' @examples
 #' tp <- with(mtcars,

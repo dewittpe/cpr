@@ -35,11 +35,9 @@ the splines where the support is open on the right hand side, that is,
 
 Additioanlly, the attributes of the object returned by \code{bsplines} are
 different from the attributes of the object returned by
-\code{\link[splines]{bs}}.
-
-See the \code{vignette("bsplines", package = "cpr")} for a detailed
-comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls
-and notes about B-splines in general.
+\code{\link[splines]{bs}}. See the \code{vignette(topic = "cpr", package =
+"cpr")} for a detailed comparison between the \code{bsplines} and
+\code{\link[splines]{bs}} calls and notes about B-splines in general.
 }
 \examples{
 # build a vector of values to transform
@@ -81,4 +79,7 @@ second derivative of a B-spline.
 See \code{\link{update_bsplines}} for info on a tool for updating a
 \code{cpr_bs} object.  This is a similar method to the
 \code{\link[stats]{update}} function from the \code{stats} package.
+
+\code{vignette(topic = "cpr", package = "cpr")} for details on B-splines and
+the control polygon reduction method.
 }

@@ -11,7 +11,7 @@ RFILES    = $(wildcard $(PKG_ROOT)/R/*.R)
 TESTS     = $(wildcard $(PKG_ROOT)/tests/*.R)
 RAWDATAR  = $(wildcard $(PKG_ROOT)/data-raw/*.R)
 
-VIGNETTES  = $(PKG_ROOT)/vignettes/bsplines.Rmd
+VIGNETTES  = $(PKG_ROOT)/vignettes/cpr.Rmd
 
 .PHONY: all check install clean
 

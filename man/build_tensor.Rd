@@ -37,5 +37,5 @@ str(tensor3)
 
 }
 \seealso{
-\code{vignette("cpr-pkg", package = "cpr")} for details on tensor products.
+\code{vignette("cnr", package = "cpr")} for details on tensor products.
 }
