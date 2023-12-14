@@ -33,6 +33,9 @@
 #' knots for each marginal is used.
 #' @param n the length of sequence to use for interpolating the spline function.
 #'
+#' @return a \code{data.frame} \code{n} rows and two columns \code{x} and
+#' \code{y}, the  values for the spline.
+#'
 #' @seealso \code{\link{get_surface}}
 #'
 #' @examples
@@ -42,10 +45,8 @@
 #' ## graphics for this example.
 #' a_cp <- cp(pdg ~ bsplines(day, df = 10), data = spdg)
 #'
-#' cp_and_spline <- get_spline(a_cp)
-#' plot(cp_and_spline$cp, type = "b")
-#' points(cp_and_spline$spline, type = "l")
-#' grid()
+#' spline <- get_spline(a_cp)
+#' plot(spline$x, spline$y, type = "b")
 #'
 #' # compare to the plot.cpr_cp method
 #' plot(a_cp, show_spline = TRUE)
@@ -59,16 +60,14 @@ get_spline <- function(x, margin = 1, at, n = 100) {
 get_spline.cpr_cp <- function(x, margin = 1, at, n = 100) {
   xvec <- seq(min(x$bknots), max(x$bknots), length = n)
   bmat <- bsplines(xvec, iknots = x$iknots, bknots = x$bknots, order = x$order)
-  out <- list(cp     = x$cp,
-              spline = data.frame(x = xvec, y = as.numeric(bmat %*% x[["cp"]][["theta"]])))
-  out
+  data.frame(x = xvec, y = as.numeric(bmat %*% x[["cp"]][["theta"]]))
 }
 
 #' @export
 get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
 
   if (length(margin) > 1) {
-    stop("use get_surface when length(margin) > 1.", call. = FALSE)
+    stop("use get_surface when length(margin) > 1.")
   }
 
   if (missing(at)) {
@@ -86,4 +85,3 @@ get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
   marginal_cp <- cp(x$bspline_list[[margin]], t(tensor %*% thetas))
   get_spline.cpr_cp(marginal_cp)
 }
-
