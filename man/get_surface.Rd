@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_surface.R
 \name{get_surface}
 \alias{get_surface}
-\title{Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets}
+\title{Get Surface}
 \usage{
 get_surface(x, margin = 1:2, at, n = 100)
 }
@@ -19,6 +19,13 @@ length \code{length(attr(x, "bspline_list"))}.  Entries for elements
 knots for each marginal is used.}
 
 \item{n}{the length of sequence to use for interpolating the spline function.}
+}
+\value{
+a list with two elements
+\describe{
+\item{cn}{the control net}
+\item{surface}{a data.frame with three columns to define the surface}
+}
 }
 \description{
 Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets

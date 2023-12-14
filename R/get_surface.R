@@ -1,5 +1,6 @@
-#' Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets
+#' Get Surface
 #'
+#' Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets
 #'
 #' @param x a \code{cpr_cn} object
 #' @param margin an integer identifying the marginal of the control net to slice
@@ -12,6 +13,12 @@
 #' @param n the length of sequence to use for interpolating the spline function.
 #'
 #' @seealso \code{\link{get_spline}}
+#'
+#' @return a list with two elements
+#' \describe{
+#' \item{cn}{the control net}
+#' \item{surface}{a data.frame with three columns to define the surface}
+#' }
 #'
 #' @examples
 #' ## Extract the control net and surface from a cpr_cn object.
@@ -78,11 +85,6 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
   xvecs <- lapply(bknots, function(x) seq(x[1], x[2], length = 100))
   xvecs[-margin] <- at[-margin]
   surface <- do.call(expand.grid, xvecs)
-  #tensors <- Map(btensor,
-  #               x = split(surface, row(surface)[, 1]),
-  #               MoreArgs = list(iknots = iknots,
-  #                               bknots = bknots,
-  #                               order = orders))
   tensors <-
     Map(function(x, ...) {
           do.call(btensor, list(x = unname(x), iknots = iknots, bknots = bknots, order = orders))

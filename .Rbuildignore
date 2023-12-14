@@ -4,11 +4,12 @@
 ^Makefile$
 ^data-raw$
 ^vignettes/figure$
+^vignette-spiners
 ^codecov\.yml$
 ^cpr-hex.png$
 ^cpr-hex-small.png$
-.document.Rout
-.install_dev_deps.Rout
+^\.document\.Rout$
+^\.install_dev_deps\.Rout$
 ^\.github$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$

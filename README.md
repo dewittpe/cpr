@@ -1,9 +1,9 @@
 cpr: Control Polygon Reduction <img src="cpr-hex-small.png" align="right"/>
 =====================================================================
 
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](http://www.repostatus.org/#active)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/dewittpe/cpr/workflows/R-CMD-check/badge.svg)](https://github.com/dewittpe/cpr/actions)
-[![Coverage Status](https://img.shields.io/codecov/c/github/dewittpe/cpr/master.svg)](https://codecov.io/github/dewittpe/cpr?branch=master)
+[![Coverage Status](https://img.shields.io/codecov/c/github/dewittpe/cpr/master.svg)](https://app.codecov.io/github/dewittpe/cpr?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cpr)](https://cran.r-project.org/package=cpr)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cpr)](http://www.r-pkg.org/pkg/cpr)
 
@@ -109,7 +109,7 @@ error, or rather message, of the form:
   font family "sans" not found, using "bitmap"
 ```
 Then there is an easy fix.  You need to get the [FreeType 2 font
-engine](https://www.freetype.org/).
+engine](https://freetype.org/).
 
 On Debian, you can get the library via:
 
