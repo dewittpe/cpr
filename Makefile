@@ -12,6 +12,7 @@ TESTS     = $(wildcard $(PKG_ROOT)/tests/*.R)
 RAWDATAR  = $(wildcard $(PKG_ROOT)/data-raw/*.R)
 
 VIGNETTES  = $(PKG_ROOT)/vignettes/cpr.Rmd
+VIGNETTES += $(PKG_ROOT)/vignettes/cnr.Rmd
 
 .PHONY: all check install clean
 

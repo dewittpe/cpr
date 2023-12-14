@@ -1,0 +1,39 @@
+#'---
+#'title: "Tensor Products of B-Splines, Control Nets, and Control Net Reduction"
+#'author: "Peter E. DeWitt"
+#'output:
+#'  rmarkdown::html_vignette:
+#'    toc: true
+#'    number_sections: true
+#'bibliography: references.bib
+#'vignette: >
+#'  %\VignetteIndexEntry{Tensor Products of B-Splines, Control Nets, and Control Net Reduction}
+#'  %\VignetteEngine{knitr::rmarkdown}
+#'  %\VignetteEncoding{UTF-8}
+#'---
+#'
+#'
+#+ label = "setup", include = FALSE
+library(qwraps2)
+options(qwraps2_markup = "markdown")
+knitr::opts_chunk$set(collapse = TRUE)
+#'
+# /*
+devtools::load_all()
+# */
+library(cpr)
+packageVersion("cpr")
+#'
+#' PLACE HOLDER
+#'
+#' VIGNETTE TO BE WRITTEN
+#'
+#'
+#' # References
+#'<div id="refs"></div>
+#'
+#' # Session Info
+#+ label = "sessioninfo"
+sessionInfo()
+
+# /* ---------------------------- END OF FILE ------------------------------- */
