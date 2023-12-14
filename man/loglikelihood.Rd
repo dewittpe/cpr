@@ -35,7 +35,7 @@ default method uses \code{\link[stats]{logLik}}.
 
 fit <- lm(mpg ~ wt, data = mtcars)
 stats::logLik(fit)
-loglikelihood(fit)
+cpr:::loglikelihood(fit)
 
 }
 \seealso{

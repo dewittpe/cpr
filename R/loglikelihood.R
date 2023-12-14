@@ -26,7 +26,7 @@
 #'
 #' fit <- lm(mpg ~ wt, data = mtcars)
 #' stats::logLik(fit)
-#' loglikelihood(fit)
+#' cpr:::loglikelihood(fit)
 #'
 loglikelihood <- function(x, ...) {
   UseMethod("loglikelihood")
