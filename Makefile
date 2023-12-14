@@ -13,7 +13,7 @@ RAWDATAR  = $(wildcard $(PKG_ROOT)/data-raw/*.R)
 
 VIGNETTES  = $(PKG_ROOT)/vignettes/bsplines.Rmd
 
-.PHONY: all check install clean covr
+.PHONY: all check install clean
 
 all: $(PKG_NAME)_$(PKG_VERSION).tar.gz
 
@@ -48,15 +48,19 @@ $(PKG_ROOT)/vignettes/%.Rmd : $(PKG_ROOT)/vignette-spinners/%.R
 	mv $(addsuffix .html, $(basename $<)) $@
 
 ################################################################################
-covr :
+covr-report-%.html : $(PKG_NAME)_$(PKG_VERSION).tar.gz
 	R --vanilla --quiet \
 		-e 'library(covr)'\
-		-e 'x <- package_coverage(type = "all", combine_types = FALSE)'\
-		-e 'report(x[["tests"]], file = "covr-report-tests.html")'\
-		-e 'report(x[["vignettes"]], file = "covr-report-vignettes.html")'\
-		-e 'report(x[["examples"]], file = "covr-report-examples.html")'\
-		-e 'x <- package_coverage(type = "all", combine_types = TRUE)'\
-		-e 'report(x, file = "covr-report-all.html")'\
+		-e 'x <- package_coverage(type = "$*")'\
+		-e 'report(x, file = "$@")'
+
+covr-report-tests.html : $(PKG_NAME)_$(PKG_VERSION).tar.gz
+	R --vanilla --quiet \
+		-e 'library(covr)'\
+		-e 'x <- package_coverage(type = "tests", function_exclusions = c("plot\\\\.", "print\\\\.", "\\\\.onLoad", "\\\\.onUnload"), line_exclusions = list("R/cpr-defunct.R"))'\
+		-e 'report(x, file = "$@")'
+
+covr : covr-report-all.html covr-report-tests.html covr-report-examples.html covr-report-vignettes.html
 
 ################################################################################
 clean:

@@ -188,7 +188,7 @@ print.cpr_cpr_summary <- function(x, ...) {
 
   dig.tst = 5L#max(1L, min(5L, digits - 1L))
   eps.Pvalue = .Machine$double.eps
-  y[["Pr(>w_(1))"]] <- format.pval(pv, digits = dig.tst, eps = eps.Pvalue)
+  y[["Pr(>w_(1))"]] <- format.pval(y[["Pr(>w_(1))"]] , digits = dig.tst, eps = eps.Pvalue)
 
   y[["elbow"]] <- sub("0", "", sub("1", "<<<", as.character(y[["elbow"]])))
   print.data.frame(y)

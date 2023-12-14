@@ -41,10 +41,7 @@ str(update_bsplines(bmat, df = 12, order = 4))
 # construct a tensor product
 tpmat <- btensor(list(x1 = seq(0, 1, length = 10), x2 = seq(0, 1, length = 10)),
                  df = list(4, 5))
-tpmat <- btensor(list(seq(0, 1, length = 10), seq(0, 1, length = 10)),
-                 df = list(4, 5))
-
-tpmat |> str()
+tpmat
 
 # update the degrees of freedom
 update_btensor(tpmat, df = list(6, 7))

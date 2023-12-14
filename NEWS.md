@@ -15,7 +15,10 @@
   from a sample of size n from a distribution with defined density and
   distribution functions within R.
 
-## Other Changes
+## User Visible Changes
+* `loglikelihood` is not exported in the namespace
+
+## Non-User Visible Changes
 * Refactor of c++ defining basis functions, derivatives of basis functions,
   b-splines structures
 

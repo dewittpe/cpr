@@ -31,6 +31,13 @@ one.
 See \code{methods(loglikelihood)} for a list of the provided methods.  The
 default method uses \code{\link[stats]{logLik}}.
 }
+\examples{
+
+fit <- lm(mpg ~ wt, data = mtcars)
+stats::logLik(fit)
+loglikelihood(fit)
+
+}
 \seealso{
 \code{\link{cpr}} \code{\link{cnr}} \code{\link[stats]{logLik}}
 }
