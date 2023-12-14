@@ -221,11 +221,12 @@ print.cpr_influence_of_iknots_summary <- function(x, ...) {
   }
 
   if (all(is.na(x$chisq) )) {
-    #print.data.frame(x[, c("j", "iknot", "influence", "influence_rank")])
-    NextMethod(x[, c("j", "iknot", "influence", "influence_rank")])
+    print.data.frame(x[, c("j", "iknot", "influence", "influence_rank")])
+    #NextMethod(object = x[, c("j", "iknot", "influence", "influence_rank")])
   } else {
     NextMethod(x)
   }
   invisible(x)
+
 }
 

@@ -58,7 +58,7 @@ get_spline <- function(x, margin = 1, at, n = 100) {
 
 #' @export
 get_spline.cpr_cp <- function(x, margin = 1, at, n = 100) {
-  xvec <- seq(min(x$bknots), max(x$bknots), length = n)
+  xvec <- seq(min(x$bknots), max(x$bknots) - sqrt(.Machine$double.eps), length = n)
   bmat <- bsplines(xvec, iknots = x$iknots, bknots = x$bknots, order = x$order)
   data.frame(x = xvec, y = as.numeric(bmat %*% x[["cp"]][["theta"]]))
 }

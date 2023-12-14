@@ -158,9 +158,6 @@ print.cpr_cpr <- function(x, ...) {
 summary.cpr_cpr <- function(object, ...) {
 
   rtn <- lapply(object, summary)
-  #for (i in seq_along(object)) {
-  #  rtn[[i]]$index <- as.integer(i)
-  #}
   rtn <- do.call(rbind, rtn)
 
   selected_index <- summary(influence_of_iknots(object))
@@ -171,8 +168,8 @@ summary.cpr_cpr <- function(object, ...) {
   # find the elbow in the rmse by n_iknots plot
   elbow <- numeric(0)
   for (brkpt in seq(1, length(object[[length(object)]]$iknot), by = 1)) {
-    y <- cp(rmse ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 3),
-            data = rtn)
+    y <- suppressWarnings(cp(rmse ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 3),
+            data = rtn))
     elbow <- c(elbow, y$rmse)
   }
   elbow <- which.min(elbow) + 1
@@ -192,7 +189,6 @@ print.cpr_cpr_summary <- function(x, ...) {
 
   y[["elbow"]] <- sub("0", "", sub("1", "<<<", as.character(y[["elbow"]])))
   print.data.frame(y)
-  #NextMethod(generic = "print", object = y)
 
   invisible(x)
 }

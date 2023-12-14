@@ -81,6 +81,14 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
     stop("order needs to be an integer value >= 2.")
   }
 
+  if (any(x < min(bknots))) {
+    warning("At least one x value < min(bknots)")
+  }
+
+  if (any(x >= max(bknots))) {
+    warning("At least one x value >= max(bknots)")
+  }
+
   iknots <- iknots_or_df(x, iknots, df, order)
 
   rtn <- cpp_bsplines(x = x, iknots = iknots, bknots = bknots, order = order)
