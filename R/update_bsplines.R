@@ -134,8 +134,7 @@ find_update_b_ <- function(x, dots) {
 }
 
 
-# newknots are used in the cpr and cnr calls.  No other use for this function.
-# It should, at some point, be deprecated in favor of update_bsplines
+# newknots are used in the cpr and cnr calls.
 newknots <- function(form, nk) {
   rr <- function(x, nk) {
     if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
