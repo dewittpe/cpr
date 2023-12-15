@@ -14,3 +14,6 @@
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
 ^lib\.*$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

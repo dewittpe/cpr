@@ -10,3 +10,4 @@ cpr.Rcheck/
 *.Rout
 *.html
 lib/*
+docs
