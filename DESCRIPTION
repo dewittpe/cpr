@@ -16,13 +16,14 @@ Language: en-us
 LazyData: true
 Imports:
     ggplot2 (>= 3.0.0),
-    lme4,
+    lme4 (>= 1.1.35.1),
     plot3D,
     Rcpp (>= 1.0.11),
     rgl,
     scales
 LinkingTo: Rcpp, RcppArmadillo
 Suggests:
+    Matrix (>= 1.6-4),
     geepack,
     ggpubr,
     knitr,
