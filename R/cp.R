@@ -169,7 +169,10 @@ summary.cpr_cp <- function(object, wiggle = TRUE, integrate.args = list(), ...){
          rse        = object$rse)
 
   if (wiggle) {
-    wggl <- try(do.call(wiggle.cpr_cp, c(list(object = object), integrate.args)), silent = TRUE)
+    # NOTE: use wiggle.cpr_cp as the "what" in do.call so there isn't confusion
+    # between the argument `wiggle` and the function `wiggle`
+    wggl <- try(do.call(what = wiggle.cpr_cp, args = c(list(object = object), integrate.args)), silent = TRUE)
+    fdsc <- try(do.call(what = sign_changes, args = c(list(object = object))), silent = TRUE)
 
     if (inherits(x = wggl, what = "integrate")) {
       out$wiggle <- as.numeric(wggl$value)
@@ -180,6 +183,7 @@ summary.cpr_cp <- function(object, wiggle = TRUE, integrate.args = list(), ...){
       out$wiggle <- NA
       attr(out$wiggle, "error") <- wggl
     }
+    out$fdsc <- fdsc
   }
   out
 }
