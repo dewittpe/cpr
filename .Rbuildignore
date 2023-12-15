@@ -4,7 +4,7 @@
 ^Makefile$
 ^data-raw$
 ^vignettes/figure$
-^vignette-spiners
+^vignette-spinners
 ^codecov\.yml$
 ^cpr-hex.png$
 ^cpr-hex-small.png$
