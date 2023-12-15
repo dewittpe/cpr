@@ -9,7 +9,7 @@ sign_changes(
   lower = min(object$bknots),
   upper = max(object$bknots),
   n = 1000,
-  derivative = c(1L, 2L),
+  derivative = 1L,
   ...
 )
 }

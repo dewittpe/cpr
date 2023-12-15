@@ -40,37 +40,21 @@ stopifnot(isTRUE(all.equal(
 ################################################################################
 #                              Count Sign Changes                              #
 
-stop("DEV WORK - PICK UP HERE")
-fprime(x) |>
-  sign() |>
-  diff() |>
-  abs() |>
-  sum() / 2L
+# sign changes in fprime
+stopifnot(identical(
+  sum(abs(diff(sign(fprime(x))))) / 2L
+  ,
+  sign_changes( object = cp(bmat, theta), lower = -3, upper = 5, derivative = 1)
+  )
+)
 
-
-fdoubleprime(x) |>
-  sign() |>
-  diff() |>
-  abs() |>
-  sum() / 2L
-
-sign_changes( object = cp(bmat, theta), lower = -3, upper = 5, derivative = 1L)
-sign_changes( object = cp(bmat, theta), lower = -3, upper = 5, derivative = 2L)
-
-plot(x, bmatD2 %*% theta)
-
-object <- cp(bmat, theta)
-  f <- function(x) {
-    bsplineD(x,
-              iknots = object$iknots,
-              bknots = object$bknots,
-              order  = object$order,
-              derivative = 2L) %*%
-     matrix(object$cp$theta, ncol = 1)
-  }
-
-x2 <- seq(min(bknots), max(bknots), length.out = 100000)
-points(x2, f(x2), col = "red", type = "l")
+# sign_changes in fdoubleprime
+stopifnot(identical(
+  sum(abs(diff(sign(fdoubleprime(x))))) / 2L
+  ,
+  sign_changes( object = cp(bmat, theta), lower = -3, upper = 5, derivative = 2)
+  )
+)
 
 ################################################################################
 #                                 End of File                                  #
