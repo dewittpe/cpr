@@ -1,13 +1,13 @@
 #'---
-#'title: "B-Splines and Control Polygons"
+#'title: "Control Polygon Reduction"
 #'author: "Peter E. DeWitt"
 #'output:
 #'  rmarkdown::html_vignette:
 #'    toc: true
-#'    number_sections: true
+#'    number_sections: false
 #'bibliography: references.bib
 #'vignette: >
-#'  %\VignetteIndexEntry{B-Splines and Control Polygons}
+#'  %\VignetteIndexEntry{Control Polygon Reduction}
 #'  %\VignetteEngine{knitr::rmarkdown}
 #'  %\VignetteEncoding{UTF-8}
 #'---
@@ -30,6 +30,14 @@ devtools::load_all()
 # */
 library(cpr)
 packageVersion("cpr")
+
+#'
+#' The purpose of this vignette is to illustrate how the Control Polygon
+#' Reduction (CPR) method can be used to select a set of knots defining B-spline
+#' to get a low degree of freedom and smooth fit to data.  We start with a
+#' primer on B-splines and control polygons then the development and use of CPR.
+#'
+#' # B-splines and Control Polygons
 #'
 #' The term "spline" is likely derived from shipwright or draftsmen splines,
 #' thin wood strips, held in place by weights, used to define curves.  These
@@ -45,16 +53,14 @@ packageVersion("cpr")
 #' following.  Two very good references for splines are @deboor2001 and
 #' @prautzsch2002 if you wish to dig into the details.
 #'
-#' # B-splines and Control Polygons
-#'
 #' ## B-splines
 #'
 #' A curve defined by $f\left(x\right)$ is a spline of order $k$ (degree $k
-#' -1$), with knots $\xi_1, \xi_2, \ldots, \xi_m$ where $\xi_i \leq x_{i+1}$ and
-#' $\xi_{i} < \xi_{i + k} \forall i$ if $f\left(x\right)$ is $k-r-1$ times
+#' -1$), with knots $\xi_1, \xi_2, \ldots, \xi_m$ where $\xi_j \leq x_{j+1}$ and
+#' $\xi_{j} < \xi_{j + k} \forall i$ if $f\left(x\right)$ is $k-r-1$ times
 #' differentiable at any $r$-fold knot, and $f\left(x\right)$ is a polynomial of
-#' order $\leq k$ over each interval $x \in \left[\xi_i, \xi_{i+1}\right]$ for
-#' $i = 0, \ldots, m - 1.$
+#' order $\leq k$ over each interval $x \in \left[\xi_j, \xi_{j+1}\right]$ for
+#' $j = 0, \ldots, m - 1.$
 #'
 #' In particular, B-splines, are defined as an affine combination:
 #'
@@ -68,12 +74,12 @@ packageVersion("cpr")
 #' where $B_{j,k,\boldsymbol{\xi}}\left(x\right)$ is the $j^{th}$ basis spline
 #' function, $\boldsymbol{\xi}$ is a sequence of $l$ interior knots and a total
 #' of $2k$ boundary knots, i.e., the cardinality of the knot sequence is
-#' $\left\lvert \boldsymbol{\xi} \right\rvert| = 2k + l.$ The value of the $k$
+#' $\left\lvert \boldsymbol{\xi} \right\rvert = 2k + l.$ The value of the $k$
 #' boundary knots is arbitrary, but a common choice is to use $k$-fold knots on
 #' the boundary:
 #'
 #' $$ \xi_1 = \xi_2 = \cdots = \xi_k < \xi_{k+1} \leq \cdots \leq \xi_{k + l} =
-#' \xi_{k + l + 1} = \cdots \xi_{2k + l}.$$
+#' \xi_{k + l + 1} = \cdots = \xi_{2k + l}.$$
 #'
 #' Alternative boundary knots can be used so long as the sequence
 #' $\boldsymbol{\xi}$ is non-decreasing.  More on the implications of $k$-fold
@@ -122,21 +128,9 @@ packageVersion("cpr")
 #'   \end{pmatrix}
 #' \end{equation}
 #'
-#'
-#' A few of many important properties of the basis functions:
-#'
-#' $$B_{j,k,\boldsymbol{xi}} \left(x\right) \in \left[0, 1\right], \forall x \in \mathbb{R};$$
-#'
-#' $$B_{j,k,\boldsymbol{\xi}} \left(x\right) > 0 \quad \text{for} \quad x \in \left(\xi_{j}, \xi_{j+k}\right);$$
-#'
-#' and
-#'
-#' $$\sum_j B_{j,k,\boldsymbol{xi}} \left(x\right) = \begin{cases} 1 & x \in
-#' \left[\xi_1, \xi_{2k+l}\right) \\ 0 & otherwise \end{cases}.$$
-#'
 #' Within the cpr package we can generate a basis matrix thusly:
 #+ label = "basis_matrix"
-x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)
+x <- seq(0, 5.9999, length.out = 5000)
 bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
 bmat
 
@@ -145,17 +139,29 @@ bmat
 {{backtick(bsplines)}}
 #' is 4, and the default for the boundary knots is the range of
 {{backtick(x) %s% "."}}
-
-#'
-#+ label = "row sums to 1"
-all(bmat >= 0)
-all(bmat <= 1)
-all.equal(rowSums(bmat), rep(1, nrow(bmat)))
-
+#' However, relying on the default boundary knots can lead to unexpected
+#' behavior as, by definition the splines on the $k$-fold upper boundary is 0.
 #'
 #' We can quickly view the plot of each of these spline functions as well.
 #+ label = "plot bmat", fig.width = 7, fig.height = 4
 plot(bmat, show_xi = TRUE, show_x = TRUE)
+
+#'
+#' A few of many important properties of the basis functions:
+#'
+#' $$B_{j,k,\boldsymbol{xi}} \left(x\right) \in \left[0, 1\right], \forall x \in \mathbb{R};$$
+all(bmat >= 0)
+all(bmat <= 1)
+
+#'
+#' $$B_{j,k,\boldsymbol{\xi}} \left(x\right) > 0 \quad \text{for} \quad x \in \left(\xi_{j}, \xi_{j+k}\right);$$
+#'
+#' and
+#'
+#' $$\sum_j B_{j,k,\boldsymbol{xi}} \left(x\right) = \begin{cases} 1 & x \in
+#' \left[\xi_1, \xi_{2k+l}\right) \\ 0 & otherwise. \end{cases}$$
+#'
+all.equal(rowSums(bmat), rep(1, nrow(bmat)))
 
 #'
 #' ### cpr::bsplines vs splines::bs
@@ -174,15 +180,15 @@ args(bsplines)
 args(splines::bs)
 
 #'
-#' | bsplines | splines::bs    | Notes |
-#' |:-------- |:-----------    |:----- |
-#' | x        | x              | numeric vector; the predictor variable |
-#' | iknots   | knots          | internal knots |
-#' | bknots   | Boundary.knots | boundary knots |
-#' | order    | degree         | polynomial order = polynomal degree + 1 |
-#' | df       | df             | degrees of freedom |
-#' |          | intercept      | |
-#' |          | warn.outside   | |
+#' | cpr::bsplines | splines::bs    | Notes                                    |
+#' |:--------      |:-----------    |:-----                                    |
+#' | x             | x              | numeric vector; the predictor variable   |
+#' | iknots        | knots          | internal knots                           |
+#' | bknots        | Boundary.knots | boundary knots                           |
+#' | order         | degree         | polynomial order = polynomial degree + 1 |
+#' | df            | df             | degrees of freedom                       |
+#' |               | intercept      |                                          |
+#' |               | warn.outside   |                                          |
 #'
 {{ backtick(bsplines) }}
 #' does not have the
@@ -206,10 +212,10 @@ args(splines::bs)
 #' order 4 (degree 3; cubic) B-spline with boundary knots placed at
 {{ backtick(range(x)) %s% "." }}
 #' However, the returns are not the same.
-bspline_mat <- bsplines(x)
-bs_mat      <- splines::bs(x)
-attributes(bspline_mat) |> str()
+bs_mat <- splines::bs(x, knots = attr(bmat, "iknots"), Boundary.knots = attr(bmat, "bknots"))
+attributes(bmat) |> str()
 attributes(bs_mat) |> str()
+
 #'
 #' The
 {{ backtick(bspline_mat) }}
@@ -238,12 +244,24 @@ attributes(bs_mat) |> str()
 {{ backtick(splines::bs) }}
 #' uses a pivoting method to allow for non-zero extrapolations outside the
 #' support.
-bsplines(c(0, 1, 2, 5, 6), bknots = c(1, 5))
-splines::bs(c(0, 1, 2, 5, 6), Boundary.knots = c(1, 5))
+#'
+#' Example: for the
+{{ backtick(cpr::bsplines) }}
+#' call, notice that the first, third, and fifth rows, corresponding to values
+#' outside the support are all zeros as are the row sums.  Compare that to the
+{{ backtick(splines::bs) }}
+#' which returns negative values and in the matrix, and all rows sum to 1.
+bspline_eg <- bsplines(c(0, 1, 2, 5, 6), bknots = c(1, 5))
+bs_eg      <- splines::bs(c(0, 1, 2, 5, 6), Boundary.knots = c(1, 5), intercept = TRUE )
+
+head(bspline_eg)
+rowSums(bspline_eg)
+
+head(bs_eg)
+rowSums(bs_eg)
 
 #'
-#'
-#' ## Control Polygons
+#' # Control Polygons
 #'
 #' The spline $f\left(\boldsymbol{x}\right) = \boldsymbol{B}_{k,\boldsymbol{\xi}}\left(\boldsymbol{x}\right)$
 #' is a convex sum of the coefficients $\boldsymbol{\theta}_{\boldsymbol{\xi}}.$
@@ -282,76 +300,6 @@ cp0 <- cp(bmat, theta)
 #'
 #+ label = "plot cp", fig.width = 7, fig.height = 4
 plot(cp0, show_spline = TRUE)
-
-#'
-#' ## Continuity and Knots
-#'
-#' All the basis functions are, by definition, right-continuous.  The spline
-#' function has at most $k$ continuity conditions.  That, is, for a value of $x$
-#' such that $\xi_1 < x < \xi
-#'
-#' The knots sequence is a representation of the desired smoothness of
-#' $f\left(x\right).$  For any point $\xi_1 < x < \xi_{2k + l}} and $\notexists
-#' i s.t. x = \xi_i,$ the function $f\left(x\right)$ has $k$ continuity
-#' conditions, $(k -1)^{st}-$ through $0^{th}$-order differentiable.  At a knot,
-#' there number of continuity conditions decreases for the number of knots at
-#' that point.  Overall, the number of continuity conditions at a point $x$ plut
-#' the number of knots at $x$ equals $k.$
-#'
-#' For an example, we will use a $k = 4$ order spline (a cubic spline) to
-#' perfectly fit a cubic function.  We'll define the function, first, and second
-#' derivatives
-f <- function(x) {
-  #(x + 2) * (x - 1) * (x - 3)
-  x^3 - 2 * x^2 - 5 * x + 6
-}
-
-fprime <- function(x) { # first derivatives of f(x)
-  3 * x^2 - 4 * x - 5
-}
-
-fdoubleprime <- function(x) { # second derivatives of f(x)
-  6 * x - 4
-}
-
-#'
-#' We'll look at the function over
-bknots = c(-3, 5)
-
-x     <- seq(-3, 4.999, length.out = 200)
-bmat  <- bsplines(x, bknots = bknots)
-theta <- matrix(coef(lm(f(x) ~ bmat + 0)), ncol = 1)
-
-bmatD1 <- bsplineD(x, bknots = bknots, derivative = 1L)
-bmatD2 <- bsplineD(x, bknots = bknots, derivative = 2L)
-
-#'
-#' Verify that we have perfectly fitted splines to the function and its
-#' derivatives.
-# check that the function f(x) is recovered
-all.equal(f(x), as.numeric(bmat %*% theta))
-
-# check that the first derivative is recovered
-all.equal(fprime(x), as.numeric(bmatD1 %*% theta))
-
-# check that the second derivative is recovered
-all.equal(fdoubleprime(x), as.numeric(bmatD2 %*% theta))
-
-#'
-#' Plot the results
-#+ label = "plot derivatives", fig.width = 7, fig.height = 4
-par(mfrow = c(1, 3))
-plot(x, f(x), type = "l", main = bquote(f(x)), ylab = "", xlab = "")
-points(x, bmat %*% theta, col = 'blue')
-grid()
-
-plot(x, fprime(x), type = "l", main = bquote(frac(d,dx)~f(x)), ylab = "", xlab = "")
-points(x, bmatD1 %*% theta, col = 'blue')
-grid()
-
-plot(x, fdoubleprime(x), type = "l", main = bquote(frac(d^2,dx^2)~f(x)), ylab = "", xlab = "")
-points(x, bmatD2 %*% theta, col = 'blue')
-grid()
 
 #'
 #' # Knot Influence

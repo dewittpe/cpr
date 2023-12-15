@@ -1,13 +1,13 @@
 ---
-title: "B-Splines and Control Polygons"
+title: "Control Polygon Reduction"
 author: "Peter E. DeWitt"
 output:
  rmarkdown::html_vignette:
    toc: true
-   number_sections: true
+   number_sections: false
 bibliography: references.bib
 vignette: >
- %\VignetteIndexEntry{B-Splines and Control Polygons}
+ %\VignetteIndexEntry{Control Polygon Reduction}
  %\VignetteEngine{knitr::rmarkdown}
  %\VignetteEncoding{UTF-8}
 ---
@@ -35,6 +35,13 @@ packageVersion("cpr")
 ```
 
 
+The purpose of this vignette is to illustrate how the Control Polygon
+Reduction (CPR) method can be used to select a set of knots defining B-spline
+to get a low degree of freedom and smooth fit to data.  We start with a
+primer on B-splines and control polygons then the development and use of CPR.
+
+# B-splines and Control Polygons
+
 The term "spline" is likely derived from shipwright or draftsmen splines,
 thin wood strips, held in place by weights, used to define curves.  These
 splines naturally minimize strain energy and the use of additional weights at
@@ -49,16 +56,14 @@ the associated control polygons and control nets are presented in the
 following.  Two very good references for splines are @deboor2001 and
 @prautzsch2002 if you wish to dig into the details.
 
-# B-splines and Control Polygons
-
 ## B-splines
 
 A curve defined by $f\left(x\right)$ is a spline of order $k$ (degree $k
--1$), with knots $\xi_1, \xi_2, \ldots, \xi_m$ where $\xi_i \leq x_{i+1}$ and
-$\xi_{i} < \xi_{i + k} \forall i$ if $f\left(x\right)$ is $k-r-1$ times
+-1$), with knots $\xi_1, \xi_2, \ldots, \xi_m$ where $\xi_j \leq x_{j+1}$ and
+$\xi_{j} < \xi_{j + k} \forall i$ if $f\left(x\right)$ is $k-r-1$ times
 differentiable at any $r$-fold knot, and $f\left(x\right)$ is a polynomial of
-order $\leq k$ over each interval $x \in \left[\xi_i, \xi_{i+1}\right]$ for
-$i = 0, \ldots, m - 1.$
+order $\leq k$ over each interval $x \in \left[\xi_j, \xi_{j+1}\right]$ for
+$j = 0, \ldots, m - 1.$
 
 In particular, B-splines, are defined as an affine combination:
 
@@ -72,12 +77,12 @@ In particular, B-splines, are defined as an affine combination:
 where $B_{j,k,\boldsymbol{\xi}}\left(x\right)$ is the $j^{th}$ basis spline
 function, $\boldsymbol{\xi}$ is a sequence of $l$ interior knots and a total
 of $2k$ boundary knots, i.e., the cardinality of the knot sequence is
-$\left\lvert \boldsymbol{\xi} \right\rvert| = 2k + l.$ The value of the $k$
+$\left\lvert \boldsymbol{\xi} \right\rvert = 2k + l.$ The value of the $k$
 boundary knots is arbitrary, but a common choice is to use $k$-fold knots on
 the boundary:
 
 $$ \xi_1 = \xi_2 = \cdots = \xi_k < \xi_{k+1} \leq \cdots \leq \xi_{k + l} =
-\xi_{k + l + 1} = \cdots \xi_{2k + l}.$$
+\xi_{k + l + 1} = \cdots = \xi_{2k + l}.$$
 
 Alternative boundary knots can be used so long as the sequence
 $\boldsymbol{\xi}$ is non-decreasing.  More on the implications of $k$-fold
@@ -126,22 +131,10 @@ functions defined above generalize to a matrix:
   \end{pmatrix}
 \end{equation}
 
-
-A few of many important properties of the basis functions:
-
-$$B_{j,k,\boldsymbol{xi}} \left(x\right) \in \left[0, 1\right], \forall x \in \mathbb{R};$$
-
-$$B_{j,k,\boldsymbol{\xi}} \left(x\right) > 0 \quad \text{for} \quad x \in \left(\xi_{j}, \xi_{j+k}\right);$$
-
-and
-
-$$\sum_j B_{j,k,\boldsymbol{xi}} \left(x\right) = \begin{cases} 1 & x \in
-\left[\xi_1, \xi_{2k+l}\right) \\ 0 & otherwise \end{cases}.$$
-
 Within the cpr package we can generate a basis matrix thusly:
 
 ```{r label = "basis_matrix"}
-x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)
+x <- seq(0, 5.9999, length.out = 5000)
 bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
 bmat
 ```
@@ -151,19 +144,36 @@ Note: the default order for
 `r backtick(bsplines) `
 is 4, and the default for the boundary knots is the range of
 `r backtick(x) %s% "." `
-
-
-```{r label = "row sums to 1"}
-all(bmat >= 0)
-all(bmat <= 1)
-all.equal(rowSums(bmat), rep(1, nrow(bmat)))
-```
-
+However, relying on the default boundary knots can lead to unexpected
+behavior as, by definition the splines on the $k$-fold upper boundary is 0.
 
 We can quickly view the plot of each of these spline functions as well.
 
 ```{r label = "plot bmat", fig.width = 7, fig.height = 4}
 plot(bmat, show_xi = TRUE, show_x = TRUE)
+```
+
+
+A few of many important properties of the basis functions:
+
+$$B_{j,k,\boldsymbol{xi}} \left(x\right) \in \left[0, 1\right], \forall x \in \mathbb{R};$$
+
+```{r}
+all(bmat >= 0)
+all(bmat <= 1)
+```
+
+
+$$B_{j,k,\boldsymbol{\xi}} \left(x\right) > 0 \quad \text{for} \quad x \in \left(\xi_{j}, \xi_{j+k}\right);$$
+
+and
+
+$$\sum_j B_{j,k,\boldsymbol{xi}} \left(x\right) = \begin{cases} 1 & x \in
+\left[\xi_1, \xi_{2k+l}\right) \\ 0 & otherwise. \end{cases}$$
+
+
+```{r}
+all.equal(rowSums(bmat), rep(1, nrow(bmat)))
 ```
 
 
@@ -186,15 +196,15 @@ args(splines::bs)
 ```
 
 
-| bsplines | splines::bs    | Notes |
-|:-------- |:-----------    |:----- |
-| x        | x              | numeric vector; the predictor variable |
-| iknots   | knots          | internal knots |
-| bknots   | Boundary.knots | boundary knots |
-| order    | degree         | polynomial order = polynomal degree + 1 |
-| df       | df             | degrees of freedom |
-|          | intercept      | |
-|          | warn.outside   | |
+| cpr::bsplines | splines::bs    | Notes                                    |
+|:--------      |:-----------    |:-----                                    |
+| x             | x              | numeric vector; the predictor variable   |
+| iknots        | knots          | internal knots                           |
+| bknots        | Boundary.knots | boundary knots                           |
+| order         | degree         | polynomial order = polynomial degree + 1 |
+| df            | df             | degrees of freedom                       |
+|               | intercept      |                                          |
+|               | warn.outside   |                                          |
 
 `r  backtick(bsplines)  `
 does not have the
@@ -220,9 +230,8 @@ order 4 (degree 3; cubic) B-spline with boundary knots placed at
 However, the returns are not the same.
 
 ```{r}
-bspline_mat <- bsplines(x)
-bs_mat      <- splines::bs(x)
-attributes(bspline_mat) |> str()
+bs_mat <- splines::bs(x, knots = attr(bmat, "iknots"), Boundary.knots = attr(bmat, "bknots"))
+attributes(bmat) |> str()
 attributes(bs_mat) |> str()
 ```
 
@@ -255,11 +264,23 @@ adheres to the definition strictly, whereas
 uses a pivoting method to allow for non-zero extrapolations outside the
 support.
 
-```{r}
-bsplines(c(0, 1, 2, 5, 6), bknots = c(1, 5))
-splines::bs(c(0, 1, 2, 5, 6), Boundary.knots = c(1, 5))
-```
+Example: for the
+`r  backtick(cpr::bsplines)  `
+call, notice that the first, third, and fifth rows, corresponding to values
+outside the support are all zeros as are the row sums.  Compare that to the
+`r  backtick(splines::bs)  `
+which returns negative values and in the matrix, and all rows sum to 1.
 
+```{r}
+bspline_eg <- bsplines(c(0, 1, 2, 5, 6), bknots = c(1, 5))
+bs_eg      <- splines::bs(c(0, 1, 2, 5, 6), Boundary.knots = c(1, 5), intercept = TRUE )
+
+head(bspline_eg)
+rowSums(bspline_eg)
+
+head(bs_eg)
+rowSums(bs_eg)
+```
 
 
 ## Control Polygons
