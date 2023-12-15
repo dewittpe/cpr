@@ -20,6 +20,7 @@ variation in daily hormone profiles during the menopausal transition.}
 Useful links:
 \itemize{
   \item \url{https://github.com/dewittpe/cpr/}
+  \item \url{http://www.peteredewitt.com/cpr/}
 }
 
 }
