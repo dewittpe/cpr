@@ -63,9 +63,7 @@ stopifnot(isTRUE(all.equal( cpr0[[1]][-call_idx],  sixth_reduction_cp[-call_idx]
 # summary
 s <- summary(cpr0)
 stopifnot(identical(nrow(s), 7L))
-
-stopifnot(identical(names(s), c("dfs", "n_iknots", "iknots", "loglik", "rss", "rse", "Pr(>w_(1))", "loglik_elbow", "rse_elbow")))
-
+stopifnot(identical(names(s), c("dfs", "n_iknots", "iknots", "loglik", "rss", "rse", "wiggle", "Pr(>w_(1))", "loglik_elbow", "rse_elbow")))
 
 ################################################################################
 # test that there is an error in the plotting method if type is not valid

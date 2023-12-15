@@ -15,8 +15,13 @@
   from a sample of size n from a distribution with defined density and
   distribution functions within R.
 
+* `sign_changes` will count the number of sign changes of the first or second
+  derivative of a spline function.
+
 ## User Visible Changes
 * `loglikelihood` is not exported in the namespace
+* `summary.cpr_cp` now calcualtes the "wiggle" of the function by default, that
+  is, changes the default from `wiggle = FALSE` to `wiggle = TRUE`
 
 ## Non-User Visible Changes
 * Refactor of c++ defining basis functions, derivatives of basis functions,

@@ -25,7 +25,7 @@ cp(x, ...)
 
 \method{print}{cpr_cp}(x, ...)
 
-\method{summary}{cpr_cp}(object, wiggle = FALSE, integrate.args = list(), ...)
+\method{summary}{cpr_cp}(object, wiggle = TRUE, integrate.args = list(), ...)
 
 \method{plot}{cpr_cp}(
   x,
@@ -70,10 +70,10 @@ that the design matrix is full rank.}
 
 \item{wiggle}{logical, if \code{TRUE} then the integral of the squared second
 derivative of the spline function will be calculated via
-\code{stats::integrate}.}
+\code{\link[stats]{integrate}}.}
 
 \item{integrate.args}{a list of arguments passed to \code{\link{wiggle}} and
-ultimately \code{stats::integrate}.}
+ultimately \code{\link[stats]{integrate}}.}
 
 \item{comparative}{when \code{TRUE} use \code{color} to distinquish one spline from
 another, when \code{FALSE} \code{color} to highight the control polygon and

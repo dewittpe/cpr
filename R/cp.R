@@ -155,11 +155,11 @@ print.cpr_cp <- function(x, ...) {
 #' @param object a \code{cpr_cp} object
 #' @param wiggle logical, if \code{TRUE} then the integral of the squared second
 #' derivative of the spline function will be calculated via
-#' \code{stats::integrate}.
+#' \code{\link[stats]{integrate}}.
 #' @param integrate.args a list of arguments passed to \code{\link{wiggle}} and
-#' ultimately \code{stats::integrate}.
+#' ultimately \code{\link[stats]{integrate}}.
 #' @rdname cp
-summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...){
+summary.cpr_cp <- function(object, wiggle = TRUE, integrate.args = list(), ...){
   out <-
     data.frame(dfs        = length(object$cp$theta),
          n_iknots   = length(object$iknots),
@@ -170,7 +170,6 @@ summary.cpr_cp <- function(object, wiggle = FALSE, integrate.args = list(), ...)
 
   if (wiggle) {
     wggl <- try(do.call(wiggle.cpr_cp, c(list(object = object), integrate.args)), silent = TRUE)
-
 
     if (inherits(x = wggl, what = "integrate")) {
       out$wiggle <- as.numeric(wggl$value)
