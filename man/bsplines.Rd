@@ -41,10 +41,10 @@ different from the attributes of the object returned by
 }
 \examples{
 # build a vector of values to transform
-xvec <- seq(-3, 5, length = 100)
+xvec <- seq(-3, 4.9999, length = 100)
 
 # cubic b-spline
-bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0))
+bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0), bknots = c(-3, 5))
 bmat
 
 # plot the splines

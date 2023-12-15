@@ -105,6 +105,7 @@ plot_data <- stack(plot_data)
 plot_data <- cbind(plot_data, data.frame(x = xvec))
 
 ggplot2::ggplot(plot_data) +
+ggplot2::theme_bw() +
 ggplot2::aes(x = x, y = values, color = ind) +
 ggplot2::geom_line() +
 ggplot2::geom_hline(yintercept = 0) +

@@ -213,8 +213,8 @@ args(splines::bs)
 {{ backtick(range(x)) %s% "." }}
 #' However, the returns are not the same.
 bs_mat <- splines::bs(x, knots = attr(bmat, "iknots"), Boundary.knots = attr(bmat, "bknots"))
-attributes(bmat) |> str()
-attributes(bs_mat) |> str()
+str(attributes(bmat))
+str(attributes(bs_mat))
 
 #'
 #' The
@@ -304,7 +304,7 @@ plot(cp0, show_spline = TRUE)
 #'
 #' # Knot Influence
 #'
-#' ## Spline Spaces
+#' ## Spline Spaces and Inserting a Knot
 #'
 #' Consider two knot sequences $\boldsymbol{\xi}$ and $\boldsymbol{\xi} \cup
 #' \boldsymbol{\xi}'.$  Then, for a given polynomial order $k,$ the spline space
@@ -419,12 +419,15 @@ summary(x)
 #+ fig.width = 7, fig.height = 7
 ggpubr::ggarrange(
   ggpubr::ggarrange(
-      plot(x, j = 3, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
-    , plot(x, j = 3, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+      plot(x, j = 3, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) +
+        ggplot2::theme(legend.position = "none")
+    , plot(x, j = 3, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) +
+      ggplot2::theme(legend.position = "none")
     , labels = c("(a)", "(b)")
     , nrow = 1
   )
-  , plot(x, j = 3, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , plot(x, j = 3, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) +
+    ggplot2::theme(legend.position = "bottom")
   , labels = c("", "(c)")
   , nrow = 2
   , ncol = 1
@@ -443,12 +446,15 @@ ggpubr::ggarrange(
 #+ fig.width = 7, fig.height = 7
 ggpubr::ggarrange(
   ggpubr::ggarrange(
-      plot(x, j = 4, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
-    , plot(x, j = 4, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "none")
+      plot(x, j = 4, coarsened = TRUE, restored = FALSE, color = TRUE, show_spline = TRUE) +
+        ggplot2::theme(legend.position = "none")
+    , plot(x, j = 4, coarsened = FALSE, restored = TRUE, color = TRUE, show_spline = TRUE) +
+      ggplot2::theme(legend.position = "none")
     , labels = c("(a)", "(b)")
     , nrow = 1
   )
-  , plot(x, j = 4, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) + ggplot2::theme(legend.position = "bottom")
+  , plot(x, j = 4, coarsened = TRUE, restored = TRUE, color = TRUE, show_spline = TRUE) +
+    ggplot2::theme(legend.position = "bottom")
   , labels = c("", "(c)")
   , nrow = 2
   , ncol = 1
@@ -460,22 +466,33 @@ ggpubr::ggarrange(
 #' $\xi_8$ over $\xi_5, \xi_6, \xi_7,$ or $\xi_9$ as that will have the least
 #' impact on the spline approximation of the original functional form.
 #'
-#' ## Fitting B-splines to noisy data
+#' # Fitting B-splines to noisy data
 #'
 #' Start with the spline we have been using and add some noise to it.
 #+ fig.width = 7, fig.height = 4
 set.seed(42)
-x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 100)
+x <- seq(0, 5.99999, length.out = 100)
 bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
 theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
 DF <- data.frame(x = x, truth = as.numeric(bmat %*% theta))
 DF$y <- as.numeric(bmat %*% theta + rnorm(nrow(bmat), sd = 0.3))
 
-ggplot2::ggplot(DF) +
-  ggplot2::theme_bw() +
-  ggplot2::aes(x = x) +
-  ggplot2::geom_line(mapping = ggplot2::aes(y = truth)) +
-  ggplot2::geom_point(mapping = ggplot2::aes(y = y))
+original_data_ggplot_layers <-
+  list(
+    ggplot2::geom_point(data = DF
+                        , mapping = ggplot2::aes(x = x, y = y)
+                        , inherit.aes = FALSE
+                        , color = "#6F263D"
+                        , alpha = 0.2)
+    ,
+    ggplot2::geom_line(data = DF
+                       , mapping = ggplot2::aes(x = x, y = truth)
+                       , inherit.aes = FALSE
+                       , color = "#6F263D"
+                       , alpha = 0.6)
+  )
+
+ggplot2::ggplot(DF) + ggplot2::theme_bw() + original_data_ggplot_layers
 
 #'
 #' To fit a spline and control polygon to the noisy data use a formula statement
@@ -488,21 +505,6 @@ initial_cp <-
   cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3.0, 4, 4.5), bknots = c(0, 6))
      , data = DF
      , keep_fit = TRUE # default is FALSE
-  )
-
-original_data_ggplot_layers <-
-  list(
-    ggplot2::geom_point(data = DF
-                        , mapping = ggplot2::aes(x = x, y = y)
-                        , inherit.aes = FALSE
-                        , color = "red"
-                        , alpha = 0.2)
-    ,
-    ggplot2::geom_line(data = DF
-                       , mapping = ggplot2::aes(x = x, y = truth)
-                       , inherit.aes = FALSE
-                       , color = "red"
-                       , alpha = 0.8)
   )
 
 plot(initial_cp, show_spline = TRUE) + original_data_ggplot_layers
@@ -520,7 +522,7 @@ initial_cp$cp$theta
 summary(influence_of_iknots(initial_cp))
 
 #'
-#' The least influential knot is $\xi_8 = 3.0,$ the extra know inserted.  Good,
+#' The least influential knot is $\xi_8 = 3.0,$ the extra knot inserted.  Good,
 #' we this is the expected result.
 #'
 #' How would someone determine if the influence was significant?  That is, how
@@ -565,74 +567,98 @@ summary(influence_of_iknots(initial_cp))
 #' report two sets of p-values.  The first is the p-value is the probability of
 #' observed chisq value greater than reported, and the second p-value is the
 #' probability of the rank order statistic exceeding the observed value.
-summary(influence_of_iknots(initial_cp))
+#+ results = "asis"
+initial_cp |>
+  influence_of_iknots() |>
+  summary() |>
+  knitr::kable(row.names = TRUE)
 
 #'
 #' It is worth remembering how fraught binary classification of statistical
 #' (non)significance can be.  Just because the p-value is low does not mean that
-#' the knot _is_ influential, just as a high p-value dose not mean that the knot
-#' _is not_ influential.  Sample size, over-fitting, and other factors can/will
+#' the knot is influential, just as a high p-value dose not mean that the knot
+#' is not influential.  Sample size, over-fitting, and other factors can/will
 #' lead to poor selection of a model if you only consider these p-values.
-#' A later example will help to illustrate this.
 #'
 #' That said, consider $\xi_9 = 4.0$ which has the lowest influence weight.  Let's
 #' omit that knot and refit the model.
+#+ results = "asis"
 first_reduction_cp <-
   cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(first_reduction_cp))
+first_reduction_cp |>
+  influence_of_iknots() |>
+  summary() |>
+  knitr::kable(row.names = TRUE)
 
 #'
-#' After omitting one knot and refitting the model we see that $\xi = 2.3" is
+#' After omitting one knot and refitting the model we see that $\xi = 2.3$ is
 #' the least influential.  Just for fun, let's omit that knot, and refit.  Let's
 #' continue that process all the way down to zero knots.
+#+ results = "asis"
 second_reduction_cp <-
   cp(y ~ bsplines(x, iknots = c(1, 1.5, 3, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(second_reduction_cp))
+second_reduction_cp |>
+  influence_of_iknots() |>
+  summary() |>
+  knitr::kable(row.names = TRUE)
 
+#'
+#' The least influential knot in the second reduction is $\xi = 1.5$ and that
+#' will be omited for the third reduction.
+#+ results = "asis"
 third_reduction_cp <-
   cp(y ~ bsplines(x, iknots = c(1, 3, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(third_reduction_cp))
+third_reduction_cp |>
+  influence_of_iknots() |>
+  summary() |>
+  knitr::kable(row.names = TRUE)
 
+#'
+#' Within the third reduction, the least influential knot is $\xi = 3.0$ and
+#' that knot will be omitted for the fourth reduction.
+#+ results = "asis"
 fourth_reduction_cp <-
   cp(y ~ bsplines(x, iknots = c(1, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(fourth_reduction_cp))
+fourth_reduction_cp |>
+  influence_of_iknots() |>
+  summary() |>
+  knitr::kable(row.names = TRUE)
 
+#'
+#' Of the two remaining internal knots, $\xi - 1.0$ is the least influential and
+#' will be omitted for the fifth reduciton.
+#+ results = "asis"
 fifth_reduction_cp <-
   cp(y ~ bsplines(x, iknots = 4.5, bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(fifth_reduction_cp))
+fifth_reduction_cp |>
+  influence_of_iknots() |>
+  summary() |>
+  knitr::kable(row.names = TRUE)
 
+#'
+#' Only one knot can be omitted from the fifth to the sixth reduciton.  Having
+#' the sixth reduction, where there are zero internal knots, lets us compare
+#' model fits to a model with just a $k=4$ order polynomial.
 sixth_reduction_cp <-
   cp(y ~ bsplines(x, bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(sixth_reduction_cp))
+sixth_reduction_cp |>
+  influence_of_iknots() |>
+  summary()
 
 #'
 #' Let's compare all the fits.  We will start by looking at the control polygons
 #' and splines.
 #'
-#+ fig.height = 7, fig.width = 7
+#+ fig.height = 4, fig.width = 7, warning = FALSE, echo = FALSE
 ggpubr::ggarrange(
-  plot(initial_cp
-       , first_reduction_cp
-       , second_reduction_cp
-       , third_reduction_cp
-       , fourth_reduction_cp
-       , fifth_reduction_cp
-       , sixth_reduction_cp
-       , show_spline = FALSE
-       , show_cp = TRUE
-       , color = TRUE
+  plot(  initial_cp , first_reduction_cp , second_reduction_cp , third_reduction_cp
+       , fourth_reduction_cp , fifth_reduction_cp , sixth_reduction_cp
+       , show_spline = FALSE , show_cp = TRUE , color = TRUE
        )
   ,
-  plot(initial_cp
-       , first_reduction_cp
-       , second_reduction_cp
-       , third_reduction_cp
-       , fourth_reduction_cp
-       , fifth_reduction_cp
-       , sixth_reduction_cp
-       , show_spline = TRUE
-       , show_cp = FALSE
-       , color = TRUE
+  plot(  initial_cp , first_reduction_cp , second_reduction_cp , third_reduction_cp
+       , fourth_reduction_cp , fifth_reduction_cp , sixth_reduction_cp
+       , show_spline = TRUE , show_cp = FALSE , color = TRUE
        )
   , labels = c("(a)", "(b)")
   , common.legend = TRUE
@@ -645,20 +671,38 @@ ggpubr::ggarrange(
 #'
 #' Next, the graphic below will let us compare these models to the truth, and
 #' the observed data.
-#+ fig.width = 7, fig.height = 4
+#+ fig.width = 7, fig.height = 4, echo = FALSE
 ggpubr::ggarrange(
-    plot(initial_cp, show_spline = TRUE)          + ggplot2::ggtitle("Initial CP") + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
-  , plot(first_reduction_cp, show_spline = TRUE)  + ggplot2::ggtitle("First Reduction") + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
-  , plot(second_reduction_cp, show_spline = TRUE) + ggplot2::ggtitle("Second Reduction") + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
-  , plot(third_reduction_cp, show_spline = TRUE)  + ggplot2::ggtitle("Third Reduction") + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
-  , plot(fourth_reduction_cp, show_spline = TRUE) + ggplot2::ggtitle("Fourth Reduction") + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
-  , plot(fifth_reduction_cp, show_spline = TRUE)  + ggplot2::ggtitle("Fifth Reduction") + ggplot2::coord_cartesian(ylim = c(-1, 5)) + original_data_ggplot_layers
+    plot(initial_cp, show_spline = TRUE) +
+      ggplot2::ggtitle("Initial CP") +
+      ggplot2::coord_cartesian(ylim = c(-1, 5)) +
+      original_data_ggplot_layers
+  , plot(first_reduction_cp, show_spline = TRUE)  +
+    ggplot2::ggtitle("First Reduction") +
+    ggplot2::coord_cartesian(ylim = c(-1, 5)) +
+    original_data_ggplot_layers
+  , plot(second_reduction_cp, show_spline = TRUE) +
+    ggplot2::ggtitle("Second Reduction") +
+    ggplot2::coord_cartesian(ylim = c(-1, 5)) +
+    original_data_ggplot_layers
+  , plot(third_reduction_cp, show_spline = TRUE)  +
+    ggplot2::ggtitle("Third Reduction") +
+    ggplot2::coord_cartesian(ylim = c(-1, 5)) +
+    original_data_ggplot_layers
+  , plot(fourth_reduction_cp, show_spline = TRUE) +
+    ggplot2::ggtitle("Fourth Reduction") +
+    ggplot2::coord_cartesian(ylim = c(-1, 5)) +
+    original_data_ggplot_layers
+  , plot(fifth_reduction_cp, show_spline = TRUE) +
+    ggplot2::ggtitle("Fifth Reduction") +
+    ggplot2::coord_cartesian(ylim = c(-1, 5)) +
+    original_data_ggplot_layers
   , common.legend = TRUE
   )
 
 #'
-#' The dashed black line is the spline fitted to the data (light red dots) and
-#' the true value of the target function is the red line.  In the fifth
+#' The dashed black line is the spline fitted to the data (light burgundy dots) and
+#' the true value of the target function is the burgundy line.  In the fifth
 #' reduction there is an easily noticeable difference between the fitted spline
 #' and the target function. Between the initial control polygon and the first
 #' three reductions it is difficult to visually discern any meaningful difference
@@ -667,39 +711,47 @@ ggpubr::ggarrange(
 #' Thus, I would argue that the third reduction is the preferable model as it
 #' has the fewest degrees of freedom while providing a good quality of fit.
 #' This conclusion is supported by looking at the residual standard error (rse)
-#' $$ rse = \sqrt{ \sum_{i=1}^{n} \left(y_i - f\left(x_i\right)\right)^2}.$$
-summary_mannual_process <-
-  list(
-       initial_cp
-       , first_reduction_cp
-       , second_reduction_cp
-       , third_reduction_cp
-       , fourth_reduction_cp
-       , fifth_reduction_cp
-       , sixth_reduction_cp
-       ) |>
+#' $$ rse = \sqrt{ \frac{1}{df} \sum_{i=1}^{n} \left(y_i - f\left(x_i\right)\right)^2 },$$
+#' where the degrees of freedom, $df,$ is the sample size $n$ minus the number
+#' of regression paramters.
+#+ results = 'asis'
+list(  initial_cp , first_reduction_cp , second_reduction_cp , third_reduction_cp
+     , fourth_reduction_cp , fifth_reduction_cp , sixth_reduction_cp) |>
   rev() |>
   lapply(summary) |>
   do.call(what = rbind, args = _) |>
   cbind(data.frame(reduction = seq(6, 0, by = -1))) |>
-  print()
+  knitr::kable(row.names = TRUE)
 
+#'
+#' The
+{{ backtick(wiggle) }}
+#' is one measure of wiggliness defined as
+#' $$
+#' \int_{\min\left(\boldsymbol{\xi}\right)}^{\max\left(\boldsymbol{\xi}\right)}
+#' \left( \frac{d^2}{dx^2} f\left(x\right) \right)^2 dx.
+#' $$
+{{ backtick(fdsc) }}
+#' reports the number of times the first derivative has a sign change.
 #'
 #' # Control Polygon Reduction
 #'
-#' ## Example with known knots
 #'
 #' The exercise above of manually identifying and omitting the knot with the
-#' smallest influence in each model would be tedious to say the least when
-#' working with a large set of initial knots.  Fortunately, the process has been
-#' automated.  Calling
+#' smallest influence in each model would be tedious when working with a large
+#' set of initial knots.  Fortunately, the process has been automated.  Calling
 {{ qwraps2::backtick(cpr) }}
 #' on a
 {{ qwraps2::backtick(cpr_cp) }}
-#' object defined by a function will automatically omit the internal know with
+#' object defined by a function will automatically omit the internal knot with
 #' the lowest influence.
 #'
-#+ fig.width = 7, fig.height = 7
+#' ## Example with known knots
+#'
+#' Apply CPR to the
+{{ qwraps2::backtick(initial_cp) }}
+#' from the above example.
+#'
 cpr0 <- cpr(initial_cp)
 cpr0
 
@@ -721,22 +773,15 @@ cpr0
 #' parts, like the control polygons, are the same.
 all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])
 
-all.equal( cpr0[[6]],  first_reduction_cp)
-call_idx <- which(names(cpr0[[6]]) == "call")
-all.equal( cpr0[[6]][-call_idx],  first_reduction_cp[-call_idx])
-
-all.equal( cpr0[[5]][-call_idx],  second_reduction_cp[-call_idx])
-
-all.equal( cpr0[[4]][-call_idx],  third_reduction_cp[-call_idx])
-
-all.equal( cpr0[[3]][-call_idx],  fourth_reduction_cp[-call_idx])
-
-all.equal( cpr0[[2]][-call_idx],  fifth_reduction_cp[-call_idx])
-
 # some attributes are different with the last cp due to how the automation
 # creates the call vs how the call was created manually.
-all.equal( cpr0[[1]][-call_idx],  sixth_reduction_cp[-call_idx], check.attributes = F)
-
+call_idx <- which(names(cpr0[[6]]) == "call")
+all.equal( cpr0[[6]][-call_idx], first_reduction_cp [-call_idx])
+all.equal( cpr0[[5]][-call_idx], second_reduction_cp[-call_idx])
+all.equal( cpr0[[4]][-call_idx], third_reduction_cp [-call_idx])
+all.equal( cpr0[[3]][-call_idx], fourth_reduction_cp[-call_idx])
+all.equal( cpr0[[2]][-call_idx], fifth_reduction_cp [-call_idx])
+all.equal( cpr0[[1]][-call_idx], sixth_reduction_cp [-call_idx], check.attributes = FALSE)
 
 #'
 #' In the manual process we identified
@@ -744,20 +789,19 @@ all.equal( cpr0[[1]][-call_idx],  sixth_reduction_cp[-call_idx], check.attribute
 #' as the preferable model. For the
 {{ backtick(cpr0) }}
 #' object we can quickly see a similar result as we did for the manual process.
-summary(cpr0)
+#+ result = "asis"
+summary(cpr0) |> knitr::kable(row.names = TRUE)
 
 #'
-#' The summary above reports some model fit statistics, the log-likelihood
-#' (loglik), the residual sum of squares (rss) and residual standard error
-#' (rse).  The
-{{ backtick("loglik_elbow", dequote = TRUE) %s% " and " %s% backtick(rse_elbow) %s% "."}}
-#' columns indicate a location in the plot for either the loglik or rse by model
+#' The additional columns in this summary,
+{{ backtick("loglik_elbow", dequote = TRUE) %s% " and " %s% backtick(rse_elbow) %s% ","}}
+#' indicate a location in the plot for either the loglik or rse by model
 #' index (degrees of freedom) where the trade-off between additional degrees of
 #' freedom and improvement in the fix statistic is negligible.  See plot below.
 #' This is determined by finding the breakpoint such that a continuous, but not
 #' differentiable at breakpoint, quadratic spline fits the plot with minimal
 #' residual standard error.
-
+#+ fig.height = 7, fig.width = 7
 ggpubr::ggarrange(
     plot(cpr0, type = "cps", color = TRUE)
   , plot(cpr0, type = "cps", show_cp = FALSE, show_spline = TRUE, color = TRUE)
@@ -765,7 +809,6 @@ ggpubr::ggarrange(
   , plot(cpr0, type = "rse")
   , ncol =2
   , nrow = 2
-  , labels = c("(a)", "(b)", "(c)", "(d)")
   , common.legend = TRUE
 )
 
@@ -779,17 +822,17 @@ ggpubr::ggarrange(
 #'
 #' From @deboor2001 (page 106)
 #' <quote>
-#' ...a B-spline doesn't change much if one changes its $k+1$ knots a little
+#' "...a B-spline doesn't change much if one changes its $k+1$ knots a little
 #' bit. Therefore, if one has multiple knots, then it is very easy to find
 #' B-spline almost like with simple knots: Simply replace knot of multiplicity
-#' $r > 1$ by $r$ simple knots nearby.
+#' $r > 1$ by $r$ simple knots nearby."
 #' </quote>
 #'
 #' That is,
 #'
 #' $$
 #'   \boldsymbol{B}_{k, \boldsymbol{\xi}}\left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi}} \approx
-#'   \boldsymbol{B}_{k, \boldsymbol{\xi'}}\left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi'}} \approx
+#'   \boldsymbol{B}_{k, \boldsymbol{\xi'}}\left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi'}}
 #' $$
 #' where
 #' $$
@@ -804,6 +847,7 @@ ggpubr::ggarrange(
 #'
 #' For example we will use 50 internal knots. Not surprisingly we have a fit
 #' that is more "connect-the-dots" than a smooth fit.
+#+ fig.width = 7, fig.height = 4
 initial_cp <- cp(y ~ bsplines(x, df = 54, bknots = c(0, 6)), data = DF)
 
 ggpubr::ggarrange(
@@ -815,21 +859,20 @@ ggpubr::ggarrange(
 #'
 #' Apply CPR to the
 {{ backtick(initial_cp) }}
-#' and look at the summary
+#' and look at the summary.  Only the first 10 of 51 rows are provided here.
 cpr1 <- cpr(initial_cp)
 x <- summary(cpr1)
-head(x, 10)
+knitr::kable(head(x, 10))
 
 #'
 #' From this, the preferable model is suggested to be index 5, the model with
 #' four internal knots.  Inspection of the rse by index plot, I would argue from
-#' a manual selection that index 5 is preferable overall. Further, if index 4 is
-#' the "elbow" then I would argue that index 3 would be preferable as there is
-#' little to gain with the extra knot.
+#' a manual selection that index 5 is preferable overall.
 plot(cpr1, type = "rse")
 
 #'
 #' Let's compare the models in indices 3, 4, and 5.
+#+ fig.width = 7, fig.height = 4
 ggpubr::ggarrange(
   plot(cpr1[[3]], cpr1[[4]], cpr1[[5]], show_cp = TRUE, show_spline = FALSE, color = TRUE)
   ,
@@ -843,19 +886,25 @@ ggpubr::ggarrange(
 #' of the support between between 0 and 1.  For the fifth index, there is change
 #' in convexity of the spline. Knowing that the models at index 3 and 4 are good
 #' fits too, then it would be easy not select index 5 due to extra "wiggle" in
-#' the spline.  Wiggle is defined as
-#' $$ \int_{\xi_1}^{\xi_{2k+l}} \left( \frac{d}{dx} f\left(x\right) \right)^2
-#' dx,$$ and the wiggle for these splines are:
-wiggle(cpr1[[3]])
-wiggle(cpr1[[4]])
-wiggle(cpr1[[5]])
-
+#' the spline.
 #'
-#' In practice I would likely pick the model in index 4 to minimize wiggle and
-#' rse.  Compare the selected model to the original data.
+#' In practice I would likely pick the model in index 4 to have a smooth (small
+#' wiggle) and low rse.  Compare the selected model to the original data.
 #'
-plot(cpr1[[4]], show_cp = TRUE, show_spline = TRUE) +
-  original_data_ggplot_layers
+#+ fig.width = 7, fig.height = 4
+ggpubr::ggarrange(
+    plot(cpr1[[3]], show_cp = FALSE, show_spline = TRUE) +
+    ggplot2::ggtitle("Model Index 3") +
+    original_data_ggplot_layers
+  , plot(cpr1[[4]], show_cp = FALSE, show_spline = TRUE) +
+    ggplot2::ggtitle("Model Index 4") +
+    original_data_ggplot_layers
+  , plot(cpr1[[5]], show_cp = FALSE, show_spline = TRUE) +
+    ggplot2::ggtitle("Model Index 5") +
+    original_data_ggplot_layers
+  , nrow = 1
+  , legend = "none"
+)
 
 #'
 #' # Extensions to higher dimensions
