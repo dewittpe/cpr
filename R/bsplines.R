@@ -3,16 +3,21 @@
 #' An implementation of Carl de Boor's recursive algorithm for building
 #' B-splines.
 #'
-#' The difference between this function and \code{splines::bs} come in the
-#' attributes associated with the output and default options.  The
-#' \code{cpr::bsplines} call is intended to simplify the work needed with
-#' respect to the control polygon reduction.  Further, the implementation of
-#' \code{cpr::bsplines} is in C++ and tends to be faster than
-#' \code{splines::bs}.
+#' There are several differences between this function and \code{\link[splines]{bs}}.
 #'
-#' See the \code{vignette("bsplines", package = "cpr")} for a detailed
-#' comparison between the \code{bsplines} and \code{\link[splines]{bs}} calls
-#' and notes about B-splines in general.
+#' The most important difference is how the two methods treat the right-hand end
+#' of the support.  \code{\link[splines]{bs}} uses a pivot method to allow for
+#' extrapolation and thus returns a basis matrix where non-zero values exist on
+#' the \code{max(Boundary.knots)} (\code{\link[splines]{bs}} version of
+#' \code{bsplines}'s \code{bknots}).  \code{bsplines} use a strict definition of
+#' the splines where the support is open on the right hand side, that is,
+#' \code{bsplines} return right-continuous functions.
+#'
+#' Additioanlly, the attributes of the object returned by \code{bsplines} are
+#' different from the attributes of the object returned by
+#' \code{\link[splines]{bs}}. See the \code{vignette(topic = "cpr", package =
+#' "cpr")} for a detailed comparison between the \code{bsplines} and
+#' \code{\link[splines]{bs}} calls and notes about B-splines in general.
 #'
 #' @references
 #' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
@@ -34,12 +39,15 @@
 #' \code{cpr_bs} object.  This is a similar method to the
 #' \code{\link[stats]{update}} function from the \code{stats} package.
 #'
+#' \code{vignette(topic = "cpr", package = "cpr")} for details on B-splines and
+#' the control polygon reduction method.
+#'
 #' @examples
 #' # build a vector of values to transform
-#' xvec <- seq(-3, 5, length = 100)
+#' xvec <- seq(-3, 4.9999, length = 100)
 #'
 #' # cubic b-spline
-#' bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0))
+#' bmat <- bsplines(xvec, iknots = c(-2, 0, 1.2, 1.2, 3.0), bknots = c(-3, 5))
 #' bmat
 #'
 #' # plot the splines
@@ -64,12 +72,26 @@
 bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L) {
 
   if (is.list(x)) {
-    stop("x is a list.  use cpr::btensor instead of cpr::bsplines.")
+    stop("x is a list. Use btensor instead of bsplines.")
+  }
+
+  stopifnot(length(bknots) == 2L)
+  order <- as.integer(order)
+  if (order <= 1) {
+    stop("order needs to be an integer value >= 2.")
+  }
+
+  if (any(x < min(bknots))) {
+    warning("At least one x value < min(bknots)")
+  }
+
+  if (any(x >= max(bknots))) {
+    warning("At least one x value >= max(bknots)")
   }
 
   iknots <- iknots_or_df(x, iknots, df, order)
 
-  rtn <- .Call('_cpr_bbasis__impl', PACKAGE = 'cpr', x, iknots, bknots, order)
+  rtn <- cpp_bsplines(x = x, iknots = iknots, bknots = bknots, order = order)
   attr(rtn, "call") <- match.call()
   attr(rtn, "environment") <- parent.frame()
   class(rtn) <- c("cpr_bs", "matrix")
@@ -84,6 +106,8 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
 #' @param n, number of rows of the B-spline basis matrix to display, defaults to
 #' 6L.
 #' @param \ldots not currently used.
+#'
+#' @return the object \code{x} is returned invisibly
 print.cpr_bs <- function(x, n = 6L, ...) {
   cat("Basis matrix dims: [",
       paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "),
@@ -95,7 +119,9 @@ print.cpr_bs <- function(x, n = 6L, ...) {
     cat("First", n, "rows:\n\n")
   }
 
-  print(x[seq(1, min(nrow(x), abs(n)), by = 1L), ])
+  if (nrow(x) > 0L) {
+    print(x[seq(1, min(nrow(x), abs(n)), by = 1L), ])
+  }
 
   invisible(x)
 }
@@ -125,13 +151,14 @@ print.cpr_bs <- function(x, n = 6L, ...) {
 #' @method plot cpr_bs
 #' @export
 plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, digits = 2, n = 100) {
-  xvec <- seq(min(attr(x, "bknots")), max(attr(x, "bknots")), length = n)
-  bmat <- bsplines(xvec, iknots = attr(x, "iknots"), order = attr(x, "order"))
 
   # reshape from wide to long and from matrix to data.frame
-  plot_data <- utils::stack(as.data.frame(bmat))
+  plot_data <- utils::stack(as.data.frame(x))
   names(plot_data) <- c("value", "spline")
-  plot_data <- cbind(plot_data, data.frame(x = rep(xvec, times = ncol(bmat))))
+
+  xvec <- seq(attr(x, "bknots")[1], attr(x, "bknots")[2], length = nrow(x))
+  plot_data <- cbind(plot_data, data.frame(x = rep(xvec, times = ncol(x))))
+
   levels(plot_data$spline) <- sub("V", "B", levels(plot_data$spline))
   levels(plot_data$spline) <- sub("(\\d+)",
                                   paste0("[list(\\1,k==", attr(x, "order"), ",bold(xi))](x)"),
@@ -175,6 +202,7 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
   g
 }
 
+
 #' B-spline Derivatives
 #'
 #' Generate the first and second derivatives of a B-spline Basis.
@@ -195,7 +223,56 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 #' @seealso \code{\link{bsplines}}
 #'
 #' @examples
+#' ################################################################################
+#' # Example 1 - pefectly fitting a cubic function
+#' f <- function(x) {
+#'   x^3 - 2 * x^2 - 5 * x + 6
+#' }
 #'
+#' fprime <- function(x) { # first derivatives of f(x)
+#'   3 * x^2 - 4 * x - 5
+#' }
+#'
+#' fdoubleprime <- function(x) { # second derivatives of f(x)
+#'   6 * x - 4
+#' }
+#'
+#' # Build a spline to fit
+#' bknots = c(-3, 5)
+#'
+#' x     <- seq(-3, 4.999, length.out = 200)
+#' bmat  <- bsplines(x, bknots = bknots)
+#' theta <- matrix(coef(lm(f(x) ~ bmat + 0)), ncol = 1)
+#'
+#' bmatD1 <- bsplineD(x, bknots = bknots, derivative = 1L)
+#' bmatD2 <- bsplineD(x, bknots = bknots, derivative = 2L)
+#'
+#' # Verify that we have perfectly fitted splines to the function and its
+#' # derivatives.
+#' # check that the function f(x) is recovered
+#' all.equal(f(x), as.numeric(bmat %*% theta))
+#' all.equal(fprime(x), as.numeric(bmatD1 %*% theta))
+#' all.equal(fdoubleprime(x), as.numeric(bmatD2 %*% theta))
+#'
+#' # Plot the results
+#' old_par <- par()
+#' par(mfrow = c(1, 3))
+#' plot(x, f(x), type = "l", main = bquote(f(x)), ylab = "", xlab = "")
+#' points(x, bmat %*% theta, col = 'blue')
+#' grid()
+#'
+#' plot(x, fprime(x), type = "l", main = bquote(frac(d,dx)~f(x)), ylab = "", xlab = "")
+#' points(x, bmatD1 %*% theta, col = 'blue')
+#' grid()
+#'
+#' plot(x, fdoubleprime(x), type = "l", main = bquote(frac(d^2,dx^2)~f(x)), ylab = "", xlab = "")
+#' points(x, bmatD2 %*% theta, col = 'blue')
+#' grid()
+#'
+#' par(old_par)
+#'
+#' ################################################################################
+#' # Example 2
 #' set.seed(42)
 #'
 #' xvec <- seq(0.1, 9.9, length = 1000)
@@ -220,6 +297,7 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 #' plot_data <- cbind(plot_data, data.frame(x = xvec))
 #'
 #' ggplot2::ggplot(plot_data) +
+#' ggplot2::theme_bw() +
 #' ggplot2::aes(x = x, y = values, color = ind) +
 #' ggplot2::geom_line() +
 #' ggplot2::geom_hline(yintercept = 0) +
@@ -230,27 +308,21 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
 bsplineD <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L, derivative = 1L) {
 
   iknots <- iknots_or_df(x, iknots, df, order)
-
-  xi <- c(rep(min(bknots), order), iknots, rep(max(bknots), order))
-
+  stopifnot(length(bknots) == 2L)
+  order <- as.integer(order)
+  if (order <= 1) {
+    stop("order needs to be an integer value >= 2.")
+  }
 
   if (derivative == 1L) {
-    rtn <- mapply(bsplineD1__impl,
-                  j = seq(0L, length(iknots) + order - 1L, by = 1L),
-                  MoreArgs = list(x = x, order = order, knots = xi),
-                  SIMPLIFY = FALSE)
+    rtn <- cpp_bsplinesD1(x = x, iknots = iknots, bknots = bknots, order = order)
   } else if (derivative == 2L) {
-    rtn <- mapply(bsplineD2__impl,
-                  j = seq(0L, length(iknots) + order - 1L, by = 1L),
-                  MoreArgs = list(x = x, order = order, knots = xi),
-                  SIMPLIFY = FALSE)
+    rtn <- cpp_bsplinesD2(x = x, iknots = iknots, bknots = bknots, order = order)
   } else {
     stop("Only first and second derivatives are supported")
   }
-
-  do.call(cbind, rtn)
+  rtn
 }
-
 
 iknots_or_df <- function(x, iknots, df, order) {
   if (is.null(iknots) & is.null(df)) {

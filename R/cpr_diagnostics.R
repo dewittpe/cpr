@@ -9,16 +9,18 @@
 #' @param x a \code{cpr_cpr} object
 #' @param type type of diagnostic plot.  \code{"cps"} for control polygons,
 #' \code{"loglik"} for the log likelihood by degrees of freedom,
-#' \code{"rmse"} for root mean squared residuals by degrees of freedom
+#' \code{"rse"} for residual standard error by index.
 #' @param from the first index of \code{x} to plot
 #' @param to the last index of \code{x} to plot
-#' @param ... arguments passed to \code{cpr::plot.cpr_cp}
+#' @param ... arguments passed to \code{plot.cpr_cp}
 #' @seealso \code{\link{plot.cpr_cp}}
-plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
+plot.cpr_cpr <- function(x, type = c("cps", "loglik", "rss", "rse"), from = 1, to, ...) {
 
   if (from < 1) {
     from <- 1
   }
+
+  type <- match.arg(type, several.ok = FALSE)
 
   if (type == "cps") {
 
@@ -35,7 +37,7 @@ plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
                                   collapse = ", "),
                             ", ...)")))
 
-  } else if (any(type %in% c("rmse", "loglik"))) {
+  } else {
     if (missing(to)) {
       to <- length(x)
     } else if (to > length(x)) {
@@ -43,6 +45,7 @@ plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
     }
 
     s <- summary(x)
+    s$index <- seq_along(s[[type]])
 
     ggplot2::ggplot(subset(s, (s$index >= from) & (s$index <= to))) +
     ggplot2::theme_bw() +
@@ -51,8 +54,6 @@ plot.cpr_cpr <- function(x, type = "cps", from = 1, to, ...) {
     ggplot2::geom_line() +
     ggplot2::xlab("Index")
 
-  } else {
-    stop("type needs to be either 'cps', 'loglik', or 'rmse'.")
   }
 }
 

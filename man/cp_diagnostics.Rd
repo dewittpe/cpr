@@ -25,9 +25,54 @@ the abscissa \code{x} given.  \code{x} could be a control vertex or on a
 line segment defined by two control vertices of the control polygon
 provided.
 
-\code{cp_diff} returns the absolute vertical distance between the control
+\code{cp_diff} returns the vertical distance between the control
 vertices of cp1 to the control polygon cp2.
 }
 \description{
 Collection of functions for inspection and analysis of the control polygons
+}
+\examples{
+xvec <- seq(0, 6, length = 500)
+
+# Define the basis matrix
+bmat1 <- bsplines(x = xvec, iknots = c(1, 1.5, 2.3, 4, 4.5))
+bmat2 <- bsplines(x = xvec)
+
+# Define the control vertices ordinates
+theta1 <- c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5)
+theta2 <- c(1, 3.4, -2, 1.7)
+
+# build the two control polygons
+cp1 <- cp(bmat1, theta1)
+cp2 <- cp(bmat2, theta2)
+
+x <- c(0.2, 0.8, 1.3, 1.73, 2.15, 3.14, 4.22, 4.88, 5.3, 5.9)
+cp_value(cp1, x = x)
+
+df <- data.frame(x = x, y = cp_value(cp1, x = x))
+
+plot(cp1, show_x = TRUE, show_spline = TRUE) +
+ggplot2::geom_point(data = df
+  , mapping = ggplot2::aes(x = x, y = y)
+  , color = "red"
+  , shape = 4
+  , size = 3
+  , inherit.aes = FALSE)
+
+
+# cp diff
+
+cp_diff(cp1, cp2)
+
+df <- data.frame(x = cp1$cp$xi_star,
+                 y = cp1$cp$theta,
+                 yend = cp1$cp$theta + cp_diff(cp1, cp2))
+
+
+plot(cp1, cp2) +
+ggplot2::geom_segment(data = df
+  , mapping = ggplot2::aes(x = x, xend = x, y = y, yend = yend)
+  , color = "red"
+  , inherit.aes = FALSE)
+
 }

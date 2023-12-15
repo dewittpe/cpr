@@ -22,7 +22,7 @@
 #'  mixed effects model was used.}
 #'  \item{vcov}{The variance-covariance matrix for the \code{coefficients}}
 #'  \item{loglik}{The log-likelihood for the regression model}
-#'  \item{rmse}{The root mean squared error for the regression models}
+#'  \item{rse}{the residual standard error for the regression models}
 #'  }
 #'
 #' @export
@@ -45,7 +45,8 @@ cn.cpr_bt <- function(x, theta, ...) {
          keep_fit = NA,
          fit     = NA,
          loglik  = NA,
-         rmse    = NA)
+         rss     = NA,
+         rse     = NA)
   class(out) <- c("cpr_cn", class(out))
   out
 }
@@ -67,7 +68,7 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   fterms <- stats::terms(formula)
   fterms
   if (sum(grepl("btensor", attr(fterms, "term.labels"))) != 1) {
-    stop("cpr::btensor() must appear once, with no effect modifiers, on the right hand side of the formula.")
+    stop("btensor() must appear once, with no effect modifiers, on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment
@@ -81,10 +82,11 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
   cl$data <- as.name("data_for_use")
 
   fit <- do.call(regression, cl)
+  COEF_VCOV <- coef_vcov(fit)
 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
-    if (matrix_rank(m) != ncol(m) | any(is.na(BETA(fit)))) {
+    if (matrix_rank(m) != ncol(m) | any(is.na(COEF_VCOV$coef))) {
       warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
               call. = FALSE,
               immediate. = TRUE)
@@ -101,15 +103,18 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
 
   out <-
     list(cn      = data.frame(cbind(do.call(expand.grid, xi_stars),
-                                 theta   = as.vector(theta(fit)))),
+                                 theta   = as.vector(COEF_VCOV$theta))),
          bspline_list = attr(Bmat, "bspline_list"),
          call    = cl,
          keep_fit = keep_fit,
          fit     = if (keep_fit) { fit } else { NA },
-         coefficients = BETA(fit),
-         vcov = SIGMA(fit),
-         loglik  = loglikelihood(fit),
-         rmse    = sqrt(mean(stats::residuals(fit)^2)))
+         theta = COEF_VCOV$theta,
+         vcov_theta = COEF_VCOV$vcov_theta,
+         coefficients = COEF_VCOV$coef,
+         vcov = COEF_VCOV$vcov,
+         loglik  = loglikelihood(fit))
+  out$rss <- stats::residuals(fit)^2
+  out$rse <- sqrt(stats::residuals(fit)^2 / (nrow(data) - length(COEF_VCOV$coef)))
   class(out) <- c("cpr_cn", class(out))
 
   out
@@ -132,7 +137,8 @@ summary.cpr_cn <- function(object, ...) {
   out <-
     data.frame(dfs        = length(object$cn$theta),
                loglik     = object$loglik,
-               rmse       = object$rmse)
+               rss        = object$rss,
+               rse        = object$rse )
 
   for(i in seq_along(iknots)) {
     nm <- names(iknots)[i]
@@ -142,4 +148,21 @@ summary.cpr_cn <- function(object, ...) {
 
   out
 
+}
+
+
+extract_cpr_bsplines <- function(form) {
+  B <- NULL
+  rr <- function(x) {
+    if (is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
+      B <<- x
+    } else if (is.recursive(x)) {
+      as.call(lapply(as.list(x), rr))
+    } else {
+      x
+    }
+  }
+
+  z <- lapply(as.list(form), rr)
+  B
 }

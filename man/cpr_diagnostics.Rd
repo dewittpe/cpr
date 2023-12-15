@@ -4,20 +4,20 @@
 \alias{plot.cpr_cpr}
 \title{Control Polygon Reduction Plots}
 \usage{
-\method{plot}{cpr_cpr}(x, type = "cps", from = 1, to, ...)
+\method{plot}{cpr_cpr}(x, type = c("cps", "loglik", "rss", "rse"), from = 1, to, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cpr} object}
 
 \item{type}{type of diagnostic plot.  \code{"cps"} for control polygons,
 \code{"loglik"} for the log likelihood by degrees of freedom,
-\code{"rmse"} for root mean squared residuals by degrees of freedom}
+\code{"rse"} for residual standard error by index.}
 
 \item{from}{the first index of \code{x} to plot}
 
 \item{to}{the last index of \code{x} to plot}
 
-\item{...}{arguments passed to \code{cpr::plot.cpr_cp}}
+\item{...}{arguments passed to \code{plot.cpr_cp}}
 }
 \description{
 A collection of function for the inspection and evaluation of the control

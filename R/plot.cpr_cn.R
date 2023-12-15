@@ -11,7 +11,7 @@
 #'
 #' Building complex and customized graphics might be easier for you if you use
 #' \code{\link{get_surface}} to generate the needed data for plotting.  See
-#' \code{vignette("cpr-pkg", package = "cpr")} for examples of building
+#' \code{vignette(topic = "cnr", package = "cpr")} for examples of building
 #' different plots.
 #'
 #' For \code{rgl} graphics, the \code{surface_args} and \code{net_args} are
@@ -51,8 +51,10 @@
 #' plot3D graphics. \code{\link{get_surface}} for generating the data sets
 #' needed for the plotting methods.
 #'
+#' @seealso \code{vignette(topic = "cnr", package = "cpr")}
+#'
 #' @examples
-#' ## see vignette("cpr-pkg", package = "cpr")
+#' ## see vignette(topic = "cnr", package = "cpr")
 #'
 #' @method plot cpr_cn
 #' @export

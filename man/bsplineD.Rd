@@ -31,7 +31,56 @@ if \code{iknots} is specified.}
 Generate the first and second derivatives of a B-spline Basis.
 }
 \examples{
+################################################################################
+# Example 1 - pefectly fitting a cubic function
+f <- function(x) {
+  x^3 - 2 * x^2 - 5 * x + 6
+}
 
+fprime <- function(x) { # first derivatives of f(x)
+  3 * x^2 - 4 * x - 5
+}
+
+fdoubleprime <- function(x) { # second derivatives of f(x)
+  6 * x - 4
+}
+
+# Build a spline to fit
+bknots = c(-3, 5)
+
+x     <- seq(-3, 4.999, length.out = 200)
+bmat  <- bsplines(x, bknots = bknots)
+theta <- matrix(coef(lm(f(x) ~ bmat + 0)), ncol = 1)
+
+bmatD1 <- bsplineD(x, bknots = bknots, derivative = 1L)
+bmatD2 <- bsplineD(x, bknots = bknots, derivative = 2L)
+
+# Verify that we have perfectly fitted splines to the function and its
+# derivatives.
+# check that the function f(x) is recovered
+all.equal(f(x), as.numeric(bmat \%*\% theta))
+all.equal(fprime(x), as.numeric(bmatD1 \%*\% theta))
+all.equal(fdoubleprime(x), as.numeric(bmatD2 \%*\% theta))
+
+# Plot the results
+old_par <- par()
+par(mfrow = c(1, 3))
+plot(x, f(x), type = "l", main = bquote(f(x)), ylab = "", xlab = "")
+points(x, bmat \%*\% theta, col = 'blue')
+grid()
+
+plot(x, fprime(x), type = "l", main = bquote(frac(d,dx)~f(x)), ylab = "", xlab = "")
+points(x, bmatD1 \%*\% theta, col = 'blue')
+grid()
+
+plot(x, fdoubleprime(x), type = "l", main = bquote(frac(d^2,dx^2)~f(x)), ylab = "", xlab = "")
+points(x, bmatD2 \%*\% theta, col = 'blue')
+grid()
+
+par(old_par)
+
+################################################################################
+# Example 2
 set.seed(42)
 
 xvec <- seq(0.1, 9.9, length = 1000)
@@ -56,6 +105,7 @@ plot_data <- stack(plot_data)
 plot_data <- cbind(plot_data, data.frame(x = xvec))
 
 ggplot2::ggplot(plot_data) +
+ggplot2::theme_bw() +
 ggplot2::aes(x = x, y = values, color = ind) +
 ggplot2::geom_line() +
 ggplot2::geom_hline(yintercept = 0) +

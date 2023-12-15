@@ -4,14 +4,14 @@
 \alias{plot.cpr_cnr}
 \title{Control Net Reduction Plots}
 \usage{
-\method{plot}{cpr_cnr}(x, type = "rmse", from = 1, to, ...)
+\method{plot}{cpr_cnr}(x, type = "rse", from = 1, to, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cnr} object}
 
 \item{type}{type of diagnostic plot.
 \code{"loglik"} for the log likelihood by degrees of freedom,
-\code{"rmse"} for root mean squared residuals by model index}
+\code{"rse"} for residual standard error by model index}
 
 \item{from}{the first index of \code{x} to plot}
 

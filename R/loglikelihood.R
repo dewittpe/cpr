@@ -3,7 +3,7 @@
 #' Return, via \code{\link[stats]{logLik}} or a custom S3 method, the (quasi)
 #' log likelihood of a regression object.
 #'
-#' This function is used by \code{cpr::cpr} and \code{cpr::cnr} to determine the
+#' This function is used by \code{cpr} and \code{cnr} to determine the
 #' (quasi) log likelihood returned in the \code{cpr_cpr} and \code{cpr_cnr}
 #' objects.
 #'
@@ -22,7 +22,12 @@
 #'
 #' @seealso \code{\link{cpr}} \code{\link{cnr}} \code{\link[stats]{logLik}}
 #'
-#' @export
+#' @examples
+#'
+#' fit <- lm(mpg ~ wt, data = mtcars)
+#' stats::logLik(fit)
+#' cpr:::loglikelihood(fit)
+#'
 loglikelihood <- function(x, ...) {
   UseMethod("loglikelihood")
 }
@@ -43,23 +48,7 @@ loglikelihood.geeglm <- function(x, ...) {
          poisson          =  sum(y * log(mu) - mu),
          Gamma            = -sum(y/mu + log(mu)),
          inverse.gaussian =  sum(-y/(2 * mu^2) + 1/mu),
-         stop(simpleError(gettextf("do not know how to calculate quasi-likelihood for geeglms with family '%s'",
+         stop(simpleError(gettextf("tool for calculating loglikelihood for geeglms with family '%s' not yet defined.",
                                    stats::family(x)$family)))
          )
 }
-
-# library(lme4)
-# library(geepack)
-#
-# fit <- lm(mpg ~ wt, data = mtcars)
-# loglikelihood(fit)
-#
-# fit <- glm(mpg ~ wt, data = mtcars)
-# loglikelihood(fit)
-#
-# fit <- lmer(mpg ~ wt + (1|cyl), data = mtcars)
-# loglikelihood(fit)
-#
-# fit <- geeglm(mpg ~ wt, id = cyl, data = mtcars)
-# loglikelihood(fit)
-#

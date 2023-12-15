@@ -20,6 +20,10 @@ knots for each marginal is used.}
 
 \item{n}{the length of sequence to use for interpolating the spline function.}
 }
+\value{
+a \code{data.frame} \code{n} rows and two columns \code{x} and
+\code{y}, the  values for the spline.
+}
 \description{
 Generate \code{data.frame}s for interpolating and plotting a spline
 function, given a \code{cpr_cp} or \code{cpr_cn} object.
@@ -52,12 +56,10 @@ data(spdg, package = "cpr")
 ## graphics for this example.
 a_cp <- cp(pdg ~ bsplines(day, df = 10), data = spdg)
 
-cp_and_spline <- get_spline(a_cp)
-plot(cp_and_spline$cp, type = "b")
-points(cp_and_spline$spline, type = "l")
-grid()
+spline <- get_spline(a_cp)
+plot(spline$x, spline$y, type = "b")
 
-# compare to the cpr:::plot.cpr_cp method
+# compare to the plot.cpr_cp method
 plot(a_cp, show_spline = TRUE)
 
 }

@@ -25,11 +25,11 @@ test_warning(x, "wrapping x into a list.")
 # 1D btensor matrix is constructed as expected
 
 bm <-
-  btensor(x = list(mtcars$hp), iknots = list(c(100, 150)))
+  btensor(x = list(mtcars$hp), iknots = list(c(100, 150)), bknots = list(c(50,350)))
 
 mm <-
   model.matrix( ~ 0 +
-               splines::bs(mtcars$hp, knots = c(100, 150), intercept = TRUE)
+               splines::bs(mtcars$hp, knots = c(100, 150), Boundary.knots = c(50, 350), intercept = TRUE)
   )
 
 stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
@@ -40,12 +40,14 @@ stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
 
 bm <-
   btensor(x = list(mtcars$disp, mtcars$hp),
-          iknots = list(numeric(0), c(100, 150)))
+          iknots = list(numeric(0), c(100, 150)),
+          bknots = list(c(70, 475), c(50, 350))
+  )
 
 mm <-
   model.matrix( ~ 0 +
-               splines::bs(mtcars$disp, intercept = TRUE) :
-             splines::bs(mtcars$hp, knots = c(100, 150), intercept = TRUE)
+               splines::bs(mtcars$disp, intercept = TRUE, Boundary.knots = c(70, 475)) :
+               splines::bs(mtcars$hp, knots = c(100, 150), Boundary.knots = c(50, 350), intercept = TRUE)
   )
 
 stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
@@ -55,13 +57,15 @@ stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
 
 bm <-
   btensor(x = list(mtcars$disp, mtcars$hp, mtcars$mpg),
-          iknots = list(numeric(0), c(100, 150), c(12.2, 16.3, 21.9)))
+          iknots = list(numeric(0), c(100, 150), c(12.2, 16.3, 21.9)),
+          bknots = list(c(70, 475), c(50, 350), c(10, 35))
+  )
 
 mm <-
   model.matrix( ~ 0 +
-               splines::bs(mtcars$disp, intercept = TRUE) :
-             splines::bs(mtcars$hp, knots = c(100, 150), intercept = TRUE) :
-             splines::bs(mtcars$mpg, knots = c(12.2, 16.3, 21.9), intercept = TRUE))
+               splines::bs(mtcars$disp, intercept = TRUE, Boundary.knots = c(70, 475)) :
+               splines::bs(mtcars$hp, knots = c(100, 150), Boundary.knots = c(50, 350), intercept = TRUE) :
+               splines::bs(mtcars$mpg, knots = c(12.2, 16.3, 21.9), Boundary.knots = c(10, 35), intercept = TRUE))
 
 stopifnot(isTRUE(all.equal(mm, unclass(bm), check.attributes = FALSE)))
 

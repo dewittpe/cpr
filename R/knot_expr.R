@@ -10,10 +10,12 @@ knot_expr <- function(x, digits) {
   UseMethod("knot_expr")
 }
 
+#' @export
 knot_expr.cpr_cp <- function(x, digits) {
   generate_knot_expression(x$xi, digits)
 }
 
+#' @export
 knot_expr.cpr_bs <- function(x, digits) {
   generate_knot_expression(attr(x, "xi"), digits)
 }
@@ -36,7 +38,7 @@ generate_knot_expression <- function(xi, digits) {
   xi_expr <- lapply(j,
                     function(x) {
                       if (length(x) > 1) {
-                        bquote(group("{", xi[j], "}")[j == .(min(x))]^{.(max(x))})
+                        bquote(group("{", xi[j], "}")[j == .(min(x))]^.(max(x)))
                       } else {
                         bquote(xi[.(x)])
                       }

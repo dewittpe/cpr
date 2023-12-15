@@ -3,7 +3,7 @@
 #' Construct a \code{data.frame} and \code{formula} to be passed to the
 #' regression modeling tool to generate a control polygon.
 #'
-#' This function is expected to be called from within the \code{cpr::cp}
+#' This function is expected to be called from within the \code{cp}
 #' function and is not expected to be called by the end user directly.
 #'
 #' \code{generate_cp_data} exists because of the need to build what could be
@@ -16,7 +16,7 @@
 #' all levels of the factor will be generated.  We need to replace the intercept
 #' column of the model matrix with the bspline.  This also needs to be done for
 #' a variety of possible model calls, \code{\link[stats]{lm}},
-#' \code{\link{lme4}{lmer}}, etc.
+#' \code{\link[lme4]{lmer}}, etc.
 #'
 #' By returning an explicit \code{formula} and \code{data.frame} for use in the
 #' fit, we hope to reduce memory use and increase the speed of the cpr method.

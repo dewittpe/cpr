@@ -58,7 +58,7 @@ Some of the elements are omitted when the using the \code{cn.cpr_bt} method.
  mixed effects model was used.}
  \item{vcov}{The variance-covariance matrix for the \code{coefficients}}
  \item{loglik}{The log-likelihood for the regression model}
- \item{rmse}{The root mean squared error for the regression models}
+ \item{rse}{the residual standard error for the regression models}
  }
 }
 \description{

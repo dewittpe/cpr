@@ -17,22 +17,21 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
 
   true_bmat <- bsplines(xvec, iknots = true_iknots, order = k)
 
-  true_cp <- cp(true_bmat, true_theta, ...)
+  true_cp <- cp(true_bmat, true_theta)
 
   s_data <- data.frame(x = xvec,
                        y = as.numeric(true_bmat %*% matrix(true_theta, ncol = 1)))
 
   initial_iknots <- sort(c(stats::runif(start_with - n_iknots), true_iknots))
 
-  f <- paste("y ~ bsplines(x, iknots = initial_iknots, order =", k, ")")
+  f <- substitute(y ~ bsplines(x, iknots = IKNOTS, order = K), list(IKNOTS = initial_iknots, K = k))
   f <- stats::as.formula(f)
   environment(f) <- environment()
 
+
   initial_cp <- suppressWarnings(do.call(cp, list(formula = f, data = s_data)))
 
-  initial_cp$keep_fit
-
-  cpr_run <- cpr(initial_cp, progress = FALSE)
+  cpr_run <- cpr(initial_cp)
 
   found_cp <- cpr_run[[n_iknots + 1L]]
 
