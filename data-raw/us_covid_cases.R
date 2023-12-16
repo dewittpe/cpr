@@ -19,4 +19,6 @@ us_covid_cases <- subset(us_covid_cases, date <= "2023-05-11") # end of the publ
 
 us_covid_cases <- us_covid_cases[, .(date = as.Date(date), cases = N)]
 
+us_covid_cases <- as.data.frame(us_covid_cases)
+
 save(us_covid_cases, file = "../data/us_covid_cases.rda")
