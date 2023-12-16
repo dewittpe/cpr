@@ -21,11 +21,19 @@
 #' By returning an explicit \code{formula} and \code{data.frame} for use in the
 #' fit, we hope to reduce memory use and increase the speed of the cpr method.
 #'
+#' We need to know the \code{method} and \code{method.args} to build the data
+#' set.  For example, for a \code{\link[geepack]{geeglm}} the \code{id} variable
+#' is needed in the data set and is part of the \code{method.args} not the
+#' \code{formula}.
+#'
 #' @param f a formula
 #' @param data the data set containing the variables in the formula
+#' @param method a character string for the regression method
+#' @param method.args additional arguments passed to method
 #'
 #' @rdname generate_cp_formula_data
-generate_cp_formula_data <- function(f, data) {
+generate_cp_formula_data <- function(f, data, method, method.args) {
+
   # part the formula, version with no bspline, no bars
   f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
   f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
@@ -33,6 +41,11 @@ generate_cp_formula_data <- function(f, data) {
   # get a list of the variables and subset the data
   vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
   data_nobsplines_nobars <- subset(data, select = vars_nobsplines_nobars)
+
+  if (grepl("geeglm", method)) {
+    fit <- do.call(geepack::geeglm, c(method.args, formula = stats::update.formula(f, . ~ 1), data = list(data)))
+    data_nobsplines_nobars[[as.character(method.args[["id"]])]] <- unname(fit[["id"]])
+  }
 
   # identify any variables which are factors or characters
   factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)})
