@@ -32,14 +32,16 @@
 #' # construct the initial control polygon.  Forth order spline with fifty
 #' # internal knots.  Remember degrees of freedom equal the polynomial order
 #' # plus number of internal knots.
-#' init_cp <- cp(log10(pdg) ~ bsplines(day, df = 54) + (1|id),
+#' init_cp <- cp(log10(pdg) ~ bsplines(day, df = 54, bknots = c(-1, 1)) + (1|id),
 #'               data = spdg, method = lme4::lmer)
 #' cpr_run <- cpr(init_cp)
 #' plot(cpr_run, color = TRUE)
-#' plot(cpr_run, type = "rse", to = 10)
+#' plot(cpr_run, type = "rse")
 #'
-#' # preferable model is in index 4
-#' preferable_cp <- cpr_run[[4]]
+#' summary(cpr_run)
+#'
+#' # preferable model is in index 5
+#' preferable_cp <- cpr_run[[5]]
 #' }
 #'
 #' #############################################################################
@@ -53,18 +55,21 @@
 #'
 #' # Define the initial control polygon
 #' init_cp <- cp(formula = y ~ bsplines(x, df = 54, bknots = c(0, 4.5)),
-#'               family  = binomial(),
+#'               data    = sim_data,
 #'               method  = glm,
-#'               data    = sim_data)
+#'               method.args = list(family  = binomial())
+#'               )
 #'
 #' # run CPR, preferable model is in index 7
 #' cpr_run <- cpr(init_cp)
-#' plot(cpr_run, color = TRUE, type = "rse", to = 15)
-#' plot(cpr_run, color = TRUE, from = 11, to = 15, show_spline = TRUE)
+#'
+#' summary(cpr_run)
+#'
+#' plot(cpr_run, color = TRUE, type = "rse")
+#' plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE)
 #'
 #' # plot the fitted spline and the true p(x)
-#' sim_data$pred_select_p <-
-#'   plogis(predict(cpr_run[[7]], newdata = sim_data)$pred)
+#' sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data)$pred)
 #'
 #' ggplot2::ggplot(sim_data) +
 #' ggplot2::theme_bw() +

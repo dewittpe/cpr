@@ -32,8 +32,11 @@ Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets
 }
 \examples{
 ## Extract the control net and surface from a cpr_cn object.
-a_cn <- cn(pdg ~ btensor(list(day, age), df = list(15, 3), order = list(3, 2)),
-           data = spdg)
+a_cn <- cn(pdg ~ btensor(list(day, age)
+           , df = list(15, 3)
+           , bknots = list(c(-1, 1), c(45, 53))
+           , order = list(3, 2))
+           , data = spdg)
 
 cn_and_surface <- get_surface(a_cn, n = 50)
 str(cn_and_surface, max.level = 2)
