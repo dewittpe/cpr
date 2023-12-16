@@ -1,6 +1,6 @@
 ################################################################################
 # Simulation of Hormone Data set
-# 
+#
 # This simulation is based on a subset of the Daily Hormone Study, part of the
 # Study of Women's Health Across the Nation.
 #
@@ -46,7 +46,7 @@ for(i in 1:nrow(spdg)) {
     if (sccm::is_in(age, ttm, agettm_sccm_ch) == 1) {
       spdg$age[i] <- age
       spdg$ttm[i] <- ttm
-      break 
+      break
     }
   }
 }
@@ -66,7 +66,7 @@ spdg$ethnicity <-
 # Check, visual check, swan vs spdg
 # par(mfrow = c(2, 2))
 # image(agettm_kernel, main = "SWAN")
-# image(MASS::kde2d(spdg$age, spdg$ttm), main = "Simulated") 
+# image(MASS::kde2d(spdg$age, spdg$ttm), main = "Simulated")
 # plot(agettm_sccm_ch)
 # plot(sccm::convex_hull(spdg))
 
@@ -75,9 +75,9 @@ spdg$ethnicity <-
 delta_bmi <- diff(agebmi_kernel$y[1:2])
 
 spdg$bmi <-
-  sapply(spdg$age, 
+  sapply(spdg$age,
          function(a) {
-           index <- which( (a > agebmi_kernel$x - delta_age/2) & (a < agebmi_kernel$x + delta_age/2)) 
+           index <- which( (a > agebmi_kernel$x - delta_age/2) & (a < agebmi_kernel$x + delta_age/2))
            sample(agebmi_kernel$y, 1, prob = agebmi_kernel$z[index, ]) + runif(1, -delta_bmi/2, delta_bmi/2)
          })
 
@@ -90,7 +90,7 @@ spdg$bmi <-
 # Cycle lengths
 index <- sample(seq_along(flll_kernel$z), SUBJECTS, replace = TRUE, prob = flll_kernel$z)
 flll  <- flll_kernel[index, c("fl", "ll")]
-flll  <- 
+flll  <-
   Map(function(id, dfd) { data.frame(id = id, day_from_dlt = dfd) },
       id = 1:SUBJECTS,
       dfd = apply(flll, 1, function(x) seq(x[1], x[2], by = 1)))
@@ -100,13 +100,13 @@ spdg <- merge(spdg, flll, all = TRUE, by = "id")
 
 spdg <- split(spdg, f = spdg$id)
 spdg <-
-  lapply(spdg, function(x) { 
+  lapply(spdg, function(x) {
            x$day_of_cycle <- seq_along(x$day_from_dlt)
            x$day <- NA_real_
            idx <- which(x$day_from_dlt > 0)
-           x$day[idx] <- x$day_from_dlt[idx] / max(x$day_from_dlt)
+           x$day[idx] <- x$day_from_dlt[idx] / (max(x$day_from_dlt) + 1)
            idx <- which(x$day_from_dlt <= 0)
-           x$day[idx] <- x$day_from_dlt[idx] / -min(x$day_from_dlt)
+           x$day[idx] <- - x$day_from_dlt[idx] / (min(x$day_from_dlt) - 1)
            x}
   )
 spdg <- do.call(rbind, spdg)
@@ -114,12 +114,13 @@ spdg <- do.call(rbind, spdg)
 ################################################################################
 # the model
 
-X <- model.matrix( ~ 0 + 
-                  cpr::btensor(list(day, age, ttm, bmi), 
+X <- model.matrix( ~ 0 +
+                  cpr::btensor(list(day, age, ttm, bmi),
                                iknots = list(c(-0.0384, 0.0705), numeric(0), numeric(0), numeric(0)),
-                               order  = list(3, 2, 2, 2)) + 
-                  I(ethnicity == "Black") + 
-                  I(ethnicity == "Chinese") + 
+                               bknots = list(c(-1, 1), c(45, 53), c(-8.5, 0), c(15, 55)),
+                               order  = list(3, 2, 2, 2)) +
+                  I(ethnicity == "Black") +
+                  I(ethnicity == "Chinese") +
                   I(ethnicity == "Hispanic") +
                   I(ethnicity == "Japanese"),
                   data = spdg)
@@ -132,10 +133,17 @@ rint  <- rep(runif(SUBJECTS, -0.5, 0.5), times = table(spdg$id))
 spdg$pdg <- 10^(apply(cbind(mu, error), 1, function(x) rnorm(1, x[1], 15 * x[2])) + rint)
 
 ################################################################################
+# view data
+if (interactive()) {
+  ggplot2::ggplot(spdg) +
+    ggplot2::aes(x = day, y = log10(pdg), group = id) +
+    ggplot2::geom_path(alpha = 0.2)
+}
+
+################################################################################
 # Write out the data
 save(spdg, file = "../data/spdg.rda")
 
-
 ################################################################################
-# end of file
+#                                 end of file                                  #
 ################################################################################
