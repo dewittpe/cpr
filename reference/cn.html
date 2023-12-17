@@ -66,7 +66,15 @@
 <span><span class="fu">cn</span><span class="op">(</span><span class="va">x</span>, <span class="va">theta</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for formula</span></span>
-<span><span class="fu">cn</span><span class="op">(</span><span class="va">formula</span>, <span class="va">data</span>, method <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span>, <span class="va">...</span>, keep_fit <span class="op">=</span> <span class="cn">FALSE</span>, check_rank <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu">cn</span><span class="op">(</span></span>
+<span>  <span class="va">formula</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  method <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span>,</span>
+<span>  method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  keep_fit <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  check_rank <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for cpr_cn</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -82,7 +90,7 @@
 
 
 <dt>...</dt>
-<dd><p>arguments passed to the regression method</p></dd>
+<dd><p>pass through</p></dd>
 
 
 <dt>theta</dt>
@@ -102,6 +110,11 @@ used.</p></dd>
 <dt>method</dt>
 <dd><p>the regression method such as <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code>,
 <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code>, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></code>, etc.</p></dd>
+
+
+<dt>method.args</dt>
+<dd><p>a list of additional arguments to pass to the regression
+method.</p></dd>
 
 
 <dt>keep_fit</dt>

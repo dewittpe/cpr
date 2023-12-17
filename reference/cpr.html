@@ -119,14 +119,16 @@ limit on the number of stored regression fits is to keep memory usage down.</p>
 <span class="r-in"><span><span class="co"># construct the initial control polygon.  Forth order spline with fifty</span></span></span>
 <span class="r-in"><span><span class="co"># internal knots.  Remember degrees of freedom equal the polynomial order</span></span></span>
 <span class="r-in"><span><span class="co"># plus number of internal knots.</span></span></span>
-<span class="r-in"><span><span class="va">init_cp</span> <span class="op">&lt;-</span> <span class="fu"><a href="cp.html">cp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">pdg</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">day</span>, df <span class="op">=</span> <span class="fl">54</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="va">init_cp</span> <span class="op">&lt;-</span> <span class="fu"><a href="cp.html">cp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">pdg</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">day</span>, df <span class="op">=</span> <span class="fl">54</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span><span class="op">|</span><span class="va">id</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>              data <span class="op">=</span> <span class="va">spdg</span>, method <span class="op">=</span> <span class="fu">lme4</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cpr_run</span> <span class="op">&lt;-</span> <span class="fu">cpr</span><span class="op">(</span><span class="va">init_cp</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr_run</span>, color <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr_run</span>, type <span class="op">=</span> <span class="st">"rse"</span>, to <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr_run</span>, type <span class="op">=</span> <span class="st">"rse"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># preferable model is in index 4</span></span></span>
-<span class="r-in"><span><span class="va">preferable_cp</span> <span class="op">&lt;-</span> <span class="va">cpr_run</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cpr_run</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># preferable model is in index 5</span></span></span>
+<span class="r-in"><span><span class="va">preferable_cp</span> <span class="op">&lt;-</span> <span class="va">cpr_run</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#############################################################################</span></span></span>
@@ -140,20 +142,127 @@ limit on the number of stored regression fits is to keep memory usage down.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Define the initial control polygon</span></span></span>
 <span class="r-in"><span><span class="va">init_cp</span> <span class="op">&lt;-</span> <span class="fu"><a href="cp.html">cp</a></span><span class="op">(</span>formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">x</span>, df <span class="op">=</span> <span class="fl">54</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4.5</span><span class="op">)</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>              family  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              data    <span class="op">=</span> <span class="va">sim_data</span>,</span></span>
 <span class="r-in"><span>              method  <span class="op">=</span> <span class="va">glm</span>,</span></span>
-<span class="r-in"><span>              data    <span class="op">=</span> <span class="va">sim_data</span><span class="op">)</span></span></span>
+<span class="r-in"><span>              method.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>family  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>              <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># run CPR, preferable model is in index 7</span></span></span>
 <span class="r-in"><span><span class="va">cpr_run</span> <span class="op">&lt;-</span> <span class="fu">cpr</span><span class="op">(</span><span class="va">init_cp</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr_run</span>, color <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"rse"</span>, to <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cpr_run</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    dfs n_iknots       iknots    loglik      rss       rse       wiggle fdsc</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    4        0              -1524.367 3048.735 1.1051914 5.670049e+00    1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2    5        1 0.729119.... -1471.933 2943.866 1.0862349 8.075067e+02    2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    6        2 0.650666.... -1445.352 2890.703 1.0765979 1.468561e+03    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    7        3 0.650666.... -1444.725 2889.451 1.0765805 1.244232e+03    4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    8        4 0.650666.... -1318.146 2636.293 1.0285438 9.081719e+03    6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6    9        5 0.587696.... -1300.001 2600.002 1.0216449 1.841409e+04    7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   10        6 0.587696.... -1256.983 2513.965 1.0048008 2.793707e+04    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   11        7 0.587696.... -1255.741 2511.483 1.0045063 2.735703e+04    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   12        8 0.587696.... -1255.228 2510.456 1.0045028 2.695608e+04    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  13        9 0.587696.... -1252.228 2504.456 1.0035034 6.658738e+04    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  14       10 0.587696.... -1251.154 2502.309 1.0032747 1.566095e+05    8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12  15       11 0.587696.... -1249.133 2498.266 1.0026657 2.533185e+05   11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13  16       12 0.587696.... -1243.738 2487.476 1.0006995 1.053843e+06   12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14  17       13 0.328569.... -1243.630 2487.260 1.0008574 1.057876e+06   10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15  18       14 0.328569.... -1242.974 2485.948 1.0007950 1.194616e+06   11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16  19       15 0.328569.... -1239.805 2479.611 0.9997200 1.811530e+06   15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17  20       16 0.249212.... -1238.228 2476.456 0.9992852 3.120671e+06   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18  21       17 0.249212.... -1238.225 2476.449 0.9994854 3.415695e+06   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19  22       18 0.249212.... -1237.759 2475.518 0.9994991 4.376128e+06   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20  23       19 0.249212.... -1234.025 2468.050 0.9981917 4.775024e+06   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21  24       20 0.249212.... -1233.591 2467.183 0.9982179 4.949395e+06   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22  25       21 0.249212.... -1233.559 2467.118 0.9984064 4.936030e+06   16</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23  26       22 0.249212.... -1230.769 2461.538 0.9974782 5.285301e+06   20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24  27       23 0.249212.... -1230.068 2460.136 0.9973956 5.376343e+06   22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25  28       24 0.249212.... -1230.026 2460.053 0.9975806 4.435994e+06   22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26  29       25 0.249212.... -1228.749 2457.498 0.9972641 6.731999e+06   22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27  30       26 0.249212.... -1228.719 2457.437 0.9974537 6.772837e+06   22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28  31       27 0.249212.... -1228.492 2456.984 0.9975637 6.896918e+06   22</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29  32       28 0.249212.... -1228.080 2456.161 0.9975986 6.678374e+06   24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30  33       29 0.249212.... -1225.369 2450.738 0.9966986 7.374691e+06   26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31  34       30 0.249212.... -1225.204 2450.407 0.9968335 8.134362e+06   26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32  35       31 0.249212.... -1223.760 2447.521 0.9964482 9.739136e+06   28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33  36       32 0.249212.... -1223.585 2447.170 0.9965789 9.599515e+06   28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34  37       33 0.249212.... -1221.897 2443.795 0.9960936 1.053703e+07   30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35  38       34 0.249212.... -1221.672 2443.344 0.9962041 1.072229e+07   30</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36  39       35 0.249212.... -1221.223 2442.446 0.9962232 1.081025e+07   32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37  40       36 0.249212.... -1221.206 2442.412 0.9964187 1.078691e+07   32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38  41       37 0.249212.... -1220.555 2441.109 0.9963555 1.086991e+07   36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39  42       38 0.077664.... -1220.425 2440.851 0.9965055 1.074457e+07   36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40  43       39 0.077664.... -1220.246 2440.492 0.9966350 1.111247e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41  44       40 0.077664.... -1220.161 2440.322 0.9968031 1.090847e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42  45       41 0.077664.... -1220.109 2440.217 0.9969848 1.194348e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43  46       42 0.077664.... -1219.814 2439.627 0.9970673 1.318852e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44  47       43 0.077664.... -1219.373 2438.747 0.9970905 1.319868e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45  48       44 0.077664.... -1219.208 2438.415 0.9972260 1.321556e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46  49       45 0.077664.... -1219.052 2438.103 0.9973656 1.323116e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47  50       46 0.077664.... -1218.831 2437.661 0.9974787 1.324242e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48  51       47 0.077664.... -1218.811 2437.622 0.9976742 1.323149e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49  52       48 0.077664.... -1218.801 2437.602 0.9978740 1.323166e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50  53       49 0.077664.... -1218.797 2437.594 0.9980761 1.323104e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51  54       50 0.077664.... -1218.796 2437.592 0.9982798 1.323654e+07   38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Pr(&gt;w_(1)) loglik_elbow rse_elbow</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          NA                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  0.01806100                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  4.0749e-07                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0.00010329                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1.4766e-14                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 1.4394e-08          &lt;&lt;&lt;       &lt;&lt;&lt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1.7764e-15                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 0.00304633                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 3.8724e-07                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1.4433e-15                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 0.31997338                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 2.2690e-07                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 2.7955e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 9.2284e-09                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 0.00896420                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 8.3824e-10                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 3.2263e-10                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 0.00190991                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26 2.1002e-11                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27 0.00360729                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28 8.2562e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29 1.2764e-12                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30 1.0369e-13                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31 3.9331e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32 2.2204e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33 6.0272e-09                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34 &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35 6.3091e-11                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36 &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37 0.00337528                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38 &lt; 2.22e-16                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39 8.0105e-09                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40 7.1681e-11                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41 1.5716e-07                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42 6.3048e-06                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43 7.1808e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44 4.7848e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45 5.5929e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46 5.0250e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47 3.4693e-08                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48 0.00031470                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49 0.00361281                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50 0.02308096                       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51 0.18953185                       </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr_run</span>, color <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"rse"</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="cpr-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr_run</span>, color <span class="op">=</span> <span class="cn">TRUE</span>, from <span class="op">=</span> <span class="fl">11</span>, to <span class="op">=</span> <span class="fl">15</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr_run</span>, color <span class="op">=</span> <span class="cn">TRUE</span>, from <span class="op">=</span> <span class="fl">5</span>, to <span class="op">=</span> <span class="fl">9</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(parse(text = paste("plot(", paste(paste0(nm, "[[", seq(from = from,     to = to, by = 1), "]]"), collapse = ", "), ", ...)"))):</span> object 'cpr_run' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot the fitted spline and the true p(x)</span></span></span>
-<span class="r-in"><span><span class="va">sim_data</span><span class="op">$</span><span class="va">pred_select_p</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cpr_run</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span>, newdata <span class="op">=</span> <span class="va">sim_data</span><span class="op">)</span><span class="op">$</span><span class="va">pred</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">sim_data</span><span class="op">$</span><span class="va">pred_select_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html" class="external-link">plogis</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">cpr_run</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span>, newdata <span class="op">=</span> <span class="va">sim_data</span><span class="op">)</span><span class="op">$</span><span class="va">pred</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">sim_data</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span></span>

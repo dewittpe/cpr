@@ -63,7 +63,7 @@ regression modeling tool to generate a control polygon.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_cp_formula_data</span><span class="op">(</span><span class="va">f</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">generate_cp_formula_data</span><span class="op">(</span><span class="va">f</span>, <span class="va">data</span>, <span class="va">method</span>, <span class="va">method.args</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,6 +74,14 @@ regression modeling tool to generate a control polygon.</p>
 
 <dt>data</dt>
 <dd><p>the data set containing the variables in the formula</p></dd>
+
+
+<dt>method</dt>
+<dd><p>a character string for the regression method</p></dd>
+
+
+<dt>method.args</dt>
+<dd><p>additional arguments passed to method</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -93,6 +101,10 @@ a variety of possible model calls, <code><a href="https://rdrr.io/r/stats/lm.htm
 <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></code>, etc.</p>
 <p>By returning an explicit <code>formula</code> and <code>data.frame</code> for use in the
 fit, we hope to reduce memory use and increase the speed of the cpr method.</p>
+<p>We need to know the <code>method</code> and <code>method.args</code> to build the data
+set.  For example, for a <code><a href="https://rdrr.io/pkg/geepack/man/geeglm.html" class="external-link">geeglm</a></code> the <code>id</code> variable
+is needed in the data set and is part of the <code>method.args</code> not the
+<code>formula</code>.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
