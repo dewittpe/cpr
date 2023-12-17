@@ -4,12 +4,16 @@
 \alias{generate_cp_formula_data}
 \title{Generate Control Polygon Formula and Data}
 \usage{
-generate_cp_formula_data(f, data)
+generate_cp_formula_data(f, data, method, method.args)
 }
 \arguments{
 \item{f}{a formula}
 
 \item{data}{the data set containing the variables in the formula}
+
+\item{method}{a character string for the regression method}
+
+\item{method.args}{additional arguments passed to method}
 }
 \description{
 Construct a \code{data.frame} and \code{formula} to be passed to the
@@ -33,4 +37,9 @@ a variety of possible model calls, \code{\link[stats]{lm}},
 
 By returning an explicit \code{formula} and \code{data.frame} for use in the
 fit, we hope to reduce memory use and increase the speed of the cpr method.
+
+We need to know the \code{method} and \code{method.args} to build the data
+set.  For example, for a \code{\link[geepack]{geeglm}} the \code{id} variable
+is needed in the data set and is part of the \code{method.args} not the
+\code{formula}.
 }

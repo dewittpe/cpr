@@ -10,7 +10,18 @@
 #' @export
 predict.cpr_cp <- function(object, newdata, ...) {
   f_for_use <- data_for_use <- NULL
-  generate_cp_formula_data(updatebsplines(stats::formula(object), object$iknots, object$bknots, object$order), newdata)
+
+  #generate_cp_formula_data(updatebsplines(stats::formula(object), object$iknots, object$bknots, object$order), newdata)
+
+  cl <- as.list(object$call)[c("method", "method.args")]
+  cl[["method"]] <- as.character(cl[["method"]])
+  do.call(generate_cp_formula_data,
+          c(cl
+            , f = updatebsplines(stats::formula(object), object$iknots, object$bknots, object$order)
+            , data = list(newdata)
+          )
+  )
+
   XMAT <- stats::model.matrix(lme4::nobars(f_for_use)[-2], data_for_use)
   data.frame(pred = as.numeric(XMAT %*% object$coefficients),
              se   = apply(XMAT, 1, function(x, sg) {sqrt(matrix(x, nrow = 1) %*% sg %*% matrix(x, ncol = 1))}, sg = object$vcov))
@@ -24,7 +35,15 @@ predict.cpr_cn <- function(object, newdata, ...) {
   ods <- lapply(object$bspline_list, attr, which = "order")
 
   f_for_use <- data_for_use <- NULL
-  generate_cp_formula_data(updatebsplines(stats::formula(object), iks, bks, ods), newdata)
+  #generate_cp_formula_data(updatebsplines(stats::formula(object), iks, bks, ods), newdata)
+  cl <- as.list(object$call)[c("method", "method.args")]
+  cl[["method"]] <- as.character(cl[["method"]])
+  do.call(generate_cp_formula_data,
+          c(cl
+            , f = updatebsplines(stats::formula(object), iks, bks, ods)
+            , data = list(newdata))
+          )
+
   XMAT <- stats::model.matrix(lme4::nobars(f_for_use)[-2], data_for_use)
   data.frame(pred = as.numeric(XMAT %*% object$coefficients),
              se   = apply(XMAT, 1, function(x, sg) {sqrt(matrix(x, nrow = 1) %*% sg %*% matrix(x, ncol = 1))}, sg = object$vcov))

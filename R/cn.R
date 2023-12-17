@@ -6,7 +6,7 @@
 #' are several methods for building a control net.
 #'
 #' @param x a \code{cpr_bs} object
-#' @param ... arguments passed to the regression method
+#' @param ... pass through
 #'
 #' @return a \code{cpr_cn} object.  This is a list with the following elements.
 #' Some of the elements are omitted when the using the \code{cn.cpr_bt} method.
@@ -58,12 +58,14 @@ cn.cpr_bt <- function(x, theta, ...) {
 #' @param data a required \code{data.frame}
 #' @param method the regression method such as \code{\link[stats]{lm}},
 #'        \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
+#' @param method.args a list of additional arguments to pass to the regression
+#' method.
 #' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in the the \code{fit} element.
 #' If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.
 #' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the
 #' design matrix is full rank.
-cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE, check_rank = TRUE) {
+cn.formula <- function(formula, data, method = stats::lm, method.args = list(),  keep_fit = FALSE, check_rank = TRUE, ...) {
   # check for some formula specification issues
   fterms <- stats::terms(formula)
   fterms
@@ -73,13 +75,11 @@ cn.formula <- function(formula, data, method = stats::lm, ..., keep_fit = FALSE,
 
   # this function will add f_for_use and data_for_use into this environment
   f_for_use <- data_for_use <- NULL
-  generate_cp_formula_data(formula, data)
+  generate_cp_formula_data(formula, data, method = deparse(substitute(method)), method.args)
 
   regression <- match.fun(method)
-  cl <- as.list(match.call())
-  cl <- cl[-c(1, which(names(cl) %in% c("method", "keep_fit", "check_rank")))]
-  cl$formula <- as.name("f_for_use")
-  cl$data <- as.name("data_for_use")
+  cl <- list(formula = as.name("f_for_use"), data = as.name("data_for_use"))
+  cl <- c(cl, method.args)
 
   fit <- do.call(regression, cl)
   COEF_VCOV <- coef_vcov(fit)

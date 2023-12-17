@@ -100,13 +100,13 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
 
   # this function will add f_for_use and data_for_use into this environment
   f_for_use <- data_for_use <- NULL
-  generate_cp_formula_data(formula, data)
+  generate_cp_formula_data(formula, data, method = deparse(substitute(method)), method.args)
 
-  regression <- match.fun(method)
   cl <- list(formula = as.name("f_for_use"),
              data = as.name("data_for_use"))
   cl <- c(cl, method.args)
 
+  regression <- match.fun(method)
   fit <- do.call(regression, cl)
   COEF_VCOV <- coef_vcov(fit)
 

@@ -12,7 +12,15 @@ cn(x, ...)
 
 \method{cn}{cpr_bt}(x, theta, ...)
 
-\method{cn}{formula}(formula, data, method = stats::lm, ..., keep_fit = FALSE, check_rank = TRUE)
+\method{cn}{formula}(
+  formula,
+  data,
+  method = stats::lm,
+  method.args = list(),
+  keep_fit = FALSE,
+  check_rank = TRUE,
+  ...
+)
 
 \method{print}{cpr_cn}(x, ...)
 
@@ -21,7 +29,7 @@ cn(x, ...)
 \arguments{
 \item{x}{a \code{cpr_bs} object}
 
-\item{...}{arguments passed to the regression method}
+\item{...}{pass through}
 
 \item{theta}{a vector of (regression) coefficients, the ordinates of the
 control net.}
@@ -33,6 +41,9 @@ used.}
 
 \item{method}{the regression method such as \code{\link[stats]{lm}},
 \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
+
+\item{method.args}{a list of additional arguments to pass to the regression
+method.}
 
 \item{keep_fit}{(logical, defaults to \code{FALSE}).  If \code{TRUE} the
 regression model fit is retained and returned in the the \code{fit} element.
