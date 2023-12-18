@@ -1,6 +1,27 @@
 library(cpr)
 require(lme4)
 require(geepack)
+################################################################################
+# Verify that cp.cpr_bs and cp.formula both return similar objects
+e <- new.env()
+with(e, {
+
+  xvec <- runif(500, 0, 6)
+  bknots <- c(0, 6)
+  dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
+  acp <- cp(y ~ bsplines(x, df = 8, bknots = bknots), data = dat)
+  theta <- coef(lm(y ~ bsplines(x, df = 8, bknots = bknots) - 1, data = dat))
+  bcp <- cp(bsplines(xvec, df =8, bknots = bknots), theta)
+
+  stopifnot(isTRUE(all.equal(names(acp), names(bcp))))
+
+  stopifnot(identical(
+    names(acp)
+    ,
+    c("cp", "xi", "iknots", "bknots", "order", "call", "keep_fit", "fit", "theta", "theta_vcov", "coefficients", "vcov", "vcov_theta", "loglik", "rss", "rse")
+  ))
+
+})
 
 ################################################################################
 # Verify that an error is thrown if bsplines is not used as expected in the
