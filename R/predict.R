@@ -42,26 +42,3 @@ predict.cpr_cp <- function(object, ...) {
 
 #' @export
 predict.cpr_cn <- predict.cpr_cp
-
-
-updatebsplines <- function(form, nik, nbk, nord) {
-  rr <- function(x, nik, nbk, nord) {
-    if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
-      x$df <- NULL
-      x$iknots <- nik
-      x$bknots <- nbk
-      x$order  <- nord
-      x
-    } else if (is.recursive(x)) {
-      as.call(lapply(as.list(x), rr, nik, nbk, nord))
-    } else {
-      x
-    }
-  }
-
-  z <- lapply(as.list(form), rr, nik, nbk, nord)
-  z <- eval(as.call(z))
-  environment(z) <- environment(form)
-  z
-}
-
