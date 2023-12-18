@@ -22,7 +22,7 @@ with(e, {
 
 e <- new.env()
 with(e, {
-  bmat       <- bsplines(1:100, df = 52)
+  bmat       <- bsplines(runif(n = 100, 1, 100), bknots = c(1, 100), df = 52)
   print_bmat <- capture.output(bmat)
 
   stopifnot(any(grepl("First\\s\\d+\\srows:", print_bmat)))
@@ -42,26 +42,28 @@ with(e, {
 
 e <- new.env()
 with(e, {
-  xvec <- seq(-1, 1, length = 25)
+  xvec <- runif(n = 25, min = -1, max = 1)
   iknots <- c(0.34, -0.23)
+  bknots = c(-1, 1)
 
-  x <- tryCatch(bsplines(xvec, iknots = iknots), error = function(e) {e})
+  x <- tryCatch(bsplines(xvec, iknots = iknots, bknots = bknots), error = function(e) {e})
   stopifnot(inherits(x, "simpleError"))
-  stopifnot(x$message == "Knots are not sorted.")
+  stopifnot(identical(x$message, "Knots are not sorted."))
 
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots)), error = function(e) {e})
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = bknots), error = function(e) {e})
   stopifnot(inherits(x, "cpr_bs"))
 
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(1, -1)), error = function(e) {e})
-  stopifnot(inherits(x, "simpleError"))
-  stopifnot(x$message == "Knots are not sorted.")
-
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-1, 1)), error = function(e) {e})
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = bknots), error = function(e) {e})
   stopifnot(inherits(x, "cpr_bs"))
 
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-0.21, 1)), error = function(e) {e})
-  stopifnot(inherits(x, "simpleError"))
-  stopifnot(x$message == "Knots are not sorted.")
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-0.21, 1)), warning = function(w) {w})
+  stopifnot(inherits(x, "warning"))
+  stopifnot(identical(x$message, "At least one x value < min(bknots)"))
+
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-1, 0)), warning = function(w) {w})
+  stopifnot(inherits(x, "warning"))
+  stopifnot(identical(x$message, "At least one x value >= max(bknots)"))
+
 })
 
 ################################################################################
@@ -204,10 +206,11 @@ with(e, {
 # verify that order is an integer of at least 2
 e <- new.env()
 with(e, {
-  xvec <- seq(-1, 5, length = 100)
-  bmat   <- tryCatch(bsplines(xvec, order = 1), error = function(e) e)
-  bmatD1 <- tryCatch(bsplineD(xvec, order = 1, derivative = 1L), error = function(e) e)
-  bmatD2 <- tryCatch(bsplineD(xvec, order = 1, derivative = 2L), error = function(e) e)
+  xvec    <- runif(n = 100, min = -1, max = 5)
+  bknots  <- c(-1, 5)
+  bmat    <- tryCatch(bsplines(xvec, bknots = bknots, order = 1), error = function(e) e)
+  bmatD1  <- tryCatch(bsplineD(xvec, bknots = bknots, order = 1, derivative = 1L), error = function(e) e)
+  bmatD2  <- tryCatch(bsplineD(xvec, bknots = bknots, order = 1, derivative = 2L), error = function(e) e)
 
   stopifnot(inherits(bmat, "simpleError"))
   stopifnot(inherits(bmatD1, "simpleError"))
@@ -217,11 +220,11 @@ with(e, {
   stopifnot(identical(bmatD1$message, "order needs to be an integer value >= 2."))
   stopifnot(identical(bmatD2$message, "order needs to be an integer value >= 2."))
 
-  bmat <- tryCatch(bsplines(xvec, order = 1.9), error = function(e) e)
+  bmat <- tryCatch(bsplines(xvec, bknots = bknots, order = 1.9), error = function(e) e)
   stopifnot(inherits(bmat, "simpleError"))
   stopifnot(identical(bmat$message, "order needs to be an integer value >= 2."))
 
-  bmat <- tryCatch(bsplines(xvec, order = 2.9), error = function(e) e)
+  bmat <- tryCatch(bsplines(xvec, bknots = bknots, order = 2.9), error = function(e) e)
   stopifnot(inherits(bmat, "cpr_bs"))
   stopifnot(identical(attr(bmat, "order"), 2))
 
