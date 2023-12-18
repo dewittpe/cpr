@@ -5,27 +5,12 @@
 \alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
-cnr(
-  x,
-  keep = -1,
-  p = 2,
-  margin,
-  n_polycoef = 20L,
-  progress = interactive(),
-  ...
-)
+cnr(x, margin, n_polycoef = 20L, progress = interactive(), ...)
 
 \method{summary}{cpr_cnr}(object, ...)
 }
 \arguments{
-\item{x}{a \code{cnr_cp} or \code{cnr_tensor} object}
-
-\item{keep}{keep (store) the regression fit for the first \code{keep}
-\code{cpr_cn} objects in the list returned by \code{cnr}.}
-
-\item{p}{defaults to 2L, the L^p norm used in determining the influence
-weight of each internal knot.  Passed to
-\code{\link{influence_weights}}.}
+\item{x}{a \code{cnr_cn} object}
 
 \item{margin}{the margins to apply the CNR algorithm to.  Passed to
 \code{\link{influence_weights}}.}

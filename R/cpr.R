@@ -4,21 +4,7 @@
 #'
 #' \code{cpr} runs the control polygon reduction algorithm.
 #'
-#' \code{keep} will keep the regression fit as part of the \code{cpr\_cp} object
-#' for models with up to and including keep fits.  For example, if \code{keep =
-#' 10} then the resulting \code{cpr\_cpr} object will have the regression fit
-#' stored in the first \code{keep + 1} (zero internal knots, one internal knot,
-#' \ldots, \code{keep} internal knots) \code{cpr\_cp} objects in the list.  The
-#' limit on the number of stored regression fits is to keep memory usage down.
-#'
 #' @param x a \code{cpr_cp} object
-#' @param keep keep (store) the regression fit for models with \code{keep} or
-#' fewer internal knots, e.g., \code{keep = 3} will result in the regression fit
-#' for models with 0, 1, 2, and 3 internal knots being saved in their respective
-#' \code{cpr_cp} objects.  The default is \code{keep = -1} so that no regression
-#' models are retained.
-#' @param p defaults to 2L, the L^p norm used in determining the influence
-#'        weight of each internal knot.
 #' @param progress show a progress bar.
 #' @param ... not currently used
 #'
@@ -69,7 +55,7 @@
 #' plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE)
 #'
 #' # plot the fitted spline and the true p(x)
-#' sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data)$pred)
+#' sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data))
 #'
 #' ggplot2::ggplot(sim_data) +
 #' ggplot2::theme_bw() +
@@ -101,20 +87,14 @@
 #'
 #'
 #' @export
-cpr <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
+cpr <- function(x, progress = interactive(), ...) {
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
+cpr.cpr_cp <- function(x, progress = interactive(), ...) {
 
   out <- vector("list", length = length(x$iknots) + 1L)
-
-  if ((length(out) > (keep + 1)) && (x$keep_fit)) {
-    x <- eval(stats::update(x, keep_fit = FALSE, check_rank = FALSE, evaluate = FALSE), parent.frame())
-  } else if (length(out) <= (keep + 1) & !x$keep_fit) {
-    x <- eval(stats::update(x, keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
-  }
 
   if (progress) {
     pb <- utils::txtProgressBar(max = length(out), style = 3)
@@ -127,11 +107,7 @@ cpr.cpr_cp <- function(x, keep = -1, p = 2, progress = interactive(), ...) {
     w <- summary(influence_of_iknots(out[[i]]))
     nkts <- w$iknot[ w$influence_rank > 1 ]
 
-    if (i == keep + 1) {
-      x <- stats::update(x, keep_fit = TRUE)
-    }
-
-    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), check_rank = FALSE, evaluate = FALSE), parent.frame())
+    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)
@@ -206,4 +182,3 @@ print.cpr_cpr_summary <- function(x, ...) {
 
   invisible(x)
 }
-

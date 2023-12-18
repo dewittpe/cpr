@@ -18,7 +18,7 @@ cp(x, ...)
   data,
   method = stats::lm,
   method.args = list(),
-  keep_fit = FALSE,
+  keep_fit = TRUE,
   check_rank = TRUE,
   ...
 )
@@ -59,7 +59,7 @@ used.}
 \item{method.args}{a list of additional arguments to pass to the regression
 method.}
 
-\item{keep_fit}{(logical, default value is \code{FALSE}).  If \code{TRUE} the
+\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the
 regression model fit is retained and returned in as the \code{fit} element.
 If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
@@ -146,7 +146,7 @@ cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = DF)
 # plot the spline and target data.
 plot(cp3, show_cp = FALSE, show_spline = TRUE) +
   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y, color = "Target"),
-                     data = dat, linetype = 2)
+                     data = DF, linetype = 2)
 
 
 x <- seq(0, 6, length = 500)

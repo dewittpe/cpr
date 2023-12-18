@@ -28,6 +28,13 @@
 #'
 #' @param f a formula
 #' @param data the data set containing the variables in the formula
+#' @param formula_only if TRUE then only generate the formula, when FALSE, then
+#' generate and assign the data set too.
+#' @param envir the environment the generated formula and data set will be
+#' assigned too.
+#'
+#' @return TRUE, invisibly.  The return isn't needed as the assignment happens
+#' within the call.
 #'
 #' @examples
 #'
@@ -64,7 +71,7 @@
 #'
 #' })
 #' @rdname generate_cp_formula_data
-generate_cp_formula_data <- function(f, data) {
+generate_cp_formula_data <- function(f, data, formula_only = FALSE, envir = parent.frame()) {
 
   # get a formula without any bspline, btensor, or bars
   term_labels <- attr(stats::terms(f), "term.labels")
@@ -88,100 +95,34 @@ generate_cp_formula_data <- function(f, data) {
 
   if (!any(fcvars)) {
     f_for_use <- stats::update.formula(f, . ~ 0 + .)
-    data_for_use <- data
+
+    if (!formula_only) {
+      data_for_use <- data
+    }
+
   } else {
     fcvars <- names(fcvars)[fcvars]
-    fcf <- as.formula(paste("~", paste(fcvars, collapse = "+")))
-    fcmm <- model.matrix(fcf, data)[, -1]
-    data_for_use <- cbind(data[!(names(data) %in% fcvars)], fcmm)
+    fcf <- stats::as.formula(paste("~", paste(fcvars, collapse = "+")))
+    fcmm <- stats::model.matrix(fcf, data)[, -1]
 
-    f1 <- as.formula(paste(" . ~ 0 + . - ",
+
+    f1 <- stats::as.formula(paste(" . ~ 0 + . - ",
                            paste(fcvars, collapse = "-"), "+",
                            paste(colnames(fcmm), collapse = "+")))
 
     f_for_use <- stats::update.formula(f, f1)
+
+    if (!formula_only) {
+      data_for_use <- cbind(data[!(names(data) %in% fcvars)], fcmm)
+    }
+
   }
 
-  e <- parent.frame()
-  e$f_for_use <- f_for_use
-  e$data_for_use <- data_for_use
+  assign("f_for_use", f_for_use, envir = envir)
 
-}
-
-
-
-
-
-
-
-old_generate_cp_formula_data <- function(f, data) {
-
-  # part the formula, version with no bspline, no bars
-  f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
-  f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
-
-  # get a list of the variables and subset the data
-  vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
-  data_nobsplines_nobars <- subset(data, select = vars_nobsplines_nobars)
-
-  if (grepl("geeglm", method)) {
-    fit <- do.call(geepack::geeglm, c(method.args, formula = stats::update.formula(f, . ~ 1), data = list(data)))
-    data_nobsplines_nobars[[as.character(method.args[["id"]])]] <- unname(fit[["id"]])
+  if (!formula_only) {
+    assign("data_for_use", data_for_use, envir = envir)
   }
 
-  # identify any variables which are factors or characters
-  factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)})
-  factors <- names(factors[factors])
-
-  # build the data frames
-  # extract only the factors and build a model matrix
-  if (length(factors)) {
-    data_factors_only <-
-      data.frame(stats::model.matrix(stats::as.formula(paste("~", paste(factors, collapse = " + "))),
-                                     data = data))[, -1]
-    new_factors <-
-      lapply(factors, function(x) grep(x, names(data_factors_only), value = TRUE))
-    new_factors <- paste(do.call(c, new_factors), collapse = " + ")
-  } else {
-    data_factors_only <- NULL
-  }
-
-
-  data_nobsplines_nobars <-
-    subset(data_nobsplines_nobars, select = setdiff(names(data_nobsplines_nobars), factors))
-
-  data_bsplines_bars <-
-    subset(data, select = setdiff(intersect(all.vars(lme4::subbars(f)), names(data)), all.vars(f_nobsplines_nobars)))
-
-  # construct the new formula and data set
-  if (!is.null(data_factors_only)) {
-    f_for_use <-
-      stats::update(f, paste(". ~ 0 + . -", paste(factors, collapse = " - "), "+", new_factors))
-    data_for_use <-
-      cbind(data_nobsplines_nobars, data_bsplines_bars, data_factors_only)
-  } else {
-    f_for_use <-
-      stats::update(f, paste(". ~ 0 + ."))
-    data_for_use <-
-      cbind(data_nobsplines_nobars, data_bsplines_bars)
-  }
-
-  e <- parent.frame()
-  e$f_for_use <- f_for_use
-  e$data_for_use <- data_for_use
-}
-
-old_factors_characters_in_f <- function(f, data) {
-  # part the formula, version with no bspline, no bars
-  f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
-  f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
-
-  # get a list of the variables and subset the data
-  vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
-  data_nobsplines_nobars <- subset(data, select = vars_nobsplines_nobars)
-
-  # identify any variables which are factors or characters
-  factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)})
-
-  return(any(factors))
+  invisible(TRUE)
 }

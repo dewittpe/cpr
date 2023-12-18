@@ -4,12 +4,22 @@
 \alias{generate_cp_formula_data}
 \title{Generate Control Polygon Formula and Data}
 \usage{
-generate_cp_formula_data(f, data)
+generate_cp_formula_data(f, data, formula_only = FALSE, envir = parent.frame())
 }
 \arguments{
 \item{f}{a formula}
 
 \item{data}{the data set containing the variables in the formula}
+
+\item{formula_only}{if TRUE then only generate the formula, when FALSE, then
+generate and assign the data set too.}
+
+\item{envir}{the environment the generated formula and data set will be
+assigned too.}
+}
+\value{
+TRUE, invisibly.  The return isn't needed as the assignment happens
+within the call.
 }
 \description{
 Construct a \code{data.frame} and \code{formula} to be passed to the

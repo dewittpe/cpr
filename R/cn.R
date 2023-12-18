@@ -5,7 +5,7 @@
 #' \code{cn} generates the control net for the given B-spline function.  There
 #' are several methods for building a control net.
 #'
-#' @param x a \code{cpr_bs} object
+#' @param x a \code{cpr_bt} object
 #' @param ... pass through
 #'
 #' @return a \code{cpr_cn} object.  This is a list with the following elements.
@@ -25,6 +25,8 @@
 #'  \item{rse}{the residual standard error for the regression models}
 #'  }
 #'
+#' @examples
+#'
 #' @export
 #' @rdname cn
 cn <- function(x, ...) {
@@ -42,11 +44,11 @@ cn.cpr_bt <- function(x, theta, ...) {
     list(cn      = data.frame(cbind(do.call(expand.grid, xi_stars), theta)),
          bspline_list = attr(x, "bspline_list"),
          call    = match.call(),
-         keep_fit = NA,
-         fit     = NA,
-         loglik  = NA,
-         rss     = NA,
-         rse     = NA)
+         keep_fit = NULL,
+         fit     = NULL,
+         loglik  = NULL,
+         rss     = NULL,
+         rse     = NULL)
   class(out) <- c("cpr_cn", class(out))
   out
 }
@@ -65,7 +67,7 @@ cn.cpr_bt <- function(x, theta, ...) {
 #' If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.
 #' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the
 #' design matrix is full rank.
-cn.formula <- function(formula, data, method = stats::lm, method.args = list(),  keep_fit = FALSE, check_rank = TRUE, ...) {
+cn.formula <- function(formula, data, method = stats::lm, method.args = list(),  keep_fit = TRUE, check_rank = TRUE, ...) {
   # check for some formula specification issues
   fterms <- stats::terms(formula)
   fterms
@@ -75,7 +77,7 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
 
   # this function will add f_for_use and data_for_use into this environment
   f_for_use <- data_for_use <- NULL
-  generate_cp_formula_data(formula, data, method = deparse(substitute(method)), method.args)
+  generate_cp_formula_data(formula, data)
 
   regression <- match.fun(method)
   cl <- list(formula = as.name("f_for_use"), data = as.name("data_for_use"))
@@ -87,10 +89,12 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
     if (matrix_rank(m) != ncol(m) | any(is.na(COEF_VCOV$coef))) {
-      warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
-              call. = FALSE,
-              immediate. = TRUE)
-    keep_fit <- TRUE
+      if (keep_fit) {
+        warning("Design Matrix is rank deficient.")
+      } else {
+        warning("Design Matrix is rank deficient. keep_fit being set to TRUE.")
+        keep_fit <- TRUE
+      }
     }
   }
 
@@ -99,22 +103,26 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- as.call(cl)
 
   Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
-  xi_stars <- lapply(attr(Bmat, "bspline_list"), attr, which = "xi_star")
+  #xi_stars <- lapply(attr(Bmat, "bspline_list"), attr, which = "xi_star")
 
-  out <-
-    list(cn      = data.frame(cbind(do.call(expand.grid, xi_stars),
-                                 theta   = as.vector(COEF_VCOV$theta))),
-         bspline_list = attr(Bmat, "bspline_list"),
-         call    = cl,
-         keep_fit = keep_fit,
-         fit     = if (keep_fit) { fit } else { NA },
-         theta = COEF_VCOV$theta,
-         vcov_theta = COEF_VCOV$vcov_theta,
-         coefficients = COEF_VCOV$coef,
-         vcov = COEF_VCOV$vcov,
-         loglik  = loglikelihood(fit))
-  out$rss <- stats::residuals(fit)^2
-  out$rse <- sqrt(stats::residuals(fit)^2 / (nrow(data) - length(COEF_VCOV$coef)))
+  out <- cn.cpr_bt(Bmat, COEF_VCOV$theta)
+
+  # update elements of the cpr_bs object
+  if (keep_fit) {
+    out[["fit"]] <-  fit
+  }
+
+  out[["call"]]         <- cl
+  out[["keep_fit"]]     <- keep_fit
+  out[["theta"]]        <- COEF_VCOV$theta
+  out[["vcov_theta"]]   <- COEF_VCOV$vcov_theta
+  out[["coefficients"]] <- COEF_VCOV$coef
+  out[["vcov"]]         <- COEF_VCOV$vcov
+  out[["loglik"]]       <- loglikelihood(fit)
+  out[["rss"]]          <- sum(stats::residuals(fit)^2)
+  out[["rse"]]          <- sqrt(sum(stats::residuals(fit)^2) / (nrow(data) - length(COEF_VCOV$coef)))
+
+  out
   class(out) <- c("cpr_cn", class(out))
 
   out

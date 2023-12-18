@@ -41,7 +41,7 @@
 #' # plot the spline and target data.
 #' plot(cp3, show_cp = FALSE, show_spline = TRUE) +
 #'   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y, color = "Target"),
-#'                      data = dat, linetype = 2)
+#'                      data = DF, linetype = 2)
 #'
 #' @export
 #' @rdname cp
@@ -61,15 +61,15 @@ cp.cpr_bs <- function(x, theta, ...) {
               bknots = c(attr(x, "bknots")),
               order  = attr(x, "order"),
               call   = match.call(),
-              keep_fit = NA,
-              fit    = NA,
-              theta = NA,
-              theta_vcov = NA,
-              coefficients = NA,
-              vcov = NA,
-              loglik = NA,
-              rss    = NA,
-              rse    = NA)
+              keep_fit = NULL,
+              fit    = NULL,
+              theta = NULL,
+              theta_vcov = NULL,
+              coefficients = NULL,
+              vcov = NULL,
+              loglik = NULL,
+              rss    = NULL,
+              rse    = NULL)
 
   class(out) <- c("cpr_cp", class(out))
 
@@ -85,12 +85,12 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
 #' @param method.args a list of additional arguments to pass to the regression
 #' method.
-#' @param keep_fit (logical, default value is \code{FALSE}).  If \code{TRUE} the
+#' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
 #' If \code{FALSE} the \code{fit} element with be \code{NA}.
 #' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check
 #' that the design matrix is full rank.
-cp.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = FALSE, check_rank = TRUE, ...) {
+cp.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = TRUE, check_rank = TRUE, ...) {
 
   # check for some formula specification issues
   rhs_check <- grepl("bsplines", attr(stats::terms(formula), "term.labels"))
@@ -113,10 +113,12 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
     if (matrix_rank(m) != ncol(m) | any(is.na(COEF_VCOV$coef))) {
-      warning("Design Matrix is rank deficient. keep_fit being set to TRUE.",
-              call. = FALSE,
-              immediate. = TRUE)
-    keep_fit <- TRUE
+      if (keep_fit) {
+        warning("Design Matrix is rank deficient.")
+      } else {
+        warning("Design Matrix is rank deficient. keep_fit being set to TRUE.")
+        keep_fit <- TRUE
+      }
     }
   }
 
@@ -129,16 +131,20 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
 
   out <- cp.cpr_bs(Bmat, as.vector(COEF_VCOV$theta))
 
-  out$call         <- cl
-  out$keep_fit     <- keep_fit
-  out$fit          <- if (keep_fit) { fit } else {NA}
-  out$theta        <- COEF_VCOV$theta
-  out$vcov_theta   <- COEF_VCOV$vcov_theta
-  out$coefficients <- COEF_VCOV$coef
-  out$vcov         <- COEF_VCOV$vcov
-  out$loglik       <- loglikelihood(fit)
-  out$rss          <- sum(stats::residuals(fit)^2)
-  out$rse          <- sqrt(sum(stats::residuals(fit)^2) / (nrow(data) - length(COEF_VCOV$coef)))
+  # update elements of the cpr_bs object
+  if (keep_fit) {
+    out[["fit"]] <-  fit
+  }
+
+  out[["call"]]         <- cl
+  out[["keep_fit"]]     <- keep_fit
+  out[["theta"]]        <- COEF_VCOV$theta
+  out[["vcov_theta"]]   <- COEF_VCOV$vcov_theta
+  out[["coefficients"]] <- COEF_VCOV$coef
+  out[["vcov"]]         <- COEF_VCOV$vcov
+  out[["loglik"]]       <- loglikelihood(fit)
+  out[["rss"]]          <- sum(stats::residuals(fit)^2)
+  out[["rse"]]          <- sqrt(sum(stats::residuals(fit)^2) / (nrow(data) - length(COEF_VCOV$coef)))
 
   out
 }

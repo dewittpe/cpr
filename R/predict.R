@@ -3,51 +3,46 @@
 #' Model prediction for \code{cpr_cp} and \code{cpr_cn} objects.
 #'
 #' @param object a \code{cpr_cp} or \code{cpr_cn} object
-#' @param newdata a \code{data.frame}
-#' @param ... passed to \code{\link[stats]{predict}} from the \code{stats}
-#' package.
+#' @param ... passed to \code{\link[stats]{predict}}
+#'
+#' @examples
 #'
 #' @export
-predict.cpr_cp <- function(object, newdata, ...) {
-  f_for_use <- data_for_use <- NULL
+predict.cpr_cp <- function(object, ...) {
 
-  #generate_cp_formula_data(updatebsplines(stats::formula(object), object$iknots, object$bknots, object$order), newdata)
+  if (is.null(object[["fit"]])) {
+    stop(sprintf("%s[['fit']] is NULL.  Set `keep_fit = TRUE` in cp call and try again.", deparse(substitute(object))))
+  }
 
-  cl <- as.list(object$call)[c("method", "method.args")]
-  cl[["method"]] <- as.character(cl[["method"]])
-  do.call(generate_cp_formula_data,
-          c(cl
-            , f = updatebsplines(stats::formula(object), object$iknots, object$bknots, object$order)
-            , data = list(newdata)
-          )
-  )
+  cl <- as.list(match.call())[-1]
 
-  XMAT <- stats::model.matrix(lme4::nobars(f_for_use)[-2], data_for_use)
-  data.frame(pred = as.numeric(XMAT %*% object$coefficients),
-             se   = apply(XMAT, 1, function(x, sg) {sqrt(matrix(x, nrow = 1) %*% sg %*% matrix(x, ncol = 1))}, sg = object$vcov))
+  dots <- list(...)
+
+  if ("newdata" %in% names(cl)) {
+    f_for_use <- data_for_use <- NULL
+
+    do.call(generate_cp_formula_data,
+            list(
+                   f = as.list(object$call)[["formula"]]
+                 , data = dots[["newdata"]]
+                 , formula_only = FALSE
+            )
+    )
+
+    cl[["object"]] <- object[["fit"]]
+    cl[["newdata"]] <- data_for_use
+    print(cl)
+
+  } else {
+    cl[["object"]] <- object[["fit"]]
+  }
+
+  do.call(what = stats::predict, args = cl)
 }
 
 #' @export
-predict.cpr_cn <- function(object, newdata, ...) {
+predict.cpr_cn <- predict.cpr_cp
 
-  iks <- lapply(object$bspline_list, attr, which = "iknots")
-  bks <- lapply(object$bspline_list, attr, which = "bknots")
-  ods <- lapply(object$bspline_list, attr, which = "order")
-
-  f_for_use <- data_for_use <- NULL
-  #generate_cp_formula_data(updatebsplines(stats::formula(object), iks, bks, ods), newdata)
-  cl <- as.list(object$call)[c("method", "method.args")]
-  cl[["method"]] <- as.character(cl[["method"]])
-  do.call(generate_cp_formula_data,
-          c(cl
-            , f = updatebsplines(stats::formula(object), iks, bks, ods)
-            , data = list(newdata))
-          )
-
-  XMAT <- stats::model.matrix(lme4::nobars(f_for_use)[-2], data_for_use)
-  data.frame(pred = as.numeric(XMAT %*% object$coefficients),
-             se   = apply(XMAT, 1, function(x, sg) {sqrt(matrix(x, nrow = 1) %*% sg %*% matrix(x, ncol = 1))}, sg = object$vcov))
-}
 
 updatebsplines <- function(form, nik, nbk, nord) {
   rr <- function(x, nik, nbk, nord) {

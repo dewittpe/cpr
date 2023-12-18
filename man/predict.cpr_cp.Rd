@@ -4,15 +4,12 @@
 \alias{predict.cpr_cp}
 \title{Model Prediction}
 \usage{
-\method{predict}{cpr_cp}(object, newdata, ...)
+\method{predict}{cpr_cp}(object, ...)
 }
 \arguments{
 \item{object}{a \code{cpr_cp} or \code{cpr_cn} object}
 
-\item{newdata}{a \code{data.frame}}
-
-\item{...}{passed to \code{\link[stats]{predict}} from the \code{stats}
-package.}
+\item{...}{passed to \code{\link[stats]{predict}}}
 }
 \description{
 Model prediction for \code{cpr_cp} and \code{cpr_cn} objects.

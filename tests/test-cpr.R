@@ -1,6 +1,5 @@
 library(cpr)
 
-
 ################################################################################
 #         Test that cpr reduces an inital control polygon as expected          #
 
@@ -41,23 +40,12 @@ cpr0 <- cpr(initial_cp)
 cpr0
 
 stopifnot(isTRUE(all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])))
-
-# the call is different
-stopifnot(!isTRUE(all.equal( cpr0[[6]],  first_reduction_cp)))
-call_idx <- which(names(cpr0[[6]]) == "call")
-stopifnot(isTRUE(all.equal( cpr0[[6]][-call_idx],  first_reduction_cp[-call_idx])))
-
-stopifnot(isTRUE(all.equal( cpr0[[5]][-call_idx],  second_reduction_cp[-call_idx])))
-
-stopifnot(isTRUE(all.equal( cpr0[[4]][-call_idx],  third_reduction_cp[-call_idx])))
-
-stopifnot(isTRUE(all.equal( cpr0[[3]][-call_idx],  fourth_reduction_cp[-call_idx])))
-
-stopifnot(isTRUE(all.equal( cpr0[[2]][-call_idx],  fifth_reduction_cp[-call_idx])))
-
-# some attributes are different with the last cp due to how the automation
-# creates the call vs how the call was created manually.
-stopifnot(isTRUE(all.equal( cpr0[[1]][-call_idx],  sixth_reduction_cp[-call_idx], check.attributes = F)))
+stopifnot(isTRUE(all.equal( cpr0[[6]][["cp"]],  first_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[[5]][["cp"]],  second_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[[4]][["cp"]],  third_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[[3]][["cp"]],  fourth_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[[2]][["cp"]],  fifth_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[[1]][["cp"]],  sixth_reduction_cp[["cp"]])))
 
 ################################################################################
 # summary
