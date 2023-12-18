@@ -115,7 +115,7 @@ Generate the control polygon for a uni-variable B-spline
 \examples{
 
 # Support
-xvec <- seq(0, 5.9999, length = 500)
+xvec <- runif(n = 500, min = 0, max = 6)
 bknots <- c(0, 6)
 
 # Define the basis matrix
@@ -140,8 +140,8 @@ plot(cp1, cp2, color = TRUE)
 plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 
 # via formula
-dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = dat)
+DF  <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
+cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = DF)
 
 # plot the spline and target data.
 plot(cp3, show_cp = FALSE, show_spline = TRUE) +

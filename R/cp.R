@@ -10,7 +10,7 @@
 #' @examples
 #'
 #' # Support
-#' xvec <- seq(0, 5.9999, length = 500)
+#' xvec <- runif(n = 500, min = 0, max = 6)
 #' bknots <- c(0, 6)
 #'
 #' # Define the basis matrix
@@ -35,8 +35,8 @@
 #' plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 #'
 #' # via formula
-#' dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-#' cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = dat)
+#' DF  <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
+#' cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = DF)
 #'
 #' # plot the spline and target data.
 #' plot(cp3, show_cp = FALSE, show_spline = TRUE) +
@@ -95,12 +95,12 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   # check for some formula specification issues
   rhs_check <- grepl("bsplines", attr(stats::terms(formula), "term.labels"))
   if ( !rhs_check[1] | any(rhs_check[-1]) ) {
-    stop("bsplines() must appear once, with no effect modifiers, as the first term on the right hand side of the formula.")
+    stop("bsplines() must appear first, once, and with no effect modifiers, as the first term on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment
   f_for_use <- data_for_use <- NULL
-  generate_cp_formula_data(formula, data, method = deparse(substitute(method)), method.args)
+  generate_cp_formula_data(formula, data)
 
   cl <- list(formula = as.name("f_for_use"),
              data = as.name("data_for_use"))

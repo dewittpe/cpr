@@ -28,11 +28,93 @@
 #'
 #' @param f a formula
 #' @param data the data set containing the variables in the formula
-#' @param method a character string for the regression method
-#' @param method.args additional arguments passed to method
 #'
+#' @examples
+#'
+#' e <- new.env()
+#' with(e, {
+#'   data <-
+#'     data.frame(
+#'                  x1 = runif(20)
+#'                , x2 = runif(20)
+#'                , x3 = runif(20)
+#'                , xf = factor(rep(c("l1","l2","l3","l4"), each = 5))
+#'                , xc = rep(c("c1","c2","c3","c4", "c5"), each = 4)
+#'                , pid = gl(n = 2, k = 10)
+#'                , pid2 = rep(1:2, each = 10)
+#'     )
+#'
+#'   f <- ~ bsplines(x1, bknots = c(0,1)) + x2 + xf + xc + (x3 | pid2)
+#'
+#'   cpr:::generate_cp_formula_data(f, data)
+#'
+#'   stopifnot(isTRUE(
+#'     all.equal(
+#'               f_for_use
+#'               ,
+#'               . ~ bsplines(x1, bknots = c(0, 1)) + x2 + (x3 | pid2) + xfl2 + xfl3 + xfl4 + xcc2 + xcc3 + xcc4 + xcc5 - 1
+#'               )
+#'   ))
+#'
+#'   stopifnot(isTRUE(identical(
+#'     names(data_for_use)
+#'     ,
+#'     c("x1", "x2", "x3", "pid", "pid2", "xfl2", "xfl3", "xfl4", "xcc2", "xcc3", "xcc4", "xcc5")
+#'   )))
+#'
+#' })
 #' @rdname generate_cp_formula_data
-generate_cp_formula_data <- function(f, data, method, method.args) {
+generate_cp_formula_data <- function(f, data) {
+
+  # get a formula without any bspline, btensor, or bars
+  term_labels <- attr(stats::terms(f), "term.labels")
+  bspline_btensor_term <- grep("bsplines|btensor", term_labels)
+  bar_term <- grep("\\|", term_labels)
+
+  # get variables not in the bsplines or btensor, not in (with) bars
+  if (
+      (length(term_labels) == 1L) |
+      (length(term_labels) == 2L & length(bar_term) == 1L)
+     ) {
+    f1 <- f
+  } else if (length(bar_term) > 0) {
+    f1 <- stats::drop.terms(stats::terms(f), c(bspline_btensor_term, bar_term))
+  } else {
+    f1 <- stats::drop.terms(stats::terms(f), c(bspline_btensor_term))
+  }
+
+  # check if any of the variables in f1 are factors or characters
+  fcvars <- sapply(all.vars(f1), function(x) {is.factor(data[[x]]) | is.character(data[[x]])})
+
+  if (!any(fcvars)) {
+    f_for_use <- stats::update.formula(f, . ~ 0 + .)
+    data_for_use <- data
+  } else {
+    fcvars <- names(fcvars)[fcvars]
+    fcf <- as.formula(paste("~", paste(fcvars, collapse = "+")))
+    fcmm <- model.matrix(fcf, data)[, -1]
+    data_for_use <- cbind(data[!(names(data) %in% fcvars)], fcmm)
+
+    f1 <- as.formula(paste(" . ~ 0 + . - ",
+                           paste(fcvars, collapse = "-"), "+",
+                           paste(colnames(fcmm), collapse = "+")))
+
+    f_for_use <- stats::update.formula(f, f1)
+  }
+
+  e <- parent.frame()
+  e$f_for_use <- f_for_use
+  e$data_for_use <- data_for_use
+
+}
+
+
+
+
+
+
+
+old_generate_cp_formula_data <- function(f, data) {
 
   # part the formula, version with no bspline, no bars
   f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
@@ -89,7 +171,7 @@ generate_cp_formula_data <- function(f, data, method, method.args) {
   e$data_for_use <- data_for_use
 }
 
-factors_characters_in_f <- function(f, data) {
+old_factors_characters_in_f <- function(f, data) {
   # part the formula, version with no bspline, no bars
   f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
   f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
