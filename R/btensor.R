@@ -71,6 +71,7 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
   if (is.null(df) & is.null(iknots)) {
     iknots <- replicate(length(x), numeric(0), simplify = FALSE)
   } else if (is.null(iknots) & !is.null(df)) {
+    stopifnot(length(df) == length(x))
     iknots <-
       mapply(function(xx, dd, oo) {
                if (dd < oo) {
