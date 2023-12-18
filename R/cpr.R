@@ -97,9 +97,9 @@ cpr.cpr_cp <- function(x, progress = interactive(), ...) {
   out <- vector("list", length = length(x$iknots) + 1L)
 
   if (progress) {
-    pb <- utils::txtProgressBar(max = length(out), style = 3)
-    prg <- 0
-    utils::setTxtProgressBar(pb, prg)
+    pb <- utils::txtProgressBar(max = length(out), style = 3) # nocov
+    prg <- 0 # noocv
+    utils::setTxtProgressBar(pb, prg) # noocv
   }
 
   for(i in rev(seq_along(out)[-1])) {
@@ -110,7 +110,7 @@ cpr.cpr_cp <- function(x, progress = interactive(), ...) {
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
 
     if (progress) {
-      utils::setTxtProgressBar(pb, prg <- prg + 1)
+      utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     }
 
   }
@@ -118,8 +118,8 @@ cpr.cpr_cp <- function(x, progress = interactive(), ...) {
   out[[1]] <- x
 
   if (progress) {
-    utils::setTxtProgressBar(pb, prg <- prg + 1)
-    close(pb)
+    utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
+    close(pb) # nocov
   }
 
   class(out) <- c("cpr_cpr", class(out))

@@ -3,6 +3,30 @@ require(lme4)
 require(geepack)
 
 ################################################################################
+# Verify that an error is thrown if bsplines is not used as expected in the
+# formula
+e <- new.env()
+with(e, {
+  test <- tryCatch(cp(log10(pdg) ~ age + ttm, data = spdg), error = function(e) e)
+  stopifnot(inherits(test, "error"))
+  stopifnot(identical(test$message, "bsplines() must appear first, once, and with no effect modifiers, as the first term on the right hand side of the formula."))
+})
+
+e <- new.env()
+with(e, {
+  test <- tryCatch(cp(log10(pdg) ~ age + bsplines(ttm), data = spdg), error = function(e) e)
+  stopifnot(inherits(test, "error"))
+  stopifnot(identical(test$message, "bsplines() must appear first, once, and with no effect modifiers, as the first term on the right hand side of the formula."))
+})
+
+e <- new.env()
+with(e, {
+  test <- tryCatch(cp(log10(pdg) ~ bsplines(ttm)*age, data = spdg), error = function(e) e)
+  stopifnot(inherits(test, "error"))
+  stopifnot(identical(test$message, "bsplines() must appear first, once, and with no effect modifiers, as the first term on the right hand side of the formula."))
+})
+
+################################################################################
 # Verify that a control polygon can be build from a lm
 e <- new.env()
 with(e, {
