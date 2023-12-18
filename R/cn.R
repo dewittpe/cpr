@@ -45,10 +45,14 @@ cn.cpr_bt <- function(x, theta, ...) {
          bspline_list = attr(x, "bspline_list"),
          call    = match.call(),
          keep_fit = NULL,
-         fit     = NULL,
-         loglik  = NULL,
-         rss     = NULL,
-         rse     = NULL)
+         fit    = NULL,
+         theta = NULL,
+         coefficients = NULL,
+         vcov = NULL,
+         vcov_theta = NULL,
+         loglik = NULL,
+         rss    = NULL,
+         rse    = NULL)
   class(out) <- c("cpr_cn", class(out))
   out
 }
