@@ -11,12 +11,7 @@
 #' \ldots, \code{keep} internal knots) \code{cnr\_cp} objects in the list.  The
 #' limit on the number of stored regression fits is to keep memory usage down.
 #'
-#' @param x a \code{cnr_cp} or \code{cnr_tensor} object
-#' @param keep keep (store) the regression fit for the first \code{keep}
-#' \code{cpr_cn} objects in the list returned by \code{cnr}.
-#' @param p defaults to 2L, the L^p norm used in determining the influence
-#'        weight of each internal knot.  Passed to
-#'        \code{\link{influence_weights}}.
+#' @param x a \code{cnr_cn} object
 #' @param margin the margins to apply the CNR algorithm to.  Passed to
 #' \code{\link{influence_weights}}.
 #' @param n_polycoef the number of polynomial coefficients to use when assessing
@@ -27,21 +22,17 @@
 #' @seealso \code{\link{influence_weights}}, \code{\link{cpr}} for the
 #' uni-variable version, Control Polygon Reduction.
 #'
+#' @examples
+#'
 #' @export
-cnr <- function(x, keep = -1, p = 2, margin, n_polycoef = 20L, progress = interactive(), ...) {
+cnr <- function(x, margin, n_polycoef = 20L, progress = interactive(), ...) {
   UseMethod("cnr")
 }
 
 #' @export
-cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), n_polycoef = 20L, progress = interactive(), ...) {
+cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, progress = interactive(), ...) {
 
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list[margin], attr, which = "iknots"), length)) + 1L)
-
-  if (length(out) > (keep + 1) & x$keep_fit) {
-    x <- eval(stats::update(x, keep_fit = FALSE, check_rank = FALSE, evaluate = FALSE), parent.frame())
-  } else if (length(out) <= (keep + 1) & !x$keep_fit) {
-    x <- eval(stats::update(x, keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
-  }
 
   if (progress) {
     pb <- utils::txtProgressBar(max = length(out), style = 3)
@@ -65,11 +56,7 @@ cnr.cpr_cn <- function(x, keep = -1, p = 2, margin = seq_along(x$bspline_list), 
 
     nkts <- lapply(nkts, function(xx) xx$iknots)
 
-    if (i == keep + 1) {
-      x <- stats::update(x, keep_fit = TRUE)
-    }
-
-    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), check_rank = FALSE, evaluate = FALSE), parent.frame())
+    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
 
     if (progress) {
       utils::setTxtProgressBar(pb, prg <- prg + 1)
@@ -104,4 +91,3 @@ summary.cpr_cnr <- function(object, ...) {
   }
   do.call(rbind, rtn)
 }
-

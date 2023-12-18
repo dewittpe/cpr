@@ -18,7 +18,7 @@ cp(x, ...)
   data,
   method = stats::lm,
   method.args = list(),
-  keep_fit = FALSE,
+  keep_fit = TRUE,
   check_rank = TRUE,
   ...
 )
@@ -59,7 +59,7 @@ used.}
 \item{method.args}{a list of additional arguments to pass to the regression
 method.}
 
-\item{keep_fit}{(logical, default value is \code{FALSE}).  If \code{TRUE} the
+\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the
 regression model fit is retained and returned in as the \code{fit} element.
 If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
@@ -115,7 +115,7 @@ Generate the control polygon for a uni-variable B-spline
 \examples{
 
 # Support
-xvec <- seq(0, 5.9999, length = 500)
+xvec <- runif(n = 500, min = 0, max = 6)
 bknots <- c(0, 6)
 
 # Define the basis matrix
@@ -140,13 +140,13 @@ plot(cp1, cp2, color = TRUE)
 plot(cp1, cp2, show_spline = TRUE, color = TRUE)
 
 # via formula
-dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
-cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = dat)
+DF  <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
+cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = DF)
 
 # plot the spline and target data.
 plot(cp3, show_cp = FALSE, show_spline = TRUE) +
   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y, color = "Target"),
-                     data = dat, linetype = 2)
+                     data = DF, linetype = 2)
 
 
 x <- seq(0, 6, length = 500)

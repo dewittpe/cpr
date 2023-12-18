@@ -28,78 +28,101 @@
 #'
 #' @param f a formula
 #' @param data the data set containing the variables in the formula
-#' @param method a character string for the regression method
-#' @param method.args additional arguments passed to method
+#' @param formula_only if TRUE then only generate the formula, when FALSE, then
+#' generate and assign the data set too.
+#' @param envir the environment the generated formula and data set will be
+#' assigned too.
 #'
+#' @return TRUE, invisibly.  The return isn't needed as the assignment happens
+#' within the call.
+#'
+#' @examples
+#'
+#' e <- new.env()
+#' with(e, {
+#'   data <-
+#'     data.frame(
+#'                  x1 = runif(20)
+#'                , x2 = runif(20)
+#'                , x3 = runif(20)
+#'                , xf = factor(rep(c("l1","l2","l3","l4"), each = 5))
+#'                , xc = rep(c("c1","c2","c3","c4", "c5"), each = 4)
+#'                , pid = gl(n = 2, k = 10)
+#'                , pid2 = rep(1:2, each = 10)
+#'     )
+#'
+#'   f <- ~ bsplines(x1, bknots = c(0,1)) + x2 + xf + xc + (x3 | pid2)
+#'
+#'   cpr:::generate_cp_formula_data(f, data)
+#'
+#'   stopifnot(isTRUE(
+#'     all.equal(
+#'               f_for_use
+#'               ,
+#'               . ~ bsplines(x1, bknots = c(0, 1)) + x2 + (x3 | pid2) + xfl2 + xfl3 + xfl4 + xcc2 + xcc3 + xcc4 + xcc5 - 1
+#'               )
+#'   ))
+#'
+#'   stopifnot(isTRUE(identical(
+#'     names(data_for_use)
+#'     ,
+#'     c("x1", "x2", "x3", "pid", "pid2", "xfl2", "xfl3", "xfl4", "xcc2", "xcc3", "xcc4", "xcc5")
+#'   )))
+#'
+#' })
 #' @rdname generate_cp_formula_data
-generate_cp_formula_data <- function(f, data, method, method.args) {
+generate_cp_formula_data <- function(f, data, formula_only = FALSE, envir = parent.frame()) {
 
-  # part the formula, version with no bspline, no bars
-  f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
-  f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
+  # get a formula without any bspline, btensor, or bars
+  term_labels <- attr(stats::terms(f), "term.labels")
+  bspline_btensor_term <- grep("bsplines|btensor", term_labels)
+  bar_term <- grep("\\|", term_labels)
 
-  # get a list of the variables and subset the data
-  vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
-  data_nobsplines_nobars <- subset(data, select = vars_nobsplines_nobars)
-
-  if (grepl("geeglm", method)) {
-    fit <- do.call(geepack::geeglm, c(method.args, formula = stats::update.formula(f, . ~ 1), data = list(data)))
-    data_nobsplines_nobars[[as.character(method.args[["id"]])]] <- unname(fit[["id"]])
-  }
-
-  # identify any variables which are factors or characters
-  factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)})
-  factors <- names(factors[factors])
-
-  # build the data frames
-  # extract only the factors and build a model matrix
-  if (length(factors)) {
-    data_factors_only <-
-      data.frame(stats::model.matrix(stats::as.formula(paste("~", paste(factors, collapse = " + "))),
-                                     data = data))[, -1]
-    new_factors <-
-      lapply(factors, function(x) grep(x, names(data_factors_only), value = TRUE))
-    new_factors <- paste(do.call(c, new_factors), collapse = " + ")
+  # get variables not in the bsplines or btensor, not in (with) bars
+  if (
+      (length(term_labels) == 1L) |
+      (length(term_labels) == 2L & length(bar_term) == 1L)
+     ) {
+    f1 <- f
+  } else if (length(bar_term) > 0) {
+    f1 <- stats::drop.terms(stats::terms(f), c(bspline_btensor_term, bar_term))
   } else {
-    data_factors_only <- NULL
+    f1 <- stats::drop.terms(stats::terms(f), c(bspline_btensor_term))
   }
 
+  # check if any of the variables in f1 are factors or characters
+  fcvars <- sapply(all.vars(f1), function(x) {is.factor(data[[x]]) | is.character(data[[x]])})
 
-  data_nobsplines_nobars <-
-    subset(data_nobsplines_nobars, select = setdiff(names(data_nobsplines_nobars), factors))
+  if (!any(fcvars)) {
+    f_for_use <- stats::update.formula(f, . ~ 0 + .)
 
-  data_bsplines_bars <-
-    subset(data, select = setdiff(intersect(all.vars(lme4::subbars(f)), names(data)), all.vars(f_nobsplines_nobars)))
+    if (!formula_only) {
+      data_for_use <- data
+    }
 
-  # construct the new formula and data set
-  if (!is.null(data_factors_only)) {
-    f_for_use <-
-      stats::update(f, paste(". ~ 0 + . -", paste(factors, collapse = " - "), "+", new_factors))
-    data_for_use <-
-      cbind(data_nobsplines_nobars, data_bsplines_bars, data_factors_only)
   } else {
-    f_for_use <-
-      stats::update(f, paste(". ~ 0 + ."))
-    data_for_use <-
-      cbind(data_nobsplines_nobars, data_bsplines_bars)
+    fcvars <- names(fcvars)[fcvars]
+    fcf <- stats::as.formula(paste("~", paste(fcvars, collapse = "+")))
+    fcmm <- stats::model.matrix(fcf, data)[, -1]
+
+
+    f1 <- stats::as.formula(paste(" . ~ 0 + . - ",
+                           paste(fcvars, collapse = "-"), "+",
+                           paste(colnames(fcmm), collapse = "+")))
+
+    f_for_use <- stats::update.formula(f, f1)
+
+    if (!formula_only) {
+      data_for_use <- cbind(data[!(names(data) %in% fcvars)], fcmm)
+    }
+
   }
 
-  e <- parent.frame()
-  e$f_for_use <- f_for_use
-  e$data_for_use <- data_for_use
-}
+  assign("f_for_use", f_for_use, envir = envir)
 
-factors_characters_in_f <- function(f, data) {
-  # part the formula, version with no bspline, no bars
-  f_nobsplines <- stats::update(f, paste(". ~ . -", grep("bspline|btensor", attr(stats::terms(f), "term.labels"), value = TRUE)))
-  f_nobsplines_nobars <- lme4::nobars(f_nobsplines)
+  if (!formula_only) {
+    assign("data_for_use", data_for_use, envir = envir)
+  }
 
-  # get a list of the variables and subset the data
-  vars_nobsplines_nobars <- all.vars(lme4::nobars(f_nobsplines_nobars))
-  data_nobsplines_nobars <- subset(data, select = vars_nobsplines_nobars)
-
-  # identify any variables which are factors or characters
-  factors <- sapply(data_nobsplines_nobars, function(x) {is.factor(x) | is.character(x)})
-
-  return(any(factors))
+  invisible(TRUE)
 }

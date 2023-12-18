@@ -5,21 +5,12 @@
 \alias{summary.cpr_cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(x, keep = -1, p = 2, progress = interactive(), ...)
+cpr(x, progress = interactive(), ...)
 
 \method{summary}{cpr_cpr}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} object}
-
-\item{keep}{keep (store) the regression fit for models with \code{keep} or
-fewer internal knots, e.g., \code{keep = 3} will result in the regression fit
-for models with 0, 1, 2, and 3 internal knots being saved in their respective
-\code{cpr_cp} objects.  The default is \code{keep = -1} so that no regression
-models are retained.}
-
-\item{p}{defaults to 2L, the L^p norm used in determining the influence
-weight of each internal knot.}
 
 \item{progress}{show a progress bar.}
 
@@ -32,13 +23,6 @@ Run the Control Polygon Reduction Algorithm.
 }
 \details{
 \code{cpr} runs the control polygon reduction algorithm.
-
-\code{keep} will keep the regression fit as part of the \code{cpr\_cp} object
-for models with up to and including keep fits.  For example, if \code{keep =
-10} then the resulting \code{cpr\_cpr} object will have the regression fit
-stored in the first \code{keep + 1} (zero internal knots, one internal knot,
-\ldots, \code{keep} internal knots) \code{cpr\_cp} objects in the list.  The
-limit on the number of stored regression fits is to keep memory usage down.
 }
 \examples{
 #############################################################################
@@ -87,7 +71,7 @@ plot(cpr_run, color = TRUE, type = "rse")
 plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE)
 
 # plot the fitted spline and the true p(x)
-sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data)$pred)
+sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data))
 
 ggplot2::ggplot(sim_data) +
 ggplot2::theme_bw() +

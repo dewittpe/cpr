@@ -22,6 +22,8 @@
 * `loglikelihood` is not exported in the namespace
 * `summary.cpr_cp` now calcualtes the "wiggle" of the function by default, that
   is, changes the default from `wiggle = FALSE` to `wiggle = TRUE`
+* `cp` and `cn` both have the default `keep_fit` argument set to TRUE.  This
+  change was made to simplify the prediction methods.
 
 ## Non-User Visible Changes
 * Refactor of c++ defining basis functions, derivatives of basis functions,

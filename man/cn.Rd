@@ -17,7 +17,7 @@ cn(x, ...)
   data,
   method = stats::lm,
   method.args = list(),
-  keep_fit = FALSE,
+  keep_fit = TRUE,
   check_rank = TRUE,
   ...
 )
@@ -27,7 +27,7 @@ cn(x, ...)
 \method{summary}{cpr_cn}(object, ...)
 }
 \arguments{
-\item{x}{a \code{cpr_bs} object}
+\item{x}{a \code{cpr_bt} object}
 
 \item{...}{pass through}
 

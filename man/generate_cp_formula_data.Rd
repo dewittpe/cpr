@@ -4,16 +4,22 @@
 \alias{generate_cp_formula_data}
 \title{Generate Control Polygon Formula and Data}
 \usage{
-generate_cp_formula_data(f, data, method, method.args)
+generate_cp_formula_data(f, data, formula_only = FALSE, envir = parent.frame())
 }
 \arguments{
 \item{f}{a formula}
 
 \item{data}{the data set containing the variables in the formula}
 
-\item{method}{a character string for the regression method}
+\item{formula_only}{if TRUE then only generate the formula, when FALSE, then
+generate and assign the data set too.}
 
-\item{method.args}{additional arguments passed to method}
+\item{envir}{the environment the generated formula and data set will be
+assigned too.}
+}
+\value{
+TRUE, invisibly.  The return isn't needed as the assignment happens
+within the call.
 }
 \description{
 Construct a \code{data.frame} and \code{formula} to be passed to the
@@ -42,4 +48,39 @@ We need to know the \code{method} and \code{method.args} to build the data
 set.  For example, for a \code{\link[geepack]{geeglm}} the \code{id} variable
 is needed in the data set and is part of the \code{method.args} not the
 \code{formula}.
+}
+\examples{
+
+e <- new.env()
+with(e, {
+  data <-
+    data.frame(
+                 x1 = runif(20)
+               , x2 = runif(20)
+               , x3 = runif(20)
+               , xf = factor(rep(c("l1","l2","l3","l4"), each = 5))
+               , xc = rep(c("c1","c2","c3","c4", "c5"), each = 4)
+               , pid = gl(n = 2, k = 10)
+               , pid2 = rep(1:2, each = 10)
+    )
+
+  f <- ~ bsplines(x1, bknots = c(0,1)) + x2 + xf + xc + (x3 | pid2)
+
+  cpr:::generate_cp_formula_data(f, data)
+
+  stopifnot(isTRUE(
+    all.equal(
+              f_for_use
+              ,
+              . ~ bsplines(x1, bknots = c(0, 1)) + x2 + (x3 | pid2) + xfl2 + xfl3 + xfl4 + xcc2 + xcc3 + xcc4 + xcc5 - 1
+              )
+  ))
+
+  stopifnot(isTRUE(identical(
+    names(data_for_use)
+    ,
+    c("x1", "x2", "x3", "pid", "pid2", "xfl2", "xfl3", "xfl4", "xcc2", "xcc3", "xcc4", "xcc5")
+  )))
+
+})
 }
