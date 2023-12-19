@@ -25,20 +25,22 @@ with(e, {
 })
 
 ################################################################################
-# simple test of the cn.formula
-#e <- new.env()
-#with(e, {
-#  acn <- cn(pdg ~ btensor(list(day, age)
-#                          , df = list(30, 4)
-#                          , bknots = list(c(-1, 1), c(44, 53))
-#                          ) + ttm
-#            , data = spdg)
-#  stopifnot(inherits(acn, "cpr_cn"))
-#
-#  stopifnot(identical(names(acn), c("cn", "bspline_list", "call", "keep_fit", "fit", "loglik", "rss", "rse", "theta", "vcov_theta", "coefficients", "vcov")))
-#
-#})
-#
+# Verify that an error is thrown if btensor is not used as expected in the
+# formula
+e <- new.env()
+with(e, {
+  test <- tryCatch(cn(log10(pdg) ~ age + ttm, data = spdg), error = function(e) e)
+  stopifnot(inherits(test, "error"))
+  stopifnot(identical(test$message, "btensor() must appear once, with no effect modifiers, on the right hand side of the formula."))
+})
+
+e <- new.env()
+with(e, {
+  test <- tryCatch(cn(log10(pdg) ~ btensor(ttm)*age, data = spdg), error = function(e) e)
+  stopifnot(inherits(test, "error"))
+  stopifnot(identical(test$message, "btensor() must appear once, with no effect modifiers, on the right hand side of the formula."))
+})
+
 ################################################################################
 #                                 End of File                                  #
 ################################################################################
