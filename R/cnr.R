@@ -35,39 +35,34 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list[margin], attr, which = "iknots"), length)) + 1L)
 
   if (progress) {
-    pb <- utils::txtProgressBar(max = length(out), style = 3)
-    prg <- 0
-    utils::setTxtProgressBar(pb, prg)
+    pb <- utils::txtProgressBar(max = length(out), style = 3) # nocov
+    prg <- 0 # nocov
+    utils::setTxtProgressBar(pb, prg) # nocov
   }
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x
-    w <- influence_weights(x, p = p, margin, n_polycoef)
-    for(i in seq_along(w)) {
-      if (nrow(w[[i]]) > 0L) {
-        w[[i]]$margin <- i
-      }
+    w <- summary(influence_of_iknots(out[[i]], margin, n_polycoef))
+    w <- w[w$influence_rank > 1, ]
+    nkts <- lapply(split(w, f = w$margin), getElement, "iknot")
+
+    for ( margin_not_in_nkts in as.character(margin)[ !(as.character(margin) %in% names(nkts)) ] ) {
+      nkts[margin_not_in_nkts] <- numeric(0)
+      nkts <- nkts[sort(names(nkts))]
     }
-    w <- do.call(rbind, w)
-
-    w <- subset(w, rank(w[["max_w"]], ties.method = "first") > 1)
-
-    nkts <- split(w, factor(w$margin, levels = seq_along(x$bspline_list)))
-
-    nkts <- lapply(nkts, function(xx) xx$iknots)
 
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
 
     if (progress) {
-      utils::setTxtProgressBar(pb, prg <- prg + 1)
+      utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     }
   }
 
   out[[1]] <- x
 
   if (progress) {
-    utils::setTxtProgressBar(pb, prg <- prg + 1)
-    close(pb)
+    utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
+    close(pb) # nocov
   }
 
   class(out) <- c("cpr_cnr", class(out))
