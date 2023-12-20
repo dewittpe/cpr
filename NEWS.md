@@ -27,6 +27,7 @@
 * `print.cpr_bt` returns the object invisibly, it used to return a str(x).
 * `print.cpr_cn` returns the object invisibly
 * `print.cpr_cnr` returns the object invisibly
+* `print.cpr_cpr` returns the object invisibly
 
 ## Non-User Visible Changes
 * Refactor of c++ defining basis functions, derivatives of basis functions,

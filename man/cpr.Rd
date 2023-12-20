@@ -2,12 +2,9 @@
 % Please edit documentation in R/cpr.R
 \name{cpr}
 \alias{cpr}
-\alias{summary.cpr_cpr}
 \title{Control Polygon Reduction}
 \usage{
 cpr(x, progress = interactive(), ...)
-
-\method{summary}{cpr_cpr}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} object}
@@ -15,8 +12,6 @@ cpr(x, progress = interactive(), ...)
 \item{progress}{show a progress bar.}
 
 \item{...}{not currently used}
-
-\item{object}{a \code{cpr_cpr} object}
 }
 \description{
 Run the Control Polygon Reduction Algorithm.
