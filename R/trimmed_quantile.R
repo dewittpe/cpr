@@ -12,6 +12,8 @@
 #' values, if false, base the quantiles on all data, after trimming.
 #' @param ... other arguments to pass to stats::quantile
 #'
+#' @return
+#'
 #'
 #' @examples
 #' trimmed_quantile(1:100, prob = 1:23 / 24, name = FALSE)

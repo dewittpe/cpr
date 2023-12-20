@@ -5,6 +5,8 @@
 #' @param object a \code{cpr_cp} or \code{cpr_cn} object
 #' @param ... passed to \code{\link[stats]{predict}}
 #'
+#' @return
+#'
 #' @examples
 #'
 #' @export

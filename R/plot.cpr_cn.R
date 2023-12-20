@@ -43,7 +43,6 @@
 #' generate the graphics.
 #'
 #' @return
-#' The result of the \code{get_surface} call is returned invisibly.
 #'
 #' @seealso \code{\link{plot.cpr_cp}} for plotting control polygons and splines,
 #' \code{\link[rgl]{persp3d}} and \code{\link[rgl]{rgl.material}} for generating
@@ -54,7 +53,6 @@
 #' @seealso \code{vignette(topic = "cnr", package = "cpr")}
 #'
 #' @examples
-#' ## see vignette(topic = "cnr", package = "cpr")
 #'
 #' @method plot cpr_cn
 #' @export

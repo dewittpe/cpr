@@ -3,6 +3,8 @@
 #' @param x \code{cpr_cp} object
 #' @param ... pass through
 #'
+#' @return
+#'
 #' @examples
 #' x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)
 #' bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))

@@ -6,6 +6,11 @@
 #' @param x a \code{cpr_cp} or \code{cpr_bs} object
 #' @param digits digits to the right of the decimal point to report
 #'
+#' @return
+#'
+#' @examples
+#'
+#'
 knot_expr <- function(x, digits) {
   UseMethod("knot_expr")
 }

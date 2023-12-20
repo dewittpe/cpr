@@ -8,6 +8,8 @@
 #' \code{bknots}, or \code{order}.
 #' @param evaluate If true evaluate the new call else return the call.
 #'
+#' @return
+#'
 #' @seealso \code{\link[stats]{update}}, \code{\link{bsplines}},
 #' \code{\link{btensor}}
 #'
@@ -131,25 +133,4 @@ find_update_b_ <- function(x, dots) {
   } else {
     x
   }
-}
-
-
-# newknots are used in the cpr and cnr calls.
-newknots <- function(form, nk) {
-  rr <- function(x, nk) {
-    if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
-      x$df <- NULL
-      x$iknots <- nk
-      x
-    } else if (is.recursive(x)) {
-      as.call(lapply(as.list(x), rr, nk))
-    } else {
-      x
-    }
-  }
-
-  z <- lapply(as.list(form), rr, nk)
-  z <- eval(as.call(z))
-  environment(z) <- environment(form)
-  z
 }

@@ -45,9 +45,6 @@ if \code{show_surface = FALSE}.}
 generate the graphics.  If \code{FALSE}, use \code{plot3D::persp3D} to
 generate the graphics.}
 }
-\value{
-The result of the \code{get_surface} call is returned invisibly.
-}
 \description{
 Three-dimensional plots of control nets and/or surfaces
 }
@@ -73,10 +70,6 @@ lists of \code{\link[rgl]{rgl.material}} and other arguments passed to
 
 For \code{plot3D} graphics there are no defaults values for the
 \code{net_args} and \code{surface_args}.
-}
-\examples{
-## see vignette(topic = "cnr", package = "cpr")
-
 }
 \seealso{
 \code{\link{plot.cpr_cp}} for plotting control polygons and splines,
