@@ -19,8 +19,12 @@
 #' @param progress show a progress bar.
 #' @param ... not currently used
 #'
+#' @return
+#'
 #' @seealso \code{\link{influence_weights}}, \code{\link{cpr}} for the
 #' uni-variable version, Control Polygon Reduction.
+#'
+#' \code{vignette(topic = "cnr", package = "cpr")}
 #'
 #' @examples
 #'
@@ -73,16 +77,6 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
 #' @export
 print.cpr_cnr <- function(x, ...) {
   cat("A list of control nets\n")
-  utils::str(x, max.level = 0)
-}
-
-#' @export
-#' @param object a \code{cpr_cnr} object
-#' @rdname cnr
-summary.cpr_cnr <- function(object, ...) {
-  rtn <- lapply(object, summary)
-  for (i in seq_along(rtn)) {
-    rtn[[i]]$index <- as.integer(i)
-  }
-  do.call(rbind, rtn)
+  print(utils::str(x, max.level = 0))
+  invisible(x)
 }

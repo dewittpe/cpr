@@ -2,12 +2,9 @@
 % Please edit documentation in R/cnr.R
 \name{cnr}
 \alias{cnr}
-\alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
 cnr(x, margin, n_polycoef = 20L, progress = interactive(), ...)
-
-\method{summary}{cpr_cnr}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cnr_cn} object}
@@ -21,8 +18,6 @@ the influence of each internal knot.}
 \item{progress}{show a progress bar.}
 
 \item{...}{not currently used}
-
-\item{object}{a \code{cpr_cnr} object}
 }
 \description{
 Run the Control Net Reduction Algorithm.
@@ -40,4 +35,6 @@ limit on the number of stored regression fits is to keep memory usage down.
 \seealso{
 \code{\link{influence_weights}}, \code{\link{cpr}} for the
 uni-variable version, Control Polygon Reduction.
+
+\code{vignette(topic = "cnr", package = "cpr")}
 }
