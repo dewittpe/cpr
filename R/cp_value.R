@@ -1,6 +1,6 @@
-#' Control Polygon Diagnostics
+#' Control Polygon Value
 #'
-#' Collection of functions for inspection and analysis of the control polygons
+#' Find the y value of a Control Polygon for a given x
 #'
 #' @return
 #' \code{cp_value} returns the ordinate on the control polygon line segment for
