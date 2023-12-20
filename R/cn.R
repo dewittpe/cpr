@@ -107,7 +107,6 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- as.call(cl)
 
   Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
-  #xi_stars <- lapply(attr(Bmat, "bspline_list"), attr, which = "xi_star")
 
   out <- cn.cpr_bt(Bmat, COEF_VCOV$theta)
 
@@ -137,29 +136,7 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
 #' @rdname cn
 print.cpr_cn <- function(x, ...) {
   print(x$cn, ...)
-}
-
-#' @export
-#' @param object a \code{cpr_cn} object
-#' @rdname cn
-summary.cpr_cn <- function(object, ...) {
-  iknots <- lapply(object$bspline_list, attr, which = "iknots")
-  names(iknots) <- paste0("iknots", seq_along(iknots))
-
-  out <-
-    data.frame(dfs        = length(object$cn$theta),
-               loglik     = object$loglik,
-               rss        = object$rss,
-               rse        = object$rse )
-
-  for(i in seq_along(iknots)) {
-    nm <- names(iknots)[i]
-    out[[paste0("n_", nm)]] <- length(iknots[[i]])
-    out[[nm]] <- I(iknots[i])
-  }
-
-  out
-
+  invisible(x)
 }
 
 
