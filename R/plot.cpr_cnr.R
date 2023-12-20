@@ -3,16 +3,20 @@
 #' A collection of function for the inspection and evaluation of the control
 #' polygon reduction.
 #'
-#' @method plot cpr_cnr
-#' @rdname cnr_diagnostics
-#' @export
 #' @param x a \code{cpr_cnr} object
 #' @param type type of diagnostic plot.
 #' \code{"loglik"} for the log likelihood by degrees of freedom,
 #' \code{"rse"} for residual standard error by model index
 #' @param from the first index of \code{x} to plot
 #' @param to the last index of \code{x} to plot
-#' @param ... ignored
+#' @param ... pass through
+#'
+#' @return a ggplot
+#'
+#' @examples
+#'
+#' @method plot cpr_cnr
+#' @export
 plot.cpr_cnr <- function(x, type = "rse", from = 1, to, ...) {
 
   if (from < 1) {
@@ -39,4 +43,3 @@ plot.cpr_cnr <- function(x, type = "rse", from = 1, to, ...) {
     stop("type needs to be either 'loglik' or 'rse'.")
   }
 }
-
