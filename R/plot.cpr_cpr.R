@@ -1,11 +1,7 @@
 #' Control Polygon Reduction Plots
 #'
-#' A collection of function for the inspection and evaluation of the control
-#' polygon reduction.
+#' A wrapper around several ggplot2 calls to help evaluate results of a CPR run.
 #'
-#' @method plot cpr_cpr
-#' @rdname cpr_diagnostics
-#' @export
 #' @param x a \code{cpr_cpr} object
 #' @param type type of diagnostic plot.  \code{"cps"} for control polygons,
 #' \code{"loglik"} for the log likelihood by degrees of freedom,
@@ -13,7 +9,15 @@
 #' @param from the first index of \code{x} to plot
 #' @param to the last index of \code{x} to plot
 #' @param ... arguments passed to \code{plot.cpr_cp}
-#' @seealso \code{\link{plot.cpr_cp}}
+#'
+#' @seealso \code{\link{plot.cpr_cp}}, \code{\link{cpr}}, \code{\link{cp}}
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @method plot cpr_cpr
+#' @export
 plot.cpr_cpr <- function(x, type = c("cps", "loglik", "rss", "rse"), from = 1, to, ...) {
 
   if (from < 1) {
@@ -56,4 +60,3 @@ plot.cpr_cpr <- function(x, type = c("cps", "loglik", "rss", "rse"), from = 1, t
 
   }
 }
-
