@@ -1,6 +1,15 @@
-#' @export
+#' Summary of Control Net
+#'
+#' Generate a summary of control net object
+#'
 #' @param object a \code{cpr_cn} object
-#' @rdname cn
+#' @param ... pass through
+#'
+#' @return
+#'
+#' @examples
+#'
+#' @export
 summary.cpr_cn <- function(object, ...) {
   iknots <- lapply(object$bspline_list, attr, which = "iknots")
   names(iknots) <- paste0("iknots", seq_along(iknots))

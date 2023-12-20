@@ -25,6 +25,8 @@
 #'  \item{rse}{the residual standard error for the regression models}
 #'  }
 #'
+#' @seealso \code{\link{summary.cpr_cn}}, \code{\link{cnr}}
+#'
 #' @examples
 #'
 #' @export
