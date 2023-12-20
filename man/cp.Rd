@@ -5,7 +5,6 @@
 \alias{cp.cpr_bs}
 \alias{cp.formula}
 \alias{print.cpr_cp}
-\alias{summary.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(x, ...)
@@ -23,8 +22,6 @@ cp(x, ...)
 )
 
 \method{print}{cpr_cp}(x, ...)
-
-\method{summary}{cpr_cp}(object, wiggle = TRUE, integrate.args = list(), ...)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
@@ -51,15 +48,6 @@ If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
 \item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check
 that the design matrix is full rank.}
-
-\item{object}{a \code{cpr_cp} object}
-
-\item{wiggle}{logical, if \code{TRUE} then the integral of the squared second
-derivative of the spline function will be calculated via
-\code{\link[stats]{integrate}}.}
-
-\item{integrate.args}{a list of arguments passed to \code{\link{wiggle}} and
-ultimately \code{\link[stats]{integrate}}.}
 }
 \description{
 Generate the control polygon for a uni-variable B-spline

@@ -21,6 +21,8 @@
 #'   \item{vcov}{full variance-covariance matrix}
 #' }
 #'
+#' @examples
+#'
 #' @seealso \code{\link[stats]{coef}} \code{\link{cp}} \code{\link{cn}}
 coef_vcov <- function(fit) {
   UseMethod("coef_vcov")
