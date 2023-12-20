@@ -1,7 +1,9 @@
 #' Internal Knots or Degrees of Freedom
 #'
-#' Used in the \link{bsplines} call to check order, degrees of freedom (df) and
-#' iknots
+#' Check order, degrees of freedom (df) and iknots
+#'
+#' This is an internal function, not to be exported, and used in the calls for
+#' \code{\link{bsplines}} and \code{\link{bsplineD}}.
 #'
 #' @param x
 #' @param iknots
@@ -10,7 +12,7 @@
 #'
 #' @return a numeric vector to use as the internal knots defining a B-spline
 #'
-#' @seealso \link{bsplines}
+#' @seealso \code{\link{bsplines}}, \code{\link{bsplineD}}
 #'
 #' @examples
 #'

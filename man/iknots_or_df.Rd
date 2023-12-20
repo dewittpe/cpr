@@ -13,9 +13,12 @@ iknots_or_df(x, iknots, df, order)
 a numeric vector to use as the internal knots defining a B-spline
 }
 \description{
-Used in the \link{bsplines} call to check order, degrees of freedom (df) and
-iknots
+Check order, degrees of freedom (df) and iknots
+}
+\details{
+This is an internal function, not to be exported, and used in the calls for
+\code{\link{bsplines}} and \code{\link{bsplineD}}.
 }
 \seealso{
-\link{bsplines}
+\code{\link{bsplines}}, \code{\link{bsplineD}}
 }
