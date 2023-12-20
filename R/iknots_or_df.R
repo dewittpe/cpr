@@ -1,6 +1,3 @@
-# utilities.R - a set of non-exported functions used within other methods in the
-# cpr package
-
 #' Internal Knots or Degrees of Freedom
 #'
 #' Used in the \link{bsplines} call to check order, degrees of freedom (df) and
@@ -12,6 +9,8 @@
 #' @param order
 #'
 #' @return a numeric vector to use as the internal knots defining a B-spline
+#'
+#' @seealso \link{bsplines}
 #'
 #' @examples
 #'
