@@ -78,7 +78,6 @@ update_bsplines.formula <- function(object, ..., evaluate = TRUE) {
 update_bsplines.cpr_bs <- function(object, ..., evaluate = TRUE) {
   cl <- as.list(attr(object, "call"))
   dots <- match.call(expand.dots = FALSE)$...
-  dots <- dots[!is.na(match(names(dots), c("iknots", "df", "bknots", "order")))]
 
   for(a in names(dots)) {
     if (!all(c(is.null(cl[[a]]), is.null(dots[[a]])))) {
@@ -89,7 +88,7 @@ update_bsplines.cpr_bs <- function(object, ..., evaluate = TRUE) {
   if (evaluate) {
     eval(as.call(cl), attr(object, "environment"))
   } else {
-    cl
+    as.call(cl)
   }
 
 }
