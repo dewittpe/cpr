@@ -231,20 +231,16 @@ with(e, {
 })
 
 ################################################################################
-# attributes of bsplines and bsplineD
+# attributes of bsplines
 e <- new.env()
 with(e, {
-  xvec <- seq(-1, 5, length = 100)
+  xvec <- runif(n = 100, min = -1, max = 5)
   iknots <- c(-0.8, 0.2, 2.3, 2.5)
   bknots <- c(-1.2, 5.2)
 
   bmat   <- tryCatch(bsplines(xvec, iknots = iknots, bknots = bknots), error = function(e) e)
-  bmatD1 <- tryCatch(bsplineD(xvec, iknots = iknots, bknots = bknots, derivative = 1L), error = function(e) e)
-  bmatD2 <- tryCatch(bsplineD(xvec, iknots = iknots, bknots = bknots, derivative = 2L), error = function(e) e)
 
   stopifnot(inherits(bmat, "cpr_bs"))
-  stopifnot(inherits(bmatD1, "cpr_bsD1"))
-  stopifnot(inherits(bmatD2, "cpr_bsD2"))
 
   stopifnot(identical(
       names(attributes(bmat))
@@ -253,47 +249,19 @@ with(e, {
     )
   )
 
-  stopifnot(identical(
-      names(attributes(bmatD1))
-      ,
-      c("dim", "order", "df", "iknots", "bknots", "xi", "xi_star", "derivative", "class")
-    )
-  )
-
-  stopifnot(identical(
-      names(attributes(bmatD2))
-      ,
-      c("dim", "order", "df", "iknots", "bknots", "xi", "xi_star", "derivative", "class")
-    )
-  )
-
   stopifnot(identical(attr(bmat, "dim"), c(100L, 8L)))
-  stopifnot(identical(attr(bmatD1, "dim"), c(100L, 8L)))
-  stopifnot(identical(attr(bmatD2, "dim"), c(100L, 8L)))
 
   stopifnot(identical(attr(bmat, "order"), 4))
-  stopifnot(identical(attr(bmatD1, "order"), 4))
-  stopifnot(identical(attr(bmatD2, "order"), 4))
 
   stopifnot(identical(attr(bmat, "df"), 4 + length(iknots)))
-  stopifnot(identical(attr(bmatD1, "df"), 4 + length(iknots)))
-  stopifnot(identical(attr(bmatD2, "df"), 4 + length(iknots)))
 
   stopifnot(identical(attr(bmat, "iknots"),   iknots))
-  stopifnot(identical(attr(bmatD1, "iknots"), iknots))
-  stopifnot(identical(attr(bmatD2, "iknots"), iknots))
 
   stopifnot(identical(attr(bmat, "bknots"),   bknots))
-  stopifnot(identical(attr(bmatD1, "bknots"), bknots))
-  stopifnot(identical(attr(bmatD2, "bknots"), bknots))
 
   stopifnot(identical(attr(bmat, "xi"),   sort(c(rep(bknots, 4), iknots))))
-  stopifnot(identical(attr(bmatD1, "xi"), sort(c(rep(bknots, 4), iknots))))
-  stopifnot(identical(attr(bmatD2, "xi"), sort(c(rep(bknots, 4), iknots))))
 
   stopifnot(identical(attr(bmat, "derivative"),   NULL))
-  stopifnot(identical(attr(bmatD1, "derivative"), 1L))
-  stopifnot(identical(attr(bmatD2, "derivative"), 2L))
 
 })
 
