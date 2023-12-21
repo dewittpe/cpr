@@ -23,9 +23,12 @@ with(e, {
 e <- new.env()
 with(e, {
   bmat       <- bsplines(runif(n = 100, 1, 100), bknots = c(1, 100), df = 52)
+
+  stopifnot(identical(bmat, print(bmat)))
+
   print_bmat <- capture.output(bmat)
 
-  stopifnot(any(grepl("First\\s\\d+\\srows:", print_bmat)))
+  stopifnot(any(grepl("First\\s6\\srows:", print_bmat))) # default
   stopifnot(identical(print_bmat[1], "Basis matrix dims: [100 x 52]"))
   stopifnot(identical(print_bmat[2], "Order: 4"))
   stopifnot(identical(print_bmat[3], "Number of internal knots: 48"))
@@ -35,6 +38,24 @@ with(e, {
 
   print_bmat <- capture.output(print(bmat, n = 1000))
   stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
+
+  print_bmat <- capture.output(print(bmat, n = 1001))
+  stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
+
+  print_bmat <- capture.output(print(bmat, n = 10))
+  stopifnot(any(grepl("First\\s10\\srows:", print_bmat)))
+})
+
+e <- new.env()
+with(e, {
+  bmat       <- bsplines(runif(n = 2, 1, 100), bknots = c(1, 100), df = 52)
+  print_bmat <- capture.output(bmat)
+
+  stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
+  stopifnot(identical(print_bmat[1], "Basis matrix dims: [2 x 52]"))
+  stopifnot(identical(print_bmat[2], "Order: 4"))
+  stopifnot(identical(print_bmat[3], "Number of internal knots: 48"))
+  stopifnot(identical(print_bmat[4], ""))
 })
 
 ################################################################################

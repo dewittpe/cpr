@@ -265,5 +265,22 @@ with(e, {
 })
 
 ################################################################################
+##                              printing method                               ##
+e <- new.env()
+with(e, {
+  bm <-
+    btensor(x = list(mtcars$disp, mtcars$hp),
+            iknots = list(numeric(0), c(100, 150)),
+            bknots = list(c(70, 475), c(50, 350))
+    )
+
+  stopifnot(identical(bm, print(bm)))
+
+  bmcap <- capture.output(print(bm))
+  stopifnot(identical(bmcap[1], "Tensor Product Matrix dims: [32 x 24]"))
+
+})
+
+################################################################################
 ##                                End of File                                 ##
 ################################################################################
