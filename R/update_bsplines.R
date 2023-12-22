@@ -69,7 +69,7 @@ update_bsplines.formula <- function(object, ..., evaluate = TRUE) {
   dots <- as.list(match.call(expand.dots = FALSE))$...
   dots <- dots[!is.na(match(names(dots), c("iknots", "df", "bknots", "order")))]
   out <- lapply(as.list(object), find_update_b_, dots)
-  out <- eval(as.call(out))
+  out <- eval(as.call(out), envir = environment(object))
   environment(out) <- environment(object)
   out
 }

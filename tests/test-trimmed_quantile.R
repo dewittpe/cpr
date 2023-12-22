@@ -2,6 +2,7 @@ library(cpr)
 
 ################################################################################
 # test that trimmed quantile warnings work
+old_options <- options()
 options(warn = 2)
 
 e <- try(trimmed_quantile(1:100, trim =  3.9, prob = 1:23 / 24, name = FALSE), silent = TRUE)
@@ -30,6 +31,10 @@ uxt <- ux[!(ux %in% range(ux))]#-c(which.min(ux), which.max(ux))]
 
 stopifnot(isTRUE(all.equal(trimmed_quantile(x), quantile(uxt))))
 stopifnot(isTRUE(all.equal(trimmed_quantile(x, use_unique = FALSE), quantile(xt))))
+
+################################################################################
+# reset options
+options(old_options)
 
 ################################################################################
 ##                                End of File                                 ##

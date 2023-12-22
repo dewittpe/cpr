@@ -48,19 +48,21 @@ e <- new.env()
 with(e, {
 
   # First, a good fit
-  bcn <- cn(pdg ~ btensor(list(day, age), df = list(30, 4), bknots = list(c(-1, 1), c(44, 53))) + ttm
-            , data = spdg)
+  bcn0 <- cn(pdg ~ btensor(list(day, age), df = list(30, 4), bknots = list(c(-1, 1), c(44, 53))) + ttm , data = spdg)
 
-  stopifnot(inherits(bcn, "cpr_cn"))
+  stopifnot(inherits(bcn0, "cpr_cn"))
 
   # Now update to something that is rank deficient
-  bcn <- tryCatch(update_btensor(bcn, iknots = list(c(0, 0, 0, 0, 0), numeric(0)), df = NULL),
+  bcn <- tryCatch(update_btensor(bcn0, iknots = list(c(0, 0, 0, 0, 0), numeric(0)), df = NULL),
                   warning = function(w) w)
 
   stopifnot(inherits(bcn, 'warning'))
   stopifnot(identical(bcn$message, 'Design Matrix is rank deficient. keep_fit being set to TRUE.'))
 
-  bcn <- tryCatch(update(bcn, keep_fit = FALSE), warning = function(w) w)
+  bcn <- tryCatch(
+                  cn(pdg ~ btensor(list(day, age), iknots = list(c(0, 0,0, 0, 0), numeric(0)), bknots = list(c(-1, 1), c(44, 53))) + ttm
+                     , data = spdg, keep_fit = FALSE)
+                  , warning = function(w) w)
 
   stopifnot(inherits(bcn, 'warning'))
   stopifnot(identical(bcn$message, 'Design Matrix is rank deficient. keep_fit being set to TRUE.'))

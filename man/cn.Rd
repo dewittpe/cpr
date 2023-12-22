@@ -4,7 +4,6 @@
 \alias{cn}
 \alias{cn.cpr_bt}
 \alias{cn.formula}
-\alias{print.cpr_cn}
 \title{Control Nets}
 \usage{
 cn(x, ...)
@@ -20,34 +19,25 @@ cn(x, ...)
   check_rank = TRUE,
   ...
 )
-
-\method{print}{cpr_cn}(x, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_bt} object}
 
 \item{...}{pass through}
 
-\item{theta}{a vector of (regression) coefficients, the ordinates of the
-control net.}
+\item{theta}{a vector of (regression) coefficients, the ordinates of the control net.}
 
-\item{formula}{a formula that is appropriate for regression method being
-used.}
+\item{formula}{a formula that is appropriate for regression method being used.}
 
 \item{data}{a required \code{data.frame}}
 
-\item{method}{the regression method such as \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
+\item{method}{the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
 
-\item{method.args}{a list of additional arguments to pass to the regression
-method.}
+\item{method.args}{a list of additional arguments to pass to the regression method.}
 
-\item{keep_fit}{(logical, defaults to \code{FALSE}).  If \code{TRUE} the
-regression model fit is retained and returned in the the \code{fit} element.
-If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.}
+\item{keep_fit}{(logical, defaults to \code{FALSE}).  If \code{TRUE} the regression model fit is retained and returned in the the \code{fit} element. If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.}
 
-\item{check_rank}{(logical, defaults to \code{TRUE}) if TRUE check that the
-design matrix is full rank.}
+\item{check_rank}{(logical, defaults to \code{TRUE}) if TRUE check that the design matrix is full rank.}
 }
 \value{
 a \code{cpr_cn} object.  This is a list with the following elements.

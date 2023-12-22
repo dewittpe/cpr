@@ -16,28 +16,27 @@ initial_cp <-
      , keep_fit = TRUE # default is FALSE
   )
 
-summary(influence_of_iknots(initial_cp))
+#summary(influence_of_iknots(initial_cp))
 
 first_reduction_cp <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(first_reduction_cp))
+#summary(influence_of_iknots(first_reduction_cp))
 
 second_reduction_cp <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 3, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(second_reduction_cp))
+#summary(influence_of_iknots(second_reduction_cp))
 
 third_reduction_cp <- cp(y ~ bsplines(x, iknots = c(1, 3, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(third_reduction_cp))
+#summary(influence_of_iknots(third_reduction_cp))
 
 fourth_reduction_cp <- cp(y ~ bsplines(x, iknots = c(1, 4.5), bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(fourth_reduction_cp))
+#summary(influence_of_iknots(fourth_reduction_cp))
 
 fifth_reduction_cp <- cp(y ~ bsplines(x, iknots = 4.5, bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(fifth_reduction_cp))
+#summary(influence_of_iknots(fifth_reduction_cp))
 
 sixth_reduction_cp <- cp(y ~ bsplines(x, bknots = c(0, 6)), data = DF)
-summary(influence_of_iknots(sixth_reduction_cp))
+#summary(influence_of_iknots(sixth_reduction_cp))
 
 cpr0 <- cpr(initial_cp)
-cpr0
 
 stopifnot(isTRUE(all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])))
 stopifnot(isTRUE(all.equal( cpr0[[6]][["cp"]],  first_reduction_cp[["cp"]])))
@@ -61,4 +60,3 @@ stopifnot(inherits(e, "try-error"))
 ################################################################################
 ###                               End of File                                ###
 ################################################################################
-

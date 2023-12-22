@@ -4,7 +4,6 @@
 \alias{cp}
 \alias{cp.cpr_bs}
 \alias{cp.formula}
-\alias{print.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(x, ...)
@@ -20,34 +19,25 @@ cp(x, ...)
   check_rank = TRUE,
   ...
 )
-
-\method{print}{cpr_cp}(x, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
 
 \item{...}{pass through}
 
-\item{theta}{a vector of (regression) coefficients, the ordinates of the
-control polygon.}
+\item{theta}{a vector of (regression) coefficients, the ordinates of the control polygon.}
 
-\item{formula}{a formula that is appropriate for regression method being
-used.}
+\item{formula}{a formula that is appropriate for regression method being used.}
 
 \item{data}{a required \code{data.frame}}
 
-\item{method}{the regression method such as \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
+\item{method}{the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
 
-\item{method.args}{a list of additional arguments to pass to the regression
-method.}
+\item{method.args}{a list of additional arguments to pass to the regression method.}
 
-\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the
-regression model fit is retained and returned in as the \code{fit} element.
-If \code{FALSE} the \code{fit} element with be \code{NA}.}
+\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the regression model fit is retained and returned in as the \code{fit} element. If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
-\item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check
-that the design matrix is full rank.}
+\item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check that the design matrix is full rank.}
 }
 \description{
 Generate the control polygon for a uni-variable B-spline

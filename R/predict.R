@@ -33,7 +33,6 @@ predict.cpr_cp <- function(object, ...) {
 
     cl[["object"]] <- object[["fit"]]
     cl[["newdata"]] <- data_for_use
-    print(cl)
 
   } else {
     cl[["object"]] <- object[["fit"]]

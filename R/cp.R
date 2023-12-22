@@ -46,15 +46,13 @@
 #'                      data = DF, linetype = 2)
 #'
 #' @export
-#' @rdname cp
 cp <- function(x, ...) {
   UseMethod("cp")
 }
 
 #' @export
 #' @rdname cp
-#' @param theta a vector of (regression) coefficients, the ordinates of the
-#'        control polygon.
+#' @param theta a vector of (regression) coefficients, the ordinates of the control polygon.
 cp.cpr_bs <- function(x, theta, ...) {
   out <- list(cp = data.frame(xi_star = as.numeric(attr(x, "xi_star")),
                               theta   = as.vector(theta)),
@@ -81,18 +79,12 @@ cp.cpr_bs <- function(x, theta, ...) {
 
 #' @export
 #' @rdname cp
-#' @param formula a formula that is appropriate for regression method being
-#' used.
+#' @param formula a formula that is appropriate for regression method being used.
 #' @param data a required \code{data.frame}
-#' @param method the regression method such as \code{\link[stats]{lm}},
-#' \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
-#' @param method.args a list of additional arguments to pass to the regression
-#' method.
-#' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the
-#' regression model fit is retained and returned in as the \code{fit} element.
-#' If \code{FALSE} the \code{fit} element with be \code{NA}.
-#' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check
-#' that the design matrix is full rank.
+#' @param method the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
+#' @param method.args a list of additional arguments to pass to the regression method.
+#' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the regression model fit is retained and returned in as the \code{fit} element. If \code{FALSE} the \code{fit} element with be \code{NA}.
+#' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check that the design matrix is full rank.
 cp.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = TRUE, check_rank = TRUE, ...) {
 
   # check for some formula specification issues
@@ -116,12 +108,8 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
     if (matrix_rank(m) != ncol(m) | any(is.na(COEF_VCOV$coef))) {
-      if (keep_fit) {
-        warning("Design Matrix is rank deficient.")
-      } else {
-        warning("Design Matrix is rank deficient. keep_fit being set to TRUE.")
-        keep_fit <- TRUE
-      }
+      keep_fit <- TRUE
+      warning("Design Matrix is rank deficient. keep_fit being set to TRUE.")
     }
   }
 
@@ -152,9 +140,7 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   out
 }
 
-#' @method print cpr_cp
 #' @export
-#' @rdname cp
 print.cpr_cp <- function(x, ...) {
   print(x$cp, ...)
   invisible(x)

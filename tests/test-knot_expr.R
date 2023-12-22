@@ -16,7 +16,7 @@ stopifnot(sum(grepl("^knot_expr", cpr_namespace)) == 3L)
 e <- new.env()
 with(e, {
 
-  bmat <- bsplines(mtcars$hp, df = 8)
+  bmat <- bsplines(mtcars$hp, df = 8, bknots = c(50, 350))
   ke <- cpr:::knot_expr(bmat, digits = 1)
   stopifnot(identical(ke$breaks, sort(c(attr(bmat, "bknots"), attr(bmat, "iknots")))))
   stopifnot(inherits(ke$xi_expr, "list"))
@@ -36,7 +36,7 @@ with(e, {
 e <- new.env()
 with(e, {
 
-  bmat <- bsplines(mtcars$hp, df = 8)
+  bmat <- bsplines(mtcars$hp, df = 8, bknots = c(50, 350))
   theta <- rnorm(4)
   acp <- cp(bmat, theta)
   ke <- cpr:::knot_expr(acp, digits = 1)
