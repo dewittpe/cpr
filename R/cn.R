@@ -95,12 +95,8 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
     if (matrix_rank(m) != ncol(m) | any(is.na(COEF_VCOV$coef))) {
-      if (keep_fit) {
-        warning("Design Matrix is rank deficient.")
-      } else {
-        warning("Design Matrix is rank deficient. keep_fit being set to TRUE.")
-        keep_fit <- TRUE
-      }
+      keep_fit <- TRUE
+      warning("Design Matrix is rank deficient. keep_fit being set to TRUE.")
     }
   }
 
