@@ -73,7 +73,7 @@ with(e, {
       all.equal(
         summary(cp3)
         ,
-        structure(list(dfs = 4L, n_iknots = 0L, iknots = structure(list( numeric(0)), class = "AsIs"), loglik = 2218.47902453217, rss = 0.00409829163655395, rse = 0.0028744886068859, wiggle = structure(0.0685628056150533, abs.error = 7.61200054267312e-16, subdivisions = 1L, message = "OK"), fdsc = 1), row.names = c(NA, -1L), class = "data.frame")
+        structure(list(dfs = 4L, n_iknots = 0L, iknots = structure(list( numeric(0)), class = "AsIs"), loglik = 2218.47902453217, rss = 0.00409829163655395, rse = 0.0028744886068859, wiggle = structure(0.0685628056150533, abs.error = 7.61200054267312e-16, subdivisions = 1L, message = "OK"), fdsc = 1), row.names = c(NA, -1L), class = c("cpr_summary_cpr_cp", "data.frame"))
       )
     )
   )
@@ -83,12 +83,10 @@ with(e, {
 # verify that a control ploygon can be build via lmer
 e <- new.env()
 with(e, {
-  head(spdg)
 
   lmer_cp <- cp(log10(pdg) ~ bsplines(day, bknots = c(-1, 1)) + (1 | id)
             , data = spdg
-            , method = lmer
-  )
+            , method = lmer)
 
   stopifnot(
     isTRUE(
@@ -105,7 +103,7 @@ with(e, {
       all.equal(
         summary(lmer_cp)
         ,
-        structure(list(dfs = 4L, n_iknots = 0L, iknots = structure(list( numeric(0)), class = "AsIs"), loglik = 7909.94604102081, rss = 622.553425369456, rse = 0.159004352365617, wiggle = structure(60.2815339858114, abs.error = 6.69259469907717e-13, subdivisions = 1L, message = "OK"), fdsc = 2), row.names = c(NA, -1L), class = "data.frame")
+        structure(list(dfs = 4L, n_iknots = 0L, iknots = structure(list( numeric(0)), class = "AsIs"), loglik = 7909.94604102081, rss = 622.553425369456, rse = 0.159004352365617, wiggle = structure(60.2815339858114, abs.error = 6.69259469907717e-13, subdivisions = 1L, message = "OK"), fdsc = 2), row.names = c(NA, -1L), class = c("cpr_summary_cpr_cp", "data.frame"))
       )
     )
   )
@@ -122,7 +120,6 @@ with(e, {
 # Verify that a control polygon can be build from a gee
 e <- new.env()
 with(e, {
-  head(spdg)
 
   gee_cp <- cp(log10(pdg) ~ bsplines(day, bknots = c(-1, 1))
                , data = spdg
@@ -133,7 +130,7 @@ with(e, {
   stopifnot(
     isTRUE(
       all.equal(
-        gee_cp$cp |> dput()
+        gee_cp$cp
         ,
         structure(list(xi_star = c(-1, -0.333333333333333, 0.333333333333333, 1), theta = c(0.0066448178731621, -1.91923731782891, 1.93439356253956, 0.0233810025421451)), class = "data.frame", row.names = c(NA, -4L))
       )
@@ -143,9 +140,9 @@ with(e, {
   stopifnot(
     isTRUE(
       all.equal(
-        summary(gee_cp) |> dput()
+        summary(gee_cp)
         ,
-        structure(list(dfs = 4L, n_iknots = 0L, iknots = structure(list( numeric(0)), class = "AsIs"), loglik = -1464.93520368629, rss = 2929.87040737258, rse = 0.344941068561338, wiggle = structure(49.9755793513228, abs.error = 5.54840388648201e-13, subdivisions = 1L, message = "OK"), fdsc = 2), row.names = c(NA, -1L), class = "data.frame")
+        structure(list(dfs = 4L, n_iknots = 0L, iknots = structure(list( numeric(0)), class = "AsIs"), loglik = -1464.93520368629, rss = 2929.87040737258, rse = 0.344941068561338, wiggle = structure(49.9755793513228, abs.error = 5.54840388648201e-13, subdivisions = 1L, message = "OK"), fdsc = 2), row.names = c(NA, -1L), class = c("cpr_summary_cpr_cp", "data.frame"))
       )
     )
   )
@@ -160,6 +157,54 @@ with(e, {
   summary(gee_cpr)
 
   stopifnot(identical(summary(gee_cpr)$rse_elbow[3], 1L))
+
+})
+
+################################################################################
+#                                rank deficient?                               #
+e <- new.env()
+with(e, {
+
+  # First, a good fit
+  cp0 <- cp(pdg ~ bsplines(day, bknots = c(-1, 1)) + ttm , data = spdg)
+
+  stopifnot(inherits(cp0, "cpr_cp"))
+
+  # Now update to something that is rank deficient
+  cp1 <- tryCatch(update_bsplines(cp0, iknots = c(0, 0, 0, 0, 0)), warning = function(w) w)
+
+  stopifnot(inherits(cp1, 'warning'))
+  stopifnot(identical(cp1$message, 'Design Matrix is rank deficient. keep_fit being set to TRUE.'))
+
+  cp2 <- tryCatch(cp(pdg ~ bsplines(day, iknots = c(0, 0, 0, 0, 0), bknots = c(-1, 1)) + ttm , data = spdg), warning = function(w) w)
+
+  stopifnot(inherits(cp2, 'warning'))
+  stopifnot(identical(cp2$message, 'Design Matrix is rank deficient. keep_fit being set to TRUE.'))
+
+})
+
+################################################################################
+##                              printing method                               ##
+e <- new.env()
+with(e, {
+  xvec <- runif(500, 0, 6)
+  bknots <- c(0, 6)
+  dat <- data.frame(x = xvec, y = sin((xvec - 2)/pi) + 1.4 * cos(xvec/pi))
+  acp <- cp(y ~ bsplines(x, df = 8, bknots = bknots), data = dat)
+  theta <- coef(lm(y ~ bsplines(x, df = 8, bknots = bknots) - 1, data = dat))
+  bcp <- cp(bsplines(xvec, df =8, bknots = bknots), theta)
+
+  # verify the value is returned from the print call
+  stopifnot(identical(acp, print(acp)))
+  stopifnot(identical(bcp, print(bcp)))
+
+  acpcap <- capture.output(print(acp))
+  expected <- capture.output(print(acp$cp))
+  stopifnot(identical(acpcap, expected))
+
+  bcpcap <- capture.output(print(bcp))
+  expected <- capture.output(print(bcp$cp))
+  stopifnot(identical(bcpcap, expected))
 
 })
 

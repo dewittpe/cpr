@@ -15,11 +15,12 @@
 summary.cpr_cp <- function(object, wiggle = TRUE, integrate.args = list(), ...){
   out <-
     data.frame(dfs        = length(object$cp$theta),
-         n_iknots   = length(object$iknots),
-         iknots     = I(list(object$iknots)),
-         loglik     = object$loglik,
-         rss        = object$rss,
-         rse        = object$rse)
+               n_iknots   = length(object$iknots),
+               iknots     = I(list(object$iknots)))
+
+  out[["loglik"]] <- ifelse(is.null(object$loglik), NA_real_, object$loglik)
+  out[["rss"]]    <- ifelse(is.null(object$rss), NA_real_, object$rss)
+  out[["rse"]]    <- ifelse(is.null(object$rse), NA_real_, object$rse)
 
   if (wiggle) {
     # NOTE: use wiggle.cpr_cp as the "what" in do.call so there isn't confusion
@@ -33,10 +34,15 @@ summary.cpr_cp <- function(object, wiggle = TRUE, integrate.args = list(), ...){
       attr(out$wiggle, "subdivisions") <- wggl$subdivisions
       attr(out$wiggle, "message") <- wggl$message
     } else {
-      out$wiggle <- NA
+      out$wiggle <- NA_real_
       attr(out$wiggle, "error") <- wggl
     }
     out$fdsc <- fdsc
+  } else {
+    out$wiggle <- NA_real_
+    out$fdsc <- NA_integer_
   }
+
+  class(out) <- c("cpr_summary_cpr_cp", class(out))
   out
 }

@@ -65,7 +65,7 @@ with(e, {
 })
 
 ################################################################################
-#                        verify error if fit is missing                        #
+#                     verify error if fit from control net                     #
 e <- new.env()
 with(e, {
 
@@ -81,7 +81,7 @@ with(e, {
 })
 
 ################################################################################
-#                         simple lm with just a spline                         #
+#                         simple lm with a tesnsor                             #
 e <- new.env()
 with(e, {
   acn <- cn(
