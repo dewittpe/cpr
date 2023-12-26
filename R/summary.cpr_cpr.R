@@ -57,9 +57,9 @@ print.cpr_summary_cpr_cpr <- function(x, n = 6, ...) {
   y[["Pr(>w_(1))"]] <- format.pval(y[["Pr(>w_(1))"]] , digits = dig.tst, eps = eps.Pvalue)
 
   if (n < nrow(y) - 1L) {
-    y <- rbind(head(y, n = ceiling(n/2)),
+    y <- rbind(utils::head(y, n = ceiling(n/2)),
                "---" = "",
-               tail(y, n = ceiling(n/2)))
+               utils::tail(y, n = ceiling(n/2)))
   }
 
   print.data.frame(y)

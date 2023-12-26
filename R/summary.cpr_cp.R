@@ -6,6 +6,7 @@
 #' \code{\link[stats]{integrate}}.
 #' @param integrate.args a list of arguments passed to \code{\link{wiggle}} and
 #' ultimately \code{\link[stats]{integrate}}.
+#' @param ... pass through
 #'
 #' @return
 #'

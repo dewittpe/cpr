@@ -156,7 +156,7 @@ influence_of_iknots.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_
            function(idx) {
              lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
                     function(tt, bmat) {
-                      influence_of_iknots(cp(bmat, tt), p)
+                      influence_of_iknots(cp(bmat, tt))
                     },
                     bmat = x$bspline_list[[idx]])
            })
