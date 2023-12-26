@@ -19,38 +19,53 @@ summary.cpr_cpr <- function(object, ...) {
   rtn[["Pr(>w_(1))"]] <- selected_index
 
   # find the elbow in the rse by n_iknots plot
-  llk_elbow <- rss_elbow <- rse_elbow <- numeric(0)
-  for (brkpt in seq(1, length(object[[length(object)]]$iknot), by = 1)) {
-    rse_y <- suppressWarnings(cp(rse ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
-  #  rss_y <- suppressWarnings(cp(rss ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
-    llk_y <- suppressWarnings(cp(loglik ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
-    rse_elbow <- c(rse_elbow, rse_y$rse)
-    #rss_elbow <- c(rss_elbow, rss_y$rse)
-    llk_elbow <- c(llk_elbow, llk_y$rse)
-  }
-  rse_elbow <- which.min(rse_elbow) + 1
-  #rss_elbow <- which.min(rss_elbow) + 1
-  llk_elbow <- which.min(llk_elbow) + 1
-  rtn$loglik_elbow <- as.integer(rtn$n_iknots == llk_elbow)
-  #rtn$rss_elbow <- as.integer(rtn$n_iknots == rss_elbow)
-  rtn$rse_elbow <- as.integer(rtn$n_iknots == rse_elbow)
+  elbow <- matrix(numeric(0), nrow = length(object[[length(object)]]$iknot), ncol = 6)
+  for (brkpt in seq(0, length(object[[length(object)]]$iknot), by = 1)) {
+    rse3 <- suppressWarnings(cp(rse ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
+    rss3 <- suppressWarnings(cp(rss ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
+    llk3 <- suppressWarnings(cp(loglik ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
+    rse2 <- suppressWarnings(cp(rse ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 2), data = rtn))
+    rss2 <- suppressWarnings(cp(rss ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 2), data = rtn))
+    llk2 <- suppressWarnings(cp(loglik ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 2), data = rtn))
+    elbow[brkpt, ] <-
+      c(
+        llk3 = llk3$rse,
+        rss3 = rss3$rse,
+        rse3 = rse3$rse,
+        llk2 = llk2$rse,
+        rss2 = rss2$rse,
+        rse2 = rse2$rse
+        )
 
-  class(rtn) <- c("cpr_cpr_summary", class(rtn))
+  }
+
+  elbow <- matrix(apply(elbow, 2, which.min) + 1, byrow = TRUE, ncol = 3)
+  dimnames(elbow) <- list(c("quadratic", "linear"), c("loglik", "rss", "rse"))
+
+  attr(rtn, "elbow") <- elbow
+
+  class(rtn) <- c("cpr_summary_cpr_cpr", class(rtn))
   rtn
 }
 
 #' @export
-print.cpr_cpr_summary <- function(x, ...) {
+print.cpr_summary_cpr_cpr <- function(x, n = 6, ...) {
   y <- x
 
   dig.tst = 5L#max(1L, min(5L, digits - 1L))
   eps.Pvalue = .Machine$double.eps
   y[["Pr(>w_(1))"]] <- format.pval(y[["Pr(>w_(1))"]] , digits = dig.tst, eps = eps.Pvalue)
 
-  y[["loglik_elbow"]] <- sub("0", "", sub("1", "<<<", as.character(y[["loglik_elbow"]])))
-  #y[["rss_elbow"]] <- sub("0", "", sub("1", "<<<", as.character(y[["rss_elbow"]])))
-  y[["rse_elbow"]] <- sub("0", "", sub("1", "<<<", as.character(y[["rse_elbow"]])))
+  if (n < nrow(y) - 1L) {
+    y <- rbind(head(y, n = ceiling(n/2)),
+               "---" = "",
+               tail(y, n = ceiling(n/2)))
+  }
+
   print.data.frame(y)
+
+  cat("\n-------\nElbows (index of selected model):\n")
+  print(attr(x, "elbow"))
 
   invisible(x)
 }
