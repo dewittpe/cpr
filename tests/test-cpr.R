@@ -50,7 +50,14 @@ stopifnot(isTRUE(all.equal( cpr0[[1]][["cp"]],  sixth_reduction_cp[["cp"]])))
 # summary
 s <- summary(cpr0)
 stopifnot(identical(nrow(s), 7L))
-stopifnot(identical(names(s), c("dfs", "n_iknots", "iknots", "loglik", "rss", "rse", "wiggle", "fdsc", "Pr(>w_(1))", "loglik_elbow", "rse_elbow")))
+stopifnot(identical(names(s), c("dfs", "n_iknots", "iknots", "loglik", "rss", "rse", "wiggle", "fdsc", "Pr(>w_(1))")))
+stopifnot(isTRUE(all.equal(
+    structure(c(3, 3, 3, 3, 3, 3), dim = 2:3, dimnames = list(c("quadratic", "linear"), c("loglik", "rss", "rse")))
+    ,
+    attr(s, "elbow")
+    )
+  )
+)
 
 ################################################################################
 # test that there is an error in the plotting method if type is not valid
