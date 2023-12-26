@@ -15,6 +15,8 @@ derivative of the spline function will be calculated via
 
 \item{integrate.args}{a list of arguments passed to \code{\link{wiggle}} and
 ultimately \code{\link[stats]{integrate}}.}
+
+\item{...}{pass through}
 }
 \description{
 Summarize a Control Polygon Object
