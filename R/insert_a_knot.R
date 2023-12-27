@@ -6,7 +6,7 @@
 #' @param xi_prime the value of the knot to insert
 #' @param ... not currently used
 #'
-#' @return
+#' @return a \code{cpr_cp} object
 #'
 #' @examples
 #' x <- seq(1e-5, 5.99999, length.out = 100)

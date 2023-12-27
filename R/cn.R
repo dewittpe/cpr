@@ -29,6 +29,15 @@
 #'
 #' @examples
 #'
+#'  acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
+#'                                 , df = list(30, 4)
+#'                                 , bknots = list(c(-1, 1), c(44, 53)))
+#'            , data = spdg)
+#'
+#' # plot3D
+#' plot(acn, rgl = FALSE)
+#'
+#'
 #' @export
 cn <- function(x, ...) {
   UseMethod("cn")

@@ -15,7 +15,11 @@ update_btensor(object, ..., evaluate = TRUE)
 \item{...}{things to update, expected to be \code{iknots}, \code{df},
 \code{bknots}, or \code{order}.}
 
-\item{evaluate}{If true evaluate the new call else return the call.}
+\item{evaluate}{whether or not to evaluate the updated call.}
+}
+\value{
+If \code{evaluate = TRUE} then a \code{cpr_bs} or \code{cpr_bt}
+object is returned, else, an unevaluated call is returned.
 }
 \description{
 Update \code{cpr_bs} and \code{cpr_bt} objects alone or within \code{cpr_cp}

@@ -13,7 +13,15 @@ with(e, {
   initial_cp <-
     cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3.0, 4, 4.5), bknots = c(0, 6)), data = DF)
 
-  s <- summary(influence_of_iknots(initial_cp))
+  iok <- influence_of_iknots(initial_cp)
+
+  stopifnot(inherits(iok, "cpr_influence_of_iknots"))
+
+  # if the following test for the names of the object changes make sure to
+  # update the @return section of the source file.
+  stopifnot(identical(names(iok), c("original_cp", "coarsened_cps", "restored_cps", "d", "influence", "chisq")))
+
+  s <- summary(iok)
 
   stopifnot(identical(dim(s), c(6L, 8L)))
   stopifnot(identical(names(s), c("j", "iknot", "influence", "influence_rank", "chisq", "chisq_rank", "p_value", "os_p_value")))

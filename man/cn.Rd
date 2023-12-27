@@ -64,6 +64,18 @@ Generate the control net for a uni-variable B-spline
 \code{cn} generates the control net for the given B-spline function.  There
 are several methods for building a control net.
 }
+\examples{
+
+ acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
+                                , df = list(30, 4)
+                                , bknots = list(c(-1, 1), c(44, 53)))
+           , data = spdg)
+
+# plot3D
+plot(acn, rgl = FALSE)
+
+
+}
 \seealso{
 \code{\link{summary.cpr_cn}}, \code{\link{cnr}}
 }

@@ -11,6 +11,19 @@
 
 \item{...}{pass through}
 }
+\value{
+a \code{data.frame}
+}
 \description{
 Generate a summary of control net object
+}
+\examples{
+
+acn <- cn(log10(pdg) ~ btensor(list(day, age)
+                               , df = list(10, 8)
+                               , bknots = list(c(-1, 1), c(44, 53)))
+         , data = spdg)
+
+summary(acn)
+
 }

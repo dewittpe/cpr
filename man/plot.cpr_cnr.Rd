@@ -26,3 +26,15 @@ a ggplot
 A collection of function for the inspection and evaluation of the control
 polygon reduction.
 }
+\examples{
+initial_cn <- cn(log10(pdg) ~ btensor(list(day, age)
+                        , df = list(10, 8)
+                        , bknots = list(c(-1, 1), c(44, 53))
+                        ) + ttm
+          , data = spdg)
+
+cnr0 <- cnr(initial_cn)
+
+plot(cnr0)
+
+}

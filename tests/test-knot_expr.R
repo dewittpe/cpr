@@ -18,6 +18,8 @@ with(e, {
 
   bmat <- bsplines(mtcars$hp, df = 8, bknots = c(50, 350))
   ke <- cpr:::knot_expr(bmat, digits = 1)
+  stopifnot(identical(length(ke), 3L))
+  stopifnot(identical(names(ke), c("breaks", "xi_expr", "num_expr")))
   stopifnot(identical(ke$breaks, sort(c(attr(bmat, "bknots"), attr(bmat, "iknots")))))
   stopifnot(inherits(ke$xi_expr, "list"))
   stopifnot(identical(length(ke$xi_expr), 2L + length(attr(bmat, "iknots"))))

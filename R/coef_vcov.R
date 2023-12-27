@@ -23,6 +23,11 @@
 #'
 #' @examples
 #'
+#' cp0 <- cp(log10(pdg) ~ bsplines(day, df = 6, bknots = c(-1, 1)) + age + ttm, data = spdg)
+#' cv <- cpr:::coef_vcov(cp0$fit)
+#'
+#' summary(cv)
+#'
 #' @seealso \code{\link[stats]{coef}} \code{\link{cp}} \code{\link{cn}}
 coef_vcov <- function(fit) {
   UseMethod("coef_vcov")

@@ -8,7 +8,7 @@
 #' @param progress show a progress bar.
 #' @param ... not currently used
 #'
-#' @return
+#' @return a list of \code{cpr_cp} objects
 #'
 #' @examples
 #' #############################################################################

@@ -5,9 +5,17 @@
 #' @param object a \code{cpr_cp} or \code{cpr_cn} object
 #' @param ... passed to \code{\link[stats]{predict}}
 #'
-#' @return
+#' @return the same as you would get from calling \code{\link[stats]{predict}}
+#' on the \code{object$fit}.
 #'
 #' @examples
+#'
+#' acp <- cp(log10(pdg) ~ bsplines(age, df = 12, bknots = c(45, 53))
+#'            , data = spdg
+#'           , keep_fit = TRUE)
+#' acp_pred0 <- predict(acp$fit, se.fit = TRUE)
+#' acp_pred <- predict(acp, se.fit = TRUE)
+#' all.equal(acp_pred0, acp_pred)
 #'
 #' @export
 predict.cpr_cp <- function(object, ...) {

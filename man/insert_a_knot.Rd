@@ -13,6 +13,9 @@ insert_a_knot(x, xi_prime, ...)
 
 \item{...}{not currently used}
 }
+\value{
+a \code{cpr_cp} object
+}
 \description{
 Insert a knot into a control polygon without changing the spline
 }

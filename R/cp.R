@@ -7,7 +7,10 @@
 #' @param x a \code{cpr_bs} object
 #' @param ... pass through
 #'
-#' @return
+#' @return a \code{cpr_cp} object, this is a list with the element \code{cp}, a
+#' data.frame reporting the x and y corrdinates of a the control polygon.
+#' Additional elements include the knot sequence, polynomial order, and other
+#' meta data regarding the construction of the control polygon.
 #'
 #' @examples
 #'

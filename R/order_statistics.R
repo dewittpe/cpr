@@ -21,7 +21,7 @@
 #' @param ... additional arguments passed to the density and distribution
 #' function
 #'
-#' @return
+#' @return a numeric vector
 #'
 #' @references
 #' Casella G, Berger RL (2002). Statistical Inference. 2nd edition. Duxbury Thomson Learning.

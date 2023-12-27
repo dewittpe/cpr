@@ -45,6 +45,9 @@ if \code{show_surface = FALSE}.}
 generate the graphics.  If \code{FALSE}, use \code{plot3D::persp3D} to
 generate the graphics.}
 }
+\value{
+the plotting data needed to generate the plot is returned invisibly.
+}
 \description{
 Three-dimensional plots of control nets and/or surfaces
 }
@@ -70,6 +73,19 @@ lists of \code{\link[rgl]{rgl.material}} and other arguments passed to
 
 For \code{plot3D} graphics there are no defaults values for the
 \code{net_args} and \code{surface_args}.
+}
+\examples{
+
+ acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
+                                , df = list(30, 4)
+                                , bknots = list(c(-1, 1), c(44, 53)))
+           , data = spdg)
+
+# plot3D
+plot(acn, rgl = FALSE)
+
+plot(acn, rgl = TRUE)
+
 }
 \seealso{
 \code{\link{plot.cpr_cp}} for plotting control polygons and splines,

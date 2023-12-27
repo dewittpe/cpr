@@ -5,9 +5,16 @@
 #' @param object a \code{cpr_cn} object
 #' @param ... pass through
 #'
-#' @return
+#' @return a \code{data.frame}
 #'
 #' @examples
+#'
+#' acn <- cn(log10(pdg) ~ btensor(list(day, age)
+#'                                , df = list(10, 8)
+#'                                , bknots = list(c(-1, 1), c(44, 53)))
+#'          , data = spdg)
+#'
+#' summary(acn)
 #'
 #' @export
 summary.cpr_cn <- function(object, ...) {

@@ -13,6 +13,9 @@ cpr(x, progress = interactive(), ...)
 
 \item{...}{not currently used}
 }
+\value{
+a list of \code{cpr_cp} objects
+}
 \description{
 Run the Control Polygon Reduction Algorithm.
 }

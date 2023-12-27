@@ -3,7 +3,16 @@
 #' @param x \code{cpr_cp} object
 #' @param ... pass through
 #'
-#' @return
+#' @return a \code{cpr_influence_of_iknots} object.  A list of six elements:
+#' \describe{
+#' \item{original_cp}{}
+#' \item{coarsened_cps}{}
+#' \item{restored_cps}{}
+#' \item{d}{}
+#' \item{influence}{}
+#' \item{chisq}{}
+#' }
+#'
 #'
 #' @examples
 #' x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)

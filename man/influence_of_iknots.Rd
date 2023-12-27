@@ -11,6 +11,17 @@ influence_of_iknots(x, ...)
 
 \item{...}{pass through}
 }
+\value{
+a \code{cpr_influence_of_iknots} object.  A list of six elements:
+\describe{
+\item{original_cp}{}
+\item{coarsened_cps}{}
+\item{restored_cps}{}
+\item{d}{}
+\item{influence}{}
+\item{chisq}{}
+}
+}
 \description{
 Determine the influence of the internal knots of a control polygon
 }

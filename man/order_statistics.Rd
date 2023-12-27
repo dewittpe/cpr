@@ -22,6 +22,9 @@ p_order_statistic(q, n, j, distribution, ...)
 \item{...}{additional arguments passed to the density and distribution
 function}
 }
+\value{
+a numeric vector
+}
 \description{
 Density of distribution function for the jth order statisitic from a sample
 of size n from a known distribution function.

@@ -6,9 +6,10 @@
 #' @param object an object to update.
 #' @param ... things to update, expected to be \code{iknots}, \code{df},
 #' \code{bknots}, or \code{order}.
-#' @param evaluate If true evaluate the new call else return the call.
+#' @param evaluate whether or not to evaluate the updated call.
 #'
-#' @return
+#' @return If \code{evaluate = TRUE} then a \code{cpr_bs} or \code{cpr_bt}
+#' object is returned, else, an unevaluated call is returned.
 #'
 #' @seealso \code{\link[stats]{update}}, \code{\link{bsplines}},
 #' \code{\link{btensor}}
