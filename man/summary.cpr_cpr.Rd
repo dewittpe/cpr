@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{a \code{cpr_cpr} object}
 
-\item{....}{pass through}
+\item{...}{pass through}
 }
 \description{
 Summarize a Control Polygon Reduction Object

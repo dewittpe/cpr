@@ -31,7 +31,13 @@ stopifnot(identical(
     )
 )
 
+# verify that print returns the object
+printed <- print(s)
+stopifnot(identical(printed, s))
 
+# only the first and last row:
+printed <- print(s, n = 1)
+stopifnot(identical(printed, s))
 
 ################################################################################
 #                                 End of File                                  #

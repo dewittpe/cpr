@@ -132,6 +132,6 @@ cpr.cpr_cp <- function(x, progress = interactive(), ...) {
 #' @export
 print.cpr_cpr <- function(x, ...) {
   cat("A list of control polygons\n")
-  print(utils::str(x, max.level = 0))
+  cat(utils::str(x, max.level = 0))
   invisible(x)
 }

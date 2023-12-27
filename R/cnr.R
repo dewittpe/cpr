@@ -51,7 +51,7 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
     nkts <- lapply(split(w, f = w$margin), getElement, "iknot")
 
     for ( margin_not_in_nkts in as.character(margin)[ !(as.character(margin) %in% names(nkts)) ] ) {
-      nkts[margin_not_in_nkts] <- numeric(0)
+      nkts <- c(nkts, stats::setNames(list(numeric(0)), margin_not_in_nkts))
       nkts <- nkts[sort(names(nkts))]
     }
 
@@ -77,6 +77,6 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
 #' @export
 print.cpr_cnr <- function(x, ...) {
   cat("A list of control nets\n")
-  print(utils::str(x, max.level = 0))
+  cat(utils::str(x, max.level = 0))
   invisible(x)
 }

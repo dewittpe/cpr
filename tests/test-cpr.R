@@ -65,5 +65,13 @@ e <- try(plot(cpr_run, type = "not-a-type"), silent = TRUE)
 stopifnot(inherits(e, "try-error"))
 
 ################################################################################
+# print method
+printed <- print(cpr0)
+stopifnot(identical(printed, cpr0))
+
+printed <- capture.output(print(cpr0))
+stopifnot(identical(length(printed), 3L))
+
+################################################################################
 ###                               End of File                                ###
 ################################################################################

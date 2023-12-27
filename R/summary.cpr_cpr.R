@@ -1,7 +1,7 @@
 #' Summarize a Control Polygon Reduction Object
 #'
 #' @param object a \code{cpr_cpr} object
-#' @param .... pass through
+#' @param ... pass through
 #'
 #' @return
 #'

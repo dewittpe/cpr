@@ -13,5 +13,7 @@ summary.cpr_cnr <- function(object, ...) {
   for (i in seq_along(rtn)) {
     rtn[[i]]$index <- as.integer(i)
   }
-  do.call(rbind, rtn)
+  rtn <- do.call(rbind, rtn)
+  class(rtn) <- c("cpr_summary_cpr_cnr", class(rtn))
+  rtn
 }

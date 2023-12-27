@@ -15,7 +15,9 @@ cp0 <- cp(log(pdg) ~ bsplines(day, iknots = c(-.25, 0, 0.25), bknots = c(-1, 1))
 
 expected <- log(pdg) ~ bsplines(day, iknots = c(-0.85, 0, 0.25, 0.3), bknots = c(-1, 1))
 
-stopifnot(isTRUE( all.equal(expected, cpr:::newknots(cp0$call$formula, c(-0.85, 0, 0.25, 0.3)))))
+test <- cpr:::newknots(cp0$call$formula, c(-0.85, 0, 0.25, 0.3))
+
+stopifnot(isTRUE( all.equal(expected, test)))
 
 ################################################################################
 #                                 End of File                                  #
