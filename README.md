@@ -1,12 +1,10 @@
-cpr: Control Polygon Reduction <img src="cpr-hex-small.png" align="right"/>
-=====================================================================
+# cpr: Control Polygon Reduction <img src="/man/figures/cpr-hex-small.png" align="right"/>
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/dewittpe/cpr/workflows/R-CMD-check/badge.svg)](https://github.com/dewittpe/cpr/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/dewittpe/cpr/master.svg)](https://app.codecov.io/github/dewittpe/cpr?branch=master)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cpr)](https://cran.r-project.org/package=cpr)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cpr)](http://www.r-pkg.org/pkg/cpr)
-
 
 An R package for implementing the Control Polygon Reduction model
 selection method.  When we are tasked with modeling the functional relationship
@@ -19,18 +17,18 @@ knots in a tensor product of B-splines.
 
 ## Learn More About CPR.
 This model selection method was developed as part of [Peter DeWitt's PhD
-dissertation](https://doi.org/10.25677/awnc-b795) work.
+dissertation](https://doi.org/10.25677/awnc-b795) work.  It has been extended
+since.
 
 ### Vignettes
-
-There is one vignette included with the package, for now.  Additional details
-will be added to this vignette.
-
+There are two vignettes within the package
 ```r
-vignette('cpr-pkg', package = 'cpr')
+vignettes(topic = 'cpr', package = 'cpr')
+vignettes(topic = 'cnr', package = 'cpr')
 ```
 
-Additional vignettes may also be authored soon.
+You can also read these on package website
+
 
 ### Related Publications:
 
