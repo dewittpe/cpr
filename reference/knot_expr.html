@@ -76,7 +76,34 @@ labeled well on a plot.</p>
 <dd><p>digits to the right of the decimal point to report</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
 
+<p>a list</p>
+    </div>
+
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">bmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">hp</span>, df <span class="op">=</span> <span class="fl">8</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">350</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">ke</span> <span class="op">&lt;-</span> <span class="fu">cpr</span><span class="fu">:::</span><span class="fu">knot_expr</span><span class="op">(</span><span class="va">bmat</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ke</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Length Class  Mode     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> breaks   6      -none- numeric  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> xi_expr  6      -none- list     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> num_expr 6      -none- character</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ke</span><span class="op">$</span><span class="va">breaks</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ke</span><span class="op">$</span><span class="va">breaks</span><span class="op">)</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>       x <span class="op">=</span> <span class="va">ke</span><span class="op">$</span><span class="va">breaks</span></span></span>
+<span class="r-in"><span>     , y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">ke</span><span class="op">$</span><span class="va">breaks</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>     , labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/parse.html" class="external-link">parse</a></span><span class="op">(</span>text <span class="op">=</span> <span class="va">ke</span><span class="op">$</span><span class="va">xi_expr</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="knot_expr-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

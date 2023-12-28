@@ -74,13 +74,7 @@
 <span>  keep_fit <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  check_rank <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for cpr_cn</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for cpr_cn</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -94,13 +88,11 @@
 
 
 <dt>theta</dt>
-<dd><p>a vector of (regression) coefficients, the ordinates of the
-control net.</p></dd>
+<dd><p>a vector of (regression) coefficients, the ordinates of the control net.</p></dd>
 
 
 <dt>formula</dt>
-<dd><p>a formula that is appropriate for regression method being
-used.</p></dd>
+<dd><p>a formula that is appropriate for regression method being used.</p></dd>
 
 
 <dt>data</dt>
@@ -108,28 +100,19 @@ used.</p></dd>
 
 
 <dt>method</dt>
-<dd><p>the regression method such as <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code>,
-<code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code>, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></code>, etc.</p></dd>
+<dd><p>the regression method such as <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code>, <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code>, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></code>, etc.</p></dd>
 
 
 <dt>method.args</dt>
-<dd><p>a list of additional arguments to pass to the regression
-method.</p></dd>
+<dd><p>a list of additional arguments to pass to the regression method.</p></dd>
 
 
 <dt>keep_fit</dt>
-<dd><p>(logical, defaults to <code>FALSE</code>).  If <code>TRUE</code> the
-regression model fit is retained and returned in the the <code>fit</code> element.
-If <code>FALSE</code> the regression model is not saved and the <code>fit</code> element will be <code>NA</code>.</p></dd>
+<dd><p>(logical, defaults to <code>FALSE</code>).  If <code>TRUE</code> the regression model fit is retained and returned in the the <code>fit</code> element. If <code>FALSE</code> the regression model is not saved and the <code>fit</code> element will be <code>NA</code>.</p></dd>
 
 
 <dt>check_rank</dt>
-<dd><p>(logical, defaults to <code>TRUE</code>) if TRUE check that the
-design matrix is full rank.</p></dd>
-
-
-<dt>object</dt>
-<dd><p>a <code>cpr_cn</code> object</p></dd>
+<dd><p>(logical, defaults to <code>TRUE</code>) if TRUE check that the design matrix is full rank.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -174,7 +157,29 @@ Some of the elements are omitted when the using the <code>cn.cpr_bt</code> metho
     <p><code>cn</code> generates the control net for the given B-spline function.  There
 are several methods for building a control net.</p>
     </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="summary.cpr_cn.html">summary.cpr_cn</a></code>, <code><a href="cnr.html">cnr</a></code></p></div>
+    </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">acn</span> <span class="op">&lt;-</span> <span class="fu">cn</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">pdg</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="btensor.html">btensor</a></span><span class="op">(</span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">day</span>, <span class="va">age</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                , df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                , bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">44</span>, <span class="fl">53</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>           , data <span class="op">=</span> <span class="va">spdg</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># plot3D</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">acn</span>, rgl <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>RGL: unable to open X11 display</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'rgl.init' failed, running with 'rgl.useNULL = TRUE'.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no DISPLAY variable so Tk is not available</span>
+<span class="r-plt img"><img src="cn-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -115,6 +115,21 @@ so.</p>
     <div class="dont-index"><p><code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></code> <code><a href="cp.html">cp</a></code> <code><a href="cn.html">cn</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">cp0</span> <span class="op">&lt;-</span> <span class="fu"><a href="cp.html">cp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">pdg</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">day</span>, df <span class="op">=</span> <span class="fl">6</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">ttm</span>, data <span class="op">=</span> <span class="va">spdg</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cv</span> <span class="op">&lt;-</span> <span class="fu">cpr</span><span class="fu">:::</span><span class="fu">coef_vcov</span><span class="op">(</span><span class="va">cp0</span><span class="op">$</span><span class="va">fit</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cv</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Length Class  Mode   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> theta       6     -none- numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> coef        8     -none- numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vcov_theta 36     -none- numeric</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> vcov       64     -none- numeric</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

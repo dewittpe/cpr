@@ -40,16 +40,16 @@
     <loc>http://www.peteredewitt.com/cpr/reference/cnr.html</loc>
   </url>
   <url>
-    <loc>http://www.peteredewitt.com/cpr/reference/cnr_diagnostics.html</loc>
-  </url>
-  <url>
     <loc>http://www.peteredewitt.com/cpr/reference/coef_vcov.html</loc>
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/cp.html</loc>
   </url>
   <url>
-    <loc>http://www.peteredewitt.com/cpr/reference/cp_diagnostics.html</loc>
+    <loc>http://www.peteredewitt.com/cpr/reference/cp_diff.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/cp_value.html</loc>
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/cpr-defunct.html</loc>
@@ -61,9 +61,6 @@
     <loc>http://www.peteredewitt.com/cpr/reference/cpr.html</loc>
   </url>
   <url>
-    <loc>http://www.peteredewitt.com/cpr/reference/cpr_diagnostics.html</loc>
-  </url>
-  <url>
     <loc>http://www.peteredewitt.com/cpr/reference/generate_cp_formula_data.html</loc>
   </url>
   <url>
@@ -71,6 +68,9 @@
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/get_surface.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/iknots_or_df.html</loc>
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/index.html</loc>
@@ -91,6 +91,9 @@
     <loc>http://www.peteredewitt.com/cpr/reference/matrix_rank.html</loc>
   </url>
   <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/newknots.html</loc>
+  </url>
+  <url>
     <loc>http://www.peteredewitt.com/cpr/reference/order_statistics.html</loc>
   </url>
   <url>
@@ -98,6 +101,15 @@
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/plot.cpr_cn.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/plot.cpr_cnr.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/plot.cpr_cp.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/plot.cpr_cpr.html</loc>
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/predict.cpr_cp.html</loc>
@@ -110,6 +122,18 @@
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/spdg.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/summary.cpr_cn.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/summary.cpr_cnr.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/summary.cpr_cp.html</loc>
+  </url>
+  <url>
+    <loc>http://www.peteredewitt.com/cpr/reference/summary.cpr_cpr.html</loc>
   </url>
   <url>
     <loc>http://www.peteredewitt.com/cpr/reference/trimmed_quantile.html</loc>

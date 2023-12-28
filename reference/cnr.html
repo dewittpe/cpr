@@ -60,10 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cnr</span><span class="op">(</span><span class="va">x</span>, <span class="va">margin</span>, n_polycoef <span class="op">=</span> <span class="fl">20L</span>, progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for cpr_cnr</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">object</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cnr</span><span class="op">(</span><span class="va">x</span>, <span class="va">margin</span>, n_polycoef <span class="op">=</span> <span class="fl">20L</span>, progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -89,11 +86,13 @@ the influence of each internal knot.</p></dd>
 <dt>...</dt>
 <dd><p>not currently used</p></dd>
 
-
-<dt>object</dt>
-<dd><p>a <code>cpr_cnr</code> object</p></dd>
-
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>A <code>cpr_cnr</code> object.  This is a list of <code>cpr_cn</code> objects.</p>
+    </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p><code>cnr</code> runs the control net reduction algorithm.</p>
@@ -106,10 +105,55 @@ limit on the number of stored regression fits is to keep memory usage down.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="cpr-defunct.html">influence_weights</a></code>, <code><a href="cpr.html">cpr</a></code> for the
-uni-variable version, Control Polygon Reduction.</p></div>
+    <div class="dont-index"><p><code><a href="cn.html">cn</a></code> for defining a control net,
+<code><a href="cpr-defunct.html">influence_weights</a></code> for finding the influence of the internal
+knots, <code><a href="cpr.html">cpr</a></code> for the uni-variable version, Control Polygon
+Reduction.</p>
+<p><code><a href="../articles/cnr.html">vignette(topic = "cnr", package = "cpr")</a></code></p></div>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">acn</span> <span class="op">&lt;-</span> <span class="fu"><a href="cn.html">cn</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log10</a></span><span class="op">(</span><span class="va">pdg</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="btensor.html">btensor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">day</span>, <span class="va">age</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                               , df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">8</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                               , bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">44</span>, <span class="fl">53</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>         , data <span class="op">=</span> <span class="va">spdg</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cnr0</span> <span class="op">&lt;-</span> <span class="fu">cnr</span><span class="op">(</span><span class="va">acn</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cnr0</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A list of control nets</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr [1:2] "cpr_cnr" "list"</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cnr0</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    dfs    loglik      rss       rse n_iknots1      iknots1 n_iknots2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   16 -8412.922 2855.385 0.3406112         0                      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   20 -8406.155 2853.816 0.3405453         0                      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   25 -7964.400 2753.253 0.3345253         1 0.057623....         1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   30 -7954.317 2750.999 0.3344224         1 0.057623....         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   36 -7795.952 2715.846 0.3323194         2 0.057623....         2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   42 -7793.308 2715.263 0.3323242         2 0.057623....         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   49 -7791.974 2714.969 0.3323536         3 -0.79187....         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   56 -7791.165 2714.791 0.3323900         4 -0.79187....         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   63 -7782.825 2712.953 0.3323248         5 -0.79187....         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  70 -7763.444 2708.686 0.3321107         6 -0.79187....         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11  80 -7761.069 2708.164 0.3321463         6 -0.79187....         4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         iknots2 index</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1                   1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  47.33451....     2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  47.33451....     3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  47.33451....     4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  47.33451....     5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  47.33451....     6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  47.33451....     7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  47.33451....     8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  47.33451....     9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 47.33451....    10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 47.33451....    11</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cnr0</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="cnr-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 

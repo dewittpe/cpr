@@ -74,26 +74,6 @@
 <span>  keep_fit <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  check_rank <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for cpr_cp</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for cpr_cp</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">object</span>, wiggle <span class="op">=</span> <span class="cn">TRUE</span>, integrate.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># S3 method for cpr_cp</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  <span class="va">...</span>,</span>
-<span>  <span class="va">comparative</span>,</span>
-<span>  show_cp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  show_spline <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  show_xi <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  color <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  n <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  show_x <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  digits <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -108,13 +88,11 @@
 
 
 <dt>theta</dt>
-<dd><p>a vector of (regression) coefficients, the ordinates of the
-control polygon.</p></dd>
+<dd><p>a vector of (regression) coefficients, the ordinates of the control polygon.</p></dd>
 
 
 <dt>formula</dt>
-<dd><p>a formula that is appropriate for regression method being
-used.</p></dd>
+<dd><p>a formula that is appropriate for regression method being used.</p></dd>
 
 
 <dt>data</dt>
@@ -122,90 +100,29 @@ used.</p></dd>
 
 
 <dt>method</dt>
-<dd><p>the regression method such as <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code>,
-<code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code>, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></code>, etc.</p></dd>
+<dd><p>the regression method such as <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></code>, <code><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></code>, <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></code>, etc.</p></dd>
 
 
 <dt>method.args</dt>
-<dd><p>a list of additional arguments to pass to the regression
-method.</p></dd>
+<dd><p>a list of additional arguments to pass to the regression method.</p></dd>
 
 
 <dt>keep_fit</dt>
-<dd><p>(logical, default value is <code>TRUE</code>).  If <code>TRUE</code> the
-regression model fit is retained and returned in as the <code>fit</code> element.
-If <code>FALSE</code> the <code>fit</code> element with be <code>NA</code>.</p></dd>
+<dd><p>(logical, default value is <code>TRUE</code>).  If <code>TRUE</code> the regression model fit is retained and returned in as the <code>fit</code> element. If <code>FALSE</code> the <code>fit</code> element with be <code>NA</code>.</p></dd>
 
 
 <dt>check_rank</dt>
-<dd><p>(logical, defaults to <code>TRUE</code>) if <code>TRUE</code> check
-that the design matrix is full rank.</p></dd>
-
-
-<dt>object</dt>
-<dd><p>a <code>cpr_cp</code> object</p></dd>
-
-
-<dt>wiggle</dt>
-<dd><p>logical, if <code>TRUE</code> then the integral of the squared second
-derivative of the spline function will be calculated via
-<code><a href="https://rdrr.io/r/stats/integrate.html" class="external-link">integrate</a></code>.</p></dd>
-
-
-<dt>integrate.args</dt>
-<dd><p>a list of arguments passed to <code><a href="wiggle.html">wiggle</a></code> and
-ultimately <code><a href="https://rdrr.io/r/stats/integrate.html" class="external-link">integrate</a></code>.</p></dd>
-
-
-<dt>comparative</dt>
-<dd><p>when <code>TRUE</code> use <code>color</code> to distinquish one spline from
-another, when <code>FALSE</code> <code>color</code> to highight the control polygon and
-spline with different colors, and plot the knots the way
-<code><a href="plot.cpr_bs.html">plot.cpr_bs</a></code> does.  When missing, the default if <code>TRUE</code> if
-more than one <code>cpr_cp</code> object is passed in, and <code>FALSE</code> is only one
-<code>cpr_cp</code> object is passed.</p></dd>
-
-
-<dt>show_cp</dt>
-<dd><p>logical (default <code>TRUE</code>), show the control polygon(s)?</p></dd>
-
-
-<dt>show_spline</dt>
-<dd><p>logical (default <code>FALSE</code>) to plot the spline
-function?</p></dd>
-
-
-<dt>show_xi</dt>
-<dd><p>logical (default <code>TRUE</code>) use
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_rug.html" class="external-link">geom_rug</a></code> to show the location of the knots in the
-respective control polygons.</p></dd>
-
-
-<dt>color</dt>
-<dd><p>Boolean (default FALSE) if more than one <code>cpr_cp</code> object is
-to be plotted, set this value to TRUE to have the graphic in color (line types
-will be used regardless of the color setting).</p></dd>
-
-
-<dt>n</dt>
-<dd><p>the number of data points to use for plotting the spline</p></dd>
-
-
-<dt>show_x</dt>
-<dd><p>boolean, so x-values</p></dd>
-
-
-<dt>digits</dt>
-<dd><p>number of digits to the right of the decimal place to report
-for the value of each knot. Only used when plotting on control polygon with
-<code>comparative = FALSE</code>.</p></dd>
+<dd><p>(logical, defaults to <code>TRUE</code>) if <code>TRUE</code> check that the design matrix is full rank.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>a ggplot</p>
+<p>a <code>cpr_cp</code> object, this is a list with the element <code>cp</code>, a
+data.frame reporting the x and y corrdinates of a the control polygon.
+Additional elements include the knot sequence, polynomial order, and other
+meta data regarding the construction of the control polygon.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -254,38 +171,6 @@ for the value of each knot. Only used when plotting on control polygon with
 <span class="r-in"><span>  <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>mapping <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, color <span class="op">=</span> <span class="st">"Target"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                     data <span class="op">=</span> <span class="va">DF</span>, linetype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="cp-6.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span>, length <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">bmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">x</span>, iknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">2.3</span>, <span class="fl">4</span>, <span class="fl">4.5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>At least one x value &gt;= max(bknots)</span>
-<span class="r-in"><span><span class="va">theta1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">3.5</span>, <span class="fl">4.2</span>, <span class="fl">3.7</span>, <span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">0.7</span>, <span class="fl">2</span>, <span class="fl">1.5</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">theta2</span> <span class="op">&lt;-</span> <span class="va">theta1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.15</span>, <span class="op">-</span><span class="fl">1.01</span>, <span class="fl">0.37</span>, <span class="fl">0.19</span>, <span class="op">-</span><span class="fl">0.53</span>, <span class="op">-</span><span class="fl">0.84</span>, <span class="op">-</span><span class="fl">0.19</span>, <span class="fl">1.15</span>, <span class="fl">0.17</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="fu">cp</span><span class="op">(</span><span class="va">bmat</span>, <span class="va">theta1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">cp2</span> <span class="op">&lt;-</span> <span class="fu">cp</span><span class="op">(</span><span class="va">bmat</span>, <span class="va">theta2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># compare two control polygons on one plot</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp1</span>, <span class="va">cp2</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-7.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp1</span>, <span class="va">cp2</span>, color <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-8.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp1</span>, <span class="va">cp2</span>, color <span class="op">=</span> <span class="cn">TRUE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-9.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp1</span>, <span class="va">cp2</span>, color <span class="op">=</span> <span class="cn">TRUE</span>, show_cp <span class="op">=</span> <span class="cn">FALSE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-10.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Show one control polygon with knots on the axis instead of the rug and</span></span></span>
-<span class="r-in"><span><span class="co"># color/linetype for the control polygon and spline, instead of different</span></span></span>
-<span class="r-in"><span><span class="co"># control polygons</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp1</span>, comparative <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-11.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp1</span>, comparative <span class="op">=</span> <span class="cn">FALSE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-12.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp1</span>, comparative <span class="op">=</span> <span class="cn">FALSE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span>, show_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-13.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp2</span>, comparative <span class="op">=</span> <span class="cn">FALSE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span>, show_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="cp-14.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

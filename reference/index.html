@@ -85,19 +85,14 @@
         <dd>Build Tensor</dd>
       </dl><dl><dt>
           
-          <code><a href="cn.html">cn()</a></code> <code><a href="cn.html">print(<i>&lt;cpr_cn&gt;</i>)</a></code> <code><a href="cn.html">summary(<i>&lt;cpr_cn&gt;</i>)</a></code> 
+          <code><a href="cn.html">cn()</a></code> 
         </dt>
         <dd>Control Nets</dd>
       </dl><dl><dt>
           
-          <code><a href="cnr.html">cnr()</a></code> <code><a href="cnr.html">summary(<i>&lt;cpr_cnr&gt;</i>)</a></code> 
+          <code><a href="cnr.html">cnr()</a></code> 
         </dt>
         <dd>Control Net Reduction</dd>
-      </dl><dl><dt>
-          
-          <code><a href="cnr_diagnostics.html">plot(<i>&lt;cpr_cnr&gt;</i>)</a></code> 
-        </dt>
-        <dd>Control Net Reduction Plots</dd>
       </dl><dl><dt>
           
           <code><a href="coef_vcov.html">coef_vcov()</a></code> 
@@ -105,14 +100,19 @@
         <dd>Extract Regression Coefficients for B-Splines and Tensor Products of B-splines</dd>
       </dl><dl><dt>
           
-          <code><a href="cp.html">cp()</a></code> <code><a href="cp.html">print(<i>&lt;cpr_cp&gt;</i>)</a></code> <code><a href="cp.html">summary(<i>&lt;cpr_cp&gt;</i>)</a></code> <code><a href="cp.html">plot(<i>&lt;cpr_cp&gt;</i>)</a></code> 
+          <code><a href="cp.html">cp()</a></code> 
         </dt>
         <dd>Control Polygons</dd>
       </dl><dl><dt>
           
-          <code><a href="cp_diagnostics.html">cp_value()</a></code> <code><a href="cp_diagnostics.html">cp_diff()</a></code> 
+          <code><a href="cp_diff.html">cp_diff()</a></code> 
         </dt>
-        <dd>Control Polygon Diagnostics</dd>
+        <dd>Vertical Difference between two Control Polygons</dd>
+      </dl><dl><dt>
+          
+          <code><a href="cp_value.html">cp_value()</a></code> 
+        </dt>
+        <dd>Control Polygon Value</dd>
       </dl><dl><dt>
           
           <code><a href="cpr-defunct.html">refine_ordinate()</a></code> <code><a href="cpr-defunct.html">coarsen_ordinate()</a></code> <code><a href="cpr-defunct.html">hat_ordinate()</a></code> <code><a href="cpr-defunct.html">insertion_matrix()</a></code> <code><a href="cpr-defunct.html">wiegh_iknots()</a></code> <code><a href="cpr-defunct.html">influence_of()</a></code> <code><a href="cpr-defunct.html">influence_weights()</a></code> 
@@ -120,14 +120,9 @@
         <dd>Defunct Functions</dd>
       </dl><dl><dt>
           
-          <code><a href="cpr.html">cpr()</a></code> <code><a href="cpr.html">summary(<i>&lt;cpr_cpr&gt;</i>)</a></code> 
+          <code><a href="cpr.html">cpr()</a></code> 
         </dt>
         <dd>Control Polygon Reduction</dd>
-      </dl><dl><dt>
-          
-          <code><a href="cpr_diagnostics.html">plot(<i>&lt;cpr_cpr&gt;</i>)</a></code> 
-        </dt>
-        <dd>Control Polygon Reduction Plots</dd>
       </dl><dl><dt>
           
           <code><a href="generate_cp_formula_data.html">generate_cp_formula_data()</a></code> 
@@ -143,6 +138,11 @@
           <code><a href="get_surface.html">get_surface()</a></code> 
         </dt>
         <dd>Get Surface</dd>
+      </dl><dl><dt>
+          
+          <code><a href="iknots_or_df.html">iknots_or_df()</a></code> 
+        </dt>
+        <dd>Internal Knots or Degrees of Freedom</dd>
       </dl><dl><dt>
           
           <code><a href="influence_of_iknots.html">influence_of_iknots()</a></code> 
@@ -170,6 +170,11 @@
         <dd>Rank of a Matrix</dd>
       </dl><dl><dt>
           
+          <code><a href="newknots.html">newknots()</a></code> 
+        </dt>
+        <dd>New Knots for CPs and CNs in CPR and CNR</dd>
+      </dl><dl><dt>
+          
           <code><a href="order_statistics.html">d_order_statistic()</a></code> <code><a href="order_statistics.html">p_order_statistic()</a></code> 
         </dt>
         <dd>Distribution of Order Statistics</dd>
@@ -177,12 +182,27 @@
           
           <code><a href="plot.cpr_bs.html">plot(<i>&lt;cpr_bs&gt;</i>)</a></code> 
         </dt>
-        <dd>Plot B-splines</dd>
+        <dd>Plot B-spline Basis</dd>
       </dl><dl><dt>
           
           <code><a href="plot.cpr_cn.html">plot(<i>&lt;cpr_cn&gt;</i>)</a></code> 
         </dt>
         <dd>Plotting Control Nets</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.cpr_cnr.html">plot(<i>&lt;cpr_cnr&gt;</i>)</a></code> 
+        </dt>
+        <dd>Control Net Reduction Plots</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.cpr_cp.html">plot(<i>&lt;cpr_cp&gt;</i>)</a></code> 
+        </dt>
+        <dd>Plotting Control Polygons</dd>
+      </dl><dl><dt>
+          
+          <code><a href="plot.cpr_cpr.html">plot(<i>&lt;cpr_cpr&gt;</i>)</a></code> 
+        </dt>
+        <dd>Control Polygon Reduction Plots</dd>
       </dl><dl><dt>
           
           <code><a href="predict.cpr_cp.html">predict(<i>&lt;cpr_cp&gt;</i>)</a></code> 
@@ -203,6 +223,26 @@
           <code><a href="spdg.html">spdg</a></code> 
         </dt>
         <dd>Simulated Pregnanediol glucuronide (PDG) Data</dd>
+      </dl><dl><dt>
+          
+          <code><a href="summary.cpr_cn.html">summary(<i>&lt;cpr_cn&gt;</i>)</a></code> 
+        </dt>
+        <dd>Summary of Control Net</dd>
+      </dl><dl><dt>
+          
+          <code><a href="summary.cpr_cnr.html">summary(<i>&lt;cpr_cnr&gt;</i>)</a></code> 
+        </dt>
+        <dd>Summarize Control Net Reduction Objects</dd>
+      </dl><dl><dt>
+          
+          <code><a href="summary.cpr_cp.html">summary(<i>&lt;cpr_cp&gt;</i>)</a></code> 
+        </dt>
+        <dd>Summarize a Control Polygon Object</dd>
+      </dl><dl><dt>
+          
+          <code><a href="summary.cpr_cpr.html">summary(<i>&lt;cpr_cpr&gt;</i>)</a></code> 
+        </dt>
+        <dd>Summarize a Control Polygon Reduction Object</dd>
       </dl><dl><dt>
           
           <code><a href="trimmed_quantile.html">trimmed_quantile()</a></code> 
