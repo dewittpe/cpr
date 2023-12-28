@@ -116,7 +116,7 @@ and <code>cpr_cn</code> objects.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "xi")= num [1:8] 1 1 1 4.21 6.79 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "xi_star")= num [1:5] 1 2.61 5.5 8.39 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "call")= language bsplines(x = seq(1, 10, length = 15), df = 5, order = 3)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "environment")=&lt;environment: 0x55c51215a128&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "environment")=&lt;environment: 0x560cde723bf0&gt; </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># change the order</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">update_bsplines</span><span class="op">(</span><span class="va">bmat</span>, order <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -129,7 +129,7 @@ and <code>cpr_cn</code> objects.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "xi")= num [1:9] 1 1 1 1 5.5 10 10 10 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "xi_star")= num [1:5] 1 2.5 5.5 8.5 10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "call")= language bsplines(x = seq(1, 10, length = 15), df = 5, order = 4)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "environment")=&lt;environment: 0x55c51215a128&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "environment")=&lt;environment: 0x560cde723bf0&gt; </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># change the order and the degrees of freedom</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">update_bsplines</span><span class="op">(</span><span class="va">bmat</span>, df <span class="op">=</span> <span class="fl">12</span>, order <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -142,7 +142,7 @@ and <code>cpr_cn</code> objects.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "xi")= num [1:16] 1 1 1 1 2.5 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "xi_star")= num [1:12] 1 1.5 2.29 3.36 4.21 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "call")= language bsplines(x = seq(1, 10, length = 15), df = 12, order = 4)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "environment")=&lt;environment: 0x55c51215a128&gt; </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "environment")=&lt;environment: 0x560cde723bf0&gt; </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">################################################################################</span></span></span>
 <span class="r-in"><span><span class="co">##                          Updating a cpr_bt object                          ##</span></span></span>
@@ -170,11 +170,11 @@ and <code>cpr_cn</code> objects.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">update_bsplines</span><span class="op">(</span><span class="va">f1</span>, df <span class="op">=</span> <span class="fl">13</span>, order <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y ~ bsplines(x, df = 13, order = 5) + var1 + var2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c51215a128&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560cde723bf0&gt;</span>
 <span class="r-in"><span><span class="fu">update_btensor</span><span class="op">(</span><span class="va">f2</span>, df <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">13</span>, <span class="fl">24</span><span class="op">)</span>, order <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y ~ btensor(x = list(x1, x2), df = list(13, 24), order = list(3, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     8)) + var1 + var2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55c51215a128&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x560cde723bf0&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">################################################################################</span></span></span>
 <span class="r-in"><span><span class="co">##                          Updating a cpr_cp object                          ##</span></span></span>
