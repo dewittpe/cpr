@@ -69,6 +69,10 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
 
   # The control net
   xvecs <- lapply(x$bspline_list, attr, which = "xi_star")
+  xvecs <- lapply(xvecs, function(x) {
+                    x[length(x)] <- x[length(x)] - sqrt(.Machine$double.eps)
+                    x
+            })
   xvecs[-margin] <- at[-margin]
   net <- do.call(expand.grid, xvecs)
 
@@ -88,7 +92,7 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
                           MoreArgs = list(y = x$cn$theta)))
 
   # the surface
-  xvecs <- lapply(bknots, function(x) seq(x[1], x[2], length = 100))
+  xvecs <- lapply(bknots, function(x) seq(x[1], x[2] - sqrt(.Machine$double.eps), length = 100))
   xvecs[-margin] <- at[-margin]
   surface <- do.call(expand.grid, xvecs)
   tensors <-

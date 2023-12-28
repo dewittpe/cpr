@@ -29,7 +29,7 @@
 #'
 #' @examples
 #'
-#'  acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
+#' acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
 #'                                 , df = list(30, 4)
 #'                                 , bknots = list(c(-1, 1), c(44, 53)))
 #'            , data = spdg)
