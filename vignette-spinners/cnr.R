@@ -124,7 +124,7 @@ packageVersion("cpr")
 #'   \sum_{j_m = 1}^{\left\lvert{\boldsymbol{\xi}_m}\right\rvert - k_m}
 #'   \boldsymbol{B}_{k_2,\boldsymbol{\xi}_2}\left(\boldsymbol{x}_2\right)
 #'   \cdots
-#'   \boldsymbol{B}_{k_m,boldsymbol{\xi}_m}\left(\boldsymbol{x}_m\right)
+#'   \boldsymbol{B}_{k_m,\boldsymbol{\xi}_m}\left(\boldsymbol{x}_m\right)
 #'   \theta_{\boldsymbol{\Xi}, j_1, j_2, \ldots, j_m}
 #'   }_{\text{polynomial coefficients}} \\
 #'   & =

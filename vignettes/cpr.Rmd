@@ -60,7 +60,7 @@ following.  Two very good references for splines are @deboor2001 and
 
 A curve defined by $f\left(x\right)$ is a spline of order $k$ (degree $k
 -1$), with knots $\xi_1, \xi_2, \ldots, \xi_m$ where $\xi_j \leq x_{j+1}$ and
-$\xi_{j} < \xi_{j + k} \forall i$ if $f\left(x\right)$ is $k-r-1$ times
+$\xi_{j} < \xi_{j + k} \forall j$ if $f\left(x\right)$ is $k-r-1$ times
 differentiable at any $r$-fold knot, and $f\left(x\right)$ is a polynomial of
 order $\leq k$ over each interval $x \in \left[\xi_j, \xi_{j+1}\right]$ for
 $j = 0, \ldots, m - 1.$
