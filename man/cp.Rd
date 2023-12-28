@@ -4,9 +4,6 @@
 \alias{cp}
 \alias{cp.cpr_bs}
 \alias{cp.formula}
-\alias{print.cpr_cp}
-\alias{summary.cpr_cp}
-\alias{plot.cpr_cp}
 \title{Control Polygons}
 \usage{
 cp(x, ...)
@@ -22,89 +19,31 @@ cp(x, ...)
   check_rank = TRUE,
   ...
 )
-
-\method{print}{cpr_cp}(x, ...)
-
-\method{summary}{cpr_cp}(object, wiggle = TRUE, integrate.args = list(), ...)
-
-\method{plot}{cpr_cp}(
-  x,
-  ...,
-  comparative,
-  show_cp = TRUE,
-  show_spline = FALSE,
-  show_xi = TRUE,
-  color = FALSE,
-  n = 100,
-  show_x = FALSE,
-  digits = 2
-)
 }
 \arguments{
 \item{x}{a \code{cpr_bs} object}
 
 \item{...}{pass through}
 
-\item{theta}{a vector of (regression) coefficients, the ordinates of the
-control polygon.}
+\item{theta}{a vector of (regression) coefficients, the ordinates of the control polygon.}
 
-\item{formula}{a formula that is appropriate for regression method being
-used.}
+\item{formula}{a formula that is appropriate for regression method being used.}
 
 \item{data}{a required \code{data.frame}}
 
-\item{method}{the regression method such as \code{\link[stats]{lm}},
-\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
+\item{method}{the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
 
-\item{method.args}{a list of additional arguments to pass to the regression
-method.}
+\item{method.args}{a list of additional arguments to pass to the regression method.}
 
-\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the
-regression model fit is retained and returned in as the \code{fit} element.
-If \code{FALSE} the \code{fit} element with be \code{NA}.}
+\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the regression model fit is retained and returned in as the \code{fit} element. If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
-\item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check
-that the design matrix is full rank.}
-
-\item{object}{a \code{cpr_cp} object}
-
-\item{wiggle}{logical, if \code{TRUE} then the integral of the squared second
-derivative of the spline function will be calculated via
-\code{\link[stats]{integrate}}.}
-
-\item{integrate.args}{a list of arguments passed to \code{\link{wiggle}} and
-ultimately \code{\link[stats]{integrate}}.}
-
-\item{comparative}{when \code{TRUE} use \code{color} to distinquish one spline from
-another, when \code{FALSE} \code{color} to highight the control polygon and
-spline with different colors, and plot the knots the way
-\code{\link{plot.cpr_bs}} does.  When missing, the default if \code{TRUE} if
-more than one \code{cpr_cp} object is passed in, and \code{FALSE} is only one
-\code{cpr_cp} object is passed.}
-
-\item{show_cp}{logical (default \code{TRUE}), show the control polygon(s)?}
-
-\item{show_spline}{logical (default \code{FALSE}) to plot the spline
-function?}
-
-\item{show_xi}{logical (default \code{TRUE}) use
-\code{\link[ggplot2]{geom_rug}} to show the location of the knots in the
-respective control polygons.}
-
-\item{color}{Boolean (default FALSE) if more than one \code{cpr_cp} object is
-to be plotted, set this value to TRUE to have the graphic in color (line types
-will be used regardless of the color setting).}
-
-\item{n}{the number of data points to use for plotting the spline}
-
-\item{show_x}{boolean, so x-values}
-
-\item{digits}{number of digits to the right of the decimal place to report
-for the value of each knot. Only used when plotting on control polygon with
-\code{comparative = FALSE}.}
+\item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check that the design matrix is full rank.}
 }
 \value{
-a ggplot
+a \code{cpr_cp} object, this is a list with the element \code{cp}, a
+data.frame reporting the x and y corrdinates of a the control polygon.
+Additional elements include the knot sequence, polynomial order, and other
+meta data regarding the construction of the control polygon.
 }
 \description{
 Generate the control polygon for a uni-variable B-spline
@@ -147,28 +86,5 @@ cp3 <- cp(y ~ bsplines(x, bknots = bknots), data = DF)
 plot(cp3, show_cp = FALSE, show_spline = TRUE) +
   ggplot2::geom_line(mapping = ggplot2::aes(x = x, y = y, color = "Target"),
                      data = DF, linetype = 2)
-
-
-x <- seq(0, 6, length = 500)
-bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5))
-theta1 <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
-theta2 <- theta1 + c(-0.15, -1.01, 0.37, 0.19, -0.53, -0.84, -0.19, 1.15, 0.17)
-cp1 <- cp(bmat, theta1)
-cp2 <- cp(bmat, theta2)
-
-# compare two control polygons on one plot
-plot(cp1, cp2)
-plot(cp1, cp2, color = TRUE)
-plot(cp1, cp2, color = TRUE, show_spline = TRUE)
-plot(cp1, cp2, color = TRUE, show_cp = FALSE, show_spline = TRUE)
-
-# Show one control polygon with knots on the axis instead of the rug and
-# color/linetype for the control polygon and spline, instead of different
-# control polygons
-plot(cp1, comparative = FALSE)
-plot(cp1, comparative = FALSE, show_spline = TRUE)
-plot(cp1, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
-plot(cp2, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
-
 
 }

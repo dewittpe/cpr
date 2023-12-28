@@ -6,7 +6,10 @@
 #' @param object an object to update.
 #' @param ... things to update, expected to be \code{iknots}, \code{df},
 #' \code{bknots}, or \code{order}.
-#' @param evaluate If true evaluate the new call else return the call.
+#' @param evaluate whether or not to evaluate the updated call.
+#'
+#' @return If \code{evaluate = TRUE} then a \code{cpr_bs} or \code{cpr_bt}
+#' object is returned, else, an unevaluated call is returned.
 #'
 #' @seealso \code{\link[stats]{update}}, \code{\link{bsplines}},
 #' \code{\link{btensor}}
@@ -67,7 +70,7 @@ update_bsplines.formula <- function(object, ..., evaluate = TRUE) {
   dots <- as.list(match.call(expand.dots = FALSE))$...
   dots <- dots[!is.na(match(names(dots), c("iknots", "df", "bknots", "order")))]
   out <- lapply(as.list(object), find_update_b_, dots)
-  out <- eval(as.call(out))
+  out <- eval(as.call(out), envir = environment(object))
   environment(out) <- environment(object)
   out
 }
@@ -76,7 +79,6 @@ update_bsplines.formula <- function(object, ..., evaluate = TRUE) {
 update_bsplines.cpr_bs <- function(object, ..., evaluate = TRUE) {
   cl <- as.list(attr(object, "call"))
   dots <- match.call(expand.dots = FALSE)$...
-  dots <- dots[!is.na(match(names(dots), c("iknots", "df", "bknots", "order")))]
 
   for(a in names(dots)) {
     if (!all(c(is.null(cl[[a]]), is.null(dots[[a]])))) {
@@ -87,7 +89,7 @@ update_bsplines.cpr_bs <- function(object, ..., evaluate = TRUE) {
   if (evaluate) {
     eval(as.call(cl), attr(object, "environment"))
   } else {
-    cl
+    as.call(cl)
   }
 
 }
@@ -131,25 +133,4 @@ find_update_b_ <- function(x, dots) {
   } else {
     x
   }
-}
-
-
-# newknots are used in the cpr and cnr calls.
-newknots <- function(form, nk) {
-  rr <- function(x, nk) {
-    if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
-      x$df <- NULL
-      x$iknots <- nk
-      x
-    } else if (is.recursive(x)) {
-      as.call(lapply(as.list(x), rr, nk))
-    } else {
-      x
-    }
-  }
-
-  z <- lapply(as.list(form), rr, nk)
-  z <- eval(as.call(z))
-  environment(z) <- environment(form)
-  z
 }

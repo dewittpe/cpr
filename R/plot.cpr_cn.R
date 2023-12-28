@@ -42,8 +42,7 @@
 #' generate the graphics.  If \code{FALSE}, use \code{plot3D::persp3D} to
 #' generate the graphics.
 #'
-#' @return
-#' The result of the \code{get_surface} call is returned invisibly.
+#' @return the plotting data needed to generate the plot is returned invisibly.
 #'
 #' @seealso \code{\link{plot.cpr_cp}} for plotting control polygons and splines,
 #' \code{\link[rgl]{persp3d}} and \code{\link[rgl]{rgl.material}} for generating
@@ -54,7 +53,16 @@
 #' @seealso \code{vignette(topic = "cnr", package = "cpr")}
 #'
 #' @examples
-#' ## see vignette(topic = "cnr", package = "cpr")
+#'
+#'  acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
+#'                                 , df = list(30, 4)
+#'                                 , bknots = list(c(-1, 1), c(44, 53)))
+#'            , data = spdg)
+#'
+#' # plot3D
+#' plot(acn, rgl = FALSE)
+#'
+#' plot(acn, rgl = TRUE)
 #'
 #' @method plot cpr_cn
 #' @export

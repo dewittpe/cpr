@@ -80,14 +80,14 @@ with(e, {
 # lm with cpr::bsplines
 e <- new.env()
 with(e, {
-  fit <- lm(mpg ~ bsplines(wt) + hp, data = mtcars)
+  fit <- lm(mpg ~ 0 + bsplines(wt, bknots = c(1.5, 5.5)) + hp, data = mtcars)
   stopifnot(inherits(fit, "lm"))
   COEF_VCOV <- cpr:::coef_vcov(fit)
 
   stopifnot(identical(names(COEF_VCOV), c("theta", "coef", "vcov_theta", "vcov")))
-  stopifnot(identical(COEF_VCOV$theta, unname(coef(fit)[2:5])))
+  stopifnot(identical(COEF_VCOV$theta, unname(coef(fit)[1:4])))
   stopifnot(identical(COEF_VCOV$coef, coef(fit)))
-  stopifnot(identical(COEF_VCOV$vcov_theta, unname(vcov(fit)[2:5, 2:5])))
+  stopifnot(identical(COEF_VCOV$vcov_theta, unname(vcov(fit)[1:4, 1:4])))
   stopifnot(identical(COEF_VCOV$vcov, vcov(fit)))
 })
 
@@ -95,7 +95,7 @@ with(e, {
 # lmer with cpr::bsplines
 e <- new.env()
 with(e, {
-  fit <- lmer(mpg ~ bsplines(wt) + (1 | am), data = mtcars)
+  fit <- lmer(mpg ~ 0 + bsplines(wt, bknots = c(1.5, 5.5)) + (1 | am), data = mtcars)
   stopifnot(inherits(fit, "lmerMod"))
   COEF_VCOV <- cpr:::coef_vcov(fit)
 
@@ -103,9 +103,9 @@ with(e, {
   setNames(fit@beta, dimnames(fit@pp@.xData$X)[[2]])
 
   stopifnot(identical(names(COEF_VCOV), c("theta", "coef", "vcov_theta", "vcov")))
-  stopifnot(identical(COEF_VCOV$theta, unname(fixef(fit))[2:5]))
+  stopifnot(identical(COEF_VCOV$theta, unname(fixef(fit))[1:4]))
   stopifnot(identical(COEF_VCOV$coef, fixef(fit)))
-  stopifnot(identical(COEF_VCOV$vcov_theta, unname(as.matrix(vcov(fit))[2:5, 2:5])))
+  stopifnot(identical(COEF_VCOV$vcov_theta, unname(as.matrix(vcov(fit))[1:4, 1:4])))
   stopifnot(identical(COEF_VCOV$vcov, as.matrix(vcov(fit))))
 })
 

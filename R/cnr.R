@@ -19,10 +19,25 @@
 #' @param progress show a progress bar.
 #' @param ... not currently used
 #'
-#' @seealso \code{\link{influence_weights}}, \code{\link{cpr}} for the
-#' uni-variable version, Control Polygon Reduction.
+#' @return A \code{cpr_cnr} object.  This is a list of \code{cpr_cn} objects.
+#'
+#' @seealso \code{\link{cn}} for defining a control net,
+#' \code{\link{influence_weights}} for finding the influence of the internal
+#' knots, \code{\link{cpr}} for the uni-variable version, Control Polygon
+#' Reduction.
+#'
+#' \code{vignette(topic = "cnr", package = "cpr")}
 #'
 #' @examples
+#'
+#' acn <- cn(log10(pdg) ~ btensor(list(day, age)
+#'                                , df = list(10, 8)
+#'                                , bknots = list(c(-1, 1), c(44, 53)))
+#'          , data = spdg)
+#' cnr0 <- cnr(acn)
+#' cnr0
+#' summary(cnr0)
+#' plot(cnr0)
 #'
 #' @export
 cnr <- function(x, margin, n_polycoef = 20L, progress = interactive(), ...) {
@@ -35,39 +50,34 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list[margin], attr, which = "iknots"), length)) + 1L)
 
   if (progress) {
-    pb <- utils::txtProgressBar(max = length(out), style = 3)
-    prg <- 0
-    utils::setTxtProgressBar(pb, prg)
+    pb <- utils::txtProgressBar(max = length(out), style = 3) # nocov
+    prg <- 0 # nocov
+    utils::setTxtProgressBar(pb, prg) # nocov
   }
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x
-    w <- influence_weights(x, p = p, margin, n_polycoef)
-    for(i in seq_along(w)) {
-      if (nrow(w[[i]]) > 0L) {
-        w[[i]]$margin <- i
-      }
+    w <- summary(influence_of_iknots(out[[i]], margin, n_polycoef))
+    w <- w[w$influence_rank > 1, ]
+    nkts <- lapply(split(w, f = w$margin), getElement, "iknot")
+
+    for ( margin_not_in_nkts in as.character(margin)[ !(as.character(margin) %in% names(nkts)) ] ) {
+      nkts <- c(nkts, stats::setNames(list(numeric(0)), margin_not_in_nkts))
+      nkts <- nkts[sort(names(nkts))]
     }
-    w <- do.call(rbind, w)
-
-    w <- subset(w, rank(w[["max_w"]], ties.method = "first") > 1)
-
-    nkts <- split(w, factor(w$margin, levels = seq_along(x$bspline_list)))
-
-    nkts <- lapply(nkts, function(xx) xx$iknots)
 
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
 
     if (progress) {
-      utils::setTxtProgressBar(pb, prg <- prg + 1)
+      utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     }
   }
 
   out[[1]] <- x
 
   if (progress) {
-    utils::setTxtProgressBar(pb, prg <- prg + 1)
-    close(pb)
+    utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
+    close(pb) # nocov
   }
 
   class(out) <- c("cpr_cnr", class(out))
@@ -78,16 +88,6 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
 #' @export
 print.cpr_cnr <- function(x, ...) {
   cat("A list of control nets\n")
-  utils::str(x, max.level = 0)
-}
-
-#' @export
-#' @param object a \code{cpr_cnr} object
-#' @rdname cnr
-summary.cpr_cnr <- function(object, ...) {
-  rtn <- lapply(object, summary)
-  for (i in seq_along(rtn)) {
-    rtn[[i]]$index <- as.integer(i)
-  }
-  do.call(rbind, rtn)
+  cat(utils::str(x, max.level = 0))
+  invisible(x)
 }

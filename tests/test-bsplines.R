@@ -22,10 +22,13 @@ with(e, {
 
 e <- new.env()
 with(e, {
-  bmat       <- bsplines(1:100, df = 52)
+  bmat       <- bsplines(runif(n = 100, 1, 100), bknots = c(1, 100), df = 52)
+
+  stopifnot(identical(bmat, print(bmat)))
+
   print_bmat <- capture.output(bmat)
 
-  stopifnot(any(grepl("First\\s\\d+\\srows:", print_bmat)))
+  stopifnot(any(grepl("First\\s6\\srows:", print_bmat))) # default
   stopifnot(identical(print_bmat[1], "Basis matrix dims: [100 x 52]"))
   stopifnot(identical(print_bmat[2], "Order: 4"))
   stopifnot(identical(print_bmat[3], "Number of internal knots: 48"))
@@ -35,6 +38,24 @@ with(e, {
 
   print_bmat <- capture.output(print(bmat, n = 1000))
   stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
+
+  print_bmat <- capture.output(print(bmat, n = 1001))
+  stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
+
+  print_bmat <- capture.output(print(bmat, n = 10))
+  stopifnot(any(grepl("First\\s10\\srows:", print_bmat)))
+})
+
+e <- new.env()
+with(e, {
+  bmat       <- bsplines(runif(n = 2, 1, 100), bknots = c(1, 100), df = 52)
+  print_bmat <- capture.output(bmat)
+
+  stopifnot(!any(grepl("First\\s\\d+\\srows:", print_bmat)))
+  stopifnot(identical(print_bmat[1], "Basis matrix dims: [2 x 52]"))
+  stopifnot(identical(print_bmat[2], "Order: 4"))
+  stopifnot(identical(print_bmat[3], "Number of internal knots: 48"))
+  stopifnot(identical(print_bmat[4], ""))
 })
 
 ################################################################################
@@ -42,26 +63,28 @@ with(e, {
 
 e <- new.env()
 with(e, {
-  xvec <- seq(-1, 1, length = 25)
+  xvec <- runif(n = 25, min = -1, max = 1)
   iknots <- c(0.34, -0.23)
+  bknots = c(-1, 1)
 
-  x <- tryCatch(bsplines(xvec, iknots = iknots), error = function(e) {e})
+  x <- tryCatch(bsplines(xvec, iknots = iknots, bknots = bknots), error = function(e) {e})
   stopifnot(inherits(x, "simpleError"))
-  stopifnot(x$message == "Knots are not sorted.")
+  stopifnot(identical(x$message, "Knots are not sorted."))
 
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots)), error = function(e) {e})
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = bknots), error = function(e) {e})
   stopifnot(inherits(x, "cpr_bs"))
 
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(1, -1)), error = function(e) {e})
-  stopifnot(inherits(x, "simpleError"))
-  stopifnot(x$message == "Knots are not sorted.")
-
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-1, 1)), error = function(e) {e})
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = bknots), error = function(e) {e})
   stopifnot(inherits(x, "cpr_bs"))
 
-  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-0.21, 1)), error = function(e) {e})
-  stopifnot(inherits(x, "simpleError"))
-  stopifnot(x$message == "Knots are not sorted.")
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-0.21, 1)), warning = function(w) {w})
+  stopifnot(inherits(x, "warning"))
+  stopifnot(identical(x$message, "At least one x value < min(bknots)"))
+
+  x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = c(-1, 0)), warning = function(w) {w})
+  stopifnot(inherits(x, "warning"))
+  stopifnot(identical(x$message, "At least one x value >= max(bknots)"))
+
 })
 
 ################################################################################
@@ -204,10 +227,11 @@ with(e, {
 # verify that order is an integer of at least 2
 e <- new.env()
 with(e, {
-  xvec <- seq(-1, 5, length = 100)
-  bmat   <- tryCatch(bsplines(xvec, order = 1), error = function(e) e)
-  bmatD1 <- tryCatch(bsplineD(xvec, order = 1, derivative = 1L), error = function(e) e)
-  bmatD2 <- tryCatch(bsplineD(xvec, order = 1, derivative = 2L), error = function(e) e)
+  xvec    <- runif(n = 100, min = -1, max = 5)
+  bknots  <- c(-1, 5)
+  bmat    <- tryCatch(bsplines(xvec, bknots = bknots, order = 1), error = function(e) e)
+  bmatD1  <- tryCatch(bsplineD(xvec, bknots = bknots, order = 1, derivative = 1L), error = function(e) e)
+  bmatD2  <- tryCatch(bsplineD(xvec, bknots = bknots, order = 1, derivative = 2L), error = function(e) e)
 
   stopifnot(inherits(bmat, "simpleError"))
   stopifnot(inherits(bmatD1, "simpleError"))
@@ -217,31 +241,27 @@ with(e, {
   stopifnot(identical(bmatD1$message, "order needs to be an integer value >= 2."))
   stopifnot(identical(bmatD2$message, "order needs to be an integer value >= 2."))
 
-  bmat <- tryCatch(bsplines(xvec, order = 1.9), error = function(e) e)
+  bmat <- tryCatch(bsplines(xvec, bknots = bknots, order = 1.9), error = function(e) e)
   stopifnot(inherits(bmat, "simpleError"))
   stopifnot(identical(bmat$message, "order needs to be an integer value >= 2."))
 
-  bmat <- tryCatch(bsplines(xvec, order = 2.9), error = function(e) e)
+  bmat <- tryCatch(bsplines(xvec, bknots = bknots, order = 2.9), error = function(e) e)
   stopifnot(inherits(bmat, "cpr_bs"))
   stopifnot(identical(attr(bmat, "order"), 2))
 
 })
 
 ################################################################################
-# attributes of bsplines and bsplineD
+# attributes of bsplines
 e <- new.env()
 with(e, {
-  xvec <- seq(-1, 5, length = 100)
+  xvec <- runif(n = 100, min = -1, max = 5)
   iknots <- c(-0.8, 0.2, 2.3, 2.5)
   bknots <- c(-1.2, 5.2)
 
   bmat   <- tryCatch(bsplines(xvec, iknots = iknots, bknots = bknots), error = function(e) e)
-  bmatD1 <- tryCatch(bsplineD(xvec, iknots = iknots, bknots = bknots, derivative = 1L), error = function(e) e)
-  bmatD2 <- tryCatch(bsplineD(xvec, iknots = iknots, bknots = bknots, derivative = 2L), error = function(e) e)
 
   stopifnot(inherits(bmat, "cpr_bs"))
-  stopifnot(inherits(bmatD1, "cpr_bsD1"))
-  stopifnot(inherits(bmatD2, "cpr_bsD2"))
 
   stopifnot(identical(
       names(attributes(bmat))
@@ -250,47 +270,19 @@ with(e, {
     )
   )
 
-  stopifnot(identical(
-      names(attributes(bmatD1))
-      ,
-      c("dim", "order", "df", "iknots", "bknots", "xi", "xi_star", "derivative", "class")
-    )
-  )
-
-  stopifnot(identical(
-      names(attributes(bmatD2))
-      ,
-      c("dim", "order", "df", "iknots", "bknots", "xi", "xi_star", "derivative", "class")
-    )
-  )
-
   stopifnot(identical(attr(bmat, "dim"), c(100L, 8L)))
-  stopifnot(identical(attr(bmatD1, "dim"), c(100L, 8L)))
-  stopifnot(identical(attr(bmatD2, "dim"), c(100L, 8L)))
 
   stopifnot(identical(attr(bmat, "order"), 4))
-  stopifnot(identical(attr(bmatD1, "order"), 4))
-  stopifnot(identical(attr(bmatD2, "order"), 4))
 
   stopifnot(identical(attr(bmat, "df"), 4 + length(iknots)))
-  stopifnot(identical(attr(bmatD1, "df"), 4 + length(iknots)))
-  stopifnot(identical(attr(bmatD2, "df"), 4 + length(iknots)))
 
   stopifnot(identical(attr(bmat, "iknots"),   iknots))
-  stopifnot(identical(attr(bmatD1, "iknots"), iknots))
-  stopifnot(identical(attr(bmatD2, "iknots"), iknots))
 
   stopifnot(identical(attr(bmat, "bknots"),   bknots))
-  stopifnot(identical(attr(bmatD1, "bknots"), bknots))
-  stopifnot(identical(attr(bmatD2, "bknots"), bknots))
 
   stopifnot(identical(attr(bmat, "xi"),   sort(c(rep(bknots, 4), iknots))))
-  stopifnot(identical(attr(bmatD1, "xi"), sort(c(rep(bknots, 4), iknots))))
-  stopifnot(identical(attr(bmatD2, "xi"), sort(c(rep(bknots, 4), iknots))))
 
   stopifnot(identical(attr(bmat, "derivative"),   NULL))
-  stopifnot(identical(attr(bmatD1, "derivative"), 1L))
-  stopifnot(identical(attr(bmatD2, "derivative"), 2L))
 
 })
 

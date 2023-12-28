@@ -11,6 +11,20 @@
 
 \item{...}{passed to \code{\link[stats]{predict}}}
 }
+\value{
+the same as you would get from calling \code{\link[stats]{predict}}
+on the \code{object$fit}.
+}
 \description{
 Model prediction for \code{cpr_cp} and \code{cpr_cn} objects.
+}
+\examples{
+
+acp <- cp(log10(pdg) ~ bsplines(age, df = 12, bknots = c(45, 53))
+           , data = spdg
+          , keep_fit = TRUE)
+acp_pred0 <- predict(acp$fit, se.fit = TRUE)
+acp_pred <- predict(acp, se.fit = TRUE)
+all.equal(acp_pred0, acp_pred)
+
 }

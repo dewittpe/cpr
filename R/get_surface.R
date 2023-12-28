@@ -22,15 +22,16 @@
 #'
 #' @examples
 #' ## Extract the control net and surface from a cpr_cn object.
-#' a_cn <- cn(pdg ~ btensor(list(day, age)
-#'            , df = list(15, 3)
-#'            , bknots = list(c(-1, 1), c(45, 53))
-#'            , order = list(3, 2))
+#' a_cn <- cn(log10(pdg) ~ btensor(list(day, age, ttm)
+#'            , df = list(15, 3, 5)
+#'            , bknots = list(c(-1, 1), c(45, 53), c(-9, -1))
+#'            , order = list(3, 2, 3))
 #'            , data = spdg)
 #'
 #' cn_and_surface <- get_surface(a_cn, n = 50)
 #' str(cn_and_surface, max.level = 2)
 #'
+#' old_par <- par()
 #' par(mfrow = c(1, 2))
 #' with(cn_and_surface$cn,
 #'      plot3D::persp3D(unique(Var1),
@@ -49,6 +50,8 @@
 #'                      main = "Surface")
 #'      )
 #'
+#' par(old_par)
+#'
 #' @export
 get_surface <- function(x, margin = 1:2, at, n = 100) {
   UseMethod("get_surface")
@@ -66,6 +69,10 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
 
   # The control net
   xvecs <- lapply(x$bspline_list, attr, which = "xi_star")
+  xvecs <- lapply(xvecs, function(x) {
+                    x[length(x)] <- x[length(x)] - sqrt(.Machine$double.eps)
+                    x
+            })
   xvecs[-margin] <- at[-margin]
   net <- do.call(expand.grid, xvecs)
 
@@ -85,7 +92,7 @@ get_surface.cpr_cn <- function(x, margin = 1:2, at, n = 100) {
                           MoreArgs = list(y = x$cn$theta)))
 
   # the surface
-  xvecs <- lapply(bknots, function(x) seq(x[1], x[2], length = 100))
+  xvecs <- lapply(bknots, function(x) seq(x[1], x[2] - sqrt(.Machine$double.eps), length = 100))
   xvecs[-margin] <- at[-margin]
   surface <- do.call(expand.grid, xvecs)
   tensors <-

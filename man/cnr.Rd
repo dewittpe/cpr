@@ -2,12 +2,9 @@
 % Please edit documentation in R/cnr.R
 \name{cnr}
 \alias{cnr}
-\alias{summary.cpr_cnr}
 \title{Control Net Reduction}
 \usage{
 cnr(x, margin, n_polycoef = 20L, progress = interactive(), ...)
-
-\method{summary}{cpr_cnr}(object, ...)
 }
 \arguments{
 \item{x}{a \code{cnr_cn} object}
@@ -21,8 +18,9 @@ the influence of each internal knot.}
 \item{progress}{show a progress bar.}
 
 \item{...}{not currently used}
-
-\item{object}{a \code{cpr_cnr} object}
+}
+\value{
+A \code{cpr_cnr} object.  This is a list of \code{cpr_cn} objects.
 }
 \description{
 Run the Control Net Reduction Algorithm.
@@ -37,7 +35,23 @@ stored in the first \code{keep + 1} (zero internal knots, one internal knot,
 \ldots, \code{keep} internal knots) \code{cnr\_cp} objects in the list.  The
 limit on the number of stored regression fits is to keep memory usage down.
 }
+\examples{
+
+acn <- cn(log10(pdg) ~ btensor(list(day, age)
+                               , df = list(10, 8)
+                               , bknots = list(c(-1, 1), c(44, 53)))
+         , data = spdg)
+cnr0 <- cnr(acn)
+cnr0
+summary(cnr0)
+plot(cnr0)
+
+}
 \seealso{
-\code{\link{influence_weights}}, \code{\link{cpr}} for the
-uni-variable version, Control Polygon Reduction.
+\code{\link{cn}} for defining a control net,
+\code{\link{influence_weights}} for finding the influence of the internal
+knots, \code{\link{cpr}} for the uni-variable version, Control Polygon
+Reduction.
+
+\code{vignette(topic = "cnr", package = "cpr")}
 }

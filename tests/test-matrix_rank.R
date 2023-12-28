@@ -8,14 +8,15 @@ stopifnot(identical(matrix_rank(mat), 120))
 
 ################################################################################
 # test that matrix rank of a full rank bspline basis is as expected
-bmat <- bsplines(seq(0, 1, length = 100), df = 15)
+x <- runif(100, 0, 1)
+bmat <- bsplines(x = x, bknots = c(0, 1), df = 15)
 stopifnot(identical(matrix_rank(bmat), 15))
 
 ################################################################################
 # test that matrix rank of a rank-deficient bspline basis
-bmat <- bsplines(seq(0, 1, length = 100), iknots = c(0.001, 0.002))
-stopifnot(identical(ncol(bmat), 6L))
-stopifnot(identical(matrix_rank(bmat), 5))
+bmat <- bsplines(x, bknots = c(0, 1), iknots = c(0.5, 0.5, 0.5, 0.5, 0.5))
+stopifnot(identical(ncol(bmat), 9L))
+stopifnot(identical(matrix_rank(bmat), 8))
 
 ################################################################################
 ##                                End of File                                 ##

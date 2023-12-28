@@ -80,8 +80,8 @@ get_spline.cpr_cn <- function(x, margin = 1, at, n = 100) {
   orders <- lapply(x$bspline_list, attr, which = "order")
 
   mbs <- mapply(bsplines, x = at, iknots = iknots, bknots = bknots, order = orders, SIMPLIFY = FALSE)
-  tensor <- build_tensor(mbs[-margin])
+  tensor <- do.call(build_tensor, mbs[-margin])
   thetas <- apply(array(x$cn$theta, dim = dfs), margin, function(x) x)
   marginal_cp <- cp(x$bspline_list[[margin]], t(tensor %*% thetas))
-  get_spline.cpr_cp(marginal_cp)
+  get_spline.cpr_cp(marginal_cp, margin = margin, at = at, n = n)
 }

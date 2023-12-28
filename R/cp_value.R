@@ -1,6 +1,6 @@
-#' Control Polygon Diagnostics
+#' Control Polygon Value
 #'
-#' Collection of functions for inspection and analysis of the control polygons
+#' Find the y value of a Control Polygon for a given x
 #'
 #' @return
 #' \code{cp_value} returns the ordinate on the control polygon line segment for
@@ -11,9 +11,11 @@
 #' \code{cp_diff} returns the vertical distance between the control
 #' vertices of cp1 to the control polygon cp2.
 #'
-#' @param x abscissa at which to determine the ordinate on control polygon cp
 #' @param obj a cpr_cp object or \code{data.frame} where the first column is the
 #' abscissa and the second column is the ordinate for the control polygon vertices.
+#' @param x abscissa at which to determine the ordinate on control polygon cp
+#'
+#' @seealso \code{\link{cp}}, \code{\link{cp_diff}}
 #'
 #' @examples
 #' xvec <- seq(0, 6, length = 500)
@@ -43,24 +45,7 @@
 #'   , size = 3
 #'   , inherit.aes = FALSE)
 #'
-#'
-#' # cp diff
-#'
-#' cp_diff(cp1, cp2)
-#'
-#' df <- data.frame(x = cp1$cp$xi_star,
-#'                  y = cp1$cp$theta,
-#'                  yend = cp1$cp$theta + cp_diff(cp1, cp2))
-#'
-#'
-#' plot(cp1, cp2) +
-#' ggplot2::geom_segment(data = df
-#'   , mapping = ggplot2::aes(x = x, xend = x, y = y, yend = yend)
-#'   , color = "red"
-#'   , inherit.aes = FALSE)
-#'
 #' @export
-#' @rdname cp_diagnostics
 cp_value <- function(obj, x) {
   UseMethod("cp_value")
 }
@@ -75,18 +60,4 @@ cp_value.cpr_cp <- function(obj, x) {
   })
 
   unname((theta[idx] - theta[idx - 1L]) / (xi_star[idx] - xi_star[idx - 1L]) * (x - xi_star[idx]) + theta[idx])
-}
-
-#' @export
-#' @rdname cp_diagnostics
-#' @param cp1 a cpr_cp object
-#' @param cp2 a cpr_cp object
-cp_diff <- function(cp1, cp2) {
-  UseMethod("cp_diff")
-}
-
-#' @export
-cp_diff.cpr_cp <- function(cp1, cp2) {
-  stopifnot(inherits(cp2, "cpr_cp"))
-  unname(sapply(cp1$cp$xi_star, function(x) {cp_value(obj = cp2, x)}) - cp1$cp$theta)
 }

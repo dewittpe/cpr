@@ -16,6 +16,9 @@ values, if false, base the quantiles on all data, after trimming.}
 
 \item{...}{other arguments to pass to stats::quantile}
 }
+\value{
+a numeric vector, the return from \code{\link[stats]{quantile}}
+}
 \description{
 For data \eqn{X = x_1, x_2, \ldots, x_n}{X = x1, x2, ..., xn}, with order
 statistics \eqn{x_{(1)}, x_{(2)}, \ldots, x_{(r)}}{x(1), x(2), ..., x(r)}
@@ -32,4 +35,7 @@ trimmed_quantile(1:100, prob = 1:23 / 24, name = FALSE)
 # no warning
 trimmed_quantile(1:100, trim = 3, prob = 1:23 / 24, name = FALSE)
 
+}
+\seealso{
+\code{\link[stats]{quantile}}
 }

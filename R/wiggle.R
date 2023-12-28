@@ -117,6 +117,7 @@ sign_changes.cpr_cp <- function(object, lower = min(object$bknots), upper = max(
     upper <- max(object$bknots) - sqrt(.Machine$double.eps)
   }
   if (lower < min(object$bknots)) {
+    warning("setting lower = min(object$bknots)")
     lower <- min(object$bknots)
   }
 

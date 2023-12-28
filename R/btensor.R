@@ -71,6 +71,7 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
   if (is.null(df) & is.null(iknots)) {
     iknots <- replicate(length(x), numeric(0), simplify = FALSE)
   } else if (is.null(iknots) & !is.null(df)) {
+    stopifnot(length(df) == length(x))
     iknots <-
       mapply(function(xx, dd, oo) {
                if (dd < oo) {
@@ -111,5 +112,5 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
 #' @export
 print.cpr_bt <- function(x, ...) {
   cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
-  utils::str(x, max.level = 1)
+  invisible(x)
 }

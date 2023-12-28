@@ -11,7 +11,7 @@
   regression method instead of relying on `...`.
 
 * `d_order_statistic` and `p_order_statistic` were added.  These functions allow
-  you to get the density of distribution function for the jth order statisitic
+  you to get the density of distribution function for the jth order statistic
   from a sample of size n from a distribution with defined density and
   distribution functions within R.
 
@@ -20,10 +20,14 @@
 
 ## User Visible Changes
 * `loglikelihood` is not exported in the namespace
-* `summary.cpr_cp` now calcualtes the "wiggle" of the function by default, that
+* `summary.cpr_cp` now calculates the "wiggle" of the function by default, that
   is, changes the default from `wiggle = FALSE` to `wiggle = TRUE`
 * `cp` and `cn` both have the default `keep_fit` argument set to TRUE.  This
   change was made to simplify the prediction methods.
+* `print.cpr_bt` returns the object invisibly, it used to return a str(x).
+* `print.cpr_cn` returns the object invisibly
+* `print.cpr_cnr` returns the object invisibly
+* `print.cpr_cpr` returns the object invisibly
 
 ## Non-User Visible Changes
 * Refactor of c++ defining basis functions, derivatives of basis functions,

@@ -5,7 +5,17 @@
 #' @param object a \code{cpr_cp} or \code{cpr_cn} object
 #' @param ... passed to \code{\link[stats]{predict}}
 #'
+#' @return the same as you would get from calling \code{\link[stats]{predict}}
+#' on the \code{object$fit}.
+#'
 #' @examples
+#'
+#' acp <- cp(log10(pdg) ~ bsplines(age, df = 12, bknots = c(45, 53))
+#'            , data = spdg
+#'           , keep_fit = TRUE)
+#' acp_pred0 <- predict(acp$fit, se.fit = TRUE)
+#' acp_pred <- predict(acp, se.fit = TRUE)
+#' all.equal(acp_pred0, acp_pred)
 #'
 #' @export
 predict.cpr_cp <- function(object, ...) {
@@ -31,7 +41,6 @@ predict.cpr_cp <- function(object, ...) {
 
     cl[["object"]] <- object[["fit"]]
     cl[["newdata"]] <- data_for_use
-    print(cl)
 
   } else {
     cl[["object"]] <- object[["fit"]]
@@ -42,26 +51,3 @@ predict.cpr_cp <- function(object, ...) {
 
 #' @export
 predict.cpr_cn <- predict.cpr_cp
-
-
-updatebsplines <- function(form, nik, nbk, nord) {
-  rr <- function(x, nik, nbk, nord) {
-    if(is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
-      x$df <- NULL
-      x$iknots <- nik
-      x$bknots <- nbk
-      x$order  <- nord
-      x
-    } else if (is.recursive(x)) {
-      as.call(lapply(as.list(x), rr, nik, nbk, nord))
-    } else {
-      x
-    }
-  }
-
-  z <- lapply(as.list(form), rr, nik, nbk, nord)
-  z <- eval(as.call(z))
-  environment(z) <- environment(form)
-  z
-}
-

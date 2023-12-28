@@ -6,6 +6,8 @@
 #' @param xi_prime the value of the knot to insert
 #' @param ... not currently used
 #'
+#' @return a \code{cpr_cp} object
+#'
 #' @examples
 #' x <- seq(1e-5, 5.99999, length.out = 100)
 #' bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
@@ -24,4 +26,3 @@ insert_a_knot.cpr_cp <- function(x, xi_prime, ...) {
   theta_prime <- refine_theta(xi_prime = xi_prime, xi = x$xi, k = x$order, x$cp$theta)
   cp(bmat_prime, theta_prime)
 }
-

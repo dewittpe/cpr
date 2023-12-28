@@ -3,6 +3,17 @@
 #' @param x \code{cpr_cp} object
 #' @param ... pass through
 #'
+#' @return a \code{cpr_influence_of_iknots} object.  A list of six elements:
+#' \describe{
+#' \item{original_cp}{}
+#' \item{coarsened_cps}{}
+#' \item{restored_cps}{}
+#' \item{d}{}
+#' \item{influence}{}
+#' \item{chisq}{}
+#' }
+#'
+#'
 #' @examples
 #' x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)
 #' bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
@@ -106,6 +117,64 @@ influence_of_iknots.cpr_cpr <- function(x, ...) {
   rtn
 }
 
+#' @export
+influence_of_iknots.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, ...) {
+
+  dfs    <- sapply(x$bspline_list, ncol)
+  bknots <- lapply(x$bspline_list, attr, which = "bknots")
+  iknots <- lapply(x$bspline_list, attr, which = "iknots")
+  orders <- lapply(x$bspline_list, attr, which = "order")
+
+  xvecs <-
+    mapply(seq,
+           from = lapply(bknots, min),
+           to   = lapply(bknots, max),
+           MoreArgs = list(length = n_polycoef),
+           SIMPLIFY = FALSE)
+
+  xvecs <-
+    lapply(xvecs, function(x) { x[length(x)] <- x[length(x)] - sqrt(.Machine$double.eps) })
+
+  marginal_bsplines <-
+    mapply(bsplines,
+           x = xvecs,
+           iknots = iknots,
+           bknots = bknots,
+           order  = orders,
+           SIMPLIFY = FALSE)
+
+  marginal_tensors <- lapply(seq_along(marginal_bsplines),
+           function(idx) {
+             do.call(build_tensor, marginal_bsplines[-idx])
+           })
+
+  marginal_thetas <-
+    lapply(seq_along(x$bspline_list),
+           function(m) {
+             apply(array(x$cn$theta, dim = dfs), m, function(x) x)
+           })
+
+  polynomial_coef <-
+    mapply(function(xx, yy) {t(xx %*% yy)},
+           xx = marginal_tensors,
+           yy = marginal_thetas,
+           SIMPLIFY = FALSE)
+
+  wghts <-
+    lapply(seq_along(x$bspline_list)[margin],
+           function(idx) {
+             lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
+                    function(tt, bmat) {
+                      influence_of_iknots(cp(bmat, tt))
+                    },
+                    bmat = x$bspline_list[[idx]])
+           })
+
+  wghts <- lapply(wghts, getElement, 1)
+  class(wghts) <- c("cpr_influence_of_iknots_cpn", class(wghts))
+  wghts
+}
+
 
 #' @export
 print.cpr_influence_of_iknots <- function(x, ...) {
@@ -119,6 +188,7 @@ print.cpr_influence_of_iknots <- function(x, ...) {
   }
   invisible(x)
 }
+
 
 #' @export
 plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRUE, ...) {
@@ -214,7 +284,21 @@ summary.cpr_influence_of_iknots_cpr <- function(object, ...) {
 }
 
 #' @export
-print.cpr_influence_of_iknots_summary <- function(x, ...) {
+summary.cpr_influence_of_iknots_cpn <- function(object, ...) {
+  rtn <- lapply(object, summary)
+  rws <- sapply(rtn, nrow)
+  idx <- rep(rws + 1, times = rws)
+  rtn <- do.call(rbind, rtn)
+  rtn$index <- idx
+  rtn$margin <- rep(seq(1, length(rws)), times = rws)
+  names(rtn)[names(rtn) == "influence_rank"] <- "marginal_influence_rank"
+  rtn$influence_rank <- rank(rtn$influence, ties.method = "first", na.last = "keep")
+  class(rtn) <- c("cpr_influence_of_iknots_cpn_summary", class(rtn))
+  rtn
+}
+
+#' @export
+print.cpr_influence_of_iknots_cpr_summary <- function(x, ...) {
   if (nrow(x) == 0) {
     message("no internal knots")
     return(invisible(x))
@@ -222,11 +306,23 @@ print.cpr_influence_of_iknots_summary <- function(x, ...) {
 
   if (all(is.na(x$chisq) )) {
     print.data.frame(x[, c("j", "iknot", "influence", "influence_rank")])
-    #NextMethod(object = x[, c("j", "iknot", "influence", "influence_rank")])
   } else {
     NextMethod(x)
   }
   invisible(x)
-
 }
 
+#' @export
+print.cpr_influence_of_iknots_cpn_summary <- function(x, ...) {
+  if (nrow(x) == 0) {
+    message("no internal knots")
+    return(invisible(x))
+  }
+
+  if (all(is.na(x$chisq) )) {
+    print.data.frame(x[, c("margin", "j", "iknot", "influence", "marginal_influence_rank", "influence_rank")])
+  } else {
+    NextMethod(x)
+  }
+  invisible(x)
+}
