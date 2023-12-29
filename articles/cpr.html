@@ -212,7 +212,7 @@ as, by definition the splines on the <span class="math inline">\(k\)</span>-fold
 well.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bmat</span>, show_xi <span class="op">=</span> <span class="cn">TRUE</span>, show_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/plot%20bmat-1.png" width="672"></p>
+<p><img src="cpr_files/figure-html/plot_bmat-1.png" width="672"></p>
 <p>A few of many important properties of the basis functions:</p>
 <p><span class="math display">\[B_{j,k,\boldsymbol{xi}} \left(x\right)
 \in \left[0, 1\right], \forall x \in \mathbb{R};\]</span></p>
@@ -427,7 +427,7 @@ polygon.</p>
 <p>Plotting the control polygon and the corresponding spline:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp0</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/plot%20cp-1.png" width="672"></p>
+<p><img src="cpr_files/figure-html/plot_cp-1.png" width="672"></p>
 </div>
 <div class="section level2">
 <h2 id="knot-influence">Knot Influence<a class="anchor" aria-label="anchor" href="#knot-influence"></a>
@@ -488,7 +488,7 @@ value of the spline function.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/insert_a_knot.html">insert_a_knot</a></span><span class="op">(</span><span class="va">cp0</span>, xi_prime <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cp0</span>, <span class="va">cp1</span>, color <span class="op">=</span> <span class="cn">TRUE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/insert%20xi_prime%20=%203-1.png" width="672"></p>
+<p><img src="cpr_files/figure-html/insert_xi_prime3-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="assessing-influence-of-xi_j">Assessing influence of <span class="math inline">\(\xi_j\)</span><a class="anchor" aria-label="anchor" href="#assessing-influence-of-xi_j"></a>
