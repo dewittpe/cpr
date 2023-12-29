@@ -1,4 +1,4 @@
-# cpr: Control Polygon Reduction <img src="/man/figures/cpr-hex-small.png" align="right"/>
+# cpr: Control Polygon Reduction <img src="man/figures/logo120x139.png" align="right"/>
 
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/dewittpe/cpr/workflows/R-CMD-check/badge.svg)](https://github.com/dewittpe/cpr/actions)

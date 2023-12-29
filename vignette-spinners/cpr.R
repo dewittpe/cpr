@@ -143,7 +143,7 @@ bmat
 #' behavior as, by definition the splines on the $k$-fold upper boundary is 0.
 #'
 #' We can quickly view the plot of each of these spline functions as well.
-#+ label = "plot bmat", fig.width = 7, fig.height = 4
+#+ label = "plot_bmat", fig.width = 7, fig.height = 4
 plot(bmat, show_xi = TRUE, show_x = TRUE)
 
 #'
@@ -291,14 +291,14 @@ rowSums(bs_eg)
 #'
 #' For example, using the basis matrix defined above and the following
 #' coefficients we can easily define a spline function and control polygon.
-#+ label = "define theta"
+#+ label = "define_theta"
 theta <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
 cp0 <- cp(bmat, theta)
 
 #'
 #' Plotting the control polygon and the corresponding spline:
 #'
-#+ label = "plot cp", fig.width = 7, fig.height = 4
+#+ label = "plot_cp", fig.width = 7, fig.height = 4
 plot(cp0, show_spline = TRUE)
 
 #'
@@ -352,7 +352,7 @@ plot(cp0, show_spline = TRUE)
 #'
 #' For an example, insert a knot $\xi' = 3$ into the control polygon defined
 #' above.
-#+ label = "insert xi_prime = 3", fig.width = 7, fig.height = 4
+#+ label = "insert_xi_prime3", fig.width = 7, fig.height = 4
 cp1 <- insert_a_knot(cp0, xi_prime = 3)
 plot(cp0, cp1, color = TRUE, show_spline = TRUE)
 
