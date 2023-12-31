@@ -493,10 +493,10 @@ value of the spline function.</p>
 <div class="section level3">
 <h3 id="assessing-influence-of-xi_j">Assessing influence of <span class="math inline">\(\xi_j\)</span><a class="anchor" aria-label="anchor" href="#assessing-influence-of-xi_j"></a>
 </h3>
-<p>Here we derivate a metric for assessing how much influence <span class="math inline">\(\xi_j \in \boldsymbol{\xi}\)</span> has on <span class="math inline">\(\boldsymbol{B}_{k,\boldsymbol{\xi}}
+<p>Here we derive a metric for assessing how much influence <span class="math inline">\(\xi_j \in \boldsymbol{\xi}\)</span> has on <span class="math inline">\(\boldsymbol{B}_{k,\boldsymbol{\xi}}
 \left(x\right)\boldsymbol{\theta}_{\boldsymbol{\xi}}.\)</span> Using the
 relationship defined by <span class="citation">Boehm (1980)</span>, we
-can derivate a metric for the influence of <span class="math inline">\(\xi_j\)</span> on the spline function.</p>
+can derive a metric for the influence of <span class="math inline">\(\xi_j\)</span> on the spline function.</p>
 <p>Start with an defined <span class="math inline">\(k,
 \boldsymbol{\xi},\)</span> and <span class="math inline">\(\boldsymbol{\theta}_{k,\boldsymbol{\xi}}.\)</span>
 The relationship <span class="math display">\[
@@ -675,7 +675,7 @@ is, how can we test the null hypothesis <span class="math display">\[H_0: w_{j} 
 <p>Under the null hypothesis that the knot has zero influence and under
 standard ordinary least squares regression assumptions the regression
 coefficients, (the ordinates of the control polygon are the regression
-coefficients), are realisations of a Gaussian random variable. Then</p>
+coefficients), are realizations of a Gaussian random variable. Then</p>
 <p><span class="math display">\[
 w_j =
 \left(\left(\boldsymbol{I} -
@@ -987,8 +987,8 @@ all the way down to zero knots.</p>
 </tr>
 </tbody>
 </table>
-<p>The least influential knot in the second reduction is <span class="math inline">\(\xi = 1.5\)</span> and that will be omited for the
-third reduction.</p>
+<p>The least influential knot in the second reduction is <span class="math inline">\(\xi = 1.5\)</span> and that will be omitted for
+the third reduction.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">third_reduction_cp</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/cp.html">cp</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="../reference/bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">x</span>, iknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4.5</span><span class="op">)</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">DF</span><span class="op">)</span></span>
@@ -1114,7 +1114,7 @@ for the fourth reduction.</p>
 </table>
 <p>Of the two remaining internal knots, <span class="math inline">\(\xi
 - 1.0\)</span> is the least influential and will be omitted for the
-fifth reduciton.</p>
+fifth reduction.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fifth_reduction_cp</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/cp.html">cp</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="../reference/bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">x</span>, iknots <span class="op">=</span> <span class="fl">4.5</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">DF</span><span class="op">)</span></span>
@@ -1157,7 +1157,7 @@ fifth reduciton.</p>
 <td align="right">0</td>
 </tr></tbody>
 </table>
-<p>Only one knot can be omitted from the fifth to the sixth reduciton.
+<p>Only one knot can be omitted from the fifth to the sixth reduction.
 Having the sixth reduction, where there are zero internal knots, lets us
 compare model fits to a model with just a <span class="math inline">\(k=4\)</span> order polynomial.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -1192,7 +1192,7 @@ error (rse) <span class="math display">\[ rse = \sqrt{ \frac{1}{df}
 \sum_{i=1}^{n} \left(y_i - f\left(x_i\right)\right)^2 },\]</span> where
 the degrees of freedom, <span class="math inline">\(df,\)</span> is the
 sample size <span class="math inline">\(n\)</span> minus the number of
-regression paramters.</p>
+regression parameters.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>  <span class="va">initial_cp</span> , <span class="va">first_reduction_cp</span> , <span class="va">second_reduction_cp</span> , <span class="va">third_reduction_cp</span></span>
 <span>     , <span class="va">fourth_reduction_cp</span> , <span class="va">fifth_reduction_cp</span> , <span class="va">sixth_reduction_cp</span><span class="op">)</span> <span class="op">|&gt;</span></span>

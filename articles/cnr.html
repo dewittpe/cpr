@@ -89,13 +89,13 @@ DeWitt</h4>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dewittpe/cpr/" class="external-link">cpr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"cpr"</span><span class="op">)</span></span>
 <span><span class="co">## [1] '0.3.0.9000'</span></span></code></pre></div>
-<p>The control polygon reduction methods for univariable-functions can
-be extended to multivariable funtions by generalizing control polygons
+<p>The control polygon reduction methods for uni-variable functions can
+be extended to multi-variable functions by generalizing control polygons
 to control nets.</p>
 <div class="section level2">
 <h2 id="tensor-products-of-b-splines">Tensor Products of B-Splines<a class="anchor" aria-label="anchor" href="#tensor-products-of-b-splines"></a>
 </h2>
-<p>Where univariable functions of B-splines:</p>
+<p>Where uni-variable functions of B-splines:</p>
 <p><span class="math display">\[\begin{equation}
   f \left( x \right) =
   \sum_{j} \theta_j B_{j,k,\boldsymbol{\xi}}\left(x\right) =
@@ -103,7 +103,7 @@ to control nets.</p>
 \boldsymbol{\theta}_{\boldsymbol{\xi}}
   \label{eq:f}
 \end{equation}\]</span></p>
-<p>we extend to mutlivariable <span class="math inline">\(m\)</span>-dimensional B-spline function, built on
+<p>we extend to multi-variable <span class="math inline">\(m\)</span>-dimensional B-spline function, built on
 <span class="math inline">\(m\)</span> B-spline basis matrices <span class="math inline">\(\boldsymbol{B}_{k_1, \boldsymbol{\xi}_1}
 \left(x_1\right),\)</span> <span class="math inline">\(\boldsymbol{B}_{k_2, \boldsymbol{\xi}_2}
 \left(x_2\right), \ldots,\)</span> <span class="math inline">\(\boldsymbol{B}_{k_m, \boldsymbol{\xi}_m}
@@ -263,10 +263,10 @@ iknots, bknots, and orders.</p>
 </h2>
 <p>Similar to control polygon reduction (CPR), control net reduction
 (CNR) looks assesses the influence of each internal knot, omits the
-least influencial, refits the model, and repeats. A complication for CNR
+least influential, refits the model, and repeats. A complication for CNR
 is that the influence of an internal knot on margin <span class="math inline">\(m\)</span> is a function of the locations values
-of <span class="math inline">\(x\)</span> on the other margins definign
-the polynomial coeficients. We suggest using a set of <span class="math inline">\(p=20\)</span> values on each margin for
+of <span class="math inline">\(x\)</span> on the other margins defining
+the polynomial coefficients. We suggest using a set of <span class="math inline">\(p=20\)</span> values on each margin for
 assessment.</p>
 <p>For example in a two-variable tensor product, the influence weight of
 the <span class="math inline">\(j^{th}\)</span> internal knot for the
@@ -303,7 +303,7 @@ w_{\left. 1j \right| x_2},\]</span> where <span class="math display">\[\boldsymb
 <span><span class="co">## </span></span>
 <span><span class="co">## attr(,"class")</span></span>
 <span><span class="co">## [1] "cpr_influence_of_iknots_cpn" "list"</span></span></code></pre></div>
-<p>The least influencial knot is <span class="math inline">\(\xi_{1,4}\)</span> and the most influencial knot
+<p>The least influential knot is <span class="math inline">\(\xi_{1,4}\)</span> and the most influential knot
 is <span class="math inline">\(\xi_{2,5}.\)</span></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cn1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_bsplines.html">update_btensor</a></span><span class="op">(</span><span class="va">initial_cn</span>, iknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.418</span>, <span class="fl">0.582</span>, <span class="fl">0.676</span>, <span class="fl">0.840</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
