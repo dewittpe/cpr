@@ -1,6 +1,6 @@
 #' Distribution of Order Statistics
 #'
-#' Density of distribution function for the jth order statisitic from a sample
+#' Density of distribution function for the jth order statistics from a sample
 #' of size n from a known distribution function.
 #'
 #' For a known distribution with defined density and distribution functions,
@@ -16,8 +16,8 @@
 #'
 #' @param x,q vector or quantiles
 #' @param n sample size
-#' @param j jth order statisitic
-#' @param distribution character string defining the distributioSe see Details
+#' @param j jth order statistics
+#' @param distribution character string defining the distribution. See Details.
 #' @param ... additional arguments passed to the density and distribution
 #' function
 #'

@@ -40,7 +40,7 @@
 #' scripts in the data-raw directory.
 "spdg"
 
-#' United States Laboratoy Confirmed COVID-19 Cases
+#' United States Laboratory Confirmed COVID-19 Cases
 #'
 #' Number of laboratory-confirmed COVID-19 cases in the United States, as
 #' reported by the Centers for Disease Control, between January 1 2020 and May
@@ -49,7 +49,7 @@
 #' @format a \code{data.frame} with two columns
 #' \describe{
 #'   \item{date}{year, month, day}
-#'   \item{cases}{number of reported laboratory-confirmeded COVID-19 cases}
+#'   \item{cases}{number of reported laboratory-confirmed COVID-19 cases}
 #' }
 #'
 #' @source

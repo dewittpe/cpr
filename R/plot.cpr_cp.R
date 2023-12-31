@@ -14,8 +14,8 @@
 #' to be plotted, set this value to TRUE to have the graphic in color (line types
 #' will be used regardless of the color setting).
 #' @param n the number of data points to use for plotting the spline
-#' @param comparative when \code{TRUE} use \code{color} to distinquish one spline from
-#' another, when \code{FALSE} \code{color} to highight the control polygon and
+#' @param comparative when \code{TRUE} use \code{color} to distinguish one spline from
+#' another, when \code{FALSE} \code{color} to highlight the control polygon and
 #' spline with different colors, and plot the knots the way
 #' \code{\link{plot.cpr_bs}} does.  When missing, the default if \code{TRUE} if
 #' more than one \code{cpr_cp} object is passed in, and \code{FALSE} is only one

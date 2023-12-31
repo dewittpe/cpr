@@ -13,7 +13,7 @@ newknots(form, nk)
 \code{\link{bsplines}} or \code{\link{btensor}} call, respectively.}
 }
 \value{
-Exptected use is within the \code{cpr} and \code{cnr} calls.  The
+Expected use is within the \code{cpr} and \code{cnr} calls.  The
 return object a formula to define a control polygon/net
 with different knots than then ones found within \code{form}.
 }
@@ -23,7 +23,7 @@ Non-exported function, \code{newknots} are used in the \code{\link{cpr}} and
 from with different internal knots.
 }
 \details{
-Think of this function as an analoge to the \code{\link{stats}{update}}
+Think of this function as an analogue to the \code{\link{stats}{update}}
 calls.  Where \code{\link{stats}{update}} will modify a \code{call}, the
 \code{newknots} will update just the \code{iknots} argument of a
 \code{bsplines} or \code{btensor} call within the \code{formula} argument of

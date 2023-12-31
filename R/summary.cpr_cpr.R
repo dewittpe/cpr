@@ -4,7 +4,7 @@
 #' @param ... pass through
 #'
 #' @return a \code{data.frame} with the attribute \code{elbow} which is a
-#' programatic attempt to identify a useful trade-off between degrees of freedom
+#' programmatic attempt to identify a useful trade-off between degrees of freedom
 #' and fit statistic.
 #'
 #' @examples

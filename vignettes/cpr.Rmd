@@ -387,10 +387,10 @@ plot(cp0, cp1, color = TRUE, show_spline = TRUE)
 
 ## Assessing influence of $\xi_j$
 
-Here we derivate a metric for assessing how much influence $\xi_j \in
+Here we derive a metric for assessing how much influence $\xi_j \in
 \boldsymbol{\xi}$ has on $\boldsymbol{B}_{k,\boldsymbol{\xi}}
 \left(x\right)\boldsymbol{\theta}_{\boldsymbol{\xi}}.$ Using the relationship
-defined by @boehm1980, we can derivate a metric for the influence of $\xi_j$
+defined by @boehm1980, we can derive a metric for the influence of $\xi_j$
 on the spline function.
 
 Start with an defined $k, \boldsymbol{\xi},$ and
@@ -574,7 +574,7 @@ can we test the null hypothesis $$H_0: w_{j} = 0$$
 Under the null hypothesis that the knot has zero influence and under standard
 ordinary least squares regression assumptions the regression coefficients,
 (the ordinates of the control polygon are the regression coefficients), are
-realisations of a Gaussian random variable. Then
+realizations of a Gaussian random variable. Then
 
 $$
 w_j =
@@ -653,7 +653,7 @@ second_reduction_cp |>
 
 
 The least influential knot in the second reduction is $\xi = 1.5$ and that
-will be omited for the third reduction.
+will be omitted for the third reduction.
 
 ```{r results = "asis"}
 third_reduction_cp <-
@@ -679,7 +679,7 @@ fourth_reduction_cp |>
 
 
 Of the two remaining internal knots, $\xi - 1.0$ is the least influential and
-will be omitted for the fifth reduciton.
+will be omitted for the fifth reduction.
 
 ```{r results = "asis"}
 fifth_reduction_cp <-
@@ -691,7 +691,7 @@ fifth_reduction_cp |>
 ```
 
 
-Only one knot can be omitted from the fifth to the sixth reduciton.  Having
+Only one knot can be omitted from the fifth to the sixth reduction.  Having
 the sixth reduction, where there are zero internal knots, lets us compare
 model fits to a model with just a $k=4$ order polynomial.
 
@@ -775,7 +775,7 @@ has the fewest degrees of freedom while providing a good quality of fit.
 This conclusion is supported by looking at the residual standard error (rse)
 $$ rse = \sqrt{ \frac{1}{df} \sum_{i=1}^{n} \left(y_i - f\left(x_i\right)\right)^2 },$$
 where the degrees of freedom, $df,$ is the sample size $n$ minus the number
-of regression paramters.
+of regression parameters.
 
 ```{r results = 'asis'}
 list(  initial_cp , first_reduction_cp , second_reduction_cp , third_reduction_cp

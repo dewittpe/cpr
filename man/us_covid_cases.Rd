@@ -3,12 +3,12 @@
 \docType{data}
 \name{us_covid_cases}
 \alias{us_covid_cases}
-\title{United States Laboratoy Confirmed COVID-19 Cases}
+\title{United States Laboratory Confirmed COVID-19 Cases}
 \format{
 a \code{data.frame} with two columns
 \describe{
   \item{date}{year, month, day}
-  \item{cases}{number of reported laboratory-confirmeded COVID-19 cases}
+  \item{cases}{number of reported laboratory-confirmed COVID-19 cases}
 }
 }
 \source{

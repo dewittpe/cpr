@@ -33,7 +33,7 @@ the \code{max(Boundary.knots)} (\code{\link[splines]{bs}} version of
 the splines where the support is open on the right hand side, that is,
 \code{bsplines} return right-continuous functions.
 
-Additioanlly, the attributes of the object returned by \code{bsplines} are
+Additionally, the attributes of the object returned by \code{bsplines} are
 different from the attributes of the object returned by
 \code{\link[splines]{bs}}. See the \code{vignette(topic = "cpr", package =
 "cpr")} for a detailed comparison between the \code{bsplines} and

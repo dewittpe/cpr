@@ -29,13 +29,13 @@ packageVersion("cpr")
 
 
 
-The control polygon reduction methods for univariable-functions can be
-extended to multivariable funtions by generalizing control polygons to
+The control polygon reduction methods for uni-variable functions can be
+extended to multi-variable functions by generalizing control polygons to
 control nets.
 
 # Tensor Products of B-Splines
 
-Where univariable functions of B-splines:
+Where uni-variable functions of B-splines:
 
 \begin{equation}
   f \left( x \right) =
@@ -44,7 +44,7 @@ Where univariable functions of B-splines:
   \label{eq:f}
 \end{equation}
 
-we extend to mutlivariable $m$-dimensional B-spline function, built on $m$
+we extend to multi-variable $m$-dimensional B-spline function, built on $m$
 B-spline basis matrices
 $\boldsymbol{B}_{k_1, \boldsymbol{\xi}_1} \left(x_1\right),$
 $\boldsymbol{B}_{k_2, \boldsymbol{\xi}_2} \left(x_2\right), \ldots,$
@@ -204,10 +204,10 @@ plot(acn, rgl = FALSE, show_net = FALSE, show_surface = TRUE, xlab = "x1", ylab 
 # Control Net Reduction
 
 Similar to control polygon reduction (CPR), control net reduction (CNR) looks
-assesses the influence of each internal knot, omits the least influencial,
+assesses the influence of each internal knot, omits the least influential,
 refits the model, and repeats.  A complication for CNR is that the influence
 of an internal knot on margin $m$ is a function of the locations values of
-$x$ on the other margins definign the polynomial coeficients.  We suggest
+$x$ on the other margins defining the polynomial coefficients.  We suggest
 using a set of $p=20$ values on each margin for assessment.
 
 For example in a two-variable tensor product, the influence
@@ -239,7 +239,7 @@ influence_of_iknots(initial_cn)
 ```
 
 
-The least influencial knot is $\xi_{1,4}$ and the most influencial knot is
+The least influential knot is $\xi_{1,4}$ and the most influential knot is
 $\xi_{2,5}.$
 
 ```{r}

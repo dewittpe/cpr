@@ -3,7 +3,7 @@
 \name{update_bsplines}
 \alias{update_bsplines}
 \alias{update_btensor}
-\title{Update bspline or btensor calls}
+\title{Update bsplines or btensor calls}
 \usage{
 update_bsplines(object, ..., evaluate = TRUE)
 
@@ -12,7 +12,7 @@ update_btensor(object, ..., evaluate = TRUE)
 \arguments{
 \item{object}{an object to update.}
 
-\item{...}{things to update, expected to be \code{iknots}, \code{df},
+\item{...}{arguments to update, expected to be \code{iknots}, \code{df},
 \code{bknots}, or \code{order}.}
 
 \item{evaluate}{whether or not to evaluate the updated call.}

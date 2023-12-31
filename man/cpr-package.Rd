@@ -21,6 +21,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/dewittpe/cpr/}
   \item \url{http://www.peteredewitt.com/cpr/}
+  \item Report bugs at \url{https://github.com/dewittpe/cpr/issues}
 }
 
 }

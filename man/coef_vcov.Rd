@@ -13,7 +13,7 @@ coef_vcov(fit)
 A list with four elements
 \describe{
   \item{theta}{theta regression coefficients}
-  \item{coef}{all regression cofficients}
+  \item{coef}{all regression coefficients}
   \item{vcov_theta}{subsection of variance-covariance matrix pertaining to the theta values}
   \item{vcov}{full variance-covariance matrix}
 }

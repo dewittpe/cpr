@@ -41,7 +41,7 @@ cp(x, ...)
 }
 \value{
 a \code{cpr_cp} object, this is a list with the element \code{cp}, a
-data.frame reporting the x and y corrdinates of a the control polygon.
+data.frame reporting the x and y coordinates of the control polygon.
 Additional elements include the knot sequence, polynomial order, and other
 meta data regarding the construction of the control polygon.
 }

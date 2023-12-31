@@ -16,7 +16,7 @@
 #' @return A list with four elements
 #' \describe{
 #'   \item{theta}{theta regression coefficients}
-#'   \item{coef}{all regression cofficients}
+#'   \item{coef}{all regression coefficients}
 #'   \item{vcov_theta}{subsection of variance-covariance matrix pertaining to the theta values}
 #'   \item{vcov}{full variance-covariance matrix}
 #' }
@@ -33,7 +33,7 @@ coef_vcov <- function(fit) {
   UseMethod("coef_vcov")
 }
 
-# IMPORTANT NOTE: for the S3 methods to work they need to be registerd.  The
+# IMPORTANT NOTE: for the S3 methods to work they need to be registered.  The
 # generic does not need to be exported, but the methods do.
 # https://github.com/r-lib/devtools/issues/2293#issuecomment-721357042
 
@@ -43,10 +43,10 @@ coef_vcov.default <- function(fit) {
   VCOV <- tryCatch(stats::vcov(fit), warning = function(w) w, error = function(e) e)
 
   if (inherits(COEF, "error")) {
-    stop(sprintf("Attemped to extract regression coefficients via stats::coef for an object of class %s.  This has failed.", paste(class(fit), collapse = ", ")))
+    stop(sprintf("Attempted to extract regression coefficients via stats::coef for an object of class %s.  This has failed.", paste(class(fit), collapse = ", ")))
   }
   if (inherits(VCOV, "error")) {
-    stop(sprintf("Attemped to extract variance-covariance matrix via stats::vcov for an object of class %s.  This has failed.", paste(class(fit), collapse = ", ")))
+    stop(sprintf("Attempted to extract variance-covariance matrix via stats::vcov for an object of class %s.  This has failed.", paste(class(fit), collapse = ", ")))
   }
 
   if (inherits(VCOV, "warning")) {
@@ -56,13 +56,13 @@ coef_vcov.default <- function(fit) {
   }
 
   if (!inherits(COEF, "numeric") & !inherits(COEF, "integer")) {
-    stop(sprintf("Attemped to extract regression coefficients via stats::coef for an object of class %s.  This has failed - expected numeric vector, got %s."
+    stop(sprintf("Attempted to extract regression coefficients via stats::coef for an object of class %s.  This has failed - expected numeric vector, got %s."
                  , paste(class(fit), collapse = ", ")
                  , paste(class(COEF), collapse = ", ")
                  ))
   }
   if (!inherits(VCOV, "matrix")) {
-    stop(sprintf("Attemped to extract variance-covariance matrix via stats::vcov for an object of class %s.  This has failed - expected numeric matrix, got %s."
+    stop(sprintf("Attempted to extract variance-covariance matrix via stats::vcov for an object of class %s.  This has failed - expected numeric matrix, got %s."
                  , paste(class(fit), collapse = ", ")
                  , paste(class(VCOV), collapse = ", ")
                  ))

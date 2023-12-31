@@ -1,10 +1,10 @@
-#' Update bspline or btensor calls
+#' Update bsplines or btensor calls
 #'
 #' Update \code{cpr_bs} and \code{cpr_bt} objects alone or within \code{cpr_cp}
 #' and \code{cpr_cn} objects.
 #'
 #' @param object an object to update.
-#' @param ... things to update, expected to be \code{iknots}, \code{df},
+#' @param ... arguments to update, expected to be \code{iknots}, \code{df},
 #' \code{bknots}, or \code{order}.
 #' @param evaluate whether or not to evaluate the updated call.
 #'

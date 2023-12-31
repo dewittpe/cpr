@@ -22,8 +22,8 @@
 
 \item{...}{additional \code{cpr_cp} objects}
 
-\item{comparative}{when \code{TRUE} use \code{color} to distinquish one spline from
-another, when \code{FALSE} \code{color} to highight the control polygon and
+\item{comparative}{when \code{TRUE} use \code{color} to distinguish one spline from
+another, when \code{FALSE} \code{color} to highlight the control polygon and
 spline with different colors, and plot the knots the way
 \code{\link{plot.cpr_bs}} does.  When missing, the default if \code{TRUE} if
 more than one \code{cpr_cp} object is passed in, and \code{FALSE} is only one
