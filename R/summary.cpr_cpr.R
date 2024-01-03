@@ -23,7 +23,9 @@
 #'   )
 #'
 #' cpr0 <- cpr(initial_cp)
-#' summary(cpr0)
+#' s <- summary(cpr0)
+#' s
+#' plot(s, type = "rse")
 #'
 #' @export
 summary.cpr_cpr <- function(object, ...) {

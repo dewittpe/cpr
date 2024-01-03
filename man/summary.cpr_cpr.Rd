@@ -35,6 +35,8 @@ initial_cp <-
   )
 
 cpr0 <- cpr(initial_cp)
-summary(cpr0)
+s <- summary(cpr0)
+s
+plot(s, type = "rse")
 
 }

@@ -59,21 +59,32 @@ plot.cpr_cpr <- function(x, type = c("cps", "loglik", "rss", "rse"), from = 1, t
                             ", ...)")))
 
   } else {
-    if (missing(to)) {
-      to <- length(x)
-    } else if (to > length(x)) {
-      to <- length(x)
-    }
-
     s <- summary(x)
-    s$index <- seq_along(s[[type]])
-
-    ggplot2::ggplot(subset(s, (s$index >= from) & (s$index <= to))) +
-    ggplot2::theme_bw() +
-    eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("index"), Y = as.name(type)))) +
-    ggplot2::geom_point() +
-    ggplot2::geom_line() +
-    ggplot2::xlab("Index")
-
+    plot(s, type = type, from = from, to = to, ...)
   }
+}
+
+#' @export
+plot.cpr_summary_cpr_cpr <- function(x, type = c("loglik", "rss", "rse"), from = 1, to, ...) {
+  if (from < 1) {
+    from <- 1
+  }
+
+  type <- match.arg(type, several.ok = FALSE)
+
+  if (missing(to)) {
+    to <- nrow(x)
+  } else if (to > nrow(x)) {
+    to <- nrow(x)
+  }
+
+  x$index <- seq_along(x[[type]])
+
+  ggplot2::ggplot(subset(x, (x$index >= from) & (x$index <= to))) +
+  ggplot2::theme_bw() +
+  eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("index"), Y = as.name(type)))) +
+  ggplot2::geom_point() +
+  ggplot2::geom_line() +
+  ggplot2::xlab("Index")
+
 }
