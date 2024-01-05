@@ -167,14 +167,16 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, ...) {
 }
 
 #' @export
-influence_of_iknots.cpr_cpr <- function(x, verbose = TRUE, cl = 2L, ...) {
-  rtn <- lapply(x, influence_of_iknots)
+influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, cl = 2L, ...) {
+  rtn <- lapply(x, influence_of_iknots, verbose = verbose, cl = cl, ...)
   class(rtn) <- c("cpr_influence_of_iknots_cpr", class(rtn))
   rtn
 }
 
 #' @export
-influence_of_iknots.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, verbose = TRUE, cl = 2L, ...) {
+#' @param margin
+#' @param n_polycoef
+influence_of_iknots.cpr_cn <- function(x, verbose = FALSE, cl = 2L, margin = seq_along(x$bspline_list), n_polycoef = 20L, ...) {
 
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
@@ -221,7 +223,7 @@ influence_of_iknots.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_
            function(idx) {
              lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
                     function(tt, bmat) {
-                      influence_of_iknots(cp(bmat, tt))
+                      influence_of_iknots(cp(bmat, tt), verbose = verbose, cl = cl, ...)
                     },
                     bmat = x$bspline_list[[idx]])
            })

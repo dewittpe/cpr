@@ -16,7 +16,9 @@
 #' \code{\link{influence_weights}}.
 #' @param n_polycoef the number of polynomial coefficients to use when assessing
 #' the influence of each internal knot.
-#' @param progress show a progress bar.
+#' @param progress controls the level of progress messaging.
+#' @param cl passed to \code{\link[pbapply]{pblapply}} or
+#' \code{\link[parallel]{mclapply}} depending on the level of \code{progress}.
 #' @param ... not currently used
 #'
 #' @return A \code{cpr_cnr} object.  This is a list of \code{cpr_cn} objects.
@@ -40,16 +42,18 @@
 #' plot(cnr0)
 #'
 #' @export
-cnr <- function(x, margin, n_polycoef = 20L, progress = interactive(), ...) {
+cnr <- function(x, margin, n_polycoef = 20L, progress = c('cnr', 'influence', 'none'), cl = 2L, ...) {
   UseMethod("cnr")
 }
 
 #' @export
-cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, progress = interactive(), ...) {
+cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, progress = c('cnr', 'influence', 'none'), cl = 2L, ...) {
+
+  progress <- match.arg(progress, several.ok = FALSE)
 
   out <- vector("list", length = sum(sapply(lapply(x$bspline_list[margin], attr, which = "iknots"), length)) + 1L)
 
-  if (progress) {
+  if (progress == 'cnr') {
     pb <- utils::txtProgressBar(max = length(out), style = 3) # nocov
     prg <- 0 # nocov
     utils::setTxtProgressBar(pb, prg) # nocov
@@ -57,7 +61,7 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x
-    w <- summary(influence_of_iknots(out[[i]], margin, n_polycoef))
+    w <- summary(influence_of_iknots(out[[i]], margin = margin, n_polycoef = n_polycoef, verbose = (progress == 'influence'), cl = cl, ...))
     w <- w[w$influence_rank > 1, ]
     nkts <- lapply(split(w, f = w$margin), getElement, "iknot")
 
@@ -68,14 +72,14 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
 
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
 
-    if (progress) {
+    if (progress == 'cnr') {
       utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     }
   }
 
   out[[1]] <- x
 
-  if (progress) {
+  if (progress == 'cnr') {
     utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     close(pb) # nocov
   }
