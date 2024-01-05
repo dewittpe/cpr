@@ -4,11 +4,25 @@
 #'
 #' \code{cpr} runs the control polygon reduction algorithm.
 #'
+#' The algorithm is genarlly speaking fast, but can take a long time to run if
+#' the number of interior knots of initial control polygon is high.  To help
+#' track the progress of the execution you can have \code{progress = "cpr"}
+#' which will show a progress bar incremented for each interation of the CPR
+#' algorithm.  \code{progress = "influence"} will use a conbination of messages
+#' and progress bars to report on each step in assessing the influce of all the
+#' internal knots for each iteration of the CPR algorithm.  See
+#' \code{\link{influence_of_iknots}} for more details.
+#'
 #' @param x a \code{cpr_cp} object
-#' @param progress show a progress bar.
+#' @param progress controls the level of progress messaging.  See Details.
+#' @param cl passed to \code{\link[pbapply]{pblapply}} or
+#' \code{\link[parallel]{mclapply}} depending on the level of \code{progress}.
+#' See Details.
 #' @param ... not currently used
 #'
 #' @return a list of \code{cpr_cp} objects
+#'
+#' @seealso \code{\link{influence_of_iknots}}
 #'
 #' @examples
 #' #############################################################################
@@ -89,16 +103,18 @@
 #'
 #'
 #' @export
-cpr <- function(x, progress = interactive(), ...) {
+cpr <- function(x, progress = c('cpr', 'influence', 'none'), cl = NULL, ...) {
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, progress = interactive(), ...) {
+cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = NULL, ...) {
+
+  progress <- match.arg(progress, several.ok = FALSE)
 
   out <- vector("list", length = length(x$iknots) + 1L)
 
-  if (progress) {
+  if (progress == 'cpr') {
     pb <- utils::txtProgressBar(max = length(out), style = 3) # nocov
     prg <- 0 # noocv
     utils::setTxtProgressBar(pb, prg) # noocv
@@ -106,12 +122,12 @@ cpr.cpr_cp <- function(x, progress = interactive(), ...) {
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x
-    w <- summary(influence_of_iknots(out[[i]]))
+    w <- summary(influence_of_iknots(out[[i]], verbose = (progress == 'influence'), cl = cl, ...))
     nkts <- w$iknot[ w$influence_rank > 1 ]
 
     x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
 
-    if (progress) {
+    if (progress == 'cpr') {
       utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     }
 
@@ -119,7 +135,7 @@ cpr.cpr_cp <- function(x, progress = interactive(), ...) {
 
   out[[1]] <- x
 
-  if (progress) {
+  if (progress == 'cpr') {
     utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     close(pb) # nocov
   }

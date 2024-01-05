@@ -4,10 +4,15 @@
 \alias{influence_of_iknots}
 \title{Determine the influence of the internal knots of a control polygon}
 \usage{
-influence_of_iknots(x, ...)
+influence_of_iknots(x, verbose = FALSE, cl = 2L, ...)
 }
 \arguments{
 \item{x}{\code{cpr_cp} object}
+
+\item{verbose}{print status messages}
+
+\item{cl}{interger passed to \code{\link[parallel]{mclapply}} and \code{\link[parallel]{mcmapply}}
+other methods within the pbapply package}
 
 \item{...}{pass through}
 }

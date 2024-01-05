@@ -4,12 +4,16 @@
 \alias{cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(x, progress = interactive(), ...)
+cpr(x, progress = c("cpr", "influence", "none"), cl = NULL, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} object}
 
-\item{progress}{show a progress bar.}
+\item{progress}{controls the level of progress messaging.  See Details.}
+
+\item{cl}{passed to \code{\link[pbapply]{pblapply}} or
+\code{\link[parallel]{mclapply}} depending on the level of \code{progress}.
+See Details.}
 
 \item{...}{not currently used}
 }
@@ -21,6 +25,15 @@ Run the Control Polygon Reduction Algorithm.
 }
 \details{
 \code{cpr} runs the control polygon reduction algorithm.
+
+The algorithm is genarlly speaking fast, but can take a long time to run if
+the number of interior knots of initial control polygon is high.  To help
+track the progress of the execution you can have \code{progress = "cpr"}
+which will show a progress bar incremented for each interation of the CPR
+algorithm.  \code{progress = "influence"} will use a conbination of messages
+and progress bars to report on each step in assessing the influce of all the
+internal knots for each iteration of the CPR algorithm.  See
+\code{\link{influence_of_iknots}} for more details.
 }
 \examples{
 #############################################################################
@@ -100,4 +113,7 @@ ggplot2::geom_line(data = bin_average
                    , mapping = ggplot2::aes(y = y, color = "bin_average"))
 
 
+}
+\seealso{
+\code{\link{influence_of_iknots}}
 }
