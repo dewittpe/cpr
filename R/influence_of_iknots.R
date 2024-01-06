@@ -2,8 +2,10 @@
 #'
 #' @param x \code{cpr_cp} or \code{cpr_cn} object
 #' @param verbose print status messages
-#' @param cl interger passed to \code{\link[parallel]{mclapply}} and \code{\link[parallel]{mcmapply}}
-#' other methods within the pbapply package
+#' @param cl interger passed to \code{\link[parallel]{mclapply}} and
+#' \code{\link[parallel]{mcmapply}} other methods within the pbapply package.
+#' Will be set to 1 when \code{.Platform$OS.type == "windows"} since windows
+#' does not support forking.
 #' @param ... pass through
 #'
 #' @return a \code{cpr_influence_of_iknots} object.  A list of six elements:
@@ -15,7 +17,6 @@
 #' \item{influence}{}
 #' \item{chisq}{}
 #' }
-#'
 #'
 #' @examples
 #' x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)
@@ -52,6 +53,16 @@ influence_of_iknots <- function(x, verbose = FALSE, cl = 2L, ...) {
 
 #' @export
 influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, ...) {
+
+  if (.Platform$OS.type == "windows")  { # nocov
+    warning("Windows does not support forking. cl being set to 1.") # nocov
+    cl <- 1L # nocov
+  } # nocov
+
+  cl <- as.integer(cl)
+  if (cl < 1) {
+    cl <- 1L
+  }
 
   if (length(x$iknots) > 0) {
 

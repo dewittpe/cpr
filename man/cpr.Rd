@@ -4,7 +4,7 @@
 \alias{cpr}
 \title{Control Polygon Reduction}
 \usage{
-cpr(x, progress = c("cpr", "influence", "none"), cl = NULL, ...)
+cpr(x, progress = c("cpr", "influence", "none"), cl = 2L, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cp} object}
@@ -34,6 +34,11 @@ algorithm.  \code{progress = "influence"} will use a conbination of messages
 and progress bars to report on each step in assessing the influce of all the
 internal knots for each iteration of the CPR algorithm.  See
 \code{\link{influence_of_iknots}} for more details.
+
+The \code{\link{influence_of_iknots}} is where parallelized code is
+evaluated.  Use of \code{\link[parallel]{mclapply}} and
+\code{\link[parallel]{mcmapply}} are used.  These are forking methods and as
+a result \code{cl > 1} will not work on Windows.
 }
 \examples{
 #############################################################################

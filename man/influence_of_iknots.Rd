@@ -21,8 +21,10 @@ influence_of_iknots(x, verbose = FALSE, cl = 2L, ...)
 
 \item{verbose}{print status messages}
 
-\item{cl}{interger passed to \code{\link[parallel]{mclapply}} and \code{\link[parallel]{mcmapply}}
-other methods within the pbapply package}
+\item{cl}{interger passed to \code{\link[parallel]{mclapply}} and
+\code{\link[parallel]{mcmapply}} other methods within the pbapply package.
+Will be set to 1 when \code{.Platform$OS.type == "windows"} since windows
+does not support forking.}
 
 \item{...}{pass through}
 

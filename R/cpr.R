@@ -13,6 +13,11 @@
 #' internal knots for each iteration of the CPR algorithm.  See
 #' \code{\link{influence_of_iknots}} for more details.
 #'
+#' The \code{\link{influence_of_iknots}} is where parallelized code is
+#' evaluated.  Use of \code{\link[parallel]{mclapply}} and
+#' \code{\link[parallel]{mcmapply}} are used.  These are forking methods and as
+#' a result \code{cl > 1} will not work on Windows.
+#'
 #' @param x a \code{cpr_cp} object
 #' @param progress controls the level of progress messaging.  See Details.
 #' @param cl passed to \code{\link[pbapply]{pblapply}} or
@@ -106,12 +111,12 @@
 #'
 #'
 #' @export
-cpr <- function(x, progress = c('cpr', 'influence', 'none'), cl = NULL, ...) {
+cpr <- function(x, progress = c('cpr', 'influence', 'none'), cl = 2L, ...) {
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = NULL, ...) {
+cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = 2L, ...) {
 
   progress <- match.arg(progress, several.ok = FALSE)
 
