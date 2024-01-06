@@ -75,11 +75,11 @@ cn.cpr_bt <- function(x, theta, ...) {
 #' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the regression model fit is retained and returned in the the \code{fit} element. If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.
 #' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the design matrix is full rank.
 cn.formula <- function(formula, data, method = stats::lm, method.args = list(),  keep_fit = TRUE, check_rank = TRUE, ...) {
+
   # check for some formula specification issues
-  fterms <- stats::terms(formula)
-  fterms
-  if (sum(grepl("btensor", attr(fterms, "term.labels"))) != 1) {
-    stop("btensor() must appear once, with no effect modifiers, on the right hand side of the formula.")
+  rhs_check <- grepl("btensor", attr(stats::terms(formula), "term.labels"))
+  if ( !rhs_check[1] | any(rhs_check[-1]) ) {
+    stop("btensor() must appear first, once, and with no effect modifiers, on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment
@@ -91,7 +91,8 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- c(cl, method.args)
 
   fit <- do.call(regression, cl)
-  COEF_VCOV <- coef_vcov(fit)
+  Bmat <- stats::model.frame(fit)[[2]]
+  COEF_VCOV <- coef_vcov(fit, theta_idx = seq(1, ncol(Bmat), by = 1))
 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
@@ -105,7 +106,7 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl[[1]] <- as.name("cn")
   cl <- as.call(cl)
 
-  Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
+  #Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
 
   out <- cn.cpr_bt(Bmat, COEF_VCOV$theta)
 

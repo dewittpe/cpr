@@ -40,7 +40,8 @@
 #' plot(cpr_run, color = TRUE)
 #' plot(cpr_run, type = "rse")
 #'
-#' summary(cpr_run)
+#' s <- summary(cpr_run)
+#' s
 #'
 #' # preferable model is in index 5
 #' preferable_cp <- cpr_run[[5]]
@@ -65,9 +66,11 @@
 #' # run CPR, preferable model is in index 7
 #' cpr_run <- cpr(init_cp)
 #'
-#' summary(cpr_run)
+#' s <- summary(cpr_run)
+#' s
 #'
-#' plot(cpr_run, color = TRUE, type = "rse")
+#' plot(s, color = TRUE, type = "rse") # same plot as plot(cpr_run, color = TRUE, type = "rse")
+#'
 #' plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE)
 #'
 #' # plot the fitted spline and the true p(x)
@@ -125,7 +128,16 @@ cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = NULL, .
     w <- summary(influence_of_iknots(out[[i]], verbose = (progress == 'influence'), cl = cl, ...))
     nkts <- w$iknot[ w$influence_rank > 1 ]
 
-    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
+    x <-
+      eval(
+        stats::update(
+             x
+           , formula = newknots(x$call$formula, nkts)
+           , keep_fit = TRUE
+           , check_rank = FALSE
+           , evaluate = FALSE)
+        , parent.frame()
+      )
 
     if (progress == 'cpr') {
       utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov

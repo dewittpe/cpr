@@ -12,6 +12,7 @@
 #' \code{\link{cn}} calls.
 #'
 #' @param fit a regression model fit
+#' @param theta_idx numeric index for the theta related coefs
 #'
 #' @return A list with four elements
 #' \describe{
@@ -29,7 +30,7 @@
 #' summary(cv)
 #'
 #' @seealso \code{\link[stats]{coef}} \code{\link{cp}} \code{\link{cn}}
-coef_vcov <- function(fit) {
+coef_vcov <- function(fit, theta_idx) {
   UseMethod("coef_vcov")
 }
 
@@ -38,7 +39,7 @@ coef_vcov <- function(fit) {
 # https://github.com/r-lib/devtools/issues/2293#issuecomment-721357042
 
 #' @export
-coef_vcov.default <- function(fit) {
+coef_vcov.default <- function(fit, theta_idx) {
   COEF <- tryCatch(stats::coef(fit), warning = function(w) w, error = function(e) e)
   VCOV <- tryCatch(stats::vcov(fit), warning = function(w) w, error = function(e) e)
 
@@ -68,21 +69,24 @@ coef_vcov.default <- function(fit) {
                  ))
   }
 
-  coef_vcov_formater(COEF, VCOV)
+  coef_vcov_formater(COEF, VCOV, theta_idx)
 
 }
 
 #' @export
-coef_vcov.lmerMod <- function(fit) {
+coef_vcov.lmerMod <- function(fit, theta_idx) {
   #COEF <- lme4::fixef(fit)
   COEF <- stats::setNames(fit@beta, dimnames(fit@pp@.xData$X)[[2]])
   VCOV <- as.matrix(stats::vcov(fit))
 
-  coef_vcov_formater(COEF, VCOV)
+  coef_vcov_formater(COEF, VCOV, theta_idx)
 }
 
-coef_vcov_formater <- function(COEF, VCOV) {
-  theta_idx <- grepl("bsplines|btensor", names(COEF))
+coef_vcov_formater <- function(COEF, VCOV, theta_idx) {
+
+  # the use of the name _was_ a good idea until edge cases came up where the
+  # names are truncated  that is why the index is now explicit
+  #theta_idx <- grepl("bsplines|btensor", names(COEF))
 
   list(
          theta = unname(COEF[theta_idx])

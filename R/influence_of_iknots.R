@@ -1,6 +1,6 @@
 #' Determine the influence of the internal knots of a control polygon
 #'
-#' @param x \code{cpr_cp} object
+#' @param x \code{cpr_cp} or \code{cpr_cn} object
 #' @param verbose print status messages
 #' @param cl interger passed to \code{\link[parallel]{mclapply}} and \code{\link[parallel]{mcmapply}}
 #' other methods within the pbapply package
@@ -64,7 +64,7 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, ...) {
     }
 
     if (verbose) {
-      message("\nThere are ", x$order + length(x$iknots), " internal knots to evaluate\n")
+      message("\nThere are ", length(x$iknots), " internal knots to evaluate\n")
     }
 
     # only work on the internal knots
@@ -173,9 +173,11 @@ influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, cl = 2L, ...) {
   rtn
 }
 
+#' @param margin which margin(s) to consider the influence of iknots
+#' @param n_polycoef number of polynomial coefficients to use when assessing the
+#' influence of a iknot
+#' @rdname influence_of_iknots
 #' @export
-#' @param margin
-#' @param n_polycoef
 influence_of_iknots.cpr_cn <- function(x, verbose = FALSE, cl = 2L, margin = seq_along(x$bspline_list), n_polycoef = 20L, ...) {
 
   dfs    <- sapply(x$bspline_list, ncol)

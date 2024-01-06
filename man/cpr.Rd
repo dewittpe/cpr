@@ -51,7 +51,8 @@ cpr_run <- cpr(init_cp)
 plot(cpr_run, color = TRUE)
 plot(cpr_run, type = "rse")
 
-summary(cpr_run)
+s <- summary(cpr_run)
+s
 
 # preferable model is in index 5
 preferable_cp <- cpr_run[[5]]
@@ -76,9 +77,11 @@ init_cp <- cp(formula = y ~ bsplines(x, df = 54, bknots = c(0, 4.5)),
 # run CPR, preferable model is in index 7
 cpr_run <- cpr(init_cp)
 
-summary(cpr_run)
+s <- summary(cpr_run)
+s
 
-plot(cpr_run, color = TRUE, type = "rse")
+plot(s, color = TRUE, type = "rse") # same plot as plot(cpr_run, color = TRUE, type = "rse")
+
 plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE)
 
 # plot the fitted spline and the true p(x)

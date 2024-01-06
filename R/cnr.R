@@ -70,7 +70,16 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
       nkts <- nkts[sort(names(nkts))]
     }
 
-    x <- eval(stats::update(x, formula = newknots(x$call$formula, nkts), keep_fit = TRUE, check_rank = FALSE, evaluate = FALSE), parent.frame())
+    x <-
+      eval(
+        stats::update(
+             x
+           , formula = newknots(x$call$formula, nkts)
+           , keep_fit = TRUE
+           , check_rank = FALSE
+           , evaluate = FALSE)
+        , parent.frame()
+      )
 
     if (progress == 'cnr') {
       utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov

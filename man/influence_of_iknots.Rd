@@ -2,12 +2,22 @@
 % Please edit documentation in R/influence_of_iknots.R
 \name{influence_of_iknots}
 \alias{influence_of_iknots}
+\alias{influence_of_iknots.cpr_cn}
 \title{Determine the influence of the internal knots of a control polygon}
 \usage{
 influence_of_iknots(x, verbose = FALSE, cl = 2L, ...)
+
+\method{influence_of_iknots}{cpr_cn}(
+  x,
+  verbose = FALSE,
+  cl = 2L,
+  margin = seq_along(x$bspline_list),
+  n_polycoef = 20L,
+  ...
+)
 }
 \arguments{
-\item{x}{\code{cpr_cp} object}
+\item{x}{\code{cpr_cp} or \code{cpr_cn} object}
 
 \item{verbose}{print status messages}
 
@@ -15,6 +25,11 @@ influence_of_iknots(x, verbose = FALSE, cl = 2L, ...)
 other methods within the pbapply package}
 
 \item{...}{pass through}
+
+\item{margin}{which margin(s) to consider the influence of iknots}
+
+\item{n_polycoef}{number of polynomial coefficients to use when assessing the
+influence of a iknot}
 }
 \value{
 a \code{cpr_influence_of_iknots} object.  A list of six elements:

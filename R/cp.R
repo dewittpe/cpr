@@ -93,7 +93,7 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   # check for some formula specification issues
   rhs_check <- grepl("bsplines", attr(stats::terms(formula), "term.labels"))
   if ( !rhs_check[1] | any(rhs_check[-1]) ) {
-    stop("bsplines() must appear first, once, and with no effect modifiers, as the first term on the right hand side of the formula.")
+    stop("bsplines() must appear first, once, and with no effect modifiers, on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment
@@ -106,7 +106,8 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
 
   regression <- match.fun(method)
   fit <- do.call(regression, cl)
-  COEF_VCOV <- coef_vcov(fit)
+  Bmat <- stats::model.frame(fit)[[2]]
+  COEF_VCOV <- coef_vcov(fit, theta_idx = seq(1, ncol(Bmat), by = 1))
 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
@@ -119,9 +120,6 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- as.list(match.call())
   cl[[1]] <- as.name("cp")
   cl <- as.call(cl)
-
-  Bmat <- stats::model.frame(fit)
-  Bmat <- Bmat[[which(grepl("bsplines", names(Bmat)))]]
 
   out <- cp.cpr_bs(Bmat, as.vector(COEF_VCOV$theta))
 
