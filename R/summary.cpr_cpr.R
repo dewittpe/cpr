@@ -58,10 +58,9 @@ summary.cpr_cpr <- function(object, estimate_elbow = TRUE, ...) {
           rse2 = rse2$rse
           )
     }
+    elbow <- matrix(apply(elbow, 2, which.min) + 1, byrow = TRUE, ncol = 3)
+    dimnames(elbow) <- list(c("quadratic", "linear"), c("loglik", "rss", "rse"))
   }
-
-  elbow <- matrix(apply(elbow, 2, which.min) + 1, byrow = TRUE, ncol = 3)
-  dimnames(elbow) <- list(c("quadratic", "linear"), c("loglik", "rss", "rse"))
 
   attr(rtn, "elbow") <- elbow
 

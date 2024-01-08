@@ -2,10 +2,6 @@
 #'
 #' @param x \code{cpr_cp} or \code{cpr_cn} object
 #' @param verbose print status messages
-#' @param cl interger passed to \code{\link[parallel]{mclapply}} and
-#' \code{\link[parallel]{mcmapply}} other methods within the pbapply package.
-#' Will be set to 1 when \code{.Platform$OS.type == "windows"} since windows
-#' does not support forking.
 #' @param ... pass through
 #'
 #' @return a \code{cpr_influence_of_iknots} object.  A list of six elements:
@@ -48,32 +44,14 @@
 #' icp1
 #'
 #' @export
-influence_of_iknots <- function(x, verbose = FALSE, cl = 2L, calculate_test_statistic = TRUE, ...) {
+influence_of_iknots <- function(x, verbose = FALSE, calculate_test_statistic = TRUE, ...) {
   UseMethod("influence_of_iknots")
 }
 
 #' @export
-influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_test_statistic = TRUE, ...) {
-
-  if (.Platform$OS.type == "windows")  { # nocov
-    warning("Windows does not support forking. cl being set to 1.") # nocov
-    cl <- 1L # nocov
-  } # nocov
-
-  cl <- as.integer(cl)
-  if (cl < 1) {
-    cl <- 1L
-  }
+influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, calculate_test_statistic = TRUE, ...) {
 
   if (length(x$iknots) > 0) {
-
-    if (verbose) {
-      LAPPLY <- function(X, FUN, cl, ...) pbapply::pblapply(X = X, FUN = FUN, ..., cl = cl)
-      MAP <- function(FUN, cl, ...) pbapply::pbMap(f = FUN, ..., cl = cl)
-    } else {
-      LAPPLY <- function(X, FUN, cl, ...) parallel::mclapply(X = X, FUN = FUN, ..., mc.cores = cl)
-      MAP <- function(FUN, cl, ...) parallel::mcmapply(FUN = FUN, ..., mc.cores = cl, SIMPLIFY = FALSE)
-    }
 
     if (verbose) {
       message("\nThere are ", length(x$iknots), " internal knots to evaluate\n")
@@ -85,13 +63,12 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
     }
 
     coarsened_thetas <-
-      LAPPLY(
+      lapply(
           X     = seq(x$order, x$order + length(x$iknots) - 1)
         , FUN   = coarsen_theta
         , xi    = x$xi
         , k     = x$order
         , theta = x$cp$theta
-        , cl    = cl
       )
 
     # just need the meta data for basis matrices
@@ -100,20 +77,19 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
     }
 
     coarsened_bmats <-
-      LAPPLY(
+      lapply(
           X = seq_along(x$iknots)
         , FUN =
                function(j) {
                  bsplines(numeric(0), iknots = x$iknots[-j], bknots = x$bknots, order = x$order)
                }
-        , cl = cl
        )
 
     if (verbose) {
       message("  generating coarsened control polygons (step 3 of 6)")
     }
 
-    coarsened_cps <- MAP(FUN = cp, x = coarsened_bmats, theta = coarsened_thetas, cl = cl)
+    coarsened_cps <- Map(f = cp, x = coarsened_bmats, theta = coarsened_thetas)
 
     bmat0 <- bsplines(numeric(0), iknots = x$iknots, bknots = x$bknots, order = x$order)
 
@@ -123,23 +99,21 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
 
     if (isTRUE(nrow(x$vcov_theta) > 0L)) {
       hat_thetas <-
-        LAPPLY(
+        lapply(
             X = seq(x$order, x$order + length(x$iknots) - 1)
           , FUN = hat_theta
           , xi = x$xi
           , k = x$order
           , theta = x$cp$theta
-          , cl = cl
       )
     } else {
       hat_thetas <-
-        LAPPLY(
+        lapply(
             X = seq(x$order, x$order + length(x$iknots) - 1)
           , FUN = hat_theta
           , xi = x$xi
           , k = x$order
           , theta = x$cp$theta
-          , cl = cl
       )
     }
 
@@ -148,11 +122,10 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
     }
 
     restored_cps <-
-      MAP(FUN = cp
+      Map(f = cp
           , x =
             lapply(1:length(hat_thetas), function(x) bmat0)
           , theta = lapply(hat_thetas, getElement, "theta")
-          , cl = cl
       )
 
     # p-values
@@ -165,13 +138,13 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
       js <- seq(x$order, x$order + length(x$iknots) - 1, by = 1L)
 
       chisq <-
-        LAPPLY(js
+        lapply(js
                , test_statistic
                , xi    = x$xi
                , k     = x$order
                , theta = x$theta
                , Sigma = x$vcov_theta
-               , cl = cl)
+               )
       chisq <- do.call(c, chisq)
 
     } else {
@@ -205,8 +178,8 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
 }
 
 #' @export
-influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, cl = 2L, calculate_test_statistic = TRUE, ...) {
-  rtn <- lapply(x, influence_of_iknots, verbose = verbose, cl = cl, calculate_test_statistic = calculate_test_statistic)#, ...)
+influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, calculate_test_statistic = TRUE, ...) {
+  rtn <- lapply(x, influence_of_iknots, verbose = verbose, calculate_test_statistic = calculate_test_statistic)#, ...)
   class(rtn) <- c("cpr_influence_of_iknots_cpr", class(rtn))
   rtn
 }
@@ -216,7 +189,7 @@ influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, cl = 2L, calculate_t
 #' influence of a iknot
 #' @rdname influence_of_iknots
 #' @export
-influence_of_iknots.cpr_cn <- function(x, verbose = FALSE, cl = 2L, margin = seq_along(x$bspline_list), n_polycoef = 20L, ...) {
+influence_of_iknots.cpr_cn <- function(x, verbose = FALSE, margin = seq_along(x$bspline_list), n_polycoef = 20L, ...) {
 
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
@@ -263,7 +236,7 @@ influence_of_iknots.cpr_cn <- function(x, verbose = FALSE, cl = 2L, margin = seq
            function(idx) {
              lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
                     function(tt, bmat) {
-                      influence_of_iknots(cp(bmat, tt), verbose = verbose, cl = cl, ...)
+                      influence_of_iknots(cp(bmat, tt), verbose = verbose, ...)
                     },
                     bmat = x$bspline_list[[idx]])
            })

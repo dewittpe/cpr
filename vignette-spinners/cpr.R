@@ -873,11 +873,7 @@ ggpubr::ggarrange(
 #' Apply CPR to the
 {{ backtick(initial_cp) }}
 #' and look at the summary.  Only the first 10 of 51 rows are provided here.
-
-tictoc::tic()
-  cpr1 <- cpr(initial_cp)
-tictoc::toc()
-
+cpr1 <- cpr(initial_cp)
 x <- summary(cpr1)
 knitr::kable(head(x, 10))
 

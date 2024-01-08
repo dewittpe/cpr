@@ -4,14 +4,7 @@
 \alias{cnr}
 \title{Control Net Reduction}
 \usage{
-cnr(
-  x,
-  margin,
-  n_polycoef = 20L,
-  progress = c("cnr", "influence", "none"),
-  cl = 2L,
-  ...
-)
+cnr(x, margin, n_polycoef = 20L, progress = c("cnr", "influence", "none"), ...)
 }
 \arguments{
 \item{x}{a \code{cnr_cn} object}
@@ -23,9 +16,6 @@ cnr(
 the influence of each internal knot.}
 
 \item{progress}{controls the level of progress messaging.}
-
-\item{cl}{passed to \code{\link[pbapply]{pblapply}} or
-\code{\link[parallel]{mclapply}} depending on the level of \code{progress}.}
 
 \item{...}{not currently used}
 }

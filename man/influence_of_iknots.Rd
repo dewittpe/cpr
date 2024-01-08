@@ -5,18 +5,11 @@
 \alias{influence_of_iknots.cpr_cn}
 \title{Determine the influence of the internal knots of a control polygon}
 \usage{
-influence_of_iknots(
-  x,
-  verbose = FALSE,
-  cl = 2L,
-  calculate_test_statistic = TRUE,
-  ...
-)
+influence_of_iknots(x, verbose = FALSE, calculate_test_statistic = TRUE, ...)
 
 \method{influence_of_iknots}{cpr_cn}(
   x,
   verbose = FALSE,
-  cl = 2L,
   margin = seq_along(x$bspline_list),
   n_polycoef = 20L,
   ...
@@ -26,11 +19,6 @@ influence_of_iknots(
 \item{x}{\code{cpr_cp} or \code{cpr_cn} object}
 
 \item{verbose}{print status messages}
-
-\item{cl}{interger passed to \code{\link[parallel]{mclapply}} and
-\code{\link[parallel]{mcmapply}} other methods within the pbapply package.
-Will be set to 1 when \code{.Platform$OS.type == "windows"} since windows
-does not support forking.}
 
 \item{...}{pass through}
 

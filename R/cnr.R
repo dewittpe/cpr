@@ -17,8 +17,6 @@
 #' @param n_polycoef the number of polynomial coefficients to use when assessing
 #' the influence of each internal knot.
 #' @param progress controls the level of progress messaging.
-#' @param cl passed to \code{\link[pbapply]{pblapply}} or
-#' \code{\link[parallel]{mclapply}} depending on the level of \code{progress}.
 #' @param ... not currently used
 #'
 #' @return A \code{cpr_cnr} object.  This is a list of \code{cpr_cn} objects.
@@ -42,12 +40,12 @@
 #' plot(cnr0)
 #'
 #' @export
-cnr <- function(x, margin, n_polycoef = 20L, progress = c('cnr', 'influence', 'none'), cl = 2L, ...) {
+cnr <- function(x, margin, n_polycoef = 20L, progress = c('cnr', 'influence', 'none'), ...) {
   UseMethod("cnr")
 }
 
 #' @export
-cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, progress = c('cnr', 'influence', 'none'), cl = 2L, ...) {
+cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, progress = c('cnr', 'influence', 'none'), ...) {
 
   progress <- match.arg(progress, several.ok = FALSE)
 
@@ -61,7 +59,7 @@ cnr.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, 
 
   for(i in rev(seq_along(out)[-1])) {
     out[[i]] <- x
-    w <- summary(influence_of_iknots(out[[i]], margin = margin, n_polycoef = n_polycoef, verbose = (progress == 'influence'), cl = cl, ...))
+    w <- summary(influence_of_iknots(out[[i]], margin = margin, n_polycoef = n_polycoef, verbose = (progress == 'influence'), ...))
     w <- w[w$influence_rank > 1, ]
     nkts <- lapply(split(w, f = w$margin), getElement, "iknot")
 

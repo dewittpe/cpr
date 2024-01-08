@@ -13,16 +13,8 @@
 #' internal knots for each iteration of the CPR algorithm.  See
 #' \code{\link{influence_of_iknots}} for more details.
 #'
-#' The \code{\link{influence_of_iknots}} is where parallelized code is
-#' evaluated.  Use of \code{\link[parallel]{mclapply}} and
-#' \code{\link[parallel]{mcmapply}} are used.  These are forking methods and as
-#' a result \code{cl > 1} will not work on Windows.
-#'
 #' @param x a \code{cpr_cp} object
 #' @param progress controls the level of progress messaging.  See Details.
-#' @param cl passed to \code{\link[pbapply]{pblapply}} or
-#' \code{\link[parallel]{mclapply}} depending on the level of \code{progress}.
-#' See Details.
 #' @param ... not currently used
 #'
 #' @return a list of \code{cpr_cp} objects
@@ -111,12 +103,12 @@
 #'
 #'
 #' @export
-cpr <- function(x, progress = c('cpr', 'influence', 'none'), cl = 1L, ...) {
+cpr <- function(x, progress = c('cpr', 'influence', 'none'), ...) {
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = 1L, ...) {
+cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), ...) {
 
   progress <- match.arg(progress, several.ok = FALSE)
 
@@ -130,7 +122,7 @@ cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = 1L, ...
 
   for(i in rev(seq_along(cp_out)[-1])) {
     cp_out[[i]] <- x
-    w <- summary(influence_of_iknots(cp_out[[i]], verbose = (progress == 'influence'), cl = cl, ...))
+    w <- summary(influence_of_iknots(cp_out[[i]], verbose = (progress == 'influence'), ...))
     nkts <- w$iknot[ w$influence_rank > 1 ]
     ioik_out[[i]] <- w
 
