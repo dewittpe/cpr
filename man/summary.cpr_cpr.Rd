@@ -4,7 +4,12 @@
 \alias{summary.cpr_cpr}
 \title{Summarize a Control Polygon Reduction Object}
 \usage{
-\method{summary}{cpr_cpr}(object, ...)
+\method{summary}{cpr_cpr}(
+  object,
+  influence_of_iknots_args = list(verbose = FALSE, cl = 2L, calculate_test_statistic =
+    TRUE),
+  ...
+)
 }
 \arguments{
 \item{object}{a \code{cpr_cpr} object}

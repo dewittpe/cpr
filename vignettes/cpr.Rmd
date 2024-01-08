@@ -561,7 +561,9 @@ initial_cp$cp$theta
 Let's now look at the influence of the internal knots on the fit
 
 ```{r}
-summary(influence_of_iknots(initial_cp))
+initial_cp |>
+  influence_of_iknots() |>
+  summary()
 ```
 
 
@@ -949,7 +951,7 @@ four internal knots.  Inspection of the rse by index plot, I would argue from
 a manual selection that index 5 is preferable overall.
 
 ```{r}
-plot(cpr1, type = "rse")
+plot(x, type = "rse")
 ```
 
 

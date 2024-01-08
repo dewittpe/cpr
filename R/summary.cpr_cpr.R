@@ -28,14 +28,13 @@
 #' plot(s, type = "rse")
 #'
 #' @export
-summary.cpr_cpr <- function(object, ...) {
+summary.cpr_cpr <- function(object, influence_of_iknots_args = list(verbose = FALSE, cl = 2L, calculate_test_statistic = TRUE), ...) {
 
   rtn <- lapply(object, summary)
   rtn <- do.call(rbind, rtn)
 
   selected_index <- summary(influence_of_iknots(object))
   selected_index <- selected_index$os_p_value[selected_index$chisq_rank == 1]
-  selected_index <- c(NA_real_, selected_index)
   rtn[["Pr(>w_(1))"]] <- selected_index
 
   # find the elbow in the rse by n_iknots plot

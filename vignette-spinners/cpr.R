@@ -519,7 +519,9 @@ initial_cp$cp$theta
 #'
 #' Let's now look at the influence of the internal knots on the fit
 #+
-summary(influence_of_iknots(initial_cp))
+initial_cp |>
+  influence_of_iknots() |>
+  summary()
 
 #'
 #' The least influential knot is $\xi_8 = 3.0,$ the extra knot inserted.  Good,
@@ -868,7 +870,7 @@ knitr::kable(head(x, 10))
 #' From this, the preferable model is suggested to be index 5, the model with
 #' four internal knots.  Inspection of the rse by index plot, I would argue from
 #' a manual selection that index 5 is preferable overall.
-plot(cpr1, type = "rse")
+plot(x, type = "rse")
 
 #'
 #' Let's compare the models in indices 3, 4, and 5.
