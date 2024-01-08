@@ -39,14 +39,18 @@ plot.cpr_cpr <- function(x, from = 1, to, ...) {
 
   if (missing(to)) {
     to <- 6
-  } else if (to > length(x)) {
-    to <- length(x)
+  } else if (to < from) {
+    to <- from
   }
 
   nm <- deparse(substitute(x))
 
-  eval(parse(text = paste("plot(",
-                          paste(paste0(nm, "[['cps']][[", seq(from = from, to = to, by = 1), "]]"),
-                                collapse = ", "),
-                          ", ...)")))
+  expr <-
+     parse(text = paste("plot(",
+                        paste(paste0(nm, "[['cps']][[", seq(from = from, to = to, by = 1), "]]"),
+                              collapse = ", "),
+                        ", ...)"))
+
+  eval(expr)
+
 }

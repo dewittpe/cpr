@@ -35,13 +35,13 @@
 #'               data = spdg, method = lme4::lmer)
 #' cpr_run <- cpr(init_cp)
 #' plot(cpr_run, color = TRUE)
-#' plot(cpr_run, type = "rse")
 #'
 #' s <- summary(cpr_run)
 #' s
+#' plot(s, type = "rse")
 #'
-#' # preferable model is in index 5
-#' preferable_cp <- cpr_run[[5]]
+#' # preferable model is in index 5 by eye
+#' preferable_cp <- cpr_run[["cps"]][[5]]
 #' }
 #'
 #' #############################################################################
@@ -66,9 +66,8 @@
 #' s <- summary(cpr_run)
 #' s
 #'
-#' plot(s, color = TRUE, type = "rse") # same plot as plot(cpr_run, color = TRUE, type = "rse")
-#'
-#' plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE)
+#' plot(s, color = TRUE, type = "rse")
+#' plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE, show_cp = FALSE)
 #'
 #' # plot the fitted spline and the true p(x)
 #' sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data))

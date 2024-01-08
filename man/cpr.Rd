@@ -45,13 +45,13 @@ init_cp <- cp(log10(pdg) ~ bsplines(day, df = 54, bknots = c(-1, 1)) + (1|id),
               data = spdg, method = lme4::lmer)
 cpr_run <- cpr(init_cp)
 plot(cpr_run, color = TRUE)
-plot(cpr_run, type = "rse")
 
 s <- summary(cpr_run)
 s
+plot(s, type = "rse")
 
-# preferable model is in index 5
-preferable_cp <- cpr_run[[5]]
+# preferable model is in index 5 by eye
+preferable_cp <- cpr_run[["cps"]][[5]]
 }
 
 #############################################################################

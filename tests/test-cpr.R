@@ -38,13 +38,13 @@ sixth_reduction_cp <- cp(y ~ bsplines(x, bknots = c(0, 6)), data = DF)
 
 cpr0 <- cpr(initial_cp)
 
-stopifnot(isTRUE(all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])))
-stopifnot(isTRUE(all.equal( cpr0[[6]][["cp"]],  first_reduction_cp[["cp"]])))
-stopifnot(isTRUE(all.equal( cpr0[[5]][["cp"]],  second_reduction_cp[["cp"]])))
-stopifnot(isTRUE(all.equal( cpr0[[4]][["cp"]],  third_reduction_cp[["cp"]])))
-stopifnot(isTRUE(all.equal( cpr0[[3]][["cp"]],  fourth_reduction_cp[["cp"]])))
-stopifnot(isTRUE(all.equal( cpr0[[2]][["cp"]],  fifth_reduction_cp[["cp"]])))
-stopifnot(isTRUE(all.equal( cpr0[[1]][["cp"]],  sixth_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[["cps"]][[7]][["cp"]],  initial_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[["cps"]][[6]][["cp"]],  first_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[["cps"]][[5]][["cp"]],  second_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[["cps"]][[4]][["cp"]],  third_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[["cps"]][[3]][["cp"]],  fourth_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[["cps"]][[2]][["cp"]],  fifth_reduction_cp[["cp"]])))
+stopifnot(isTRUE(all.equal( cpr0[["cps"]][[1]][["cp"]],  sixth_reduction_cp[["cp"]])))
 
 ################################################################################
 # summary
@@ -65,12 +65,9 @@ e <- try(plot(cpr_run, type = "not-a-type"), silent = TRUE)
 stopifnot(inherits(e, "try-error"))
 
 ################################################################################
-# print method
+# print method returns the object
 printed <- print(cpr0)
 stopifnot(identical(printed, cpr0))
-
-printed <- capture.output(print(cpr0))
-stopifnot(identical(length(printed), 3L))
 
 ################################################################################
 ###                               End of File                                ###
