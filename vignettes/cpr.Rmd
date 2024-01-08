@@ -580,16 +580,16 @@ $$
 w_j =
 \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 \left[
-  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
+  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)
   \boldsymbol{\Sigma}
-  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
+  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)^{T}
 \right]^{+}
 \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
 $$
 where $\boldsymbol{H} = W (W^{T}W)^{-1} W^{T},$ $\boldsymbol{\Sigma}$ is
 the variance-covariance matrix for the regression coefficients, and $+$
 denotes the Moore-Penrose inverse of the matrix.  By construction,
-$\left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right) \boldsymbol{\Sigma} \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}$
+$\left(\boldsymbol{I} - \boldsymbol{H}\right) \boldsymbol{\Sigma} \left(\boldsymbol{I} - \boldsymbol{H}\right)^{T}$
 is singular and thus the standard inverse does not exist and a generalized
 inverse is necessary. This yields the test statistic following a chi-square
 distribution with one degree of freedom,
