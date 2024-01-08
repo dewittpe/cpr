@@ -80,5 +80,6 @@ plot(cp0, icp0$restored_cps[[5]], color = TRUE, show_spline = TRUE)
 df <- data.frame(x = x, y = as.numeric(bmat \%*\% theta) + rnorm(5000, sd = 0.2))
 cp1 <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4, 4.5), bknots = c(0, 6)), data = df)
 icp1 <- influence_of_iknots(cp1)
+icp1
 
 }

@@ -178,11 +178,18 @@ double test_statistic(unsigned int j, const arma::vec& xi, unsigned int k, const
     }
   }
 
+  //arma::mat w = W(xi(j), xi_sans_j, k);
+  //arma::mat HAT = w * (w.t() * w).i() * w.t();
+  //arma::mat IHAT = arma::eye(theta.n_elem, theta.n_elem) - HAT;
+
+  //arma::mat CHISQ = (IHAT * theta).t() * arma::pinv(IHAT * Sigma * IHAT.t()) * (IHAT * theta);
+
   arma::mat w = W(xi(j), xi_sans_j, k);
   arma::mat HAT = w * (w.t() * w).i() * w.t();
-  arma::mat IHAT = arma::eye(theta.n_elem, theta.n_elem) - HAT;
+  arma::mat IHAT = arma::eye(k + 1, k + 1) - HAT.submat(j-k,j-k,j,j);
 
-  arma::mat CHISQ = (IHAT * theta).t() * arma::pinv(IHAT * Sigma * IHAT.t()) * (IHAT * theta);
+  arma::mat CHISQ = (IHAT * theta.subvec(j-k,j)).t() * arma::pinv(IHAT * Sigma.submat(j-k,j-k,j,j) * IHAT.t()) * (IHAT * theta.subvec(j-k,j));
+
   return ( CHISQ(0,0) );
 }
 

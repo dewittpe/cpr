@@ -45,6 +45,7 @@
 #' df <- data.frame(x = x, y = as.numeric(bmat %*% theta) + rnorm(5000, sd = 0.2))
 #' cp1 <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4, 4.5), bknots = c(0, 6)), data = df)
 #' icp1 <- influence_of_iknots(cp1)
+#' icp1
 #'
 #' @export
 influence_of_iknots <- function(x, verbose = FALSE, cl = 2L, calculate_test_statistic = TRUE, ...) {
@@ -142,10 +143,12 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
     if (verbose) {
       message("  building restored control polygons (step 5 of 6)")
     }
+
     restored_cps <-
       MAP(FUN = cp
-          , x = lapply(1:length(hat_theta), function(x) bmat0)
-          , theta = lapply(hat_thetas, getElement, "theta")[[1]]
+          , x =
+            lapply(1:length(hat_thetas), function(x) bmat0)
+          , theta = lapply(hat_thetas, getElement, "theta")
       )
 
     # p-values
