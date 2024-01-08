@@ -4,14 +4,10 @@
 \alias{plot.cpr_cpr}
 \title{Control Polygon Reduction Plots}
 \usage{
-\method{plot}{cpr_cpr}(x, type = c("cps", "loglik", "rss", "rse"), from = 1, to, ...)
+\method{plot}{cpr_cpr}(x, from = 1, to, ...)
 }
 \arguments{
 \item{x}{a \code{cpr_cpr} object}
-
-\item{type}{type of diagnostic plot.  \code{"cps"} for control polygons,
-\code{"loglik"} for the log likelihood by degrees of freedom,
-\code{"rse"} for residual standard error by index.}
 
 \item{from}{the first index of \code{x} to plot}
 
@@ -41,8 +37,7 @@ initial_cp0 <-
 cpr0 <- cpr(initial_cp0)
 
 plot(cpr0)
-plot(cpr0, type = "cps", show_spline = TRUE, show_cp = FALSE, color = TRUE, from = 2, to = 4)
-plot(cpr0, type = "rse")
+plot(cpr0, show_spline = TRUE, show_cp = FALSE, color = TRUE, from = 2, to = 4)
 
 }
 \seealso{

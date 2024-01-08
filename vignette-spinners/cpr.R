@@ -759,8 +759,8 @@ cpr0
 
 #'
 #' There are
-{{ length(cpr0) }}
-#' elements of the
+{{ length(cpr0$cps) }}
+#' control polygons within the
 {{ backtick(cpr_cpr) }}
 #' object,
 {{ backtick(length(initial_cp$iknots) + 1) %s% "."}}
@@ -773,17 +773,17 @@ cpr0
 #' are the same as the manual results found about.
 #' There are some differences in the metadata of the objects, but the important
 #' parts, like the control polygons, are the same.
-all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])
+all.equal( cpr0[["cps"]][[7]][["cp"]],  initial_cp[["cp"]])
 
 # some attributes are different with the last cp due to how the automation
 # creates the call vs how the call was created manually.
-call_idx <- which(names(cpr0[[6]]) == "call")
-all.equal( cpr0[[6]][-call_idx], first_reduction_cp [-call_idx])
-all.equal( cpr0[[5]][-call_idx], second_reduction_cp[-call_idx])
-all.equal( cpr0[[4]][-call_idx], third_reduction_cp [-call_idx])
-all.equal( cpr0[[3]][-call_idx], fourth_reduction_cp[-call_idx])
-all.equal( cpr0[[2]][-call_idx], fifth_reduction_cp [-call_idx])
-all.equal( cpr0[[1]][-call_idx], sixth_reduction_cp [-call_idx], check.attributes = FALSE)
+call_idx <- which(names(cpr0[["cps"]][[6]]) == "call")
+all.equal( cpr0[["cps"]][[6]][-call_idx], first_reduction_cp [-call_idx])
+all.equal( cpr0[["cps"]][[5]][-call_idx], second_reduction_cp[-call_idx])
+all.equal( cpr0[["cps"]][[4]][-call_idx], third_reduction_cp [-call_idx])
+all.equal( cpr0[["cps"]][[3]][-call_idx], fourth_reduction_cp[-call_idx])
+all.equal( cpr0[["cps"]][[2]][-call_idx], fifth_reduction_cp [-call_idx])
+all.equal( cpr0[["cps"]][[1]][-call_idx], sixth_reduction_cp [-call_idx], check.attributes = FALSE)
 
 #'
 #' In the manual process we identified
@@ -792,7 +792,8 @@ all.equal( cpr0[[1]][-call_idx], sixth_reduction_cp [-call_idx], check.attribute
 {{ backtick(cpr0) }}
 #' object we can quickly see a similar result as we did for the manual process.
 #+ result = "asis"
-summary(cpr0) |> knitr::kable(row.names = TRUE)
+s0 <- summary(cpr0)
+knitr::kable(s0, row.names = TRUE)
 
 #'
 #' The additional columns in this summary,
@@ -805,13 +806,23 @@ summary(cpr0) |> knitr::kable(row.names = TRUE)
 #' residual standard error.
 #+ fig.height = 7, fig.width = 7
 ggpubr::ggarrange(
-    plot(cpr0, type = "cps", color = TRUE)
-  , plot(cpr0, type = "cps", show_cp = FALSE, show_spline = TRUE, color = TRUE)
-  , plot(cpr0, type = "loglik")
-  , plot(cpr0, type = "rse")
-  , ncol =2
-  , nrow = 2
+  ggpubr::ggarrange(
+      plot(cpr0, color = TRUE)
+    , plot(cpr0, show_cp = FALSE, show_spline = TRUE, color = TRUE)
+    , ncol = 1
+    , common.legend = TRUE
+  )
+  ,
+  ggpubr::ggarrange(
+      plot(s0, type = "rse")
+    , plot(s0, type = "rss")
+    , plot(s0, type = "loglik")
+    , plot(s0, type = "wiggle")
+    , plot(s0, type = "fdsc")
+    , plot(s0, type = "Pr(>w_(1))")
   , common.legend = TRUE
+  )
+  , widths = c(2, 3)
 )
 
 #'
@@ -862,7 +873,11 @@ ggpubr::ggarrange(
 #' Apply CPR to the
 {{ backtick(initial_cp) }}
 #' and look at the summary.  Only the first 10 of 51 rows are provided here.
-cpr1 <- cpr(initial_cp)
+
+tictoc::tic()
+  cpr1 <- cpr(initial_cp)
+tictoc::toc()
+
 x <- summary(cpr1)
 knitr::kable(head(x, 10))
 
@@ -876,9 +891,9 @@ plot(x, type = "rse")
 #' Let's compare the models in indices 3, 4, and 5.
 #+ fig.width = 7, fig.height = 4
 ggpubr::ggarrange(
-  plot(cpr1[[3]], cpr1[[4]], cpr1[[5]], show_cp = TRUE, show_spline = FALSE, color = TRUE)
+  plot(cpr1[["cps"]][[3]], cpr1[["cps"]][[4]], cpr1[["cps"]][[5]], show_cp = TRUE, show_spline = FALSE, color = TRUE)
   ,
-  plot(cpr1[[3]], cpr1[[4]], cpr1[[5]], show_cp = FALSE, show_spline = TRUE, color = TRUE)
+  plot(cpr1[["cps"]][[3]], cpr1[["cps"]][[4]], cpr1[["cps"]][[5]], show_cp = FALSE, show_spline = TRUE, color = TRUE)
   ,
   common.legend = TRUE
 )
@@ -895,13 +910,13 @@ ggpubr::ggarrange(
 #'
 #+ fig.width = 7, fig.height = 4
 ggpubr::ggarrange(
-    plot(cpr1[[3]], show_cp = FALSE, show_spline = TRUE) +
+    plot(cpr1[["cps"]][[3]], show_cp = FALSE, show_spline = TRUE) +
     ggplot2::ggtitle("Model Index 3") +
     original_data_ggplot_layers
-  , plot(cpr1[[4]], show_cp = FALSE, show_spline = TRUE) +
+  , plot(cpr1[["cps"]][[4]], show_cp = FALSE, show_spline = TRUE) +
     ggplot2::ggtitle("Model Index 4") +
     original_data_ggplot_layers
-  , plot(cpr1[[5]], show_cp = FALSE, show_spline = TRUE) +
+  , plot(cpr1[["cps"]][[5]], show_cp = FALSE, show_spline = TRUE) +
     ggplot2::ggtitle("Model Index 5") +
     original_data_ggplot_layers
   , nrow = 1

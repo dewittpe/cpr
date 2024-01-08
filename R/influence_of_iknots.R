@@ -68,11 +68,11 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
   if (length(x$iknots) > 0) {
 
     if (verbose) {
-      LAPPLY <- function(X, FUN, cl = 2L, ...) pbapply::pblapply(X = X, FUN = FUN, ..., cl = cl)
-      MAP <- function(FUN, cl = 2L, ...) pbapply::pbMap(f = FUN, ..., cl = cl)
+      LAPPLY <- function(X, FUN, cl, ...) pbapply::pblapply(X = X, FUN = FUN, ..., cl = cl)
+      MAP <- function(FUN, cl, ...) pbapply::pbMap(f = FUN, ..., cl = cl)
     } else {
-      LAPPLY <- function(X, FUN, cl = 2L, ...) parallel::mclapply(X = X, FUN = FUN, ..., mc.cores = cl)
-      MAP <- function(FUN, cl = 2L, ...) parallel::mcmapply(FUN = FUN, ..., mc.cores = cl, SIMPLIFY = FALSE)
+      LAPPLY <- function(X, FUN, cl, ...) parallel::mclapply(X = X, FUN = FUN, ..., mc.cores = cl)
+      MAP <- function(FUN, cl, ...) parallel::mcmapply(FUN = FUN, ..., mc.cores = cl, SIMPLIFY = FALSE)
     }
 
     if (verbose) {
@@ -91,7 +91,7 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
         , xi    = x$xi
         , k     = x$order
         , theta = x$cp$theta
-        , cl    = 2
+        , cl    = cl
       )
 
     # just need the meta data for basis matrices
@@ -106,13 +106,14 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
                function(j) {
                  bsplines(numeric(0), iknots = x$iknots[-j], bknots = x$bknots, order = x$order)
                }
+        , cl = cl
        )
 
     if (verbose) {
       message("  generating coarsened control polygons (step 3 of 6)")
     }
 
-    coarsened_cps <- MAP(FUN = cp, x = coarsened_bmats, theta = coarsened_thetas)
+    coarsened_cps <- MAP(FUN = cp, x = coarsened_bmats, theta = coarsened_thetas, cl = cl)
 
     bmat0 <- bsplines(numeric(0), iknots = x$iknots, bknots = x$bknots, order = x$order)
 
@@ -128,6 +129,7 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
           , xi = x$xi
           , k = x$order
           , theta = x$cp$theta
+          , cl = cl
       )
     } else {
       hat_thetas <-
@@ -137,6 +139,7 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
           , xi = x$xi
           , k = x$order
           , theta = x$cp$theta
+          , cl = cl
       )
     }
 
@@ -149,6 +152,7 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, calculate_te
           , x =
             lapply(1:length(hat_thetas), function(x) bmat0)
           , theta = lapply(hat_thetas, getElement, "theta")
+          , cl = cl
       )
 
     # p-values

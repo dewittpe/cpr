@@ -111,27 +111,28 @@
 #'
 #'
 #' @export
-cpr <- function(x, progress = c('cpr', 'influence', 'none'), cl = 2L, ...) {
+cpr <- function(x, progress = c('cpr', 'influence', 'none'), cl = 1L, ...) {
   UseMethod("cpr")
 }
 
 #' @export
-cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = 2L, ...) {
+cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = 1L, ...) {
 
   progress <- match.arg(progress, several.ok = FALSE)
 
-  out <- vector("list", length = length(x$iknots) + 1L)
+  ioik_out <- cp_out <- vector("list", length = length(x$iknots) + 1L)
 
   if (progress == 'cpr') {
-    pb <- utils::txtProgressBar(max = length(out), style = 3) # nocov
+    pb <- utils::txtProgressBar(max = length(cp_out), style = 3) # nocov
     prg <- 0 # noocv
     utils::setTxtProgressBar(pb, prg) # noocv
   }
 
-  for(i in rev(seq_along(out)[-1])) {
-    out[[i]] <- x
-    w <- summary(influence_of_iknots(out[[i]], verbose = (progress == 'influence'), cl = cl, ...))
+  for(i in rev(seq_along(cp_out)[-1])) {
+    cp_out[[i]] <- x
+    w <- summary(influence_of_iknots(cp_out[[i]], verbose = (progress == 'influence'), cl = cl, ...))
     nkts <- w$iknot[ w$influence_rank > 1 ]
+    ioik_out[[i]] <- w
 
     x <-
       eval(
@@ -150,12 +151,15 @@ cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = 2L, ...
 
   }
 
-  out[[1]] <- x
+  cp_out[[1]]   <- x
+  ioik_out[[1]] <- summary(influence_of_iknots(x))
 
   if (progress == 'cpr') {
     utils::setTxtProgressBar(pb, prg <- prg + 1) # nocov
     close(pb) # nocov
   }
+
+  out <- list(cps = cp_out, ioik = ioik_out)
 
   class(out) <- c("cpr_cpr", class(out))
   out
@@ -164,7 +168,7 @@ cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), cl = 2L, ...
 #' @method print cpr_cpr
 #' @export
 print.cpr_cpr <- function(x, ...) {
-  cat("A list of control polygons\n")
-  cat(utils::str(x, max.level = 0))
+  cat("A list of control polygons and the summary of the influence_of_iknots thereof\n")
+  cat(utils::str(x, max.level = 1))
   invisible(x)
 }

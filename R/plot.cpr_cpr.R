@@ -3,9 +3,6 @@
 #' A wrapper around several ggplot2 calls to help evaluate results of a CPR run.
 #'
 #' @param x a \code{cpr_cpr} object
-#' @param type type of diagnostic plot.  \code{"cps"} for control polygons,
-#' \code{"loglik"} for the log likelihood by degrees of freedom,
-#' \code{"rse"} for residual standard error by index.
 #' @param from the first index of \code{x} to plot
 #' @param to the last index of \code{x} to plot
 #' @param ... arguments passed to \code{plot.cpr_cp}
@@ -30,61 +27,26 @@
 #' cpr0 <- cpr(initial_cp0)
 #'
 #' plot(cpr0)
-#' plot(cpr0, type = "cps", show_spline = TRUE, show_cp = FALSE, color = TRUE, from = 2, to = 4)
-#' plot(cpr0, type = "rse")
+#' plot(cpr0, show_spline = TRUE, show_cp = FALSE, color = TRUE, from = 2, to = 4)
 #'
 #' @method plot cpr_cpr
 #' @export
-plot.cpr_cpr <- function(x, type = c("cps", "loglik", "rss", "rse"), from = 1, to, ...) {
+plot.cpr_cpr <- function(x, from = 1, to, ...) {
 
   if (from < 1) {
     from <- 1
   }
-
-  type <- match.arg(type, several.ok = FALSE)
-
-  if (type == "cps") {
-
-    if (missing(to)) {
-      to <- 6
-    } else if (to > length(x)) {
-      to <- length(x)
-    }
-
-    nm <- deparse(substitute(x))
-
-    eval(parse(text = paste("plot(",
-                            paste(paste0(nm, "[[", seq(from = from, to = to, by = 1), "]]"),
-                                  collapse = ", "),
-                            ", ...)")))
-
-  } else {
-    s <- summary(x)
-    plot(s, type = type, from = from, to = to, ...)
-  }
-}
-
-#' @export
-plot.cpr_summary_cpr_cpr <- function(x, type = c("loglik", "rss", "rse"), from = 1, to, ...) {
-  if (from < 1) {
-    from <- 1
-  }
-
-  type <- match.arg(type, several.ok = FALSE)
 
   if (missing(to)) {
-    to <- nrow(x)
-  } else if (to > nrow(x)) {
-    to <- nrow(x)
+    to <- 6
+  } else if (to > length(x)) {
+    to <- length(x)
   }
 
-  x$index <- seq_along(x[[type]])
+  nm <- deparse(substitute(x))
 
-  ggplot2::ggplot(subset(x, (x$index >= from) & (x$index <= to))) +
-  ggplot2::theme_bw() +
-  eval(substitute(ggplot2::aes(x = X, y = Y), list(X = as.name("index"), Y = as.name(type)))) +
-  ggplot2::geom_point() +
-  ggplot2::geom_line() +
-  ggplot2::xlab("Index")
-
+  eval(parse(text = paste("plot(",
+                          paste(paste0(nm, "[['cps']][[", seq(from = from, to = to, by = 1), "]]"),
+                                collapse = ", "),
+                          ", ...)")))
 }
