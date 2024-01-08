@@ -127,8 +127,6 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, ...) {
           , xi = x$xi
           , k = x$order
           , theta = x$cp$theta
-          , calculate_F = TRUE
-          , Sigma = x$vcov_theta
       )
     } else {
       hat_thetas <-
@@ -138,8 +136,6 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, cl = 2L, ...) {
           , xi = x$xi
           , k = x$order
           , theta = x$cp$theta
-          , calculate_F = FALSE
-          , Sigma = matrix(numeric(0)) # place holder
       )
     }
 
@@ -311,13 +307,29 @@ plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRU
 }
 
 #' @export
-summary.cpr_influence_of_iknots <- function(object, ...) {
-  if (length(object$original_cp$iknots) == 0L) {
-    i <- numeric(0)
-    chisq <- numeric(0)
-  } else {
+summary.cpr_influence_of_iknots <- function(object, pvalues = TRUE, ...) {
+
+  i <- numeric(length(object$original_cp$iknots))
+  chisq <- numeric(length(object$original_cp$iknots))
+
+  if (pvalues & length(i) > 0L & !is.null(object$original_cp$vcov_theta)) {
+
     i <- object$influence
-    chisq <- object$chisq
+
+    # js are indexed for cpp not R
+    js <- seq(object$original_cp$order
+              , object$original_cp$order + length(object$original_cp$iknots) - 1
+              , by = 1L)
+
+    chisq <-
+      sapply(js
+        , test_statistic
+        , xi    = object$original_cp$xi
+        , k     = object$original_cp$order
+        , theta = object$original_cp$theta
+        , Sigma = object$original_cp$vcov_theta
+      )
+
   }
 
   rtn <-

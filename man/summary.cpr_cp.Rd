@@ -4,7 +4,7 @@
 \alias{summary.cpr_cp}
 \title{Summarize a Control Polygon Object}
 \usage{
-\method{summary}{cpr_cp}(object, wiggle = TRUE, integrate.args = list(), ...)
+\method{summary}{cpr_cp}(object, chisq = TRUE, wiggle = TRUE, integrate.args = list(), ...)
 }
 \arguments{
 \item{object}{a \code{cpr_cp} object}
