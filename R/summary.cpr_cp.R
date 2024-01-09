@@ -27,7 +27,7 @@
 #' summary(initial_cp)
 #'
 #' @export
-summary.cpr_cp <- function(object, chisq = TRUE, wiggle = TRUE, integrate.args = list(), ...){
+summary.cpr_cp <- function(object, wiggle = TRUE, integrate.args = list(), ...){
   out <-
     data.frame(dfs        = length(object$cp$theta),
                n_iknots   = length(object$iknots),

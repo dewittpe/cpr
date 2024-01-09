@@ -150,16 +150,16 @@ cpr.cpr_cp <- function(x, progress = c('cpr', 'influence', 'none'), ...) {
     close(pb) # nocov
   }
 
-  out <- list(cps = cp_out, ioik = ioik_out)
+  attr(cp_out, "ioik") <- ioik_out
 
-  class(out) <- c("cpr_cpr", class(out))
-  out
+  class(cp_out) <- c("cpr_cpr", class(cp_out))
+  cp_out
 }
 
 #' @method print cpr_cpr
 #' @export
 print.cpr_cpr <- function(x, ...) {
-  cat("A list of control polygons and the summary of the influence_of_iknots thereof\n")
-  cat(utils::str(x, max.level = 1))
+  cat("A list of control polygons\n")
+  cat(utils::str(x, max.level = 0))
   invisible(x)
 }

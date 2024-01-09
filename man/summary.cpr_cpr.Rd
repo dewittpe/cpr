@@ -4,7 +4,7 @@
 \alias{summary.cpr_cpr}
 \title{Summarize a Control Polygon Reduction Object}
 \usage{
-\method{summary}{cpr_cpr}(object, estimate_elbow = TRUE, ...)
+\method{summary}{cpr_cpr}(object, ...)
 }
 \arguments{
 \item{object}{a \code{cpr_cpr} object}

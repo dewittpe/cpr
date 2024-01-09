@@ -44,12 +44,12 @@
 #' icp1
 #'
 #' @export
-influence_of_iknots <- function(x, verbose = FALSE, calculate_test_statistic = TRUE, ...) {
+influence_of_iknots <- function(x, verbose = FALSE, ...) {
   UseMethod("influence_of_iknots")
 }
 
 #' @export
-influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, calculate_test_statistic = TRUE, ...) {
+influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, ...) {
 
   if (length(x$iknots) > 0) {
 
@@ -132,7 +132,7 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, calculate_test_statis
     if (verbose) {
       message("  building test statistics (step 6 of 6)")
     }
-    if (calculate_test_statistic & !is.null(x$vcov_theta)) {
+    if (!is.null(x$vcov_theta)) {
 
       # js are indexed for cpp not R
       js <- seq(x$order, x$order + length(x$iknots) - 1, by = 1L)
@@ -178,8 +178,8 @@ influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, calculate_test_statis
 }
 
 #' @export
-influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, calculate_test_statistic = TRUE, ...) {
-  rtn <- lapply(x, influence_of_iknots, verbose = verbose, calculate_test_statistic = calculate_test_statistic)#, ...)
+influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, ...) {
+  rtn <- lapply(x, influence_of_iknots, verbose = verbose, ...)
   class(rtn) <- c("cpr_influence_of_iknots_cpr", class(rtn))
   rtn
 }

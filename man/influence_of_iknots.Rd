@@ -5,7 +5,7 @@
 \alias{influence_of_iknots.cpr_cn}
 \title{Determine the influence of the internal knots of a control polygon}
 \usage{
-influence_of_iknots(x, verbose = FALSE, calculate_test_statistic = TRUE, ...)
+influence_of_iknots(x, verbose = FALSE, ...)
 
 \method{influence_of_iknots}{cpr_cn}(
   x,

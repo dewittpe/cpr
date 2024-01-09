@@ -887,9 +887,9 @@ plot(x, type = "rse")
 #' Let's compare the models in indices 3, 4, and 5.
 #+ fig.width = 7, fig.height = 4
 ggpubr::ggarrange(
-  plot(cpr1[["cps"]][[3]], cpr1[["cps"]][[4]], cpr1[["cps"]][[5]], show_cp = TRUE, show_spline = FALSE, color = TRUE)
+  plot(cpr1[[3]], cpr1[[4]], cpr1[[5]], show_cp = TRUE, show_spline = FALSE, color = TRUE)
   ,
-  plot(cpr1[["cps"]][[3]], cpr1[["cps"]][[4]], cpr1[["cps"]][[5]], show_cp = FALSE, show_spline = TRUE, color = TRUE)
+  plot(cpr1[[3]], cpr1[[4]], cpr1[[5]], show_cp = FALSE, show_spline = TRUE, color = TRUE)
   ,
   common.legend = TRUE
 )
@@ -906,13 +906,13 @@ ggpubr::ggarrange(
 #'
 #+ fig.width = 7, fig.height = 4
 ggpubr::ggarrange(
-    plot(cpr1[["cps"]][[3]], show_cp = FALSE, show_spline = TRUE) +
+    plot(cpr1[[3]], show_cp = FALSE, show_spline = TRUE) +
     ggplot2::ggtitle("Model Index 3") +
     original_data_ggplot_layers
-  , plot(cpr1[["cps"]][[4]], show_cp = FALSE, show_spline = TRUE) +
+  , plot(cpr1[[4]], show_cp = FALSE, show_spline = TRUE) +
     ggplot2::ggtitle("Model Index 4") +
     original_data_ggplot_layers
-  , plot(cpr1[["cps"]][[5]], show_cp = FALSE, show_spline = TRUE) +
+  , plot(cpr1[[5]], show_cp = FALSE, show_spline = TRUE) +
     ggplot2::ggtitle("Model Index 5") +
     original_data_ggplot_layers
   , nrow = 1

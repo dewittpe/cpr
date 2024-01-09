@@ -1,6 +1,6 @@
 Package: cpr
 Title: Control Polygon Reduction
-Version: 0.3.0.9004
+Version: 0.3.0.9005
 Authors@R:
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6391-0795")),
       person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),
@@ -18,7 +18,6 @@ LazyData: true
 Imports:
     ggplot2 (>= 3.0.0),
     lme4 (>= 1.1.35.1),
-    pbapply,
     plot3D,
     Rcpp (>= 1.0.11),
     rgl,

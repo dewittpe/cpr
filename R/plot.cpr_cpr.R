@@ -47,7 +47,7 @@ plot.cpr_cpr <- function(x, from = 1, to, ...) {
 
   expr <-
      parse(text = paste("plot(",
-                        paste(paste0(nm, "[['cps']][[", seq(from = from, to = to, by = 1), "]]"),
+                        paste(paste0(nm, "[[", seq(from = from, to = to, by = 1), "]]"),
                               collapse = ", "),
                         ", ...)"))
 
