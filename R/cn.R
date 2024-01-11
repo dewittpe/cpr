@@ -25,18 +25,18 @@
 #'  \item{rse}{the residual standard error for the regression models}
 #'  }
 #'
-#' @seealso \code{\link{summary.cpr_cn}}, \code{\link{cnr}}
+#' @seealso \code{\link{summary.cpr_cn}}, \code{\link{cnr}},
+#' \code{\link{plot.cpr_cn}} for plotting control nets
 #'
 #' @examples
 #'
-#' acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
-#'                                 , df = list(30, 4)
-#'                                 , bknots = list(c(-1, 1), c(44, 53)))
+#' acn <- cn(log10(pdg) ~
+#'               btensor(   x     = list(day, age)
+#'                       , df     = list(30, 4)
+#'                       , bknots = list(c(-1, 1), c(44, 53))
+#'               )
 #'            , data = spdg)
-#'
-#' # plot3D
-#' plot(acn, rgl = FALSE)
-#'
+#' str(acn, max.level = 1)
 #'
 #' @export
 cn <- function(x, ...) {
