@@ -31,13 +31,18 @@ cp(x, ...)
 
 \item{data}{a required \code{data.frame}}
 
-\item{method}{the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
+\item{method}{the regression method such as \code{\link[stats]{lm}},
+\code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.}
 
-\item{method.args}{a list of additional arguments to pass to the regression method.}
+\item{method.args}{a list of additional arguments to pass to the regression
+method.}
 
-\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the regression model fit is retained and returned in as the \code{fit} element. If \code{FALSE} the \code{fit} element with be \code{NA}.}
+\item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the
+regression model fit is retained and returned in as the \code{fit} element.
+If \code{FALSE} the \code{fit} element with be \code{NA}.}
 
-\item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check that the design matrix is full rank.}
+\item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check
+that the design matrix is full rank.}
 }
 \value{
 a \code{cpr_cp} object, this is a list with the element \code{cp}, a

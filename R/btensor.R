@@ -111,6 +111,10 @@ btensor <- function(x, df = NULL, iknots = NULL, bknots, order) {
 #' @method print cpr_bt
 #' @export
 print.cpr_bt <- function(x, ...) {
-  cat("Tensor Product Matrix dims: [", paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x "), "]\n\n", sep = "")
+  cat("Tensor Product Matrix dims: ["
+      , paste(format(dim(x), big.mark = ",", trim = TRUE), collapse = " x ")
+      , "]\n\n"
+      , sep = ""
+  )
   invisible(x)
 }

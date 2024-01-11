@@ -1,7 +1,7 @@
 #' Vertical Difference between two Control Polygons
 #'
-#' @return the vertical distance between the control vertices of cp1 to the control
-#' polygon cp2.
+#' @return the vertical distance between the control vertices of cp1 to the
+#' control polygon cp2.
 #'
 #' @param cp1 a cpr_cp object
 #' @param cp2 a cpr_cp object

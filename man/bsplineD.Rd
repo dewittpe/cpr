@@ -72,11 +72,25 @@ plot(x, f(x), type = "l", main = bquote(f(x)), ylab = "", xlab = "")
 points(x, bmat \%*\% theta, col = 'blue')
 grid()
 
-plot(x, fprime(x), type = "l", main = bquote(frac(d,dx)~f(x)), ylab = "", xlab = "")
+plot(
+    x
+  , fprime(x)
+  , type = "l"
+  , main = bquote(frac(d,dx)~f(x))
+  , ylab = ""
+  , xlab = ""
+)
 points(x, bmatD1 \%*\% theta, col = 'blue')
 grid()
 
-plot(x, fdoubleprime(x), type = "l", main = bquote(frac(d^2,dx^2)~f(x)), ylab = "", xlab = "")
+plot(
+    x
+  , fdoubleprime(x)
+  , type = "l"
+  , main = bquote(frac(d^2,dx^2)~f(x))
+  , ylab = ""
+  , xlab = ""
+)
 points(x, bmatD2 \%*\% theta, col = 'blue')
 grid()
 
@@ -90,8 +104,8 @@ xvec <- seq(0.1, 9.9, length = 1000)
 iknots <- sort(runif(rpois(1, 3), 1, 9))
 bknots <- c(0, 10)
 
-# basis matrix and the first and second derivatives thereof, for cubic (order =
-# 4) b-splines
+# basis matrix and the first and second derivatives thereof, for cubic
+# (order = 4) b-splines
 bmat  <- bsplines(xvec, iknots, bknots = bknots)
 bmat1 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 1)
 bmat2 <- bsplineD(xvec, iknots, bknots = bknots, derivative = 2)
@@ -101,9 +115,11 @@ theta <- runif(length(iknots) + 4L, -5, 5)
 
 # plot data
 plot_data <-
-  data.frame(Spline            = as.numeric(bmat \%*\% theta),
-             First_Derivative  = as.numeric(bmat1 \%*\% theta),
-             Second_Derivative = as.numeric(bmat2 \%*\% theta))
+  data.frame(
+      Spline            = as.numeric(bmat \%*\% theta)
+    , First_Derivative  = as.numeric(bmat1 \%*\% theta)
+    , Second_Derivative = as.numeric(bmat2 \%*\% theta)
+  )
 plot_data <- stack(plot_data)
 plot_data <- cbind(plot_data, data.frame(x = xvec))
 

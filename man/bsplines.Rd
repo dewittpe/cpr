@@ -23,7 +23,8 @@ An implementation of Carl de Boor's recursive algorithm for building
 B-splines.
 }
 \details{
-There are several differences between this function and \code{\link[splines]{bs}}.
+There are several differences between this function and
+\code{\link[splines]{bs}}.
 
 The most important difference is how the two methods treat the right-hand end
 of the support.  \code{\link[splines]{bs}} uses a pivot method to allow for
@@ -56,8 +57,12 @@ plot(bmat, color = FALSE) + ggplot2::aes(linetype = spline) # add a linetype
 # The x-axis, by default, show the knot locations.  Other options are numeric
 # values, and/or to use a second x-axis
 
-plot(bmat, show_xi = TRUE,  show_x = FALSE) # default, knot, symbols, on lower axis
-plot(bmat, show_xi = FALSE, show_x = TRUE)  # Numeric value for the knot locations
+plot(bmat, show_xi = TRUE,  show_x = FALSE) # default, knot, symbols, on lower
+                                            # axis
+
+plot(bmat, show_xi = FALSE, show_x = TRUE)  # Numeric value for the knot
+                                            # locations
+
 plot(bmat, show_xi = TRUE,  show_x = TRUE)  # symbols on bottom, numbers on top
 
 # quadratic splines
@@ -69,7 +74,8 @@ plot(bmat) + ggplot2::ggtitle("Quadratic B-splines")
 \references{
 C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
 
-H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
+H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques,"
+Springer, 2002.
 }
 \seealso{
 \code{\link{plot.cpr_bs}} for plotting the basis,

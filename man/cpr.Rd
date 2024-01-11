@@ -77,7 +77,14 @@ s <- summary(cpr_run)
 s
 
 plot(s, color = TRUE, type = "rse")
-plot(cpr_run, color = TRUE, from = 5, to = 9, show_spline = TRUE, show_cp = FALSE)
+plot(
+    cpr_run
+  , color = TRUE
+  , from = 5
+  , to = 9
+  , show_spline = TRUE
+  , show_cp = FALSE
+  )
 
 # plot the fitted spline and the true p(x)
 sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data))
@@ -86,7 +93,9 @@ ggplot2::ggplot(sim_data) +
 ggplot2::theme_bw() +
 ggplot2::aes(x = x) +
 ggplot2::geom_point(mapping = ggplot2::aes(y = y), alpha = 0.1) +
-ggplot2::geom_line(mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")) +
+ggplot2::geom_line(
+    mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")
+  ) +
 ggplot2::stat_function(fun = p, mapping = ggplot2::aes(color = 'p(x)'))
 
 # compare to gam and a binned average
@@ -101,7 +110,9 @@ ggplot2::ggplot(sim_data) +
 ggplot2::theme_bw() +
 ggplot2::aes(x = x) +
 ggplot2::stat_function(fun = p, mapping = ggplot2::aes(color = 'p(x)')) +
-ggplot2::geom_line(mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")) +
+ggplot2::geom_line(
+    mapping = ggplot2::aes(y = pred_select_p, color = "pred_select_p")
+  ) +
 ggplot2::stat_smooth(mapping = ggplot2::aes(y = y, color = "gam"),
                      method = "gam",
                      formula = y ~ s(x, bs = "cs"),

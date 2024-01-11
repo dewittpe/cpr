@@ -83,10 +83,15 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @rdname cp
 #' @param formula a formula that is appropriate for regression method being used.
 #' @param data a required \code{data.frame}
-#' @param method the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
-#' @param method.args a list of additional arguments to pass to the regression method.
-#' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the regression model fit is retained and returned in as the \code{fit} element. If \code{FALSE} the \code{fit} element with be \code{NA}.
-#' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check that the design matrix is full rank.
+#' @param method the regression method such as \code{\link[stats]{lm}},
+#' \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
+#' @param method.args a list of additional arguments to pass to the regression
+#' method.
+#' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the
+#' regression model fit is retained and returned in as the \code{fit} element.
+#' If \code{FALSE} the \code{fit} element with be \code{NA}.
+#' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check
+#' that the design matrix is full rank.
 cp.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = TRUE, check_rank = TRUE, ...) {
 
   # check for some formula specification issues
