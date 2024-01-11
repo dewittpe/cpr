@@ -141,20 +141,3 @@ print.cpr_cn <- function(x, ...) {
   print(x$cn, ...)
   invisible(x)
 }
-
-
-extract_cpr_bsplines <- function(form) {
-  B <- NULL
-  rr <- function(x) {
-    if (is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
-      B <<- x
-    } else if (is.recursive(x)) {
-      as.call(lapply(as.list(x), rr))
-    } else {
-      x
-    }
-  }
-
-  z <- lapply(as.list(form), rr)
-  B
-}
