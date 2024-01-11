@@ -67,7 +67,6 @@ cp.cpr_bs <- function(x, theta, ...) {
               keep_fit = NULL,
               fit    = NULL,
               theta = NULL,
-              theta_vcov = NULL,
               coefficients = NULL,
               vcov = NULL,
               vcov_theta = NULL,
