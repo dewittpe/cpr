@@ -62,7 +62,10 @@
 #' # plot3D
 #' plot(acn, rgl = FALSE)
 #'
+#' # rgl
+#' \dontrun{
 #' plot(acn, rgl = TRUE)
+#' }
 #'
 #' @method plot cpr_cn
 #' @export
