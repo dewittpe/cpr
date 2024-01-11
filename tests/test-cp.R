@@ -18,7 +18,7 @@ with(e, {
   stopifnot(identical(
     names(acp)
     ,
-    c("cp", "xi", "iknots", "bknots", "order", "call", "keep_fit", "fit", "theta", "theta_vcov", "coefficients", "vcov", "vcov_theta", "loglik", "rss", "rse")
+    c("cp", "xi", "iknots", "bknots", "order", "call", "keep_fit", "fit", "theta", "coefficients", "vcov", "vcov_theta", "loglik", "rss", "rse")
   ))
 
 })
