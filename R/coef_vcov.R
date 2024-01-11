@@ -88,10 +88,17 @@ coef_vcov_formater <- function(COEF, VCOV, theta_idx) {
   # names are truncated  that is why the index is now explicit
   #theta_idx <- grepl("bsplines|btensor", names(COEF))
 
-  list(
-         theta = unname(COEF[theta_idx])
-       , coef  = COEF
-       , vcov_theta = if (nrow(VCOV) > 0) {unname(VCOV[theta_idx, theta_idx])} else {unname(VCOV)}
-       , vcov = VCOV
-  )
+  rtn <-
+    list(
+           theta = unname(COEF[theta_idx])
+         , coef  = COEF
+         , vcov_theta = NULL #if (nrow(VCOV) > 0) {unname(VCOV[theta_idx, theta_idx])} else {unname(VCOV)}
+         , vcov = VCOV
+    )
+
+  if (nrow(VCOV) > 0) {
+    rtn[["vcov_theta"]] <- unname(VCOV[theta_idx, theta_idx])
+  }
+
+  rtn
 }
