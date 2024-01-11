@@ -24,6 +24,8 @@
 * `sign_changes` will count the number of sign changes of the first or second
   derivative of a spline function.
 
+* `get_spline` returns standard errors and deriviatives (#60)
+
 ## User Visible Changes
 * `loglikelihood` is not exported in the namespace
 * `summary.cpr_cp` now calculates the "wiggle" of the function by default, that

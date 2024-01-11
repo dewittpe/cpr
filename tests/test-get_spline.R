@@ -57,5 +57,92 @@ stopifnot(inherits(test, "error"))
 stopifnot(identical(test$message, "use get_surface when length(margin) > 1."))
 
 ################################################################################
+# expect an error if derivative is not 0, 1, or 2
+test <- tryCatch(get_spline(cp1, derivative = 0:1), error = function(e) e)
+stopifnot(inherits(test, "error"))
+stopifnot(identical(test$message, "length(derivative) == 1L is not TRUE"))
+
+test <- tryCatch(get_spline(cp1, derivative = 3), error = function(e) e)
+stopifnot(inherits(test, "error"))
+stopifnot(identical(test$message, "derivative needs to be 0, 1, or 2"))
+
+################################################################################
+# derivatives are as expected
+f0 <- function(x) {
+  #(x + 2) * (x - 1) * (x - 3)
+  x^3 - 2 * x^2 - 5 * x + 6
+}
+f1 <- function(x) {
+  3 * x^2 - 4 * x - 5
+}
+f2 <- function(x) {
+  6 * x - 4
+}
+
+x <- sort(runif(n = 100, min = -3, max = 5))
+bknots = c(-3, 5)
+bmat <- bsplines(x, bknots = bknots)
+theta <- coef(lm(f0(x) ~ bsplines(x, bknots = bknots) + 0) )
+
+cp0 <- cp(bmat, theta)
+spline0 <- get_spline(cp0, derivative = 0)
+spline1 <- get_spline(cp0, derivative = 1)
+spline2 <- get_spline(cp0, derivative = 2)
+
+stopifnot(isTRUE(all.equal(f0(spline0$x), spline0$y)))
+stopifnot(isTRUE(all.equal(f1(spline1$x), spline1$y)))
+stopifnot(isTRUE(all.equal(f2(spline2$x), spline2$y)))
+
+################################################################################
+# Standard errors
+test <- tryCatch(get_spline(cp0, se = TRUE), warning = function(w) w)
+stopifnot(inherits(test, "warning"))
+stopifnot(identical(test$message, "vcov_theta of cp0 is NULL"))
+
+set.seed(742)
+x <- sort(runif(n = 2222, min = -3, max = 5))
+sdata <- data.frame(x = x, y = f0(x) + rnorm(2222, sd = 25))
+cp0 <- cp(y ~ bsplines(x, bknots = bknots), data = sdata)
+spline0 <- get_spline(cp0, se = TRUE, derivative = 0, n = 20)
+
+stopifnot(
+  isTRUE(
+    all.equal(
+      spline0$se
+      ,
+      predict(cp0, newdata = data.frame(x = spline0$x), se.fit = TRUE)$se.fit
+      ,
+      check.attributes = FALSE
+    )
+  )
+)
+
+spline1 <- get_spline(cp0, se = TRUE, derivative = 1, n = 20)
+spline2 <- get_spline(cp0, se = TRUE, derivative = 2, n = 20)
+
+if (interactive()) {
+  old_par <- par()
+
+  par(mfrow = c(1, 3))
+
+  plot(x, f0(x), type = "l", main = "spline")
+  lines(spline0$x, spline0$y, pch = 2, col = 'blue')
+  lines(spline0$x, spline0$y + 1.96 * spline0$se, pch = 1, col = 'red')
+  lines(spline0$x, spline0$y - 1.96 * spline0$se, pch = 1, col = 'green')
+
+  plot(x, f1(x), type = "l", main = "first derivative")
+  lines(spline1$x, spline1$y, pch = 2, col = 'blue')
+  lines(spline1$x, spline1$y + 1.96 * spline1$se, pch = 1, col = 'red')
+  lines(spline1$x, spline1$y - 1.96 * spline1$se, pch = 1, col = 'green')
+
+  plot(x, f2(x), type = "l", main = "second derivative")
+  lines(spline2$x, spline2$y, pch = 2, col = 'blue')
+  lines(spline2$x, spline2$y + 1.96 * spline2$se, pch = 1, col = 'red')
+  lines(spline2$x, spline2$y - 1.96 * spline2$se, pch = 1, col = 'green')
+
+  par(old_par)
+}
+
+################################################################################
 #                                 End of File                                  #
 ################################################################################
