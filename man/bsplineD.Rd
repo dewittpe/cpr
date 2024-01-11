@@ -137,5 +137,6 @@ C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
 H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
 }
 \seealso{
-\code{\link{bsplines}}
+\code{\link{bsplines}} for bspline basis.  \code{\link{get_spline}}
+will give you the spline or the derivative thereof for a control polygon.
 }

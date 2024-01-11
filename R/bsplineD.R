@@ -17,7 +17,8 @@
 #'
 #' @return a numeric matrix
 #'
-#' @seealso \code{\link{bsplines}}
+#' @seealso \code{\link{bsplines}} for bspline basis.  \code{\link{get_spline}}
+#' will give you the spline or the derivative thereof for a control polygon.
 #'
 #' @examples
 #' ################################################################################
