@@ -347,7 +347,7 @@ summary.cpr_influence_of_iknots <- function(object, ...) {
 summary.cpr_influence_of_iknots_cpr <- function(object, ...) {
   rtn <- lapply(object, summary)
   rws <- sapply(rtn, nrow)
-  idx <- rep(rws + 1, times = rws)
+  idx <- rep(seq(1, length(rtn), by = 1), times = rws)
   rtn <- do.call(rbind, rtn)
   rtn$index <- idx
   class(rtn) <- c("cpr_influence_of_iknots_cpr_summary", class(rtn))
