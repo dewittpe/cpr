@@ -23,7 +23,9 @@
 #'   )
 #'
 #' cpr0 <- cpr(initial_cp)
-#' summary(cpr0)
+#' s <- summary(cpr0)
+#' s
+#' plot(s, type = "rse")
 #'
 #' @export
 summary.cpr_cpr <- function(object, ...) {
@@ -31,20 +33,20 @@ summary.cpr_cpr <- function(object, ...) {
   rtn <- lapply(object, summary)
   rtn <- do.call(rbind, rtn)
 
-  selected_index <- summary(influence_of_iknots(object))
+  selected_index <- do.call(rbind, attr(object, "ioik"))
   selected_index <- selected_index$os_p_value[selected_index$chisq_rank == 1]
-  selected_index <- c(NA_real_, selected_index)
   rtn[["Pr(>w_(1))"]] <- selected_index
 
   # find the elbow in the rse by n_iknots plot
-  elbow <- matrix(numeric(0), nrow = length(object[[length(object)]]$iknot), ncol = 6)
-  for (brkpt in seq(0, length(object[[length(object)]]$iknot), by = 1)) {
-    rse3 <- suppressWarnings(cp(rse ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
-    rss3 <- suppressWarnings(cp(rss ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
-    llk3 <- suppressWarnings(cp(loglik ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, length(object[[length(object)]]$iknot)), order = 3), data = rtn))
-    rse2 <- suppressWarnings(cp(rse ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 2), data = rtn))
-    rss2 <- suppressWarnings(cp(rss ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 2), data = rtn))
-    llk2 <- suppressWarnings(cp(loglik ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, length(object[[length(object)]]$iknot)), order = 2), data = rtn))
+  elbow <- matrix(numeric(0), nrow = nrow(rtn), ncol = 6)
+
+  for (brkpt in seq(0, nrow(rtn), by = 1)) {
+    rse3 <- suppressWarnings(cp(rse ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, nrow(rtn)), order = 3), data = rtn))
+    rss3 <- suppressWarnings(cp(rss ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, nrow(rtn)), order = 3), data = rtn))
+    llk3 <- suppressWarnings(cp(loglik ~ bsplines(n_iknots, iknot = c(brkpt, brkpt), bknots = c(0, nrow(rtn)), order = 3), data = rtn))
+    rse2 <- suppressWarnings(cp(rse ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, nrow(rtn)), order = 2), data = rtn))
+    rss2 <- suppressWarnings(cp(rss ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, nrow(rtn)), order = 2), data = rtn))
+    llk2 <- suppressWarnings(cp(loglik ~ bsplines(n_iknots, iknot = brkpt, bknots = c(0, nrow(rtn)), order = 2), data = rtn))
     elbow[brkpt, ] <-
       c(
         llk3 = llk3$rse,
@@ -54,9 +56,7 @@ summary.cpr_cpr <- function(object, ...) {
         rss2 = rss2$rse,
         rse2 = rse2$rse
         )
-
   }
-
   elbow <- matrix(apply(elbow, 2, which.min) + 1, byrow = TRUE, ncol = 3)
   dimnames(elbow) <- list(c("quadratic", "linear"), c("loglik", "rss", "rse"))
 

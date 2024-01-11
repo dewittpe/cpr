@@ -25,8 +25,12 @@ coarsen_theta <- function(j, xi, k, theta) {
     .Call('_cpr_coarsen_theta', PACKAGE = 'cpr', j, xi, k, theta)
 }
 
-hat_theta <- function(j, xi, k, theta, calculate_F, Sigma) {
-    .Call('_cpr_hat_theta', PACKAGE = 'cpr', j, xi, k, theta, calculate_F, Sigma)
+hat_theta <- function(j, xi, k, theta) {
+    .Call('_cpr_hat_theta', PACKAGE = 'cpr', j, xi, k, theta)
+}
+
+test_statistic <- function(j, xi, k, theta, Sigma) {
+    .Call('_cpr_test_statistic', PACKAGE = 'cpr', j, xi, k, theta, Sigma)
 }
 
 #' Rank of a Matrix

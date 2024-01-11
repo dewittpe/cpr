@@ -519,7 +519,9 @@ initial_cp$cp$theta
 #'
 #' Let's now look at the influence of the internal knots on the fit
 #+
-summary(influence_of_iknots(initial_cp))
+initial_cp |>
+  influence_of_iknots() |>
+  summary()
 
 #'
 #' The least influential knot is $\xi_8 = 3.0,$ the extra knot inserted.  Good,
@@ -537,16 +539,16 @@ summary(influence_of_iknots(initial_cp))
 #' w_j =
 #' \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 #' \left[
-#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
+#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)
 #'   \boldsymbol{\Sigma}
-#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
+#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)^{T}
 #' \right]^{+}
 #' \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
 #' $$
 #' where $\boldsymbol{H} = W (W^{T}W)^{-1} W^{T},$ $\boldsymbol{\Sigma}$ is
 #' the variance-covariance matrix for the regression coefficients, and $+$
 #' denotes the Moore-Penrose inverse of the matrix.  By construction,
-#' $\left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right) \boldsymbol{\Sigma} \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}$
+#' $\left(\boldsymbol{I} - \boldsymbol{H}\right) \boldsymbol{\Sigma} \left(\boldsymbol{I} - \boldsymbol{H}\right)^{T}$
 #' is singular and thus the standard inverse does not exist and a generalized
 #' inverse is necessary. This yields the test statistic following a chi-square
 #' distribution with one degree of freedom,
@@ -757,8 +759,8 @@ cpr0
 
 #'
 #' There are
-{{ length(cpr0) }}
-#' elements of the
+{{ length(cpr0$cps) }}
+#' control polygons within the
 {{ backtick(cpr_cpr) }}
 #' object,
 {{ backtick(length(initial_cp$iknots) + 1) %s% "."}}
@@ -771,17 +773,17 @@ cpr0
 #' are the same as the manual results found about.
 #' There are some differences in the metadata of the objects, but the important
 #' parts, like the control polygons, are the same.
-all.equal( cpr0[[7]][["cp"]],  initial_cp[["cp"]])
+all.equal( cpr0[["cps"]][[7]][["cp"]],  initial_cp[["cp"]])
 
 # some attributes are different with the last cp due to how the automation
 # creates the call vs how the call was created manually.
-call_idx <- which(names(cpr0[[6]]) == "call")
-all.equal( cpr0[[6]][-call_idx], first_reduction_cp [-call_idx])
-all.equal( cpr0[[5]][-call_idx], second_reduction_cp[-call_idx])
-all.equal( cpr0[[4]][-call_idx], third_reduction_cp [-call_idx])
-all.equal( cpr0[[3]][-call_idx], fourth_reduction_cp[-call_idx])
-all.equal( cpr0[[2]][-call_idx], fifth_reduction_cp [-call_idx])
-all.equal( cpr0[[1]][-call_idx], sixth_reduction_cp [-call_idx], check.attributes = FALSE)
+call_idx <- which(names(cpr0[["cps"]][[6]]) == "call")
+all.equal( cpr0[["cps"]][[6]][-call_idx], first_reduction_cp [-call_idx])
+all.equal( cpr0[["cps"]][[5]][-call_idx], second_reduction_cp[-call_idx])
+all.equal( cpr0[["cps"]][[4]][-call_idx], third_reduction_cp [-call_idx])
+all.equal( cpr0[["cps"]][[3]][-call_idx], fourth_reduction_cp[-call_idx])
+all.equal( cpr0[["cps"]][[2]][-call_idx], fifth_reduction_cp [-call_idx])
+all.equal( cpr0[["cps"]][[1]][-call_idx], sixth_reduction_cp [-call_idx], check.attributes = FALSE)
 
 #'
 #' In the manual process we identified
@@ -790,7 +792,8 @@ all.equal( cpr0[[1]][-call_idx], sixth_reduction_cp [-call_idx], check.attribute
 {{ backtick(cpr0) }}
 #' object we can quickly see a similar result as we did for the manual process.
 #+ result = "asis"
-summary(cpr0) |> knitr::kable(row.names = TRUE)
+s0 <- summary(cpr0)
+knitr::kable(s0, row.names = TRUE)
 
 #'
 #' The additional columns in this summary,
@@ -803,13 +806,23 @@ summary(cpr0) |> knitr::kable(row.names = TRUE)
 #' residual standard error.
 #+ fig.height = 7, fig.width = 7
 ggpubr::ggarrange(
-    plot(cpr0, type = "cps", color = TRUE)
-  , plot(cpr0, type = "cps", show_cp = FALSE, show_spline = TRUE, color = TRUE)
-  , plot(cpr0, type = "loglik")
-  , plot(cpr0, type = "rse")
-  , ncol =2
-  , nrow = 2
+  ggpubr::ggarrange(
+      plot(cpr0, color = TRUE)
+    , plot(cpr0, show_cp = FALSE, show_spline = TRUE, color = TRUE)
+    , ncol = 1
+    , common.legend = TRUE
+  )
+  ,
+  ggpubr::ggarrange(
+      plot(s0, type = "rse")
+    , plot(s0, type = "rss")
+    , plot(s0, type = "loglik")
+    , plot(s0, type = "wiggle")
+    , plot(s0, type = "fdsc")
+    , plot(s0, type = "Pr(>w_(1))")
   , common.legend = TRUE
+  )
+  , widths = c(2, 3)
 )
 
 #'
@@ -868,7 +881,7 @@ knitr::kable(head(x, 10))
 #' From this, the preferable model is suggested to be index 5, the model with
 #' four internal knots.  Inspection of the rse by index plot, I would argue from
 #' a manual selection that index 5 is preferable overall.
-plot(cpr1, type = "rse")
+plot(x, type = "rse")
 
 #'
 #' Let's compare the models in indices 3, 4, and 5.

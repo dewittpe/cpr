@@ -4,10 +4,12 @@
 \alias{coef_vcov}
 \title{Extract Regression Coefficients for B-Splines and Tensor Products of B-splines}
 \usage{
-coef_vcov(fit)
+coef_vcov(fit, theta_idx)
 }
 \arguments{
 \item{fit}{a regression model fit}
+
+\item{theta_idx}{numeric index for the theta related coefs}
 }
 \value{
 A list with four elements

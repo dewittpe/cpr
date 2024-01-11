@@ -2,14 +2,30 @@
 % Please edit documentation in R/influence_of_iknots.R
 \name{influence_of_iknots}
 \alias{influence_of_iknots}
+\alias{influence_of_iknots.cpr_cn}
 \title{Determine the influence of the internal knots of a control polygon}
 \usage{
-influence_of_iknots(x, ...)
+influence_of_iknots(x, verbose = FALSE, ...)
+
+\method{influence_of_iknots}{cpr_cn}(
+  x,
+  verbose = FALSE,
+  margin = seq_along(x$bspline_list),
+  n_polycoef = 20L,
+  ...
+)
 }
 \arguments{
-\item{x}{\code{cpr_cp} object}
+\item{x}{\code{cpr_cp} or \code{cpr_cn} object}
+
+\item{verbose}{print status messages}
 
 \item{...}{pass through}
+
+\item{margin}{which margin(s) to consider the influence of iknots}
+
+\item{n_polycoef}{number of polynomial coefficients to use when assessing the
+influence of a iknot}
 }
 \value{
 a \code{cpr_influence_of_iknots} object.  A list of six elements:
@@ -52,5 +68,6 @@ plot(cp0, icp0$restored_cps[[5]], color = TRUE, show_spline = TRUE)
 df <- data.frame(x = x, y = as.numeric(bmat \%*\% theta) + rnorm(5000, sd = 0.2))
 cp1 <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4, 4.5), bknots = c(0, 6)), data = df)
 icp1 <- influence_of_iknots(cp1)
+icp1
 
 }

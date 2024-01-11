@@ -3,7 +3,8 @@
 #' An implementation of Carl de Boor's recursive algorithm for building
 #' B-splines.
 #'
-#' There are several differences between this function and \code{\link[splines]{bs}}.
+#' There are several differences between this function and
+#' \code{\link[splines]{bs}}.
 #'
 #' The most important difference is how the two methods treat the right-hand end
 #' of the support.  \code{\link[splines]{bs}} uses a pivot method to allow for
@@ -22,7 +23,8 @@
 #' @references
 #' C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.
 #'
-#' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.
+#' H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques,"
+#' Springer, 2002.
 #'
 #' @param x a numeric vector
 #' @param iknots internal knots
@@ -59,8 +61,12 @@
 #' # The x-axis, by default, show the knot locations.  Other options are numeric
 #' # values, and/or to use a second x-axis
 #'
-#' plot(bmat, show_xi = TRUE,  show_x = FALSE) # default, knot, symbols, on lower axis
-#' plot(bmat, show_xi = FALSE, show_x = TRUE)  # Numeric value for the knot locations
+#' plot(bmat, show_xi = TRUE,  show_x = FALSE) # default, knot, symbols, on lower
+#'                                             # axis
+#'
+#' plot(bmat, show_xi = FALSE, show_x = TRUE)  # Numeric value for the knot
+#'                                             # locations
+#'
 #' plot(bmat, show_xi = TRUE,  show_x = TRUE)  # symbols on bottom, numbers on top
 #'
 #' # quadratic splines
@@ -92,6 +98,7 @@ bsplines <- function(x, iknots = NULL, df = NULL, bknots = range(x), order = 4L)
   iknots <- iknots_or_df(x, iknots, df, order)
 
   rtn <- cpp_bsplines(x = x, iknots = iknots, bknots = bknots, order = order)
+  #colnames(rtn) <- paste0("bspline", seq(1, ncol(rtn)))
   attr(rtn, "call") <- match.call()
   attr(rtn, "environment") <- parent.frame()
   class(rtn) <- c("cpr_bs", "matrix")

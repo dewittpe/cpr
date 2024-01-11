@@ -25,18 +25,18 @@
 #'  \item{rse}{the residual standard error for the regression models}
 #'  }
 #'
-#' @seealso \code{\link{summary.cpr_cn}}, \code{\link{cnr}}
+#' @seealso \code{\link{summary.cpr_cn}}, \code{\link{cnr}},
+#' \code{\link{plot.cpr_cn}} for plotting control nets
 #'
 #' @examples
 #'
-#' acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
-#'                                 , df = list(30, 4)
-#'                                 , bknots = list(c(-1, 1), c(44, 53)))
+#' acn <- cn(log10(pdg) ~
+#'               btensor(   x     = list(day, age)
+#'                       , df     = list(30, 4)
+#'                       , bknots = list(c(-1, 1), c(44, 53))
+#'               )
 #'            , data = spdg)
-#'
-#' # plot3D
-#' plot(acn, rgl = FALSE)
-#'
+#' str(acn, max.level = 1)
 #'
 #' @export
 cn <- function(x, ...) {
@@ -45,7 +45,8 @@ cn <- function(x, ...) {
 
 #' @export
 #' @rdname cn
-#' @param theta a vector of (regression) coefficients, the ordinates of the control net.
+#' @param theta a vector of (regression) coefficients, the ordinates of the
+#' control net.
 cn.cpr_bt <- function(x, theta, ...) {
   xi_stars <- lapply(attr(x, "bspline_list"), attr, which = "xi_star")
 
@@ -70,16 +71,22 @@ cn.cpr_bt <- function(x, theta, ...) {
 #' @rdname cn
 #' @param formula a formula that is appropriate for regression method being used.
 #' @param data a required \code{data.frame}
-#' @param method the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
-#' @param method.args a list of additional arguments to pass to the regression method.
-#' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the regression model fit is retained and returned in the the \code{fit} element. If \code{FALSE} the regression model is not saved and the \code{fit} element will be \code{NA}.
-#' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the design matrix is full rank.
-cn.formula <- function(formula, data, method = stats::lm, method.args = list(),  keep_fit = TRUE, check_rank = TRUE, ...) {
+#' @param method the regression method such as \code{\link[stats]{lm}},
+#' \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
+#' @param method.args a list of additional arguments to pass to the regression
+#' method.
+#' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the
+#' regression model fit is retained and returned in the the \code{fit} element.
+#' If \code{FALSE} the regression model is not saved and the \code{fit} element
+#' will be \code{NA}.
+#' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the
+#' design matrix is full rank.
+cn.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = TRUE, check_rank = TRUE, ...) {
+
   # check for some formula specification issues
-  fterms <- stats::terms(formula)
-  fterms
-  if (sum(grepl("btensor", attr(fterms, "term.labels"))) != 1) {
-    stop("btensor() must appear once, with no effect modifiers, on the right hand side of the formula.")
+  rhs_check <- grepl("btensor", attr(stats::terms(formula), "term.labels"))
+  if ( !rhs_check[1] | any(rhs_check[-1]) ) {
+    stop("btensor() must appear first, once, and with no effect modifiers, on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment
@@ -91,7 +98,8 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- c(cl, method.args)
 
   fit <- do.call(regression, cl)
-  COEF_VCOV <- coef_vcov(fit)
+  Bmat <- stats::model.frame(fit)[[2]]
+  COEF_VCOV <- coef_vcov(fit, theta_idx = seq(1, ncol(Bmat), by = 1))
 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
@@ -104,8 +112,6 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- as.list(match.call())
   cl[[1]] <- as.name("cn")
   cl <- as.call(cl)
-
-  Bmat <- eval(extract_cpr_bsplines(formula), data, environment(formula))
 
   out <- cn.cpr_bt(Bmat, COEF_VCOV$theta)
 
@@ -134,21 +140,4 @@ cn.formula <- function(formula, data, method = stats::lm, method.args = list(), 
 print.cpr_cn <- function(x, ...) {
   print(x$cn, ...)
   invisible(x)
-}
-
-
-extract_cpr_bsplines <- function(form) {
-  B <- NULL
-  rr <- function(x) {
-    if (is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
-      B <<- x
-    } else if (is.recursive(x)) {
-      as.call(lapply(as.list(x), rr))
-    } else {
-      x
-    }
-  }
-
-  z <- lapply(as.list(form), rr)
-  B
 }

@@ -20,8 +20,9 @@ e <- new.env()
 with(e, {
   fit <- list(coefficients = LETTERS)
   stopifnot(identical(coef(fit), LETTERS))
-  x <- tryCatch(cpr:::coef_vcov(fit), error = function(e) e)
+  x <- tryCatch(cpr:::coef_vcov(fit, theta_idx = numeric(0)), error = function(e) e)
   stopifnot(inherits(x, "error"))
+  stopifnot(identical(x$message, "Attempted to extract variance-covariance matrix via stats::vcov for an object of class list.  This has failed."))
 })
 
 e <- new.env()
@@ -31,8 +32,16 @@ with(e, {
   vcov.cpr_testing_class <- function(x) { x$vcov }
   stopifnot(identical(coef(fit), LETTERS))
   stopifnot(identical(vcov(fit), matrix(1:10)))
-  x <- tryCatch(cpr:::coef_vcov(fit), error = function(e) e)
+  x <- tryCatch(cpr:::coef_vcov(fit, theta_idx = numeric(0)), error = function(e) e)
   stopifnot(inherits(x, "error"))
+  print(x)
+
+  # for some reason this message will change from evaulating line by line vs
+  # within the environment
+  stopifnot(identical(x$message,
+    #"Attempted to extract regression coefficients via stats::coef for an object of class cpr_testing_class, list.  This has failed - expected numeric vector, got character."
+    "Attempted to extract variance-covariance matrix via stats::vcov for an object of class cpr_testing_class, list.  This has failed."
+    ))
 })
 
 e <- new.env()
@@ -44,6 +53,14 @@ with(e, {
   stopifnot(identical(vcov(fit), (1:10)))
   x <- tryCatch(cpr:::coef_vcov(fit), error = function(e) e)
   stopifnot(inherits(x, "error"))
+  print(x)
+
+  # for some reason this message will change from evaulating line by line vs
+  # within the environment
+  stopifnot(identical(x$message,
+    #"Attempted to extract variance-covariance matrix via stats::vcov for an object of class cpr_testing_class, list.  This has failed - expected numeric matrix, got integer."
+    "Attempted to extract variance-covariance matrix via stats::vcov for an object of class cpr_testing_class, list.  This has failed."
+    ))
 })
 
 ################################################################################
@@ -52,7 +69,7 @@ e <- new.env()
 with(e, {
   fit <- lm(mpg ~ wt, data = mtcars)
   stopifnot(inherits(fit, "lm"))
-  COEF_VCOV <- cpr:::coef_vcov(fit)
+  COEF_VCOV <- cpr:::coef_vcov(fit, theta_idx = numeric(0))
 
   stopifnot(identical(names(COEF_VCOV), c("theta", "coef", "vcov_theta", "vcov")))
   stopifnot(identical(COEF_VCOV$theta, numeric(0)))
@@ -67,7 +84,7 @@ e <- new.env()
 with(e, {
   fit <- lmer(mpg ~ wt | am, data = mtcars)
   stopifnot(inherits(fit, "lmerMod"))
-  COEF_VCOV <- cpr:::coef_vcov(fit)
+  COEF_VCOV <- cpr:::coef_vcov(fit, theta_idx = numeric(0))
 
   stopifnot(identical(names(COEF_VCOV), c("theta", "coef", "vcov_theta", "vcov")))
   stopifnot(identical(COEF_VCOV$theta, numeric(0)))
@@ -82,7 +99,7 @@ e <- new.env()
 with(e, {
   fit <- lm(mpg ~ 0 + bsplines(wt, bknots = c(1.5, 5.5)) + hp, data = mtcars)
   stopifnot(inherits(fit, "lm"))
-  COEF_VCOV <- cpr:::coef_vcov(fit)
+  COEF_VCOV <- cpr:::coef_vcov(fit, theta_idx = 1:4)
 
   stopifnot(identical(names(COEF_VCOV), c("theta", "coef", "vcov_theta", "vcov")))
   stopifnot(identical(COEF_VCOV$theta, unname(coef(fit)[1:4])))
@@ -97,7 +114,7 @@ e <- new.env()
 with(e, {
   fit <- lmer(mpg ~ 0 + bsplines(wt, bknots = c(1.5, 5.5)) + (1 | am), data = mtcars)
   stopifnot(inherits(fit, "lmerMod"))
-  COEF_VCOV <- cpr:::coef_vcov(fit)
+  COEF_VCOV <- cpr:::coef_vcov(fit, theta_idx = 1:4)
 
   fixef(fit)
   setNames(fit@beta, dimnames(fit@pp@.xData$X)[[2]])

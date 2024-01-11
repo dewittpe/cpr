@@ -1,6 +1,7 @@
 #' Determine the influence of the internal knots of a control polygon
 #'
-#' @param x \code{cpr_cp} object
+#' @param x \code{cpr_cp} or \code{cpr_cn} object
+#' @param verbose print status messages
 #' @param ... pass through
 #'
 #' @return a \code{cpr_influence_of_iknots} object.  A list of six elements:
@@ -12,7 +13,6 @@
 #' \item{influence}{}
 #' \item{chisq}{}
 #' }
-#'
 #'
 #' @examples
 #' x <- seq(0 + 1/5000, 6 - 1/5000, length.out = 5000)
@@ -41,69 +41,136 @@
 #' df <- data.frame(x = x, y = as.numeric(bmat %*% theta) + rnorm(5000, sd = 0.2))
 #' cp1 <- cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3, 4, 4.5), bknots = c(0, 6)), data = df)
 #' icp1 <- influence_of_iknots(cp1)
+#' icp1
 #'
 #' @export
-influence_of_iknots <- function(x, ...) {
+influence_of_iknots <- function(x, verbose = FALSE, ...) {
   UseMethod("influence_of_iknots")
 }
 
 #' @export
-influence_of_iknots.cpr_cp <- function(x, ...) {
+influence_of_iknots.cpr_cp <- function(x, verbose = FALSE, ...) {
 
-  # only work on the internal knots
-  coarsened_thetas <-
-    lapply(X = seq(x$order, x$order + length(x$iknots) - 1),
-           FUN = coarsen_theta,
-           xi = x$xi,
-           k = x$order,
-           theta = x$cp$theta)
+  if (length(x$iknots) > 0) {
 
-  # just need the meta data for basis matrices
-  coarsened_bmats <-
-    lapply(X = seq_along(x$iknots),
-           FUN =
-             function(j) {
-               bsplines(numeric(0), iknots = x$iknots[-j], bknots = x$bknots, order = x$order)
-             }
-    )
+    if (verbose) {
+      message("\nThere are ", length(x$iknots), " internal knots to evaluate\n")
+    }
 
-  coarsened_cps <- Map(cp, x = coarsened_bmats, theta = coarsened_thetas)
+    # only work on the internal knots
+    if (verbose) {
+      message("  Coarsening theta (step 1 of 6)")
+    }
 
-  bmat0 <- bsplines(numeric(0), iknots = x$iknots, bknots = x$bknots, order = x$order)
+    coarsened_thetas <-
+      lapply(
+          X     = seq(x$order, x$order + length(x$iknots) - 1)
+        , FUN   = coarsen_theta
+        , xi    = x$xi
+        , k     = x$order
+        , theta = x$cp$theta
+      )
 
-  if (isTRUE(nrow(x$vcov_theta) > 0L)) {
-    hat_thetas <- lapply(X = seq(x$order, x$order + length(x$iknots) - 1),
-                         FUN = hat_theta,
-                         xi = x$xi,
-                         k = x$order,
-                         theta = x$cp$theta,
-                         calculate_F = TRUE,
-                         Sigma = x$vcov_theta
-    )
+    # just need the meta data for basis matrices
+    if (verbose) {
+      message("  getting meta data for coarsend basis matrices (step 2 of 6)")
+    }
+
+    coarsened_bmats <-
+      lapply(
+          X = seq_along(x$iknots)
+        , FUN =
+               function(j) {
+                 bsplines(numeric(0), iknots = x$iknots[-j], bknots = x$bknots, order = x$order)
+               }
+       )
+
+    if (verbose) {
+      message("  generating coarsened control polygons (step 3 of 6)")
+    }
+
+    coarsened_cps <- Map(f = cp, x = coarsened_bmats, theta = coarsened_thetas)
+
+    bmat0 <- bsplines(numeric(0), iknots = x$iknots, bknots = x$bknots, order = x$order)
+
+    if (verbose) {
+      message("  building theta hat (step 4 of 6)")
+    }
+
+    if (isTRUE(nrow(x$vcov_theta) > 0L)) {
+      hat_thetas <-
+        lapply(
+            X = seq(x$order, x$order + length(x$iknots) - 1)
+          , FUN = hat_theta
+          , xi = x$xi
+          , k = x$order
+          , theta = x$cp$theta
+      )
+    } else {
+      hat_thetas <-
+        lapply(
+            X = seq(x$order, x$order + length(x$iknots) - 1)
+          , FUN = hat_theta
+          , xi = x$xi
+          , k = x$order
+          , theta = x$cp$theta
+      )
+    }
+
+    if (verbose) {
+      message("  building restored control polygons (step 5 of 6)")
+    }
+
+    restored_cps <-
+      Map(f = cp
+          , x =
+            lapply(1:length(hat_thetas), function(x) bmat0)
+          , theta = lapply(hat_thetas, getElement, "theta")
+      )
+
+    # p-values
+    if (verbose) {
+      message("  building test statistics (step 6 of 6)")
+    }
+    if (!is.null(x$vcov_theta)) {
+
+      # js are indexed for cpp not R
+      js <- seq(x$order, x$order + length(x$iknots) - 1, by = 1L)
+
+      chisq <-
+        lapply(js
+               , test_statistic
+               , xi    = x$xi
+               , k     = x$order
+               , theta = x$theta
+               , Sigma = x$vcov_theta
+               )
+      chisq <- do.call(c, chisq)
+
+    } else {
+      chisq <- rep(NA_real_, length(x$iknots))
+    }
+
+
+    rtn <- list(
+                original_cp   = x,
+                coarsened_cps = coarsened_cps,
+                restored_cps  = restored_cps,
+                d             = lapply(hat_thetas, getElement, "d"),
+                influence     = sapply(hat_thetas, getElement, "influence"),
+                chisq         = chisq
+                )
   } else {
-    hat_thetas <- lapply(X = seq(x$order, x$order + length(x$iknots) - 1),
-                         FUN = hat_theta,
-                         xi = x$xi,
-                         k = x$order,
-                         theta = x$cp$theta,
-                         calculate_F = FALSE,
-                         Sigma = matrix(numeric(0)) # place holder
-    )
+    # no internal knots
+    rtn <- list(
+                original_cp   = x,
+                coarsened_cps = NA,
+                restored_cps  = NA,
+                d             = NA,
+                influence     = NA,
+                chisq         = NA
+                )
   }
-
-  restored_cps <- mapply(function(x, hat_theta) {cp(x, hat_theta$theta)}
-                         , hat_theta = hat_thetas
-                         , MoreArgs = list(x = bmat0)
-                         , SIMPLIFY = FALSE)
-
-  rtn <- list(
-              original_cp   = x,
-              coarsened_cps = coarsened_cps,
-              restored_cps  = restored_cps,
-              d             = lapply(hat_thetas, getElement, "d"),
-              influence     = sapply(hat_thetas, getElement, "influence"),
-              chisq         = sapply(hat_thetas, getElement, "chisq")
-              )
 
   class(rtn) <- "cpr_influence_of_iknots"
 
@@ -111,14 +178,18 @@ influence_of_iknots.cpr_cp <- function(x, ...) {
 }
 
 #' @export
-influence_of_iknots.cpr_cpr <- function(x, ...) {
-  rtn <- lapply(x, influence_of_iknots)
+influence_of_iknots.cpr_cpr <- function(x, verbose = FALSE, ...) {
+  rtn <- lapply(x, influence_of_iknots, verbose = verbose, ...)
   class(rtn) <- c("cpr_influence_of_iknots_cpr", class(rtn))
   rtn
 }
 
+#' @param margin which margin(s) to consider the influence of iknots
+#' @param n_polycoef number of polynomial coefficients to use when assessing the
+#' influence of a iknot
+#' @rdname influence_of_iknots
 #' @export
-influence_of_iknots.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_polycoef = 20L, ...) {
+influence_of_iknots.cpr_cn <- function(x, verbose = FALSE, margin = seq_along(x$bspline_list), n_polycoef = 20L, ...) {
 
   dfs    <- sapply(x$bspline_list, ncol)
   bknots <- lapply(x$bspline_list, attr, which = "bknots")
@@ -165,7 +236,7 @@ influence_of_iknots.cpr_cn <- function(x, margin = seq_along(x$bspline_list), n_
            function(idx) {
              lapply(split(polynomial_coef[[idx]], col(polynomial_coef[[idx]])),
                     function(tt, bmat) {
-                      influence_of_iknots(cp(bmat, tt))
+                      influence_of_iknots(cp(bmat, tt), verbose = verbose, ...)
                     },
                     bmat = x$bspline_list[[idx]])
            })
@@ -241,23 +312,23 @@ plot.cpr_influence_of_iknots <- function(x, j, coarsened = FALSE, restored = TRU
 
 #' @export
 summary.cpr_influence_of_iknots <- function(object, ...) {
-  if (length(object$original_cp$iknots) == 0L) {
-    i <- numeric(0)
-    chisq <- numeric(0)
-  } else {
-    i <- object$influence
-    chisq <- object$chisq
+
+  iknots <- object$original_cp$iknots
+  j = object$original_cp$order + seq_along(object$original_cp$iknots)
+  if (length(iknots) == 0L) {
+    iknots <- NA
+    j <- object$original_cp$order
   }
 
   rtn <-
     data.frame(
-                 j = object$original_cp$order + seq_along(object$original_cp$iknots)
-               , iknot = object$original_cp$iknots
-               , influence = i
-               , influence_rank = rank(i, ties.method = "first", na.last = "keep")
-               , chisq = chisq
-               , chisq_rank = rank(chisq, ties.method = "first", na.last = "keep")
-               , p_value = 1.0 - stats::pchisq(chisq, df = 1)
+                 j = j
+               , iknot = iknots
+               , influence = object$influence
+               , influence_rank = rank(object$influence, ties.method = "first", na.last = "keep")
+               , chisq = object$chisq
+               , chisq_rank = rank(object$chisq, ties.method = "first", na.last = "keep")
+               , p_value = 1.0 - stats::pchisq(object$chisq, df = 1)
                )
 
   rtn$os_p_value = 1 -
@@ -276,7 +347,7 @@ summary.cpr_influence_of_iknots <- function(object, ...) {
 summary.cpr_influence_of_iknots_cpr <- function(object, ...) {
   rtn <- lapply(object, summary)
   rws <- sapply(rtn, nrow)
-  idx <- rep(rws + 1, times = rws)
+  idx <- rep(seq(1, length(rtn), by = 1), times = rws)
   rtn <- do.call(rbind, rtn)
   rtn$index <- idx
   class(rtn) <- c("cpr_influence_of_iknots_cpr_summary", class(rtn))

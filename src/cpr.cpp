@@ -144,7 +144,7 @@ arma::vec coarsen_theta(unsigned int j, const arma::vec& xi, unsigned int k, con
 }
 
 // [[Rcpp::export]]
-Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta, bool calculate_F, const arma::mat& Sigma) {
+Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta) {
   arma::vec xi_sans_j(xi.n_elem - 1);
   for (unsigned int i = 0; i < xi_sans_j.n_elem; ++i) {
     if (i < j) {
@@ -158,24 +158,41 @@ Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const 
   arma::mat HAT = w * (w.t() * w).i() * w.t();
   arma::mat IHAT = arma::eye(theta.n_elem, theta.n_elem) - HAT;
 
-  double chisq;
-  if (calculate_F) {
-    arma::mat F = (IHAT * theta).t() * arma::pinv(IHAT * Sigma * IHAT.t()) * (IHAT * theta);
-    chisq = F(0,0);
-  } else {
-    chisq = NA_REAL;
-  }
-
   return (
     Rcpp::List::create(
         Rcpp::Named("theta") = (HAT * theta),
         Rcpp::Named("d") = IHAT * theta,
-        //Rcpp::Named("influence") = arma::norm(IHAT * theta, 2),
-        Rcpp::Named("influence") = arma::sum(arma::pow(IHAT * theta, 2)),
-        Rcpp::Named("chisq") = chisq
+        Rcpp::Named("influence") = arma::sum(arma::pow(IHAT * theta, 2))
         )
   );
 }
+
+// [[Rcpp::export]]
+double test_statistic(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta, const arma::mat& Sigma ) {
+  arma::vec xi_sans_j(xi.n_elem - 1);
+  for (unsigned int i = 0; i < xi_sans_j.n_elem; ++i) {
+    if (i < j) {
+      xi_sans_j(i) = xi(i);
+    } else if (i >= j) {
+      xi_sans_j(i) = xi(i + 1);
+    }
+  }
+
+  //arma::mat w = W(xi(j), xi_sans_j, k);
+  //arma::mat HAT = w * (w.t() * w).i() * w.t();
+  //arma::mat IHAT = arma::eye(theta.n_elem, theta.n_elem) - HAT;
+
+  //arma::mat CHISQ = (IHAT * theta).t() * arma::pinv(IHAT * Sigma * IHAT.t()) * (IHAT * theta);
+
+  arma::mat w = W(xi(j), xi_sans_j, k);
+  arma::mat HAT = w * (w.t() * w).i() * w.t();
+  arma::mat IHAT = arma::eye(k + 1, k + 1) - HAT.submat(j-k,j-k,j,j);
+
+  arma::mat CHISQ = (IHAT * theta.subvec(j-k,j)).t() * arma::pinv(IHAT * Sigma.submat(j-k,j-k,j,j) * IHAT.t()) * (IHAT * theta.subvec(j-k,j));
+
+  return ( CHISQ(0,0) );
+}
+
 
 /* ************************************************************************** */
 /*                                End of File                                 */

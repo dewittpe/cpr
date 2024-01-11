@@ -32,7 +32,11 @@ a \code{\link{cp}} or \code{\link{cn}} call.
 \examples{
 
 cp0 <- cp(log(pdg) ~ bsplines(day, iknots = c(-.25, 0, 0.25), bknots = c(-1, 1)), data = spdg)
-cpr:::newknots(cp0$call$formula, c(-0.85, 0, 0.25, 0.3))
+
+new_knots <- c(-0.85, 0, 0.25, 0.3)
+f <- cpr:::newknots(cp0$call$formula, nk = new_knots)
+f
+cp(f, data = spdg)
 
 }
 \seealso{

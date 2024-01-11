@@ -1,5 +1,6 @@
 library(cpr)
 
+# Test if the CPR algorithm can recover a known spline
 
 recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100, ...) {
 
@@ -13,9 +14,9 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
   true_iknots <- sort(stats::runif(n_iknots))
   true_theta  <- stats::rnorm(n_iknots + k, sd = theta_dist_sd)
 
-  xvec <- seq(0, 1, length = 10001)
+  xvec <- runif(10000)
 
-  true_bmat <- bsplines(xvec, iknots = true_iknots, order = k)
+  true_bmat <- bsplines(xvec, iknots = true_iknots, bknots = c(0, 1), order = k)
 
   true_cp <- cp(true_bmat, true_theta)
 
@@ -24,10 +25,9 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
 
   initial_iknots <- sort(c(stats::runif(start_with - n_iknots), true_iknots))
 
-  f <- substitute(y ~ bsplines(x, iknots = IKNOTS, order = K), list(IKNOTS = initial_iknots, K = k))
+  f <- substitute(y ~ bsplines(x, iknots = IKNOTS, bknots = c(0, 1), order = K), list(IKNOTS = initial_iknots, K = k))
   f <- stats::as.formula(f)
   environment(f) <- environment()
-
 
   initial_cp <- suppressWarnings(do.call(cp, list(formula = f, data = s_data)))
 
@@ -50,8 +50,9 @@ recover_spline <- function(k = 4L, start_with = 100L, seed, theta_dist_sd = 100,
   out
 }
 
-set.seed(42)
-stopifnot(recover_spline(start_with = 40L, progress = FALSE)$recovered)
+stopifnot(
+  recover_spline(start_with = 40L, seed = 42)$recovered
+)
 ################################################################################
 ##                                End of File                                 ##
 ################################################################################

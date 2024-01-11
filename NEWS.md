@@ -2,6 +2,12 @@
 
 ## New Features
 
+* `cpr`'s `progress` argument has been extended to control if a progress bar is
+  used for just the cpr steps, or if a more detailed progress for of the
+  influence weight calculations is reported.
+
+* `influence_of_iknots` gains parallel execution via `pbapply` (#17)
+
 * `plot.cpr_cp` gains the argument `comparitive` which, when set to `FALSE` and
   only one `cpr_cp` is passed in for plotting, the graphic will appear more like
   the `plot.cpr_bs` results.  When `comparitive = TRUE` or more than one

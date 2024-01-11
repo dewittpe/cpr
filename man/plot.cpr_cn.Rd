@@ -84,7 +84,10 @@ For \code{plot3D} graphics there are no defaults values for the
 # plot3D
 plot(acn, rgl = FALSE)
 
+# rgl
+\dontrun{
 plot(acn, rgl = TRUE)
+}
 
 }
 \seealso{

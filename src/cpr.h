@@ -121,9 +121,24 @@ arma::vec coarsen_theta(unsigned int j, const arma::vec& xi, unsigned int k, con
  *   theta: theta_xi
  *
  * Return:
- *   a R list with the theta_hat, d for the difference from intial to hat
+ *   a R list with the theta_hat, d for the difference from intial to hat, and
+ *   the influence weight
  *
  */
 Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta);
 
+/* test_statistic
+ *
+ * Arguments:
+ *   j : the index of xi to omit
+ *   xi: full knot sequence
+ *   k: polynomial order
+ *   theta: theta_xi
+ *   Sigma: variance-covariance matrix
+ *
+ *  Return:
+ *    realiztion of a chisq random variable
+ *
+ */
+double test_statistic(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta, const arma::mat& Sigma );
 #endif

@@ -12,7 +12,8 @@
 #' vertices of cp1 to the control polygon cp2.
 #'
 #' @param obj a cpr_cp object or \code{data.frame} where the first column is the
-#' abscissa and the second column is the ordinate for the control polygon vertices.
+#' abscissa and the second column is the ordinate for the control polygon
+#' vertices.
 #' @param x abscissa at which to determine the ordinate on control polygon cp
 #'
 #' @seealso \code{\link{cp}}, \code{\link{cp_diff}}

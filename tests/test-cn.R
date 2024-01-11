@@ -31,14 +31,14 @@ e <- new.env()
 with(e, {
   test <- tryCatch(cn(log10(pdg) ~ age + ttm, data = spdg), error = function(e) e)
   stopifnot(inherits(test, "error"))
-  stopifnot(identical(test$message, "btensor() must appear once, with no effect modifiers, on the right hand side of the formula."))
+  stopifnot(identical(test$message, "btensor() must appear first, once, and with no effect modifiers, on the right hand side of the formula."))
 })
 
 e <- new.env()
 with(e, {
   test <- tryCatch(cn(log10(pdg) ~ btensor(ttm)*age, data = spdg), error = function(e) e)
   stopifnot(inherits(test, "error"))
-  stopifnot(identical(test$message, "btensor() must appear once, with no effect modifiers, on the right hand side of the formula."))
+  stopifnot(identical(test$message, "btensor() must appear first, once, and with no effect modifiers, on the right hand side of the formula."))
 })
 
 

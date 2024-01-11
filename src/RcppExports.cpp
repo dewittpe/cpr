@@ -95,8 +95,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // hat_theta
-Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta, bool calculate_F, const arma::mat& Sigma);
-RcppExport SEXP _cpr_hat_theta(SEXP jSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP, SEXP calculate_FSEXP, SEXP SigmaSEXP) {
+Rcpp::List hat_theta(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta);
+RcppExport SEXP _cpr_hat_theta(SEXP jSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -104,9 +104,22 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
     Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
-    Rcpp::traits::input_parameter< bool >::type calculate_F(calculate_FSEXP);
+    rcpp_result_gen = Rcpp::wrap(hat_theta(j, xi, k, theta));
+    return rcpp_result_gen;
+END_RCPP
+}
+// test_statistic
+double test_statistic(unsigned int j, const arma::vec& xi, unsigned int k, const arma::vec& theta, const arma::mat& Sigma);
+RcppExport SEXP _cpr_test_statistic(SEXP jSEXP, SEXP xiSEXP, SEXP kSEXP, SEXP thetaSEXP, SEXP SigmaSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< unsigned int >::type j(jSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type xi(xiSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< const arma::vec& >::type theta(thetaSEXP);
     Rcpp::traits::input_parameter< const arma::mat& >::type Sigma(SigmaSEXP);
-    rcpp_result_gen = Rcpp::wrap(hat_theta(j, xi, k, theta, calculate_F, Sigma));
+    rcpp_result_gen = Rcpp::wrap(test_statistic(j, xi, k, theta, Sigma));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -141,7 +154,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_cpr_W", (DL_FUNC) &_cpr_W, 3},
     {"_cpr_refine_theta", (DL_FUNC) &_cpr_refine_theta, 4},
     {"_cpr_coarsen_theta", (DL_FUNC) &_cpr_coarsen_theta, 4},
-    {"_cpr_hat_theta", (DL_FUNC) &_cpr_hat_theta, 6},
+    {"_cpr_hat_theta", (DL_FUNC) &_cpr_hat_theta, 4},
+    {"_cpr_test_statistic", (DL_FUNC) &_cpr_test_statistic, 5},
     {"_cpr_matrix_rank", (DL_FUNC) &_cpr_matrix_rank, 1},
     {"_cpr_tensor_product", (DL_FUNC) &_cpr_tensor_product, 2},
     {NULL, NULL, 0}

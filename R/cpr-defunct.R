@@ -57,3 +57,23 @@ influence_weights <- function(...) {
   .Defunct("influence_of_iknots")
   # v0.3.0 defined this S3 method in R/influence_weights.R
 }
+
+
+# NONE EXPORTED DEFUNCT
+extract_cpr_bsplines <- function(form) {
+  .Defunct()
+  # was part of the cn function from v0.3.0 and no longer needed
+  B <- NULL
+  rr <- function(x) {
+    if (is.call(x) && grepl("bsplines|btensor", deparse(x[[1]]))) {
+      B <<- x
+    } else if (is.recursive(x)) {
+      as.call(lapply(as.list(x), rr))
+    } else {
+      x
+    }
+  }
+
+  z <- lapply(as.list(form), rr)
+  B
+}

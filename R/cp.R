@@ -67,7 +67,6 @@ cp.cpr_bs <- function(x, theta, ...) {
               keep_fit = NULL,
               fit    = NULL,
               theta = NULL,
-              theta_vcov = NULL,
               coefficients = NULL,
               vcov = NULL,
               vcov_theta = NULL,
@@ -84,16 +83,21 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' @rdname cp
 #' @param formula a formula that is appropriate for regression method being used.
 #' @param data a required \code{data.frame}
-#' @param method the regression method such as \code{\link[stats]{lm}}, \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
-#' @param method.args a list of additional arguments to pass to the regression method.
-#' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the regression model fit is retained and returned in as the \code{fit} element. If \code{FALSE} the \code{fit} element with be \code{NA}.
-#' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check that the design matrix is full rank.
+#' @param method the regression method such as \code{\link[stats]{lm}},
+#' \code{\link[stats]{glm}}, \code{\link[lme4]{lmer}}, etc.
+#' @param method.args a list of additional arguments to pass to the regression
+#' method.
+#' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the
+#' regression model fit is retained and returned in as the \code{fit} element.
+#' If \code{FALSE} the \code{fit} element with be \code{NA}.
+#' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check
+#' that the design matrix is full rank.
 cp.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = TRUE, check_rank = TRUE, ...) {
 
   # check for some formula specification issues
   rhs_check <- grepl("bsplines", attr(stats::terms(formula), "term.labels"))
   if ( !rhs_check[1] | any(rhs_check[-1]) ) {
-    stop("bsplines() must appear first, once, and with no effect modifiers, as the first term on the right hand side of the formula.")
+    stop("bsplines() must appear first, once, and with no effect modifiers, on the right hand side of the formula.")
   }
 
   # this function will add f_for_use and data_for_use into this environment
@@ -106,7 +110,8 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
 
   regression <- match.fun(method)
   fit <- do.call(regression, cl)
-  COEF_VCOV <- coef_vcov(fit)
+  Bmat <- stats::model.frame(fit)[[2]]
+  COEF_VCOV <- coef_vcov(fit, theta_idx = seq(1, ncol(Bmat), by = 1))
 
   if (check_rank) {
     m <- stats::model.matrix(lme4::nobars(f_for_use), data_for_use)
@@ -119,9 +124,6 @@ cp.formula <- function(formula, data, method = stats::lm, method.args = list(), 
   cl <- as.list(match.call())
   cl[[1]] <- as.name("cp")
   cl <- as.call(cl)
-
-  Bmat <- stats::model.frame(fit)
-  Bmat <- Bmat[[which(grepl("bsplines", names(Bmat)))]]
 
   out <- cp.cpr_bs(Bmat, as.vector(COEF_VCOV$theta))
 

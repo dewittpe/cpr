@@ -4,7 +4,7 @@
 \alias{cnr}
 \title{Control Net Reduction}
 \usage{
-cnr(x, margin, n_polycoef = 20L, progress = interactive(), ...)
+cnr(x, margin, n_polycoef = 20L, progress = c("cnr", "influence", "none"), ...)
 }
 \arguments{
 \item{x}{a \code{cnr_cn} object}
@@ -15,7 +15,7 @@ cnr(x, margin, n_polycoef = 20L, progress = interactive(), ...)
 \item{n_polycoef}{the number of polynomial coefficients to use when assessing
 the influence of each internal knot.}
 
-\item{progress}{show a progress bar.}
+\item{progress}{controls the level of progress messaging.}
 
 \item{...}{not currently used}
 }

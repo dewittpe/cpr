@@ -29,7 +29,7 @@ and \code{cpr_cn} objects.
 ################################################################################
 ##                          Updating a cpr_bs object                          ##
 # construct a B-spline basis
-bmat <- bsplines(seq(1, 10, length = 15), df = 5, order = 3)
+bmat <- bsplines(runif(10, 1, 10), df = 5, order = 3, bknots = c(1, 10))
 
 # look at the structure of the basis
 str(bmat)
