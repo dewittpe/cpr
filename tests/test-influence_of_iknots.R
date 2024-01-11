@@ -40,12 +40,12 @@ with(e, {
   initial_cp <-
     cp(y ~ bsplines(x, iknots = c(1, 1.5, 2.3, 3.0, 4, 4.5), bknots = c(0, 6)), data = DF)
 
-  iok0 <- influence_of_iknots(initial_cp, versbose = FALSE, cl = 0)
-  iok1 <- influence_of_iknots(initial_cp, versbose = FALSE, cl = 1)
-  iok2 <- influence_of_iknots(initial_cp, versbose = FALSE, cl = 2)
-  iok0v <- influence_of_iknots(initial_cp, versbose = TRUE, cl = 0)
-  iok1v <- influence_of_iknots(initial_cp, versbose = TRUE, cl = 1)
-  iok2v <- influence_of_iknots(initial_cp, versbose = TRUE, cl = 2)
+  iok0 <- influence_of_iknots(initial_cp, verbose = FALSE, cl = 0)
+  iok1 <- influence_of_iknots(initial_cp, verbose = FALSE, cl = 1)
+  iok2 <- influence_of_iknots(initial_cp, verbose = FALSE, cl = 2)
+  iok0v <- influence_of_iknots(initial_cp, verbose = TRUE, cl = 0)
+  iok1v <- influence_of_iknots(initial_cp, verbose = TRUE, cl = 1)
+  iok2v <- influence_of_iknots(initial_cp, verbose = TRUE, cl = 2)
 
   stopifnot(isTRUE(all.equal(iok0, iok1)))
   stopifnot(isTRUE(all.equal(iok0, iok2)))
