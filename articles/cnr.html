@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@ DeWitt</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dewittpe/cpr/" class="external-link">cpr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"cpr"</span><span class="op">)</span></span>
-<span><span class="co">## [1] '0.3.0.9000'</span></span></code></pre></div>
+<span><span class="co">## [1] '0.3.0.9005'</span></span></code></pre></div>
 <p>The control polygon reduction methods for uni-variable functions can
 be extended to multi-variable functions by generalizing control polygons
 to control nets.</p>
@@ -316,24 +316,38 @@ is <span class="math inline">\(\xi_{2,5}.\)</span></p>
 <p><img src="cnr_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 <p>A call to <code>cnr</code> runs the full CNR algorithm on an initial
 control net.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cnr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cnr.html">cnr</a></span><span class="op">(</span><span class="va">initial_cn</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cnr0</span><span class="op">)</span></span>
-<span><span class="co">##   dfs   loglik        rss         rse n_iknots1 iknots1 n_iknots2      iknots2</span></span>
-<span><span class="co">## 1  12 12396.78 49.0631393 0.070087150         0                 0             </span></span>
-<span><span class="co">## 2  15 12408.53 48.9479832 0.070015367         0                 1        0.582</span></span>
-<span><span class="co">## 3  18 36554.82  0.3912139 0.006260346         0                 2 0.418, 0.582</span></span>
-<span><span class="co">## 4  21 36559.88  0.3908179 0.006258118         0                 3 0.418, 0....</span></span>
-<span><span class="co">## 5  24 38449.23  0.2678356 0.005181505         0                 4 0.418, 0....</span></span>
-<span><span class="co">## 6  32 38449.23  0.2678356 0.005183584         1   0.234         4 0.418, 0....</span></span>
-<span><span class="co">##   index</span></span>
-<span><span class="co">## 1     1</span></span>
-<span><span class="co">## 2     2</span></span>
-<span><span class="co">## 3     3</span></span>
-<span><span class="co">## 4     4</span></span>
-<span><span class="co">## 5     5</span></span>
-<span><span class="co">## 6     6</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cnr0</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cnr0 <span class="ot">&lt;-</span> <span class="fu">cnr</span>(initial_cn)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============</span>                                                          <span class="er">|</span>  <span class="dv">17</span>%</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========================================================</span>            <span class="er">|</span>  <span class="dv">83</span>%</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cnr0)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="do">##   dfs   loglik        rss         rse n_iknots1 iknots1 n_iknots2      iknots2</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 1  12 12396.78 49.0631393 0.070087150         0                 0             </span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="do">## 2  15 12408.53 48.9479832 0.070015367         0                 1        0.582</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="do">## 3  18 36554.82  0.3912139 0.006260346         0                 2 0.418, 0.582</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 4  21 36559.88  0.3908179 0.006258118         0                 3 0.418, 0....</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="do">## 5  24 38449.23  0.2678356 0.005181505         0                 4 0.418, 0....</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="do">## 6  32 38449.23  0.2678356 0.005183584         1   0.234         4 0.418, 0....</span></span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="do">##   index</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="do">## 1     1</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="do">## 2     2</span></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="do">## 3     3</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="do">## 4     4</span></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="do">## 5     5</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="do">## 6     6</span></span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cnr0)</span></code></pre></div>
 <p><img src="cnr_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>The plot of the residual standard errors by index shows index 3 is
 the preferable model. We can look at all the surfaces and see there is
@@ -382,7 +396,7 @@ considerable differences in the surfaces for index 1 and 2.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] cpr_0.3.0.9000 qwraps2_0.6.0 </span></span>
+<span><span class="co">## [1] cpr_0.3.0.9005 qwraps2_0.6.0 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] generics_0.1.3    utf8_1.2.4        sass_0.4.8        tcltk_4.3.2      </span></span>

@@ -12,7 +12,7 @@ B-splines."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/
     
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,8 @@ if <code>iknots</code> is specified.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>There are several differences between this function and <code><a href="https://rdrr.io/r/splines/bs.html" class="external-link">bs</a></code>.</p>
+    <p>There are several differences between this function and
+<code><a href="https://rdrr.io/r/splines/bs.html" class="external-link">bs</a></code>.</p>
 <p>The most important difference is how the two methods treat the right-hand end
 of the support.  <code><a href="https://rdrr.io/r/splines/bs.html" class="external-link">bs</a></code> uses a pivot method to allow for
 extrapolation and thus returns a basis matrix where non-zero values exist on
@@ -108,7 +109,8 @@ different from the attributes of the object returned by
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
     <p>C. de Boor, "A practical guide to splines. Revised Edition," Springer, 2001.</p>
-<p>H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques," Springer, 2002.</p>
+<p>H. Prautzsch, W. Boehm, M. Paluszny, "Bezier and B-spline Techniques,"
+Springer, 2002.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -156,10 +158,14 @@ the control polygon reduction method.</p></div>
 <span class="r-in"><span><span class="co"># The x-axis, by default, show the knot locations.  Other options are numeric</span></span></span>
 <span class="r-in"><span><span class="co"># values, and/or to use a second x-axis</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bmat</span>, show_xi <span class="op">=</span> <span class="cn">TRUE</span>,  show_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># default, knot, symbols, on lower axis</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bmat</span>, show_xi <span class="op">=</span> <span class="cn">TRUE</span>,  show_x <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># default, knot, symbols, on lower</span></span></span>
 <span class="r-plt img"><img src="bsplines-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bmat</span>, show_xi <span class="op">=</span> <span class="cn">FALSE</span>, show_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># Numeric value for the knot locations</span></span></span>
+<span class="r-in"><span>                                            <span class="co"># axis</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bmat</span>, show_xi <span class="op">=</span> <span class="cn">FALSE</span>, show_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># Numeric value for the knot</span></span></span>
 <span class="r-plt img"><img src="bsplines-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span>                                            <span class="co"># locations</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">bmat</span>, show_xi <span class="op">=</span> <span class="cn">TRUE</span>,  show_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># symbols on bottom, numbers on top</span></span></span>
 <span class="r-plt img"><img src="bsplines-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>

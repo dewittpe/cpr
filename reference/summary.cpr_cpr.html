@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,9 @@ and fit statistic.</p>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cpr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="cpr.html">cpr</a></span><span class="op">(</span><span class="va">initial_cp</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cpr0</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |==========                                                            |  14%  |                                                                              |====================                                                  |  29%  |                                                                              |==============================                                        |  43%  |                                                                              |========================================                              |  57%  |                                                                              |==================================================                    |  71%  |                                                                              |============================================================          |  86%  |                                                                              |======================================================================| 100%</span>
+<span class="r-in"><span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cpr0</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">s</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   dfs n_iknots       iknots    loglik       rss       rse    wiggle fdsc</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   4        0              -74.49596 25.977023 0.5201865  46.88727    2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   5        1          4.5 -60.10762 19.481116 0.4528403  46.14794    2</span>
@@ -123,6 +125,8 @@ and fit statistic.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           loglik rss rse</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> quadratic      3   3   3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> linear         3   3   3</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">s</span>, type <span class="op">=</span> <span class="st">"rse"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="summary.cpr_cpr-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

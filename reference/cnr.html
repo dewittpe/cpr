@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,7 +60,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cnr</span><span class="op">(</span><span class="va">x</span>, <span class="va">margin</span>, n_polycoef <span class="op">=</span> <span class="fl">20L</span>, progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/interactive.html" class="external-link">interactive</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cnr</span><span class="op">(</span><span class="va">x</span>, <span class="va">margin</span>, n_polycoef <span class="op">=</span> <span class="fl">20L</span>, progress <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"cnr"</span>, <span class="st">"influence"</span>, <span class="st">"none"</span><span class="op">)</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,7 +80,7 @@ the influence of each internal knot.</p></dd>
 
 
 <dt>progress</dt>
-<dd><p>show a progress bar.</p></dd>
+<dd><p>controls the level of progress messaging.</p></dd>
 
 
 <dt>...</dt>
@@ -120,6 +120,7 @@ Reduction.</p>
 <span class="r-in"><span>                               , bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">44</span>, <span class="fl">53</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>         , data <span class="op">=</span> <span class="va">spdg</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cnr0</span> <span class="op">&lt;-</span> <span class="fu">cnr</span><span class="op">(</span><span class="va">acn</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |======                                                                |   9%  |                                                                              |=============                                                         |  18%  |                                                                              |===================                                                   |  27%  |                                                                              |=========================                                             |  36%  |                                                                              |================================                                      |  45%  |                                                                              |======================================                                |  55%  |                                                                              |=============================================                         |  64%  |                                                                              |===================================================                   |  73%  |                                                                              |=========================================================             |  82%  |                                                                              |================================================================      |  91%  |                                                                              |======================================================================| 100%</span>
 <span class="r-in"><span><span class="va">cnr0</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A list of control nets</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 11</span>

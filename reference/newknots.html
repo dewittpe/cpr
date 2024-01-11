@@ -14,7 +14,7 @@ from with different internal knots."><!-- mathjax --><script src="https://cdnjs.
     
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9005</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -106,10 +106,23 @@ user.</p></div>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">cp0</span> <span class="op">&lt;-</span> <span class="fu"><a href="cp.html">cp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="va">pdg</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">day</span>, iknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">.25</span>, <span class="fl">0</span>, <span class="fl">0.25</span><span class="op">)</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">spdg</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">cpr</span><span class="fu">:::</span><span class="fu">newknots</span><span class="op">(</span><span class="va">cp0</span><span class="op">$</span><span class="va">call</span><span class="op">$</span><span class="va">formula</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.85</span>, <span class="fl">0</span>, <span class="fl">0.25</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">new_knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.85</span>, <span class="fl">0</span>, <span class="fl">0.25</span>, <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu">cpr</span><span class="fu">:::</span><span class="fu">newknots</span><span class="op">(</span><span class="va">cp0</span><span class="op">$</span><span class="va">call</span><span class="op">$</span><span class="va">formula</span>, nk <span class="op">=</span> <span class="va">new_knots</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">f</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> log(pdg) ~ bsplines(day, iknots = c(-0.85, 0, 0.25, 0.3), bknots = c(-1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     1))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-in"><span><span class="fu"><a href="cp.html">cp</a></span><span class="op">(</span><span class="va">f</span>, data <span class="op">=</span> <span class="va">spdg</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      xi_star        theta</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 -1.0000000 -0.007699847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 -0.9500000 -0.439608186</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 -0.6166667 -1.086005675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 -0.2000000 -1.657347591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0.1833333  0.570416069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  0.5166667  1.960042179</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0.7666667  1.477610529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1.0000000  0.088837397</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
