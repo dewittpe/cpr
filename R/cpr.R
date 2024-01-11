@@ -31,7 +31,7 @@
 #' # construct the initial control polygon.  Forth order spline with fifty
 #' # internal knots.  Remember degrees of freedom equal the polynomial order
 #' # plus number of internal knots.
-#' init_cp <- cp(log10(pdg) ~ bsplines(day, df = 54, bknots = c(-1, 1)) + (1|id),
+#' init_cp <- cp(log10(pdg) ~ bsplines(day, df = 24, bknots = c(-1, 1)) + (1|id),
 #'               data = spdg, method = lme4::lmer)
 #' cpr_run <- cpr(init_cp)
 #' plot(cpr_run, color = TRUE)
@@ -54,27 +54,28 @@
 #' sim_data <- data.frame(x = x, y = rbinom(2500, 1, p(x)))
 #'
 #' # Define the initial control polygon
-#' init_cp <- cp(formula = y ~ bsplines(x, df = 54, bknots = c(0, 4.5)),
+#' init_cp <- cp(formula = y ~ bsplines(x, df = 24, bknots = c(0, 4.5)),
 #'               data    = sim_data,
 #'               method  = glm,
 #'               method.args = list(family  = binomial())
 #'               )
 #'
-#' # run CPR, preferable model is in index 7
+#' # run CPR
 #' cpr_run <- cpr(init_cp)
 #'
+#' # preferable model is in index 6
 #' s <- summary(cpr_run)
-#' s
-#'
 #' plot(s, color = TRUE, type = "rse")
+#'
 #' plot(
 #'     cpr_run
 #'   , color = TRUE
 #'   , from = 5
-#'   , to = 9
+#'   , to = 7
 #'   , show_spline = TRUE
 #'   , show_cp = FALSE
 #'   )
+#'
 #'
 #' # plot the fitted spline and the true p(x)
 #' sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data))
