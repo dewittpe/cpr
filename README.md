@@ -62,36 +62,24 @@ You can also read these on package website
 
 ## Installing CPR
 
-### Released Versions
+### Released Version
 
-1. Install from the Comprehensive R Archive Network (CRAN)
+Install from the Comprehensive R Archive Network (CRAN)
 
 ```r
 # within R
 install.packages("cpr", repos = "https://cran.rstudio.com")
 ```
 
-2. Go to the [release page](https://github.com/dewittpe/cpr/releases) and down
-   load the `cpr_<version>.tar.gz` file of the version you want to install.
+### Developmental Version
 
-  * Install from the command line
+If you are working on a Windows machine you will need to have
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
 
-```bash
-R CMD INSTALL cpr_<version>.tar.gz
-```
+#### From github
 
-  * Within R
-
-```r
-install.packages(<path_to_file>, repos = NULL, type="source")
-```
-
-### Developmental Versions
-
-1. Install the developmental version from github.  This will require you to have
-   [remotes](https://cran.r-project.org/package=remotes) installed, and, if you are
-   using Windows, you'll need
-   [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed as well.
+This will require you to have
+[remotes](https://cran.r-project.org/package=remotes) package installed.
 
 ```r
 # Just the package without the manual and without vignettes
@@ -105,7 +93,7 @@ remotes::install_github(
 )
 ```
 
-2. Clone the repository and use `GNU make`
+#### From a cloneed repository
 
 You'll need to have the R package
 [devtools](https://cran.r-project.org/package=devtools) installed on your
@@ -123,8 +111,11 @@ To build the R package and install the dev verion on you machine:
 make install
 ```
 
-
-
+Alternatively, you should be able to build and install without `make`
+```bash
+R CMD build <path to cloned repo>
+R CMD INSTALL cpr_<version>.tar.gz
+```
 
 ## Other Notes:
 The `cpr` package provides 3D graphics via the
