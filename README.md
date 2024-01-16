@@ -61,30 +61,17 @@ You can also read these on package website
    (WNAR) of the IBS.
 
 ## Installing CPR
-Options for installing CPR:
+
+### Released Versions
+
 1. Install from the Comprehensive R Archive Network (CRAN)
 
-```
+```r
 # within R
 install.packages("cpr", repos = "https://cran.rstudio.com")
 ```
 
-2. Install the developmental version from github.  This will require you to have
-   [remotes](https://cran.r-project.org/package=remotes) installed, and, if you are
-   using Windows, you'll need
-   [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed as well.
-
-```
-remotes::install_github("dewittpe/cpr", build_vignettes = TRUE)
-```
-
-3. Clone the repository and use `GNU make`
-
-```bash
-make install
-```
-
-4. Go to the [release page](https://github.com/dewittpe/cpr/releases) and down
+2. Go to the [release page](https://github.com/dewittpe/cpr/releases) and down
    load the `cpr_<version>.tar.gz` file of the version you want to install.
 
   * Install from the command line
@@ -99,6 +86,46 @@ R CMD INSTALL cpr_<version>.tar.gz
 install.packages(<path_to_file>, repos = NULL, type="source")
 ```
 
+### Developmental Versions
+
+1. Install the developmental version from github.  This will require you to have
+   [remotes](https://cran.r-project.org/package=remotes) installed, and, if you are
+   using Windows, you'll need
+   [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed as well.
+
+```r
+# Just the package without the manual and without vignettes
+remotes::install_github(repo = "dewittpe/cpr")
+
+# Install with vignettes
+remotes::install_github(
+    repo = "dewittpe/cpr"
+  , dependbuild_vignettes = TRUE
+  , dependencies = TRUE
+)
+```
+
+2. Clone the repository and use `GNU make`
+
+You'll need to have the R package
+[devtools](https://cran.r-project.org/package=devtools) installed on your
+machine.
+
+To check R dependencies before building, or after you get errors due to missing
+R packages run:
+```r
+devtools::install_dev_deps()
+```
+
+To build the R package and install the dev verion on you machine:
+
+```bash
+make install
+```
+
+
+
+
 ## Other Notes:
 The `cpr` package provides 3D graphics via the
 [`rgl`](https://CRAN.R-project.org/package=rgl) package.  If you are get an
@@ -111,7 +138,7 @@ engine](https://freetype.org/).
 
 On Debian, you can get the library via:
 
-```
+```bash
 apt-get install libfreetype6-dev
 ```
 
