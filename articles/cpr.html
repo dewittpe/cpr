@@ -698,8 +698,15 @@ the matrix. By construction, <span class="math inline">\(\left(\boldsymbol{I} - 
 \boldsymbol{\Sigma} \left(\boldsymbol{I} -
 \boldsymbol{H}\right)^{T}\)</span> is singular and thus the standard
 inverse does not exist and a generalized inverse is necessary. This
-yields the test statistic following a chi-square distribution with one
-degree of freedom, <span class="math display">\[ w_j \sim
+yields the test statistic following an F distribution with 1, and <span class="math inline">\(\nu_2\)</span> degress of freedom, <span class="math display">\[ w_j \sim F_{1,\nu_2}.\]</span> The second degree
+of freedom is dependent on the sample size, the number of regression
+parameters, and the type of regression used to estimate the
+ordinates.</p>
+<p>To simplify the work, and generalize the approach, we will use the
+fact that the limiting distribuiton of <span class="math inline">\(F_{1,
+\nu_2}\)</span> as <span class="math inline">\(\nu_2 \rightarrow
+\infty\)</span> is <span class="math inline">\(\chisq_{1}^{2},\)</span>
+that is, <span class="math display">\[ w_j \sim
 \chi_{1}^{2}.\]</span></p>
 <p>Now, if we are interested in removing the knot with the lowest
 influence we are interested in the minimum. So the hypothesis test we
@@ -1932,20 +1939,20 @@ Prautzsch, Hartmut, Wolfgang Boehm, and Marco Paluszny. 2002.
 <span><span class="co">##  [1] gtable_0.3.4      xfun_0.41         bslib_0.6.1       ggplot2_3.4.4    </span></span>
 <span><span class="co">##  [5] rstatix_0.7.2     lattice_0.21-9    vctrs_0.6.5       tools_4.3.2      </span></span>
 <span><span class="co">##  [9] generics_0.1.3    tibble_3.2.1      fansi_1.0.6       highr_0.10       </span></span>
-<span><span class="co">## [13] pkgconfig_2.0.3   Matrix_1.6-4      desc_1.4.3        lifecycle_1.0.4  </span></span>
+<span><span class="co">## [13] pkgconfig_2.0.3   Matrix_1.6-5      desc_1.4.3        lifecycle_1.0.4  </span></span>
 <span><span class="co">## [17] compiler_4.3.2    farver_2.1.1      stringr_1.5.1     textshaping_0.3.7</span></span>
 <span><span class="co">## [21] munsell_0.5.0     carData_3.0-5     htmltools_0.5.7   sass_0.4.8       </span></span>
 <span><span class="co">## [25] yaml_2.3.8        pillar_1.9.0      pkgdown_2.0.7     car_3.1-2        </span></span>
-<span><span class="co">## [29] ggpubr_0.6.0      nloptr_2.0.3      jquerylib_0.1.4   tidyr_1.3.0      </span></span>
+<span><span class="co">## [29] ggpubr_0.6.0      nloptr_2.0.3      jquerylib_0.1.4   tidyr_1.3.1      </span></span>
 <span><span class="co">## [33] MASS_7.3-60       cachem_1.0.8      boot_1.3-28.1     abind_1.4-5      </span></span>
-<span><span class="co">## [37] nlme_3.1-163      tidyselect_1.2.0  digest_0.6.33     stringi_1.8.3    </span></span>
+<span><span class="co">## [37] nlme_3.1-163      tidyselect_1.2.0  digest_0.6.34     stringi_1.8.3    </span></span>
 <span><span class="co">## [41] dplyr_1.1.4       purrr_1.0.2       labeling_0.4.3    splines_4.3.2    </span></span>
-<span><span class="co">## [45] cowplot_1.1.2     fastmap_1.1.1     grid_4.3.2        colorspace_2.1-0 </span></span>
+<span><span class="co">## [45] cowplot_1.1.3     fastmap_1.1.1     grid_4.3.2        colorspace_2.1-0 </span></span>
 <span><span class="co">## [49] cli_3.6.2         magrittr_2.0.3    utf8_1.2.4        broom_1.0.5      </span></span>
-<span><span class="co">## [53] withr_2.5.2       scales_1.3.0      backports_1.4.1   rmarkdown_2.25   </span></span>
+<span><span class="co">## [53] withr_3.0.0       scales_1.3.0      backports_1.4.1   rmarkdown_2.25   </span></span>
 <span><span class="co">## [57] lme4_1.1-35.1     gridExtra_2.3     ggsignif_0.6.4    ragg_1.2.7       </span></span>
-<span><span class="co">## [61] memoise_2.0.1     evaluate_0.23     knitr_1.45        rlang_1.1.2      </span></span>
-<span><span class="co">## [65] Rcpp_1.0.11       glue_1.6.2        minqa_1.2.6       jsonlite_1.8.8   </span></span>
+<span><span class="co">## [61] memoise_2.0.1     evaluate_0.23     knitr_1.45        rlang_1.1.3      </span></span>
+<span><span class="co">## [65] Rcpp_1.0.12       glue_1.7.0        minqa_1.2.6       jsonlite_1.8.8   </span></span>
 <span><span class="co">## [69] R6_2.5.1          systemfonts_1.0.5 fs_1.6.3</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

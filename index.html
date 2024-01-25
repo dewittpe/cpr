@@ -117,29 +117,47 @@
 <div class="section level2">
 <h2 id="installing-cpr">Installing CPR<a class="anchor" aria-label="anchor" href="#installing-cpr"></a>
 </h2>
-<p>Options for installing CPR: 1. Install from the Comprehensive R Archive Network (CRAN)</p>
-<pre><code><span><span class="co"># within R</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cpr"</span>, repos <span class="op">=</span> <span class="st">"https://cran.rstudio.com"</span><span class="op">)</span></span></code></pre>
-<ol start="2" style="list-style-type: decimal">
-<li>Install the developmental version from github. This will require you to have <a href="https://cran.r-project.org/package=remotes" class="external-link">remotes</a> installed, and, if you are using Windows, you’ll need <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> installed as well.</li>
-</ol>
-<pre><code><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dewittpe/cpr"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
-<ol start="3" style="list-style-type: decimal">
-<li>Clone the repository and use <code>GNU make</code>
-</li>
-</ol>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> install</span></code></pre></div>
-<ol start="4" style="list-style-type: decimal">
-<li>Go to the <a href="https://github.com/dewittpe/cpr/releases" class="external-link">release page</a> and down load the <code>cpr_&lt;version&gt;.tar.gz</code> file of the version you want to install.</li>
-</ol>
-<ul>
-<li>Install from the command line</li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL cpr_<span class="op">&lt;</span>version<span class="op">&gt;</span>.tar.gz</span></code></pre></div>
-<ul>
-<li>Within R</li>
-</ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="sc">&lt;</span>path_to_file<span class="sc">&gt;</span>, <span class="at">repos =</span> <span class="cn">NULL</span>, <span class="at">type=</span><span class="st">"source"</span>)</span></code></pre></div>
+<div class="section level3">
+<h3 id="released-version">Released Version<a class="anchor" aria-label="anchor" href="#released-version"></a>
+</h3>
+<p>Install from the Comprehensive R Archive Network (CRAN)</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># within R</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cpr"</span>, repos <span class="op">=</span> <span class="st">"https://cran.rstudio.com"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="developmental-version">Developmental Version<a class="anchor" aria-label="anchor" href="#developmental-version"></a>
+</h3>
+<p>If you are working on a Windows machine you will need to have <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> installed.</p>
+<div class="section level4">
+<h4 id="from-github">From github<a class="anchor" aria-label="anchor" href="#from-github"></a>
+</h4>
+<p>This will require you to have <a href="https://cran.r-project.org/package=remotes" class="external-link">remotes</a> package installed.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Just the package without the manual and without vignettes</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span>repo <span class="op">=</span> <span class="st">"dewittpe/cpr"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Install with vignettes</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span></span>
+<span>    repo <span class="op">=</span> <span class="st">"dewittpe/cpr"</span></span>
+<span>  , dependbuild_vignettes <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  , dependencies <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="from-a-cloneed-repository">From a cloneed repository<a class="anchor" aria-label="anchor" href="#from-a-cloneed-repository"></a>
+</h4>
+<p>You’ll need to have the R package <a href="https://cran.r-project.org/package=devtools" class="external-link">devtools</a> installed on your machine.</p>
+<p>To check R dependencies before building, or after you get errors due to missing R packages run:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_dev_deps</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>To build the R package and install the dev verion on you machine:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">make</span> install</span></code></pre></div>
+<p>Alternatively, you should be able to build and install without <code>make</code></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD build <span class="op">&lt;</span>path to cloned repo<span class="op">&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL cpr_<span class="op">&lt;</span>version<span class="op">&gt;</span>.tar.gz</span></code></pre></div>
+</div>
+</div>
 </div>
 <div class="section level2">
 <h2 id="other-notes">Other Notes:<a class="anchor" aria-label="anchor" href="#other-notes"></a>
@@ -148,7 +166,7 @@
 <pre><code>  font family "sans" not found, using "bitmap"</code></pre>
 <p>Then there is an easy fix. You need to get the <a href="https://freetype.org/" class="external-link">FreeType 2 font engine</a>.</p>
 <p>On Debian, you can get the library via:</p>
-<pre><code>apt-get install libfreetype6-dev</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">apt-get</span> install libfreetype6-dev</span></code></pre></div>
 <p>Once the FreeType 2 font engine has been installed on your computer you <strong>must reinstall</strong> the <code>rgl</code> package.</p>
 </div>
 </div>
