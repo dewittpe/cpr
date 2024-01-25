@@ -550,8 +550,16 @@ initial_cp |>
 #' denotes the Moore-Penrose inverse of the matrix.  By construction,
 #' $\left(\boldsymbol{I} - \boldsymbol{H}\right) \boldsymbol{\Sigma} \left(\boldsymbol{I} - \boldsymbol{H}\right)^{T}$
 #' is singular and thus the standard inverse does not exist and a generalized
-#' inverse is necessary. This yields the test statistic following a chi-square
-#' distribution with one degree of freedom,
+#' inverse is necessary. This yields the test statistic following an F
+#' distribution with 1, and $\nu_2$ degress of freedom,
+#' $$ w_j \sim F_{1,\nu_2}.$$
+#' The second degree of
+#' freedom is dependent on the sample size, the number of regression
+#' parameters, and the type of regression used to estimate the ordinates.
+#'
+#' To simplify the work, and generalize the approach, we will use the fact that
+#' the limiting distribuiton of $F_{1, \nu_2}$ as $\nu_2 \rightarrow \infty$ is
+#' $\chisq_{1}^{2},$ that is,
 #' $$ w_j \sim \chi_{1}^{2}.$$
 #'
 #' Now, if we are interested in removing the knot with the lowest influence we

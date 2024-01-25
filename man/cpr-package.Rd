@@ -3,7 +3,6 @@
 \docType{package}
 \name{cpr-package}
 \alias{cpr-package}
-\alias{_PACKAGE}
 \title{cpr: Control Polygon Reduction}
 \description{
 The cpr package implements the control polygon reduction and control net
