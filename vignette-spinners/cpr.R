@@ -539,9 +539,9 @@ initial_cp |>
 #' w_j =
 #' \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 #' \left[
-#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)
+#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
 #'   \boldsymbol{\Sigma}
-#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)^{T}
+#'   \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 #' \right]^{+}
 #' \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
 #' $$
@@ -559,7 +559,7 @@ initial_cp |>
 #'
 #' To simplify the work, and generalize the approach, we will use the fact that
 #' the limiting distribuiton of $F_{1, \nu_2}$ as $\nu_2 \rightarrow \infty$ is
-#' $\chisq_{1}^{2},$ that is,
+#' $\chi_{1}^{2},$ that is,
 #' $$ w_j \sim \chi_{1}^{2}.$$
 #'
 #' Now, if we are interested in removing the knot with the lowest influence we
@@ -762,12 +762,16 @@ list(  initial_cp , first_reduction_cp , second_reduction_cp , third_reduction_c
 {{ qwraps2::backtick(initial_cp) }}
 #' from the above example.
 #'
+#+ results = 'hide', message = FALSE
 cpr0 <- cpr(initial_cp)
+
+#'
+#'
 cpr0
 
 #'
 #' There are
-{{ length(cpr0$cps) }}
+{{ length(cpr0) }}
 #' control polygons within the
 {{ backtick(cpr_cpr) }}
 #' object,
@@ -881,7 +885,11 @@ ggpubr::ggarrange(
 #' Apply CPR to the
 {{ backtick(initial_cp) }}
 #' and look at the summary.  Only the first 10 of 51 rows are provided here.
+#+ results = "hide", message = FALSE
 cpr1 <- cpr(initial_cp)
+
+#'
+#'
 x <- summary(cpr1)
 knitr::kable(head(x, 10))
 

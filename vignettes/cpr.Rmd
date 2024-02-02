@@ -582,9 +582,9 @@ $$
 w_j =
 \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 \left[
-  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)
+  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
   \boldsymbol{\Sigma}
-  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}} \right)^{T}
+  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 \right]^{+}
 \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
 $$
@@ -602,7 +602,7 @@ parameters, and the type of regression used to estimate the ordinates.
 
 To simplify the work, and generalize the approach, we will use the fact that
 the limiting distribuiton of $F_{1, \nu_2}$ as $\nu_2 \rightarrow \infty$ is
-$\chisq_{1}^{2},$ that is,
+$\chi_{1}^{2},$ that is,
 $$ w_j \sim \chi_{1}^{2}.$$
 
 Now, if we are interested in removing the knot with the lowest influence we
@@ -827,14 +827,20 @@ Apply CPR to the
 from the above example.
 
 
-```{r}
+```{r results = 'hide', message = FALSE}
 cpr0 <- cpr(initial_cp)
+```
+
+
+
+
+```{r}
 cpr0
 ```
 
 
 There are
-`r  length(cpr0$cps)  `
+`r  length(cpr0)  `
 control polygons within the
 `r  backtick(cpr_cpr)  `
 object,
@@ -958,8 +964,14 @@ Apply CPR to the
 `r  backtick(initial_cp)  `
 and look at the summary.  Only the first 10 of 51 rows are provided here.
 
-```{r}
+```{r results = "hide", message = FALSE}
 cpr1 <- cpr(initial_cp)
+```
+
+
+
+
+```{r}
 x <- summary(cpr1)
 knitr::kable(head(x, 10))
 ```
