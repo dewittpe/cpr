@@ -683,11 +683,11 @@ w_j =
 \left(\left(\boldsymbol{I} -
 \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 \left[
-  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}}
-\right)
+  \left(\left(\boldsymbol{I} -
+\boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
   \boldsymbol{\Sigma}
-  \left(\left(\boldsymbol{I} - \boldsymbol{H}\right)\boldsymbol{\theta}}
-\right)^{T}
+  \left(\left(\boldsymbol{I} -
+\boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)^{T}
 \right]^{+}
 \left(\left(\boldsymbol{I} -
 \boldsymbol{H}\right)\hat{\boldsymbol{\theta}} \right)
@@ -705,7 +705,7 @@ ordinates.</p>
 <p>To simplify the work, and generalize the approach, we will use the
 fact that the limiting distribuiton of <span class="math inline">\(F_{1,
 \nu_2}\)</span> as <span class="math inline">\(\nu_2 \rightarrow
-\infty\)</span> is <span class="math inline">\(\chisq_{1}^{2},\)</span>
+\infty\)</span> is <span class="math inline">\(\chi_{1}^{2},\)</span>
 that is, <span class="math display">\[ w_j \sim
 \chi_{1}^{2}.\]</span></p>
 <p>Now, if we are interested in removing the knot with the lowest
@@ -1340,37 +1340,22 @@ lowest influence.</p>
 <h3 id="example-with-known-knots">Example with known knots<a class="anchor" aria-label="anchor" href="#example-with-known-knots"></a>
 </h3>
 <p>Apply CPR to the <code>initial_cp</code> from the above example.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>cpr0 <span class="ot">&lt;-</span> <span class="fu">cpr</span>(initial_cp)</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========</span>                                                            <span class="er">|</span>  <span class="dv">14</span>%</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="er">|====================</span>                                                  <span class="er">|</span>  <span class="dv">29</span>%</span>
-<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==============================</span>                                        <span class="er">|</span>  <span class="dv">43</span>%</span>
-<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>  <span class="er">|========================================</span>                              <span class="er">|</span>  <span class="dv">57</span>%</span>
-<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==================================================</span>                    <span class="er">|</span>  <span class="dv">71</span>%</span>
-<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============================================================</span>          <span class="er">|</span>  <span class="dv">86</span>%</span>
-<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>cpr0</span>
-<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a><span class="do">## A list of control polygons</span></span>
-<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a><span class="do">## List of 7</span></span>
-<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a><span class="do">##  - attr(*, "ioik")=List of 7</span></span>
-<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a><span class="do">##  - attr(*, "class")= chr [1:2] "cpr_cpr" "list"</span></span></code></pre></div>
-<p>There are 0 control polygons within the <code>cpr_cpr</code> object,
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cpr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cpr.html">cpr</a></span><span class="op">(</span><span class="va">initial_cp</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cpr0</span></span>
+<span><span class="co">## A list of control polygons</span></span>
+<span><span class="co">## List of 7</span></span>
+<span><span class="co">##  - attr(*, "ioik")=List of 7</span></span>
+<span><span class="co">##  - attr(*, "class")= chr [1:2] "cpr_cpr" "list"</span></span></code></pre></div>
+<p>There are 7 control polygons within the <code>cpr_cpr</code> object,
 <code>length(initial_cp$iknots) + 1</code>. The indexing is set such at
 that the <span class="math inline">\(i^{th}\)</span> element has <span class="math inline">\(i-1\)</span> internal knots.</p>
 <p>Before exploring the results, let’s just verify that the results of
 the call to <code>cpr</code> are the same as the manual results found
 about. There are some differences in the metadata of the objects, but
 the important parts, like the control polygons, are the same.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/all.equal-methods.html" class="external-link">all.equal</a></span><span class="op">(</span> <span class="va">cpr0</span><span class="op">[[</span><span class="st">"cps"</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="fl">7</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="st">"cp"</span><span class="op">]</span><span class="op">]</span>,  <span class="va">initial_cp</span><span class="op">[[</span><span class="st">"cp"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## [1] "target is NULL, current is data.frame"</span></span>
 <span></span>
@@ -1392,7 +1377,7 @@ the important parts, like the control polygons, are the same.</p>
 <p>In the manual process we identified <code>third_reduction_cp</code>
 as the preferable model. For the <code>cpr0</code> object we can quickly
 see a similar result as we did for the manual process.</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cpr0</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">s0</span>, row.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
@@ -1515,7 +1500,7 @@ statistic is negligible. See plot below. This is determined by finding
 the breakpoint such that a continuous, but not differentiable at
 breakpoint, quadratic spline fits the plot with minimal residual
 standard error.</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span></span>
 <span>  <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span></span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr0</span>, color <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -1539,7 +1524,7 @@ standard error.</p>
 <span><span class="co">## Warning: Removed 1 row containing missing values (`geom_line()`).</span></span>
 <span><span class="co">## Warning: Removed 1 rows containing missing values (`geom_point()`).</span></span>
 <span><span class="co">## Warning: Removed 1 row containing missing values (`geom_line()`).</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/unnamed-chunk-27-1.png" width="672"></p>
+<p><img src="cpr_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
 </div>
 <div class="section level3">
 <h3 id="example-when-knots-are-unknown">Example when knots are unknown<a class="anchor" aria-label="anchor" href="#example-when-knots-are-unknown"></a>
@@ -1569,7 +1554,7 @@ without precedent <span class="citation">Eilers and Marx (2010)</span>.
 We then apply the CPR algorithm to find a good set of knots.</p>
 <p>For example we will use 50 internal knots. Not surprisingly we have a
 fit that is more “connect-the-dots” than a smooth fit.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">initial_cp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cp.html">cp</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="../reference/bsplines.html">bsplines</a></span><span class="op">(</span><span class="va">x</span>, df <span class="op">=</span> <span class="fl">54</span>, bknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">DF</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span></span>
@@ -1577,117 +1562,14 @@ fit that is more “connect-the-dots” than a smooth fit.</p>
 <span>  ,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">initial_cp</span>, show_cp <span class="op">=</span> <span class="cn">FALSE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span> <span class="va">original_data_ggplot_layers</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/unnamed-chunk-28-1.png" width="672"></p>
+<p><img src="cpr_files/figure-html/unnamed-chunk-29-1.png" width="672"></p>
 <p>Apply CPR to the <code>initial_cp</code> and look at the summary.
 Only the first 10 of 51 rows are provided here.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>cpr1 <span class="ot">&lt;-</span> <span class="fu">cpr</span>(initial_cp)</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=</span>                                                                     <span class="er">|</span>   <span class="dv">2</span>%</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===</span>                                                                   <span class="er">|</span>   <span class="dv">4</span>%</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="er">|====</span>                                                                  <span class="er">|</span>   <span class="dv">6</span>%</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=====</span>                                                                 <span class="er">|</span>   <span class="dv">8</span>%</span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=======</span>                                                               <span class="er">|</span>  <span class="dv">10</span>%</span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>  <span class="er">|========</span>                                                              <span class="er">|</span>  <span class="dv">12</span>%</span>
-<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========</span>                                                            <span class="er">|</span>  <span class="dv">14</span>%</span>
-<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===========</span>                                                           <span class="er">|</span>  <span class="dv">16</span>%</span>
-<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============</span>                                                          <span class="er">|</span>  <span class="dv">18</span>%</span>
-<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==============</span>                                                        <span class="er">|</span>  <span class="dv">20</span>%</span>
-<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===============</span>                                                       <span class="er">|</span>  <span class="dv">22</span>%</span>
-<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-28"><a href="#cb32-28" aria-hidden="true" tabindex="-1"></a>  <span class="er">|================</span>                                                      <span class="er">|</span>  <span class="dv">24</span>%</span>
-<span id="cb32-29"><a href="#cb32-29" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-30"><a href="#cb32-30" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==================</span>                                                    <span class="er">|</span>  <span class="dv">25</span>%</span>
-<span id="cb32-31"><a href="#cb32-31" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-32"><a href="#cb32-32" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================</span>                                                   <span class="er">|</span>  <span class="dv">27</span>%</span>
-<span id="cb32-33"><a href="#cb32-33" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-34"><a href="#cb32-34" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=====================</span>                                                 <span class="er">|</span>  <span class="dv">29</span>%</span>
-<span id="cb32-35"><a href="#cb32-35" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-36"><a href="#cb32-36" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================</span>                                                <span class="er">|</span>  <span class="dv">31</span>%</span>
-<span id="cb32-37"><a href="#cb32-37" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-38"><a href="#cb32-38" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
-<span id="cb32-39"><a href="#cb32-39" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-40"><a href="#cb32-40" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=========================</span>                                             <span class="er">|</span>  <span class="dv">35</span>%</span>
-<span id="cb32-41"><a href="#cb32-41" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-42"><a href="#cb32-42" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========================</span>                                            <span class="er">|</span>  <span class="dv">37</span>%</span>
-<span id="cb32-43"><a href="#cb32-43" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-44"><a href="#cb32-44" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===========================</span>                                           <span class="er">|</span>  <span class="dv">39</span>%</span>
-<span id="cb32-45"><a href="#cb32-45" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-46"><a href="#cb32-46" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=============================</span>                                         <span class="er">|</span>  <span class="dv">41</span>%</span>
-<span id="cb32-47"><a href="#cb32-47" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-48"><a href="#cb32-48" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==============================</span>                                        <span class="er">|</span>  <span class="dv">43</span>%</span>
-<span id="cb32-49"><a href="#cb32-49" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-50"><a href="#cb32-50" aria-hidden="true" tabindex="-1"></a>  <span class="er">|================================</span>                                      <span class="er">|</span>  <span class="dv">45</span>%</span>
-<span id="cb32-51"><a href="#cb32-51" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-52"><a href="#cb32-52" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=================================</span>                                     <span class="er">|</span>  <span class="dv">47</span>%</span>
-<span id="cb32-53"><a href="#cb32-53" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-54"><a href="#cb32-54" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==================================</span>                                    <span class="er">|</span>  <span class="dv">49</span>%</span>
-<span id="cb32-55"><a href="#cb32-55" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-56"><a href="#cb32-56" aria-hidden="true" tabindex="-1"></a>  <span class="er">|====================================</span>                                  <span class="er">|</span>  <span class="dv">51</span>%</span>
-<span id="cb32-57"><a href="#cb32-57" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-58"><a href="#cb32-58" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=====================================</span>                                 <span class="er">|</span>  <span class="dv">53</span>%</span>
-<span id="cb32-59"><a href="#cb32-59" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-60"><a href="#cb32-60" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================</span>                                <span class="er">|</span>  <span class="dv">55</span>%</span>
-<span id="cb32-61"><a href="#cb32-61" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-62"><a href="#cb32-62" aria-hidden="true" tabindex="-1"></a>  <span class="er">|========================================</span>                              <span class="er">|</span>  <span class="dv">57</span>%</span>
-<span id="cb32-63"><a href="#cb32-63" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-64"><a href="#cb32-64" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=========================================</span>                             <span class="er">|</span>  <span class="dv">59</span>%</span>
-<span id="cb32-65"><a href="#cb32-65" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-66"><a href="#cb32-66" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===========================================</span>                           <span class="er">|</span>  <span class="dv">61</span>%</span>
-<span id="cb32-67"><a href="#cb32-67" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-68"><a href="#cb32-68" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============================================</span>                          <span class="er">|</span>  <span class="dv">63</span>%</span>
-<span id="cb32-69"><a href="#cb32-69" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-70"><a href="#cb32-70" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=============================================</span>                         <span class="er">|</span>  <span class="dv">65</span>%</span>
-<span id="cb32-71"><a href="#cb32-71" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-72"><a href="#cb32-72" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
-<span id="cb32-73"><a href="#cb32-73" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-74"><a href="#cb32-74" aria-hidden="true" tabindex="-1"></a>  <span class="er">|================================================</span>                      <span class="er">|</span>  <span class="dv">69</span>%</span>
-<span id="cb32-75"><a href="#cb32-75" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-76"><a href="#cb32-76" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=================================================</span>                     <span class="er">|</span>  <span class="dv">71</span>%</span>
-<span id="cb32-77"><a href="#cb32-77" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-78"><a href="#cb32-78" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================================================</span>                   <span class="er">|</span>  <span class="dv">73</span>%</span>
-<span id="cb32-79"><a href="#cb32-79" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-80"><a href="#cb32-80" aria-hidden="true" tabindex="-1"></a>  <span class="er">|====================================================</span>                  <span class="er">|</span>  <span class="dv">75</span>%</span>
-<span id="cb32-81"><a href="#cb32-81" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-82"><a href="#cb32-82" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================</span>                <span class="er">|</span>  <span class="dv">76</span>%</span>
-<span id="cb32-83"><a href="#cb32-83" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-84"><a href="#cb32-84" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=======================================================</span>               <span class="er">|</span>  <span class="dv">78</span>%</span>
-<span id="cb32-85"><a href="#cb32-85" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-86"><a href="#cb32-86" aria-hidden="true" tabindex="-1"></a>  <span class="er">|========================================================</span>              <span class="er">|</span>  <span class="dv">80</span>%</span>
-<span id="cb32-87"><a href="#cb32-87" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-88"><a href="#cb32-88" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========================================================</span>            <span class="er">|</span>  <span class="dv">82</span>%</span>
-<span id="cb32-89"><a href="#cb32-89" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-90"><a href="#cb32-90" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===========================================================</span>           <span class="er">|</span>  <span class="dv">84</span>%</span>
-<span id="cb32-91"><a href="#cb32-91" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-92"><a href="#cb32-92" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============================================================</span>          <span class="er">|</span>  <span class="dv">86</span>%</span>
-<span id="cb32-93"><a href="#cb32-93" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-94"><a href="#cb32-94" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==============================================================</span>        <span class="er">|</span>  <span class="dv">88</span>%</span>
-<span id="cb32-95"><a href="#cb32-95" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-96"><a href="#cb32-96" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===============================================================</span>       <span class="er">|</span>  <span class="dv">90</span>%</span>
-<span id="cb32-97"><a href="#cb32-97" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-98"><a href="#cb32-98" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=================================================================</span>     <span class="er">|</span>  <span class="dv">92</span>%</span>
-<span id="cb32-99"><a href="#cb32-99" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-100"><a href="#cb32-100" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==================================================================</span>    <span class="er">|</span>  <span class="dv">94</span>%</span>
-<span id="cb32-101"><a href="#cb32-101" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-102"><a href="#cb32-102" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================================================================</span>   <span class="er">|</span>  <span class="dv">96</span>%</span>
-<span id="cb32-103"><a href="#cb32-103" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-104"><a href="#cb32-104" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=====================================================================</span> <span class="er">|</span>  <span class="dv">98</span>%</span>
-<span id="cb32-105"><a href="#cb32-105" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb32-106"><a href="#cb32-106" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb32-107"><a href="#cb32-107" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">summary</span>(cpr1)</span>
-<span id="cb32-108"><a href="#cb32-108" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">head</span>(x, <span class="dv">10</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cpr1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cpr.html">cpr</a></span><span class="op">(</span><span class="va">initial_cp</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cpr1</span><span class="op">)</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table style="width:100%;" class="table">
 <colgroup>
 <col width="4%">
@@ -1827,11 +1709,11 @@ Only the first 10 of 51 rows are provided here.</p>
 <p>From this, the preferable model is suggested to be index 5, the model
 with four internal knots. Inspection of the rse by index plot, I would
 argue from a manual selection that index 5 is preferable overall.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, type <span class="op">=</span> <span class="st">"rse"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/unnamed-chunk-30-1.png" width="700"></p>
+<p><img src="cpr_files/figure-html/unnamed-chunk-32-1.png" width="700"></p>
 <p>Let’s compare the models in indices 3, 4, and 5.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr1</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, <span class="va">cpr1</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, <span class="va">cpr1</span><span class="op">[[</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>, show_cp <span class="op">=</span> <span class="cn">TRUE</span>, show_spline <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  ,</span>
@@ -1839,7 +1721,7 @@ argue from a manual selection that index 5 is preferable overall.</p>
 <span>  ,</span>
 <span>  common.legend <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/unnamed-chunk-31-1.png" width="672"></p>
+<p><img src="cpr_files/figure-html/unnamed-chunk-33-1.png" width="672"></p>
 <p>The noticeable differences are, for the most part, located on the
 left side of the support between between 0 and 1. For the fifth index,
 there is change in convexity of the spline. Knowing that the models at
@@ -1848,7 +1730,7 @@ index 3 and 4 are good fits too, then it would be easy not select index
 <p>In practice I would likely pick the model in index 4 to have a smooth
 (small wiggle) and low rse. Compare the selected model to the original
 data.</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cpr1</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, show_cp <span class="op">=</span> <span class="cn">FALSE</span>, show_spline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Model Index 3"</span><span class="op">)</span> <span class="op">+</span></span>
@@ -1862,7 +1744,7 @@ data.</p>
 <span>  , nrow <span class="op">=</span> <span class="fl">1</span></span>
 <span>  , legend <span class="op">=</span> <span class="st">"none"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="cpr_files/figure-html/unnamed-chunk-32-1.png" width="672"></p>
+<p><img src="cpr_files/figure-html/unnamed-chunk-34-1.png" width="672"></p>
 </div>
 </div>
 <div class="section level2">
@@ -1872,7 +1754,7 @@ data.</p>
 B-splines, and building a control-net, the higher-dimensional analog of
 a control polygon, we can apply similar methods to estimate a surface.
 Details on the Control Net Reduction method are presented in</p>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"cnr"</span>, package <span class="op">=</span> <span class="st">"cpr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -1910,7 +1792,7 @@ Prautzsch, Hartmut, Wolfgang Boehm, and Marco Paluszny. 2002.
 <div class="section level2">
 <h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
 </h2>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">## R version 4.3.2 (2023-10-31)</span></span>
 <span><span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
