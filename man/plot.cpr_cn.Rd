@@ -75,7 +75,7 @@ For \code{plot3D} graphics there are no defaults values for the
 \code{net_args} and \code{surface_args}.
 }
 \examples{
-
+\donttest{
  acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
                                 , df = list(30, 4)
                                 , bknots = list(c(-1, 1), c(44, 53)))
@@ -85,8 +85,9 @@ For \code{plot3D} graphics there are no defaults values for the
 plot(acn, rgl = FALSE)
 
 # rgl
-\dontrun{
-plot(acn, rgl = TRUE)
+if (require(rgl)) {
+  plot(acn, rgl = TRUE)
+}
 }
 
 }

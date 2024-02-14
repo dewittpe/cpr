@@ -31,6 +31,7 @@ a list with two elements
 Get Two-Dimensional Control Net and Surface from n-dimensional Control Nets
 }
 \examples{
+\donttest{
 ## Extract the control net and surface from a cpr_cn object.
 a_cn <- cn(log10(pdg) ~ btensor(list(day, age, ttm)
            , df = list(15, 3, 5)
@@ -61,7 +62,7 @@ with(cn_and_surface$surface,
      )
 
 par(old_par)
-
+}
 }
 \seealso{
 \code{\link{get_spline}}

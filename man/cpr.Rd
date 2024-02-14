@@ -34,7 +34,7 @@ internal knots for each iteration of the CPR algorithm.  See
 \examples{
 #############################################################################
 # Example 1: find a model for log10(pdg) = f(day) from the spdg data set
-\dontrun{
+\donttest{
 # need the lme4 package to fit a mixed effect model
 require(lme4)
 

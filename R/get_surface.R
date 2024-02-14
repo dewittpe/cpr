@@ -21,6 +21,7 @@
 #' }
 #'
 #' @examples
+#' \donttest{
 #' ## Extract the control net and surface from a cpr_cn object.
 #' a_cn <- cn(log10(pdg) ~ btensor(list(day, age, ttm)
 #'            , df = list(15, 3, 5)
@@ -51,7 +52,7 @@
 #'      )
 #'
 #' par(old_par)
-#'
+#' }
 #' @export
 get_surface <- function(x, margin = 1:2, at, n = 100) {
   UseMethod("get_surface")

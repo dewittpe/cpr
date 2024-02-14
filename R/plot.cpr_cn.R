@@ -53,7 +53,7 @@
 #' @seealso \code{vignette(topic = "cnr", package = "cpr")}
 #'
 #' @examples
-#'
+#' \donttest{
 #'  acn <- cn(log10(pdg) ~ btensor(  x = list(day, age)
 #'                                 , df = list(30, 4)
 #'                                 , bknots = list(c(-1, 1), c(44, 53)))
@@ -63,8 +63,9 @@
 #' plot(acn, rgl = FALSE)
 #'
 #' # rgl
-#' \dontrun{
-#' plot(acn, rgl = TRUE)
+#' if (require(rgl)) {
+#'   plot(acn, rgl = TRUE)
+#' }
 #' }
 #'
 #' @method plot cpr_cn
