@@ -3,8 +3,8 @@
 #' @return the vertical distance between the control vertices of cp1 to the
 #' control polygon cp2.
 #'
-#' @param cp1 a cpr_cp object
-#' @param cp2 a cpr_cp object
+#' @param cp1 a \code{cpr_cp} object
+#' @param cp2 a \code{cpr_cp} object
 #'
 #' @seealso \code{\link{cp}}, \code{\link{cp_value}}
 #'

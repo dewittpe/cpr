@@ -18,7 +18,7 @@
 #'
 #' @param x a list of variables to build B-spline transforms of.  The tensor
 #' product of these B-splines will be returned.
-#' @param df degrees of freedom.  a list of the degrees of freedom for each
+#' @param df degrees of freedom.  A list of the degrees of freedom for each
 #' marginal.
 #' @param iknots a list of internal knots for each x.  If omitted, the default
 #' is to place no internal knots for all x.  If specified, the list needs to
@@ -30,7 +30,7 @@
 #' @param order  a list of the order for each x; defaults to 4L for all x.
 #'
 #' @return
-#' A matrix with a class cpr_bt
+#' A matrix with a class \code{cpr_bt}
 #'
 #' @seealso \code{\link{bsplines}}, \code{vignette(topic = "cnr", package = "cpr")}
 #'

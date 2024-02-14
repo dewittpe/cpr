@@ -7,9 +7,9 @@
 cp_diff(cp1, cp2)
 }
 \arguments{
-\item{cp1}{a cpr_cp object}
+\item{cp1}{a \code{cpr_cp} object}
 
-\item{cp2}{a cpr_cp object}
+\item{cp2}{a \code{cpr_cp} object}
 }
 \value{
 the vertical distance between the control vertices of cp1 to the

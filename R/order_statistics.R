@@ -24,7 +24,7 @@
 #' @return a numeric vector
 #'
 #' @references
-#' Casella G, Berger RL (2002). Statistical Inference. 2nd edition. Duxbury Thomson Learning.
+#' George Casella and Roger L. Berger (2002). Statistical Inference. 2nd edition. Duxbury Thomson Learning.
 #'
 #' @examples
 #'

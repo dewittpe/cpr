@@ -93,7 +93,7 @@ remotes::install_github(
 )
 ```
 
-#### From a cloneed repository
+#### From a cloned repository
 
 You'll need to have the R package
 [devtools](https://cran.r-project.org/package=devtools) installed on your
@@ -105,7 +105,7 @@ R packages run:
 devtools::install_dev_deps()
 ```
 
-To build the R package and install the dev verion on you machine:
+To build the R package and install the dev version on you machine:
 
 ```bash
 make install
