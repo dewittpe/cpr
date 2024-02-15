@@ -4,12 +4,12 @@
 #'
 #' \code{cpr} runs the control polygon reduction algorithm.
 #'
-#' The algorithm is genarlly speaking fast, but can take a long time to run if
+#' The algorithm is generally speaking fast, but can take a long time to run if
 #' the number of interior knots of initial control polygon is high.  To help
 #' track the progress of the execution you can have \code{progress = "cpr"}
-#' which will show a progress bar incremented for each interation of the CPR
-#' algorithm.  \code{progress = "influence"} will use a conbination of messages
-#' and progress bars to report on each step in assessing the influce of all the
+#' which will show a progress bar incremented for each iteration of the CPR
+#' algorithm.  \code{progress = "influence"} will use a combination of messages
+#' and progress bars to report on each step in assessing the influence of all the
 #' internal knots for each iteration of the CPR algorithm.  See
 #' \code{\link{influence_of_iknots}} for more details.
 #'
@@ -24,7 +24,7 @@
 #' @examples
 #' #############################################################################
 #' # Example 1: find a model for log10(pdg) = f(day) from the spdg data set
-#' \dontrun{
+#' \donttest{
 #' # need the lme4 package to fit a mixed effect model
 #' require(lme4)
 #'
@@ -79,7 +79,6 @@
 #'
 #' # plot the fitted spline and the true p(x)
 #' sim_data$pred_select_p <- plogis(predict(cpr_run[[7]], newdata = sim_data))
-#'
 #' ggplot2::ggplot(sim_data) +
 #' ggplot2::theme_bw() +
 #' ggplot2::aes(x = x) +

@@ -9,7 +9,7 @@ coef_vcov(fit, theta_idx)
 \arguments{
 \item{fit}{a regression model fit}
 
-\item{theta_idx}{numeric index for the theta related coefs}
+\item{theta_idx}{numeric index for the theta related coefficients}
 }
 \value{
 A list with four elements

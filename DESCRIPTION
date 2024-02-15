@@ -1,6 +1,6 @@
 Package: cpr
 Title: Control Polygon Reduction
-Version: 0.3.0.9006
+Version: 0.4.0
 Authors@R:
     c(person("Peter", "DeWitt", email = "dewittpe@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6391-0795")),
       person("Samantha", "MaWhinney", email = "sam.mawhinney@ucdenver.edu", role = c("ths")),

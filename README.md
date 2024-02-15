@@ -3,8 +3,8 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/dewittpe/cpr/workflows/R-CMD-check/badge.svg)](https://github.com/dewittpe/cpr/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/dewittpe/cpr/master.svg)](https://app.codecov.io/github/dewittpe/cpr?branch=master)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/cpr)](https://cran.r-project.org/package=cpr)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cpr)](http://www.r-pkg.org/pkg/cpr)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/cpr)](https://cran.r-project.org/package=cpr)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/cpr)](https://www.r-pkg.org/pkg/cpr)
 
 An R package for implementing the Control Polygon Reduction model
 selection method.  When we are tasked with modeling the functional relationship
@@ -47,7 +47,6 @@ You can also read these on package website
   year         = {2016},
   organization = {International Biometric Society},
   address      = {Victoria, British Columbia},
-  url          = {http://www.biometricsociety.org/conference-abstracts/2016/},
   isbn         = {978-0-9821919-4-1}
 }
 ```
@@ -93,7 +92,7 @@ remotes::install_github(
 )
 ```
 
-#### From a cloneed repository
+#### From a cloned repository
 
 You'll need to have the R package
 [devtools](https://cran.r-project.org/package=devtools) installed on your
@@ -105,7 +104,7 @@ R packages run:
 devtools::install_dev_deps()
 ```
 
-To build the R package and install the dev verion on you machine:
+To build the R package and install the dev version on you machine:
 
 ```bash
 make install

@@ -551,14 +551,14 @@ initial_cp |>
 #' $\left(\boldsymbol{I} - \boldsymbol{H}\right) \boldsymbol{\Sigma} \left(\boldsymbol{I} - \boldsymbol{H}\right)^{T}$
 #' is singular and thus the standard inverse does not exist and a generalized
 #' inverse is necessary. This yields the test statistic following an F
-#' distribution with 1, and $\nu_2$ degress of freedom,
+#' distribution with 1, and $\nu_2$ degrees of freedom,
 #' $$ w_j \sim F_{1,\nu_2}.$$
 #' The second degree of
 #' freedom is dependent on the sample size, the number of regression
 #' parameters, and the type of regression used to estimate the ordinates.
 #'
 #' To simplify the work, and generalize the approach, we will use the fact that
-#' the limiting distribuiton of $F_{1, \nu_2}$ as $\nu_2 \rightarrow \infty$ is
+#' the limiting distribution of $F_{1, \nu_2}$ as $\nu_2 \rightarrow \infty$ is
 #' $\chi_{1}^{2},$ that is,
 #' $$ w_j \sim \chi_{1}^{2}.$$
 #'

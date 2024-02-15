@@ -12,7 +12,7 @@
 #' \code{\link{cn}} calls.
 #'
 #' @param fit a regression model fit
-#' @param theta_idx numeric index for the theta related coefs
+#' @param theta_idx numeric index for the theta related coefficients
 #'
 #' @return A list with four elements
 #' \describe{

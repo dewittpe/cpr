@@ -10,7 +10,7 @@ btensor(x, df = NULL, iknots = NULL, bknots, order)
 \item{x}{a list of variables to build B-spline transforms of.  The tensor
 product of these B-splines will be returned.}
 
-\item{df}{degrees of freedom.  a list of the degrees of freedom for each
+\item{df}{degrees of freedom.  A list of the degrees of freedom for each
 marginal.}
 
 \item{iknots}{a list of internal knots for each x.  If omitted, the default
@@ -25,7 +25,7 @@ use must specify the bknots for each x.}
 \item{order}{a list of the order for each x; defaults to 4L for all x.}
 }
 \value{
-A matrix with a class cpr_bt
+A matrix with a class \code{cpr_bt}
 }
 \description{
 Tensor products of B-splines.

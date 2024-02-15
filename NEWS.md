@@ -1,4 +1,4 @@
-# Version 0.3.0.9000
+# Version 0.4.0
 
 ## New Features
 
@@ -24,7 +24,7 @@
 * `sign_changes` will count the number of sign changes of the first or second
   derivative of a spline function.
 
-* `get_spline` returns standard errors and deriviatives (#60)
+* `get_spline` returns standard errors and derivatives (#60)
 
 ## User Visible Changes
 * `loglikelihood` is not exported in the namespace
@@ -32,7 +32,7 @@
   is, changes the default from `wiggle = FALSE` to `wiggle = TRUE`
 * `cp` and `cn` both have the default `keep_fit` argument set to TRUE.  This
   change was made to simplify the prediction methods.
-* `print.cpr_bt` returns the object invisibly, it used to return a str(x).
+* `print.cpr_bt` returns the object invisibly, it used to return a `str(x)`.
 * `print.cpr_cn` returns the object invisibly
 * `print.cpr_cnr` returns the object invisibly
 * `print.cpr_cpr` returns the object invisibly
