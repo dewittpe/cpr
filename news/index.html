@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0.9006</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,19 +54,19 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.3.0.9000" id="version-0309000">Version 0.3.0.9000<a class="anchor" aria-label="anchor" href="#version-0309000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.0" id="version-040">Version 0.4.0<a class="anchor" aria-label="anchor" href="#version-040"></a></h2><p class="text-muted">CRAN release: 2024-02-15</p>
 <div class="section level3">
-<h3 id="new-features-0-3-0-9000">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0-9000"></a></h3>
+<h3 id="new-features-0-4-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
 <ul><li><p><code>cpr</code>’s <code>progress</code> argument has been extended to control if a progress bar is used for just the cpr steps, or if a more detailed progress for of the influence weight calculations is reported.</p></li>
 <li><p><code>influence_of_iknots</code> gains parallel execution via <code>pbapply</code> (<a href="https://github.com/dewittpe/cpr/issues/17" class="external-link">#17</a>)</p></li>
 <li><p><code>plot.cpr_cp</code> gains the argument <code>comparitive</code> which, when set to <code>FALSE</code> and only one <code>cpr_cp</code> is passed in for plotting, the graphic will appear more like the <code>plot.cpr_bs</code> results. When <code>comparitive = TRUE</code> or more than one <code>cpr_cp</code> is present, the behavior from v0.3.0 is retained.</p></li>
 <li><p><code>cp.formula</code> gains the <code>methods.args</code> argument to pass arguments to the regression method instead of relying on <code>...</code>.</p></li>
 <li><p><code>d_order_statistic</code> and <code>p_order_statistic</code> were added. These functions allow you to get the density of distribution function for the jth order statistic from a sample of size n from a distribution with defined density and distribution functions within R.</p></li>
 <li><p><code>sign_changes</code> will count the number of sign changes of the first or second derivative of a spline function.</p></li>
-<li><p><code>get_spline</code> returns standard errors and deriviatives (<a href="https://github.com/dewittpe/cpr/issues/60" class="external-link">#60</a>)</p></li>
+<li><p><code>get_spline</code> returns standard errors and derivatives (<a href="https://github.com/dewittpe/cpr/issues/60" class="external-link">#60</a>)</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="user-visible-changes-0-3-0-9000">User Visible Changes<a class="anchor" aria-label="anchor" href="#user-visible-changes-0-3-0-9000"></a></h3>
+<h3 id="user-visible-changes-0-4-0">User Visible Changes<a class="anchor" aria-label="anchor" href="#user-visible-changes-0-4-0"></a></h3>
 <ul><li>
 <code>loglikelihood</code> is not exported in the namespace</li>
 <li>
@@ -75,7 +75,7 @@
 <li>
 <code>cp</code> and <code>cn</code> both have the default <code>keep_fit</code> argument set to TRUE. This change was made to simplify the prediction methods.</li>
 <li>
-<code>print.cpr_bt</code> returns the object invisibly, it used to return a str(x).</li>
+<code>print.cpr_bt</code> returns the object invisibly, it used to return a <code>str(x)</code>.</li>
 <li>
 <code>print.cpr_cn</code> returns the object invisibly</li>
 <li>
@@ -84,12 +84,12 @@
 <code>print.cpr_cpr</code> returns the object invisibly</li>
 </ul></div>
 <div class="section level3">
-<h3 id="non-user-visible-changes-0-3-0-9000">Non-User Visible Changes<a class="anchor" aria-label="anchor" href="#non-user-visible-changes-0-3-0-9000"></a></h3>
+<h3 id="non-user-visible-changes-0-4-0">Non-User Visible Changes<a class="anchor" aria-label="anchor" href="#non-user-visible-changes-0-4-0"></a></h3>
 <ul><li><p>Refactor of c++ defining basis functions, derivatives of basis functions, b-splines structures</p></li>
 <li><p><code>cp.formula</code> checks the <code>formula</code> and requires that <code>bsplines</code> is used once and is the first term on the right hand side of the formula.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="defunct-functions-0-3-0-9000">Defunct Functions<a class="anchor" aria-label="anchor" href="#defunct-functions-0-3-0-9000"></a></h3>
+<h3 id="defunct-functions-0-4-0">Defunct Functions<a class="anchor" aria-label="anchor" href="#defunct-functions-0-4-0"></a></h3>
 <ul><li>A major refactor of the internal code as since v0.3.0 has resulted in several functions becoming defunct, see <code>help(cpr-defunct)</code> for details.</li>
 </ul></div>
 </div>
