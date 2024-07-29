@@ -1,3 +1,10 @@
+# Version 0.4.0.9000
+
+## Bug fixes:
+
+* `plot_bs` builds the x-axis correctly for a basis built with values outside of
+  the boundary knots.
+
 # Version 0.4.0
 
 ## New Features

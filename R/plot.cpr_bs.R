@@ -24,6 +24,9 @@
 #' plot(bmat, show_xi = FALSE, show_x = FALSE)
 #' plot(bmat, show_xi = FALSE, show_x = FALSE)
 #' plot(bmat, show_xi = FALSE, show_x = FALSE, color = FALSE)
+#'
+#' bmat <- bsplines(seq(0, 10, length.out = 1000), bknots = c(1, 9))
+#' plot(bmat)
 #' @method plot cpr_bs
 #' @export
 plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, digits = 2, n = 100) {
@@ -32,7 +35,9 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
   plot_data <- utils::stack(as.data.frame(x))
   names(plot_data) <- c("value", "spline")
 
-  xvec <- seq(attr(x, "bknots")[1], attr(x, "bknots")[2], length = nrow(x))
+  inputx_range <- range(c(eval(attr(x, "call")[["x"]], envir = attr(x, "environment")), attr(x, "bknots")))
+
+  xvec <- seq(min(inputx_range), max(inputx_range), length = nrow(x))
   plot_data <- cbind(plot_data, data.frame(x = rep(xvec, times = ncol(x))))
 
   levels(plot_data$spline) <- sub("V", "B", levels(plot_data$spline))
@@ -60,20 +65,22 @@ plot.cpr_bs <- function(x, ..., show_xi = TRUE, show_x = FALSE, color = TRUE, di
     if (show_xi & !show_x) {
       g <- g + ggplot2::scale_x_continuous(breaks = e$breaks,
                                            labels = parse(text = e$xi_expr),
-                                           minor_breaks = NULL)
+                                           minor_breaks = NULL,
+                                           limits = inputx_range)
     } else if (!show_xi & show_x) {
       g <- g + ggplot2::scale_x_continuous(breaks = e$breaks,
                                            labels = e$num_expr,
-                                           minor_breaks = NULL)
+                                           minor_breaks = NULL,
+                                           limits = inputx_range)
     } else {
       g <- g + ggplot2::scale_x_continuous(breaks = e$breaks,
                                            labels = parse(text = e$xi_expr),
                                            minor_breaks = NULL,
+                                           limits = inputx_range,
                                            sec.axis = ggplot2::sec_axis(~ .,
                                                                         breaks = e$breaks,
                                                                         labels = e$num_expr))
     }
-
   }
   g
 }
