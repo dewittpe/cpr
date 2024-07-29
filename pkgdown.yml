@@ -1,11 +1,10 @@
-pandoc: 2.19.2
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   cnr: cnr.html
   cpr: cpr.html
-last_built: 2024-02-15T17:06Z
+last_built: 2024-07-29T22:41Z
 urls:
   reference: http://www.peteredewitt.com/cpr/reference
   article: http://www.peteredewitt.com/cpr/articles
-

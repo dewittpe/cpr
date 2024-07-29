@@ -5,67 +5,49 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="cpr">
 <title>Tensor Products of B-Splines, Control Nets, and Control Net Reduction • cpr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tensor Products of B-Splines, Control Nets, and Control Net Reduction">
-<meta property="og:description" content="cpr">
-<!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
-<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Tensor Products of B-Splines, Control Nets, and Control Net Reduction">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
-    
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
-    
+
+    <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
+
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
 
-    
+
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item">
-  <a class="nav-link" href="../articles/cpr.html">Get started</a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../articles/cpr.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/cnr.html">Tensor Products of B-Splines, Control Nets, and Control Net Reduction</a>
-  </div>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+<li><a class="dropdown-item" href="../articles/cnr.html">Tensor Products of B-Splines, Control Nets, and Control Net Reduction</a></li>
+  </ul>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../news/index.html">Changelog</a>
-</li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
-<form class="form-inline my-2 my-lg-0" role="search">
-        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
-</form>
-
-      <ul class="navbar-nav">
-<li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/dewittpe/cpr/" aria-label="github">
-    <span class="fab fa fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
+<ul class="navbar-nav">
+<li class="nav-item"><form class="form-inline" role="search">
+ <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
+</form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/dewittpe/cpr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
-    
+
   </div>
 </nav><div class="container template-article">
 
@@ -74,12 +56,13 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Tensor Products of B-Splines, Control Nets, and Control Net Reduction</h1>
+
+      <h1>Tensor Products of B-Splines, Control Nets, and Control Net Reduction</h1>
                         <h4 data-toc-skip class="author">Peter E.
 DeWitt</h4>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/dewittpe/cpr/blob/HEAD/vignettes/cnr.Rmd" class="external-link"><code>vignettes/cnr.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dewittpe/cpr/blob/main/vignettes/cnr.Rmd" class="external-link"><code>vignettes/cnr.Rmd</code></a></small>
       <div class="d-none name"><code>cnr.Rmd</code></div>
     </div>
 
@@ -88,7 +71,7 @@ DeWitt</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dewittpe/cpr/" class="external-link">cpr</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html" class="external-link">packageVersion</a></span><span class="op">(</span><span class="st">"cpr"</span><span class="op">)</span></span>
-<span><span class="co">## [1] '0.4.0'</span></span></code></pre></div>
+<span><span class="co">## [1] '0.4.0.9000'</span></span></code></pre></div>
 <p>The control polygon reduction methods for uni-variable functions can
 be extended to multi-variable functions by generalizing control polygons
 to control nets.</p>
@@ -96,83 +79,91 @@ to control nets.</p>
 <h2 id="tensor-products-of-b-splines">Tensor Products of B-Splines<a class="anchor" aria-label="anchor" href="#tensor-products-of-b-splines"></a>
 </h2>
 <p>Where uni-variable functions of B-splines:</p>
-<p><span class="math display">\[\begin{equation}
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>θ</mi><mi>j</mi></msub><msub><mi>B</mi><mrow><mi>j</mi><mo>,</mo><mi>k</mi><mo>,</mo><mi>𝛏</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>𝐁</mi><mrow><mi>k</mi><mo>,</mo><mi>𝛏</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>𝛉</mi><mi>𝛏</mi></msub></mrow><annotation encoding="application/x-tex">\begin{equation}
   f \left( x \right) =
   \sum_{j} \theta_j B_{j,k,\boldsymbol{\xi}}\left(x\right) =
-  \boldsymbol{B}_{k, \boldsymbol{\xi}} \left(x\right)
-\boldsymbol{\theta}_{\boldsymbol{\xi}}
+  \boldsymbol{B}_{k, \boldsymbol{\xi}} \left(x\right) \boldsymbol{\theta}_{\boldsymbol{\xi}}
   \label{eq:f}
-\end{equation}\]</span></p>
-<p>we extend to multi-variable <span class="math inline">\(m\)</span>-dimensional B-spline function, built on
-<span class="math inline">\(m\)</span> B-spline basis matrices <span class="math inline">\(\boldsymbol{B}_{k_1, \boldsymbol{\xi}_1}
-\left(x_1\right),\)</span> <span class="math inline">\(\boldsymbol{B}_{k_2, \boldsymbol{\xi}_2}
-\left(x_2\right), \ldots,\)</span> <span class="math inline">\(\boldsymbol{B}_{k_m, \boldsymbol{\xi}_m}
-\left(x_m\right),\)</span> as</p>
-<p><span class="math display">\[\begin{equation}
+\end{equation}</annotation></semantics></math></p>
+<p>we extend to multi-variable
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>-dimensional
+B-spline function, built on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+B-spline basis matrices
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>1</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{B}_{k_1, \boldsymbol{\xi}_1} \left(x_1\right),</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>2</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>2</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>…</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{B}_{k_2, \boldsymbol{\xi}_2} \left(x_2\right), \ldots,</annotation></semantics></math><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mi>m</mi></msub><mo>,</mo><msub><mi>𝛏</mi><mi>m</mi></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{B}_{k_m, \boldsymbol{\xi}_m} \left(x_m\right),</annotation></semantics></math>
+as</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>ℬ</mi><mrow><mi>𝐊</mi><mo>,</mo><mi>𝚵</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>𝛉</mi><mi>𝚵</mi></msub></mrow><annotation encoding="application/x-tex">\begin{equation}
   f \left( \boldsymbol{X} \right) =
-  \mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left( \boldsymbol{X}
-\right)
+  \mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left( \boldsymbol{X} \right)
   \boldsymbol{\theta}_{\boldsymbol{\Xi}}
-\end{equation}\]</span></p>
-<p>where <span class="math inline">\(\boldsymbol{K} = \left\{k_1, k_2,
-\ldots, k_m\right\},\)</span> denotes the set of polynomial orders,
-<span class="math inline">\(\boldsymbol{\Xi} = \left\{
-\boldsymbol{\xi}_1, \boldsymbol{\xi}_2, \ldots, \boldsymbol{\xi}_m
-\right\}\)</span> is the set of knot sequences, and <span class="math inline">\(\boldsymbol{\theta}_{\boldsymbol{\Xi}}\)</span> is
-a <span class="math inline">\(\prod_{i = 1}^{m} \left( \left\lvert
-\boldsymbol{\xi}_i \right\rvert - k_i \right) \times 1\)</span> column
-vector of regression coefficients, and <span class="math inline">\(\boldsymbol{X}\)</span> is the observed data:</p>
-<p><span class="math display">\[\begin{equation}
+\end{equation}</annotation></semantics></math></p>
+<p>where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐊</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>k</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>k</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{K} = \left\{k_1, k_2, \ldots, k_m\right\},</annotation></semantics></math>
+denotes the set of polynomial orders,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚵</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>𝛏</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>𝛏</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">}</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{\Xi} = \left\{ \boldsymbol{\xi}_1,
+\boldsymbol{\xi}_2, \ldots, \boldsymbol{\xi}_m \right\}</annotation></semantics></math>
+is the set of knot sequences, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>𝛉</mi><mi>𝚵</mi></msub><annotation encoding="application/x-tex">\boldsymbol{\theta}_{\boldsymbol{\Xi}}</annotation></semantics></math>
+is a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></msubsup><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\prod_{i =
+1}^{m} \left( \left\lvert \boldsymbol{\xi}_i \right\rvert - k_i \right)
+\times 1</annotation></semantics></math> column vector of regression
+coefficients, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐗</mi><annotation encoding="application/x-tex">\boldsymbol{X}</annotation></semantics></math>
+is the observed data:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐗</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>11</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>21</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mi>m</mi><mn>1</mn></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>12</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>22</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mi>m</mi><mn>2</mn></mrow></msub></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd><mtd columnalign="center" style="text-align: center"><mo>⋱</mo></mtd><mtd columnalign="center" style="text-align: center"><mi>⋮</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>12</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mn>22</mn></msub></mtd><mtd columnalign="center" style="text-align: center"><mi>⋯</mi></mtd><mtd columnalign="center" style="text-align: center"><msub><mi>x</mi><mrow><mi>m</mi><mi>n</mi></mrow></msub></mtd></mtr></mtable><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
   \boldsymbol{X} = \begin{pmatrix}
     x_{11} &amp; x_{21} &amp; \cdots &amp; x_{m1} \\
     x_{12} &amp; x_{22} &amp; \cdots &amp; x_{m2} \\
     \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
     x_{12} &amp; x_{22} &amp; \cdots &amp; x_{mn}
   \end{pmatrix}.
-\end{equation}\]</span></p>
+\end{equation}</annotation></semantics></math></p>
 <p>The basis for multi-variable B-splines is constructed by a recursive
-algorithm. The base case for <span class="math inline">\(m = 2\)</span>
-is <span class="math display">\[\begin{equation}
+algorithm. The base case for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">m = 2</annotation></semantics></math>
+is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℬ</mi><mrow><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>k</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>𝛏</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">}</mo></mrow></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mn>𝟏</mn><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>2</mn></msub></mrow><mi>T</mi></msubsup><mo>⊗</mo><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>1</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>⊙</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>2</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>2</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⊗</mo><msubsup><mn>𝟏</mn><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>1</mn></msub></mrow><mi>T</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\begin{equation}
   \label{eq:tensor_product_base_case}
   \mathscr{B}_{ \left\{k_1, k_2\right\}, \left\{ \boldsymbol{\xi}_1,
-  \boldsymbol{\xi}_2 \right\}} \left( \boldsymbol{x}_1, \boldsymbol{x}_2
-\right) =
-  \left(\boldsymbol{1}^T_{\left\lvert{\boldsymbol{\xi}_2}\right\rvert -
-k_2} \otimes
-  \boldsymbol{B}_{k_1, \boldsymbol{\xi}_1} \left(\boldsymbol{x}_1
-\right)  \right) \odot
-  \left(\boldsymbol{B}_{k_2, \boldsymbol{\xi}_2} \left( \boldsymbol{x}_2
-\right) \otimes
-  \boldsymbol{1}^{T}_{\left\lvert{\boldsymbol{\xi}_1}\right\rvert - k_1}
-\right),
-\end{equation}\]</span> where <span class="math inline">\(\odot\)</span>
-is the element-wise product, <span class="math inline">\(\otimes\)</span> is a Kronecker product, and <span class="math inline">\(\boldsymbol{1}_n\)</span> is a <span class="math inline">\(n \times 1\)</span> column vector of 1s. The two
-Kronecker products define the correct dimensions for the entry-wise
-product. The tensor product matrix has the same number of rows as the
-two input matrices and the columns are generated by all the pairwise
-products of the columns of the two input matrices. The general case for
-<span class="math inline">\(m &gt; 2,\)</span> the matrix <span class="math inline">\(\mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}}
-\left( \boldsymbol{X} \right)\)</span> is defined by <span class="math display">\[\begin{equation}
-    \mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left( \boldsymbol{X}
-\right) =
-    \left( \boldsymbol{1}_{\left\lvert{\boldsymbol{\xi}_m}\right\rvert -
-k_m}^{T} \otimes
+  \boldsymbol{\xi}_2 \right\}} \left( \boldsymbol{x}_1, \boldsymbol{x}_2 \right) =
+  \left(\boldsymbol{1}^T_{\left\lvert{\boldsymbol{\xi}_2}\right\rvert - k_2} \otimes
+  \boldsymbol{B}_{k_1, \boldsymbol{\xi}_1} \left(\boldsymbol{x}_1 \right)  \right) \odot
+  \left(\boldsymbol{B}_{k_2, \boldsymbol{\xi}_2} \left( \boldsymbol{x}_2 \right) \otimes
+  \boldsymbol{1}^{T}_{\left\lvert{\boldsymbol{\xi}_1}\right\rvert - k_1} \right),
+\end{equation}</annotation></semantics></math> where
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⊙</mo><annotation encoding="application/x-tex">\odot</annotation></semantics></math>
+is the element-wise product,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⊗</mo><annotation encoding="application/x-tex">\otimes</annotation></semantics></math>
+is a Kronecker product, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mn>𝟏</mn><mi>n</mi></msub><annotation encoding="application/x-tex">\boldsymbol{1}_n</annotation></semantics></math>
+is a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>×</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n \times 1</annotation></semantics></math>
+column vector of 1s. The two Kronecker products define the correct
+dimensions for the entry-wise product. The tensor product matrix has the
+same number of rows as the two input matrices and the columns are
+generated by all the pairwise products of the columns of the two input
+matrices. The general case for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>&gt;</mo><mn>2</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">m &gt; 2,</annotation></semantics></math>
+the matrix
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℬ</mi><mrow><mi>𝐊</mi><mo>,</mo><mi>𝚵</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left( \boldsymbol{X} \right)</annotation></semantics></math>
+is defined by
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℬ</mi><mrow><mi>𝐊</mi><mo>,</mo><mi>𝚵</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mn>𝟏</mn><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mi>m</mi></msub></mrow><mi>T</mi></msubsup><mo>⊗</mo><msub><mi>ℬ</mi><mrow><mi>𝐊</mi><mo>∖</mo><msub><mi>k</mi><mi>m</mi></msub><mo>,</mo><mi>𝚵</mi><mo>∖</mo><msub><mi>𝛏</mi><mi>m</mi></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo>∖</mo><msub><mi>𝐱</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo>⊙</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mi>m</mi></msub><mo>,</mo><msub><mi>𝛏</mi><mi>m</mi></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>⊗</mo><msubsup><mn>𝟏</mn><mrow><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow></munderover><mrow><mo stretchy="true" form="prefix">(</mo><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><mi>T</mi></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+    \mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left( \boldsymbol{X} \right) =
+    \left( \boldsymbol{1}_{\left\lvert{\boldsymbol{\xi}_m}\right\rvert - k_m}^{T} \otimes
     \mathscr{B}_{\boldsymbol{K} \backslash
-  k_{m}, \boldsymbol{\Xi} \backslash \boldsymbol{\xi}_m}
-\left(\boldsymbol{X}
+  k_{m}, \boldsymbol{\Xi} \backslash \boldsymbol{\xi}_m} \left(\boldsymbol{X}
   \backslash \boldsymbol{x}_{m} \right) \right)
     \odot
-    \left( \boldsymbol{B}_{k_m,
-\boldsymbol{\xi}_m}\left(\boldsymbol{x}_m\right) \otimes
+    \left( \boldsymbol{B}_{k_m, \boldsymbol{\xi}_m}\left(\boldsymbol{x}_m\right) \otimes
     \boldsymbol{1}_{\prod_{i = 1}^{m-1}
     \left(\left\lvert{\boldsymbol{\xi}_i}\right\rvert - k_i \right)}^{T}
   \right).
-\end{equation}\]</span></p>
-<p>It is possible to write the above as a set of summations: <span class="math display">\[\begin{equation}
+\end{equation}</annotation></semantics></math></p>
+<p>It is possible to write the above as a set of summations:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right"><mi>f</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><msub><mi>ℬ</mi><mrow><mi>𝐊</mi><mo>,</mo><mi>𝚵</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>𝛉</mi><mi>𝚵</mi></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><munderover><mo>∑</mo><mrow><msub><mi>j</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>1</mn></msub></mrow></munderover><munderover><mo>∑</mo><mrow><msub><mi>j</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>2</mn></msub></mrow></munderover><mi>⋯</mi><munderover><mo>∑</mo><mrow><msub><mi>j</mi><mi>m</mi></msub><mo>=</mo><mn>1</mn></mrow><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mi>m</mi></msub></mrow></munderover><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>1</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>2</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>2</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>⋯</mi><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mi>m</mi></msub><mo>,</mo><msub><mi>𝛏</mi><mi>m</mi></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>θ</mi><mrow><mi>𝚵</mi><mo>,</mo><msub><mi>j</mi><mn>1</mn></msub><mo>,</mo><msub><mi>j</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>j</mi><mi>m</mi></msub></mrow></msub></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><munderover><mo>∑</mo><mrow><msub><mi>j</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>1</mn></msub></mrow></munderover><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>1</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><munder><munder><mrow><munderover><mo>∑</mo><mrow><msub><mi>j</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>2</mn></msub></mrow></munderover><mi>⋯</mi><munderover><mo>∑</mo><mrow><msub><mi>j</mi><mi>m</mi></msub><mo>=</mo><mn>1</mn></mrow><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mi>m</mi></msub></mrow></munderover><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>2</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>2</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mi>⋯</mi><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mi>m</mi></msub><mo>,</mo><msub><mi>𝛏</mi><mi>m</mi></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mi>m</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>θ</mi><mrow><mi>𝚵</mi><mo>,</mo><msub><mi>j</mi><mn>1</mn></msub><mo>,</mo><msub><mi>j</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>j</mi><mi>m</mi></msub></mrow></msub></mrow><mo accent="true">⏟</mo></munder><mtext mathvariant="normal">polynomial coefficients</mtext></munder></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right"></mtd><mtd columnalign="left" style="text-align: left"><mo>=</mo><mtext mathvariant="normal">diag</mtext><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐁</mi><mrow><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>1</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>𝛉</mi><mrow><mi>𝚵</mi><mo>∖</mo><msub><mi>𝛏</mi><mn>1</mn></msub></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐗</mi><mo>∖</mo><msub><mi>𝐱</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{equation}
   \begin{split}
-    f\left( \boldsymbol{X} \right) &amp; = \mathscr{B}_{\boldsymbol{K},
-\boldsymbol{\Xi}} \left( \boldsymbol{X} \right)
-\boldsymbol{\theta}_{\boldsymbol{\Xi}} \\
+    f\left( \boldsymbol{X} \right) &amp; = \mathscr{B}_{\boldsymbol{K}, \boldsymbol{\Xi}} \left( \boldsymbol{X} \right) \boldsymbol{\theta}_{\boldsymbol{\Xi}} \\
    &amp; =
     \sum_{j_1 = 1}^{\left\lvert{\boldsymbol{\xi}_1}\right\rvert - k_1}
     \sum_{j_2 = 1}^{\left\lvert{\boldsymbol{\xi}_2}\right\rvert - k_2}
@@ -199,34 +190,39 @@ k_m}^{T} \otimes
   \text{diag}\left(
   \boldsymbol{B}_{k_1, \boldsymbol{\xi}_1} \left(\boldsymbol{x}_1\right)
   \boldsymbol{\theta}_{\boldsymbol{\Xi}\backslash
-  \boldsymbol{\xi}_1} \left( \boldsymbol{X} \backslash \boldsymbol{x}_1
-\right)\right).
+  \boldsymbol{\xi}_1} \left( \boldsymbol{X} \backslash \boldsymbol{x}_1 \right)\right).
   \end{split}
-\end{equation}\]</span> This is critical in the extension from the
-uni-variable control polygon reduction method to the multi-variable
-control polygon reduction method. By conditioning on <span class="math inline">\(m-1\)</span> marginals, the multi-variable
-B-spline becomes a uni-variable B-spline in terms of the <span class="math inline">\(m^{th}\)</span> marginal. Thus, the metrics and
-methods of control polygon reduction can be applied.</p>
+\end{equation}</annotation></semantics></math> This is critical in the
+extension from the uni-variable control polygon reduction method to the
+multi-variable control polygon reduction method. By conditioning on
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m-1</annotation></semantics></math>
+marginals, the multi-variable B-spline becomes a uni-variable B-spline
+in terms of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>m</mi><mrow><mi>t</mi><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">m^{th}</annotation></semantics></math>
+marginal. Thus, the metrics and methods of control polygon reduction can
+be applied.</p>
 </div>
 <div class="section level2">
 <h2 id="control-nets">Control Nets<a class="anchor" aria-label="anchor" href="#control-nets"></a>
 </h2>
 <p>For multi-variable B-splines, a meaningful geometric relationship
-between the set of knot sequences, <span class="math inline">\(\boldsymbol{\Xi},\)</span> and regression
-coefficients, <span class="math inline">\(\boldsymbol{\theta}_{\boldsymbol{\Xi}},\)</span>
-is provided by a control net. A control net for <span class="math inline">\(m = 2\)</span> variables would be: <span class="math display">\[\begin{equation}
-  {CN}_{\boldsymbol{K} = \left\{k_1, k_2\right\}, \boldsymbol{\Xi} =
-\left\{
+between the set of knot sequences,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝚵</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\Xi},</annotation></semantics></math>
+and regression coefficients,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝛉</mi><mi>𝚵</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\boldsymbol{\theta}_{\boldsymbol{\Xi}},</annotation></semantics></math>
+is provided by a control net. A control net for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">m = 2</annotation></semantics></math>
+variables would be:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi>C</mi><mi>N</mi></mrow><mrow><mi>𝐊</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><msub><mi>k</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo><mi>𝚵</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>𝛏</mi><mn>1</mn></msub><mo>,</mo><msub><mi>𝛏</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">}</mo></mrow><mo>,</mo><msub><mi>𝛉</mi><mi>𝚵</mi></msub></mrow></msub><mo>=</mo><msubsup><mrow><mo stretchy="true" form="prefix">{</mo><mrow><mo stretchy="true" form="prefix">(</mo><msubsup><mi>ξ</mi><mrow><mn>1</mn><mi>i</mi></mrow><mo>*</mo></msubsup><mo>,</mo><msubsup><mi>ξ</mi><mrow><mn>2</mn><mi>j</mi></mrow><mo>*</mo></msubsup><mo>,</mo><msub><mi>θ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>1</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>1</mn></msub><mo>,</mo><mrow><mo stretchy="true" form="prefix">|</mo><msub><mi>𝛏</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">|</mo></mrow><mo>−</mo><msub><mi>k</mi><mn>2</mn></msub></mrow></msubsup><mo>,</mo><mspace width="1.0em"></mspace><msubsup><mi>ξ</mi><mrow><mi>l</mi><mi>j</mi></mrow><mo>*</mo></msubsup><mo>=</mo><mfrac><mn>1</mn><mrow><msub><mi>k</mi><mi>l</mi></msub><mo>+</mo><mn>1</mn></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><msub><mi>k</mi><mi>l</mi></msub><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>ξ</mi><mrow><mi>l</mi><mo>,</mo><mi>j</mi><mo>+</mo><mi>i</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\begin{equation}
+  {CN}_{\boldsymbol{K} = \left\{k_1, k_2\right\}, \boldsymbol{\Xi} = \left\{
   \boldsymbol{\xi}_1,
-  \boldsymbol{\xi}_2 \right\}, \boldsymbol{\theta}_{\boldsymbol{\Xi}}} =
-\left\{ \left( \xi_{1i}^{*},
+  \boldsymbol{\xi}_2 \right\}, \boldsymbol{\theta}_{\boldsymbol{\Xi}}} = \left\{ \left( \xi_{1i}^{*},
   \xi_{2j}^{*}, \theta_{ij} \right) \right\}_{i = 1, j =
   1}^{\left\lvert{\boldsymbol{\xi}_1}\right\rvert -
     k_1,
-  \left\lvert{\boldsymbol{\xi}_2}\right\rvert - k_2}, \quad \xi^{*}_{lj}
-= \frac{1}{k_l + 1} \sum_{i = 1}^{k_l - 1}
+  \left\lvert{\boldsymbol{\xi}_2}\right\rvert - k_2}, \quad \xi^{*}_{lj} = \frac{1}{k_l + 1} \sum_{i = 1}^{k_l - 1}
   \xi_{l, j + i}.
-\end{equation}\]</span></p>
+\end{equation}</annotation></semantics></math></p>
 <p>Building a control net in the cpr package is done by calling the
 <code>cn</code> function after defining a basis via the
 <code>btensor</code> method.</p>
@@ -264,20 +260,24 @@ iknots, bknots, and orders.</p>
 <p>Similar to control polygon reduction (CPR), control net reduction
 (CNR) looks assesses the influence of each internal knot, omits the
 least influential, refits the model, and repeats. A complication for CNR
-is that the influence of an internal knot on margin <span class="math inline">\(m\)</span> is a function of the locations values
-of <span class="math inline">\(x\)</span> on the other margins defining
-the polynomial coefficients. We suggest using a set of <span class="math inline">\(p=20\)</span> values on each margin for
-assessment.</p>
+is that the influence of an internal knot on margin
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+is a function of the locations values of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+on the other margins defining the polynomial coefficients. We suggest
+using a set of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>20</mn></mrow><annotation encoding="application/x-tex">p=20</annotation></semantics></math>
+values on each margin for assessment.</p>
 <p>For example in a two-variable tensor product, the influence weight of
-the <span class="math inline">\(j^{th}\)</span> internal knot for the
-first margin is</p>
-<p><span class="math display">\[w_{1j} = \max_{x_2 \in \boldsymbol{U}}
-w_{\left. 1j \right| x_2},\]</span> where <span class="math display">\[\boldsymbol{U} =
-\left\{ u :  \min\left(x_2\right) +
-\frac{\left\{1,2,\ldots,p\right\}}{p+1} \left( \max\left(x_2\right) -
-\min\left(x_2\right)\right)
+the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>j</mi><mrow><mi>t</mi><mi>h</mi></mrow></msup><annotation encoding="application/x-tex">j^{th}</annotation></semantics></math>
+internal knot for the first margin is</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mrow><mn>1</mn><mi>j</mi></mrow></msub><mo>=</mo><munder><mo>max</mo><mrow><msub><mi>x</mi><mn>2</mn></msub><mo>∈</mo><mi>𝐔</mi></mrow></munder><msub><mi>w</mi><mrow><mrow><mn>1</mn><mi>j</mi><mo stretchy="true" form="postfix">|</mo></mrow><msub><mi>x</mi><mn>2</mn></msub></mrow></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">w_{1j} = \max_{x_2 \in \boldsymbol{U}} w_{\left. 1j \right| x_2},</annotation></semantics></math>
+where
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐔</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mi>u</mi><mo>:</mo><mo>min</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mfrac><mrow><mo stretchy="true" form="prefix">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>p</mi><mo stretchy="true" form="postfix">}</mo></mrow><mrow><mi>p</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mrow><mo stretchy="true" form="prefix">(</mo><mo>max</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo>−</mo><mo>min</mo><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">)</mo></mrow><mo stretchy="true" form="postfix">}</mo></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{U} =
+\left\{ u :  \min\left(x_2\right) + \frac{\left\{1,2,\ldots,p\right\}}{p+1} \left( \max\left(x_2\right) - \min\left(x_2\right)\right)
 \right\}
-\]</span></p>
+</annotation></semantics></math></p>
 <p>For example:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x1</span>, <span class="va">x2</span><span class="op">)</span> <span class="op">{</span><span class="op">(</span><span class="va">x1</span> <span class="op">-</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html" class="external-link">sin</a></span><span class="op">(</span><span class="fl">4</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">x2</span><span class="op">)</span> <span class="op">-</span> <span class="va">x1</span> <span class="op">*</span> <span class="va">x2</span><span class="op">}</span></span>
@@ -303,8 +303,10 @@ w_{\left. 1j \right| x_2},\]</span> where <span class="math display">\[\boldsymb
 <span><span class="co">## </span></span>
 <span><span class="co">## attr(,"class")</span></span>
 <span><span class="co">## [1] "cpr_influence_of_iknots_cpn" "list"</span></span></code></pre></div>
-<p>The least influential knot is <span class="math inline">\(\xi_{1,4}\)</span> and the most influential knot
-is <span class="math inline">\(\xi_{2,5}.\)</span></p>
+<p>The least influential knot is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ξ</mi><mrow><mn>1</mn><mo>,</mo><mn>4</mn></mrow></msub><annotation encoding="application/x-tex">\xi_{1,4}</annotation></semantics></math>
+and the most influential knot is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ξ</mi><mrow><mn>2</mn><mo>,</mo><mn>5</mn></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\xi_{2,5}.</annotation></semantics></math></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cn1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_bsplines.html">update_btensor</a></span><span class="op">(</span><span class="va">initial_cn</span>, iknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.418</span>, <span class="fl">0.582</span>, <span class="fl">0.676</span>, <span class="fl">0.840</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">cn2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/update_bsplines.html">update_btensor</a></span><span class="op">(</span><span class="va">initial_cn</span>, iknots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">numeric</a></span><span class="op">(</span><span class="fl">0.234</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.582</span>, <span class="fl">0.676</span>, <span class="fl">0.840</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -316,38 +318,25 @@ is <span class="math inline">\(\xi_{2,5}.\)</span></p>
 <p><img src="cnr_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 <p>A call to <code>cnr</code> runs the full CNR algorithm on an initial
 control net.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cnr0 <span class="ot">&lt;-</span> <span class="fu">cnr</span>(initial_cn)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============</span>                                                          <span class="er">|</span>  <span class="dv">17</span>%</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========================================================</span>            <span class="er">|</span>  <span class="dv">83</span>%</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(cnr0)</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="do">##   dfs   loglik        rss         rse n_iknots1 iknots1 n_iknots2      iknots2</span></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 1  12 12396.78 49.0631393 0.070087150         0                 0             </span></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="do">## 2  15 12408.53 48.9479832 0.070015367         0                 1        0.582</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="do">## 3  18 36554.82  0.3912139 0.006260346         0                 2 0.418, 0.582</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 4  21 36559.88  0.3908179 0.006258118         0                 3 0.418, 0....</span></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="do">## 5  24 38449.23  0.2678356 0.005181505         0                 4 0.418, 0....</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a><span class="do">## 6  32 38449.23  0.2678356 0.005183584         1   0.234         4 0.418, 0....</span></span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="do">##   index</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a><span class="do">## 1     1</span></span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="do">## 2     2</span></span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="do">## 3     3</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="do">## 4     4</span></span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="do">## 5     5</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a><span class="do">## 6     6</span></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cnr0)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">cnr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cnr.html">cnr</a></span><span class="op">(</span><span class="va">initial_cn</span><span class="op">)</span></span>
+<span><span class="co">##   |                                                                              |                                                                      |   0%  |                                                                              |============                                                          |  17%  |                                                                              |=======================                                               |  33%  |                                                                              |===================================                                   |  50%  |                                                                              |===============================================                       |  67%  |                                                                              |==========================================================            |  83%  |                                                                              |======================================================================| 100%</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cnr0</span><span class="op">)</span></span>
+<span><span class="co">##   dfs   loglik        rss         rse n_iknots1 iknots1 n_iknots2      iknots2</span></span>
+<span><span class="co">## 1  12 12396.78 49.0631393 0.070087150         0                 0             </span></span>
+<span><span class="co">## 2  15 12408.53 48.9479832 0.070015367         0                 1        0.582</span></span>
+<span><span class="co">## 3  18 36554.82  0.3912139 0.006260346         0                 2 0.418, 0.582</span></span>
+<span><span class="co">## 4  21 36559.88  0.3908179 0.006258118         0                 3 0.418, 0....</span></span>
+<span><span class="co">## 5  24 38449.23  0.2678356 0.005181505         0                 4 0.418, 0....</span></span>
+<span><span class="co">## 6  32 38449.23  0.2678356 0.005183584         1   0.234         4 0.418, 0....</span></span>
+<span><span class="co">##   index</span></span>
+<span><span class="co">## 1     1</span></span>
+<span><span class="co">## 2     2</span></span>
+<span><span class="co">## 3     3</span></span>
+<span><span class="co">## 4     4</span></span>
+<span><span class="co">## 5     5</span></span>
+<span><span class="co">## 6     6</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">cnr0</span><span class="op">)</span></span></code></pre></div>
 <p><img src="cnr_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>The plot of the residual standard errors by index shows index 3 is
 the preferable model. We can look at all the surfaces and see there is
@@ -375,9 +364,9 @@ considerable differences in the surfaces for index 1 and 2.</p>
 </h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">## R version 4.3.2 (2023-10-31)</span></span>
-<span><span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
-<span><span class="co">## Running under: Ubuntu 22.04.3 LTS</span></span>
+<span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
+<span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
+<span><span class="co">## Running under: Ubuntu 22.04.4 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
 <span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
@@ -396,49 +385,46 @@ considerable differences in the surfaces for index 1 and 2.</p>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## other attached packages:</span></span>
-<span><span class="co">## [1] cpr_0.4.0     qwraps2_0.6.0</span></span>
+<span><span class="co">## [1] cpr_0.4.0.9000 qwraps2_0.6.0 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] generics_0.1.3    utf8_1.2.4        sass_0.4.8        tcltk_4.3.2      </span></span>
-<span><span class="co">##  [5] stringi_1.8.3     lattice_0.21-9    lme4_1.1-35.1     digest_0.6.34    </span></span>
-<span><span class="co">##  [9] magrittr_2.0.3    rgl_1.2.8         evaluate_0.23     grid_4.3.2       </span></span>
-<span><span class="co">## [13] fastmap_1.1.1     jsonlite_1.8.8    Matrix_1.6-5      misc3d_0.9-1     </span></span>
-<span><span class="co">## [17] fansi_1.0.6       purrr_1.0.2       scales_1.3.0      textshaping_0.3.7</span></span>
-<span><span class="co">## [21] jquerylib_0.1.4   cli_3.6.2         rlang_1.1.3       munsell_0.5.0    </span></span>
-<span><span class="co">## [25] splines_4.3.2     withr_3.0.0       base64enc_0.1-3   cachem_1.0.8     </span></span>
-<span><span class="co">## [29] yaml_2.3.8        tools_4.3.2       memoise_2.0.1     nloptr_2.0.3     </span></span>
-<span><span class="co">## [33] dplyr_1.1.4       minqa_1.2.6       colorspace_2.1-0  ggplot2_3.4.4    </span></span>
-<span><span class="co">## [37] boot_1.3-28.1     vctrs_0.6.5       R6_2.5.1          lifecycle_1.0.4  </span></span>
-<span><span class="co">## [41] plot3D_1.4.1      stringr_1.5.1     fs_1.6.3          htmlwidgets_1.6.4</span></span>
-<span><span class="co">## [45] MASS_7.3-60       ragg_1.2.7        pkgconfig_2.0.3   desc_1.4.3       </span></span>
-<span><span class="co">## [49] pillar_1.9.0      pkgdown_2.0.7     bslib_0.6.1       gtable_0.3.4     </span></span>
-<span><span class="co">## [53] glue_1.7.0        Rcpp_1.0.12       systemfonts_1.0.5 tidyselect_1.2.0 </span></span>
-<span><span class="co">## [57] tibble_3.2.1      xfun_0.42         highr_0.10        knitr_1.45       </span></span>
-<span><span class="co">## [61] farver_2.1.1      htmltools_0.5.7   nlme_3.1-163      labeling_0.4.3   </span></span>
-<span><span class="co">## [65] rmarkdown_2.25    compiler_4.3.2</span></span></code></pre></div>
+<span><span class="co">##  [1] generics_0.1.3    sass_0.4.9        utf8_1.2.4        tcltk_4.4.1      </span></span>
+<span><span class="co">##  [5] lattice_0.22-6    lme4_1.1-35.5     digest_0.6.36     magrittr_2.0.3   </span></span>
+<span><span class="co">##  [9] rgl_1.3.1         evaluate_0.24.0   grid_4.4.1        fastmap_1.2.0    </span></span>
+<span><span class="co">## [13] jsonlite_1.8.8    Matrix_1.7-0      misc3d_0.9-1      fansi_1.0.6      </span></span>
+<span><span class="co">## [17] scales_1.3.0      textshaping_0.4.0 jquerylib_0.1.4   cli_3.6.3        </span></span>
+<span><span class="co">## [21] rlang_1.1.4       munsell_0.5.1     splines_4.4.1     withr_3.0.0      </span></span>
+<span><span class="co">## [25] base64enc_0.1-3   cachem_1.1.0      yaml_2.3.10       tools_4.4.1      </span></span>
+<span><span class="co">## [29] nloptr_2.1.1      minqa_1.2.7       dplyr_1.1.4       colorspace_2.1-1 </span></span>
+<span><span class="co">## [33] ggplot2_3.5.1     boot_1.3-30       vctrs_0.6.5       R6_2.5.1         </span></span>
+<span><span class="co">## [37] lifecycle_1.0.4   plot3D_1.4.1      fs_1.6.4          htmlwidgets_1.6.4</span></span>
+<span><span class="co">## [41] MASS_7.3-60.2     ragg_1.3.2        pkgconfig_2.0.3   desc_1.4.3       </span></span>
+<span><span class="co">## [45] pkgdown_2.1.0     bslib_0.7.0       pillar_1.9.0      gtable_0.3.5     </span></span>
+<span><span class="co">## [49] glue_1.7.0        Rcpp_1.0.13       systemfonts_1.1.0 tidyselect_1.2.1 </span></span>
+<span><span class="co">## [53] xfun_0.46         tibble_3.2.1      highr_0.11        knitr_1.48       </span></span>
+<span><span class="co">## [57] farver_2.1.2      htmltools_0.5.8.1 nlme_3.1-164      labeling_0.4.3   </span></span>
+<span><span class="co">## [61] rmarkdown_2.27    compiler_4.4.1</span></span></code></pre></div>
 </div>
-  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
 
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p>
-<p>Developed by Peter DeWitt.</p>
+  <p>Developed by Peter DeWitt.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
 </div>
 
     </footer>
 </div>
 
-  
 
-  
+
+
 
   </body>
 </html>
