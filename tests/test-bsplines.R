@@ -68,7 +68,7 @@ with(e, {
   bknots = c(-1, 1)
 
   x <- tryCatch(bsplines(xvec, iknots = iknots, bknots = bknots), error = function(e) {e})
-  stopifnot(inherits(x, "simpleError"))
+  stopifnot(inherits(x, "error"))
   stopifnot(identical(x$message, "Knots are not sorted."))
 
   x <- tryCatch(bsplines(xvec, iknots = sort(iknots), bknots = bknots), error = function(e) {e})
@@ -92,7 +92,7 @@ with(e, {
 e <- new.env()
 with(e, {
   x <- tryCatch(bsplines(list(1:10)), error = function(e) { e })
-  stopifnot(inherits(x, "simpleError"))
+  stopifnot(inherits(x, "error"))
   stopifnot("error if list passed to bsplines" = identical(x$message, "x is a list. Use btensor instead of bsplines."))
 })
 
@@ -104,7 +104,7 @@ with(e, {
   bknots <- c(-1, 1)
 
   x <- tryCatch(bsplines(xvec, df = 2, bknots = bknots), warning = function(w) {w})
-  stopifnot(identical(class(x), c("simpleWarning", "warning", "condition")))
+  stopifnot(inherits(x, "warning"))
   stopifnot(identical(x$message, "df being set to order"))
 
   x <- suppressWarnings(bsplines(xvec, df = 2, bknots = bknots))
@@ -118,7 +118,7 @@ with(e, {
   stopifnot(isTRUE(all.equal(x, z, check.attributes = FALSE)))
 
   x <- tryCatch(bsplines(xvec, iknots = 0.2, df = 6, bknots = bknots), warning = function(w) {w})
-  stopifnot(identical(class(x), c("simpleWarning", "warning", "condition")))
+  stopifnot(inherits(x, "warning"))
   stopifnot(identical(x$message, "Both iknots and df defined, using iknots"))
 
   x <- suppressWarnings(bsplines(xvec, iknots = 0.2, df = 6, bknots = bknots))
@@ -210,16 +210,16 @@ with(e, {
   stopifnot(isTRUE( all.equal(cprD2[-100, ], baseD2[-100, ])))
 
   x <- tryCatch(bsplineD(xvec, derivative = 1.5), error = function(e) {e})
-  stopifnot(identical(class(x), c("simpleError", "error", "condition")))
+  stopifnot(inherits(x, "error"))
   stopifnot(identical(x$message, "Only first and second derivatives are supported"))
   rm(x)
 
   x <- tryCatch(bsplineD(xvec, derivative = 3), error = function(e) {e})
-  stopifnot(identical(class(x), c("simpleError", "error", "condition")))
+  stopifnot(inherits(x, "error"))
   stopifnot(identical(x$message, "Only first and second derivatives are supported"))
 
   x <- tryCatch(bsplineD(xvec, order = 2, derivative = 2), error = function(e) {e})
-  stopifnot(identical(class(x), c("simpleError", "error", "condition")))
+  stopifnot(inherits(x, "error"))
   stopifnot(identical(x$message, "(order - 2) <= 0"))
 })
 
@@ -233,16 +233,16 @@ with(e, {
   bmatD1  <- tryCatch(bsplineD(xvec, bknots = bknots, order = 1, derivative = 1L), error = function(e) e)
   bmatD2  <- tryCatch(bsplineD(xvec, bknots = bknots, order = 1, derivative = 2L), error = function(e) e)
 
-  stopifnot(inherits(bmat, "simpleError"))
-  stopifnot(inherits(bmatD1, "simpleError"))
-  stopifnot(inherits(bmatD2, "simpleError"))
+  stopifnot(inherits(bmat, "error"))
+  stopifnot(inherits(bmatD1, "error"))
+  stopifnot(inherits(bmatD2, "error"))
 
   stopifnot(identical(bmat$message, "order needs to be an integer value >= 2."))
   stopifnot(identical(bmatD1$message, "order needs to be an integer value >= 2."))
   stopifnot(identical(bmatD2$message, "order needs to be an integer value >= 2."))
 
   bmat <- tryCatch(bsplines(xvec, bknots = bknots, order = 1.9), error = function(e) e)
-  stopifnot(inherits(bmat, "simpleError"))
+  stopifnot(inherits(bmat, "error"))
   stopifnot(identical(bmat$message, "order needs to be an integer value >= 2."))
 
   bmat <- tryCatch(bsplines(xvec, bknots = bknots, order = 2.9), error = function(e) e)
