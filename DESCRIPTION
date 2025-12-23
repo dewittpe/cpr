@@ -29,5 +29,5 @@ Suggests:
     ggpubr,
     knitr,
     qwraps2 (>= 0.6.0)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 VignetteBuilder: knitr
