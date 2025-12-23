@@ -47,11 +47,12 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
     }
   }
 
-  // The following three lines were a hack to get a non-zero b-spline when x =
-  // bknots(1).  This works, but has some conceptual issues.  First, the
-  // B-splines are right continuous and this work forces left continuity at
-  // bknots(1).  By omitting this code and returning a warning it is left to the
-  // end user to define the boundary knots well, or to .  I'm cons
+  // The following three lines were a hack to get a non-zero B-spline when x ==
+  // bknots(1). This works, but has conceptual issues. B-splines are
+  // right-continuous and this workaround forces left-continuity at bknots(1).
+  // By omitting this code and returning a warning, it is left to the end user
+  // to define boundary knots well or avoid evaluating exactly at the lower
+  // boundary.
   //arma::uvec bx = arma::find(x == bknots(1));
   //arma::uvec jx(bx.n_elem); jx.fill(bmat.n_cols - 1);
   //bmat(bx, jx).ones();
