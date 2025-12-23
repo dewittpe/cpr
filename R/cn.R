@@ -1,6 +1,6 @@
 #' Control Nets
 #'
-#' Generate the control net for a uni-variable B-spline
+#' Generate the control net for a univariate B-spline
 #'
 #' \code{cn} generates the control net for the given B-spline function.  There
 #' are several methods for building a control net.
@@ -9,20 +9,20 @@
 #' @param ... pass through
 #'
 #' @return a \code{cpr_cn} object.  This is a list with the following elements.
-#' Some of the elements are omitted when the using the \code{cn.cpr_bt} method.
+#' Some of the elements are omitted when using the \code{cn.cpr_bt} method.
 #' \describe{
 #'  \item{cn}{the control net, \code{data.frame} with each row defining a vertex
 #'  of the control net}
 #'  \item{bspline_list}{A list of the marginal B-splines}
 #'  \item{call}{the call}
-#'  \item{keep_fit}{logical, indicates if the regression models was retained}
+#'  \item{keep_fit}{logical, indicates if the regression model was retained}
 #'  \item{fit}{if \code{isTRUE(keep_fit)} then the regression model is here,
 #'  else \code{NA}.}
 #'  \item{coefficients}{regression coefficients, only the fixed effects if a
 #'  mixed effects model was used.}
 #'  \item{vcov}{The variance-covariance matrix for the \code{coefficients}}
 #'  \item{loglik}{The log-likelihood for the regression model}
-#'  \item{rse}{the residual standard error for the regression models}
+#'  \item{rse}{the residual standard error for the regression model}
 #'  }
 #'
 #' @seealso \code{\link{summary.cpr_cn}}, \code{\link{cnr}},
@@ -76,7 +76,7 @@ cn.cpr_bt <- function(x, theta, ...) {
 #' @param method.args a list of additional arguments to pass to the regression
 #' method.
 #' @param keep_fit (logical, defaults to \code{FALSE}).  If \code{TRUE} the
-#' regression model fit is retained and returned in the the \code{fit} element.
+#' regression model fit is retained and returned in the \code{fit} element.
 #' If \code{FALSE} the regression model is not saved and the \code{fit} element
 #' will be \code{NA}.
 #' @param check_rank (logical, defaults to \code{TRUE}) if TRUE check that the

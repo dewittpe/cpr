@@ -39,7 +39,7 @@ method.}
 
 \item{keep_fit}{(logical, default value is \code{TRUE}).  If \code{TRUE} the
 regression model fit is retained and returned in as the \code{fit} element.
-If \code{FALSE} the \code{fit} element with be \code{NA}.}
+If \code{FALSE} the \code{fit} element will be \code{NA}.}
 
 \item{check_rank}{(logical, defaults to \code{TRUE}) if \code{TRUE} check
 that the design matrix is full rank.}
@@ -48,10 +48,10 @@ that the design matrix is full rank.}
 a \code{cpr_cp} object, this is a list with the element \code{cp}, a
 data.frame reporting the x and y coordinates of the control polygon.
 Additional elements include the knot sequence, polynomial order, and other
-meta data regarding the construction of the control polygon.
+metadata regarding the construction of the control polygon.
 }
 \description{
-Generate the control polygon for a uni-variable B-spline
+Generate the control polygon for a univariate B-spline
 }
 \details{
 \code{cp} generates the control polygon for the given B-spline function.

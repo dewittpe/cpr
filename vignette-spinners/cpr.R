@@ -34,7 +34,7 @@ packageVersion("cpr")
 #'
 #' The purpose of this vignette is to illustrate how the Control Polygon
 #' Reduction (CPR) method can be used to select a set of knots defining B-spline
-#' to get a low degree of freedom and smooth fit to data.  We start with a
+#' to get low degrees of freedom and a smooth fit to the data.  We start with a
 #' primer on B-splines and control polygons then the development and use of CPR.
 #'
 #' # B-splines and Control Polygons
@@ -42,13 +42,13 @@ packageVersion("cpr")
 #' The term "spline" is likely derived from shipwright or draftsmen splines,
 #' thin wood strips, held in place by weights, used to define curves.  These
 #' splines naturally minimize strain energy and the use of additional weights at
-#' strategic locations on the spline are needed to achieve specific curvatures.
+#' strategic locations on the spline is needed to achieve specific curvatures.
 #' Cubic B-splines are not dissimilar.
 #'
 #' Splines are piecewise polynomial curves that are differentiable up to a
 #' prescribed order. B-splines are based on a _basis_ of polynomial functions.
 #'
-#' Definitions and notation for uni-variable and multi-variable B-splines and
+#' Definitions and notation for univariate and multivariate B-splines and
 #' the associated control polygons and control nets are presented in the
 #' following.  Two very good references for splines are @deboor2001 and
 #' @prautzsch2002 if you wish to dig into the details.
@@ -62,7 +62,7 @@ packageVersion("cpr")
 #' order $\leq k$ over each interval $x \in \left[\xi_j, \xi_{j+1}\right]$ for
 #' $j = 0, \ldots, m - 1.$
 #'
-#' In particular, B-splines, are defined as an affine combination:
+#' In particular, B-splines are defined as an affine combination:
 #'
 #' \begin{equation}
 #'   f \left( x \right) =
@@ -128,7 +128,7 @@ packageVersion("cpr")
 #'   \end{pmatrix}
 #' \end{equation}
 #'
-#' Within the cpr package we can generate a basis matrix thusly:
+#' Within the cpr package we can generate a basis matrix as follows:
 #+ label = "basis_matrix"
 x <- seq(0, 5.9999, length.out = 5000)
 bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
@@ -140,7 +140,7 @@ bmat
 #' is 4, and the default for the boundary knots is the range of
 {{backtick(x) %s% "."}}
 #' However, relying on the default boundary knots can lead to unexpected
-#' behavior as, by definition the splines on the $k$-fold upper boundary is 0.
+#' behavior because, by definition, the spline values on the $k$-fold upper boundary are 0.
 #'
 #' We can quickly view the plot of each of these spline functions as well.
 #+ label = "plot_bmat", fig.width = 7, fig.height = 4
@@ -166,7 +166,7 @@ all.equal(rowSums(bmat), rep(1, nrow(bmat)))
 #'
 #' ### cpr::bsplines vs splines::bs
 #'
-#' Part of the base R distribution is the splines package which build B-splines
+#' Part of the base R distribution is the splines package which builds B-splines
 #' by calling
 {{ backtick(bs) %s% "."}}
 #' There are three areas where the functions differ:
@@ -221,16 +221,16 @@ str(attributes(bs_mat))
 {{ backtick(bspline_mat) }}
 #' has additional attributes related to the control polygons.
 #'
-#' The major difference is the in the dimension of the matrices.
+#' The major difference is in the dimensions of the matrices.
 #' By default
 {{ backtick(splines::bs) }}
-#' omits one column from the basis matrix such that when using using the
+#' omits one column from the basis matrix such that when using the
 #' function is a regression formula the resulting design matrix is not rank
 #' deficient.  Using
 {{ backtick(bsplines) }}
 #' would suggest using a
 {{ backtick(+0) %s% " or " %s% backtick(-1)}}
-#' in the regression formula to omit the intercept (is nuance is handled in
+#' in the regression formula to omit the intercept (this nuance is handled in
 #' calls to
 {{ backtick(cp) }}
 #' so the end user need not worry about it).
@@ -938,8 +938,8 @@ ggpubr::ggarrange(
 #'
 #' # Extensions to higher dimensions
 #'
-#' CPR works for uni-variable B-splines.  By taking tensor products of
-#' B-splines, and building a control-net, the higher-dimensional analog of a
+#' CPR works for univariate B-splines.  By taking tensor products of
+#' B-splines and building a control net, the higher-dimensional analog of a
 #' control polygon, we can apply similar methods to estimate a surface.
 #' Details on the Control Net Reduction method are presented in
 #+ echo = TRUE, eval = FALSE

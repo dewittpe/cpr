@@ -23,7 +23,7 @@
 #'
 #' @seealso \code{\link{cn}} for defining a control net,
 #' \code{\link{influence_weights}} for finding the influence of the internal
-#' knots, \code{\link{cpr}} for the uni-variable version, Control Polygon
+#' knots, \code{\link{cpr}} for the univariate version, Control Polygon
 #' Reduction.
 #'
 #' \code{vignette(topic = "cnr", package = "cpr")}

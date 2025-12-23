@@ -29,13 +29,13 @@ packageVersion("cpr")
 
 
 
-The control polygon reduction methods for uni-variable functions can be
-extended to multi-variable functions by generalizing control polygons to
+The control polygon reduction methods for univariate functions can be
+extended to multivariate functions by generalizing control polygons to
 control nets.
 
 # Tensor Products of B-Splines
 
-Where uni-variable functions of B-splines:
+For univariate B-splines:
 
 \begin{equation}
   f \left( x \right) =
@@ -44,7 +44,7 @@ Where uni-variable functions of B-splines:
   \label{eq:f}
 \end{equation}
 
-we extend to multi-variable $m$-dimensional B-spline function, built on $m$
+we extend to a multivariate $m$-dimensional B-spline function, built on $m$
 B-spline basis matrices
 $\boldsymbol{B}_{k_1, \boldsymbol{\xi}_1} \left(x_1\right),$
 $\boldsymbol{B}_{k_2, \boldsymbol{\xi}_2} \left(x_2\right), \ldots,$
@@ -74,7 +74,7 @@ the observed data:
 \end{equation}
 
 
-The basis for multi-variable B-splines is constructed by a recursive algorithm.
+The basis for multivariate B-splines is constructed by a recursive algorithm.
 The base case for $m = 2$ is
 \begin{equation}
   \label{eq:tensor_product_base_case}
@@ -138,15 +138,15 @@ It is possible to write the above as a set of summations:
   \boldsymbol{\xi}_1} \left( \boldsymbol{X} \backslash \boldsymbol{x}_1 \right)\right).
   \end{split}
 \end{equation}
-This is critical in the extension from the uni-variable control polygon
-reduction method to the multi-variable control polygon reduction method.  By
-conditioning on $m-1$ marginals, the multi-variable B-spline becomes a
-uni-variable B-spline in terms of the $m^{th}$ marginal.  Thus, the metrics
+This is critical in the extension from the univariate control polygon
+reduction method to the multivariate control polygon reduction method.  By
+conditioning on $m-1$ marginals, the multivariate B-spline becomes a
+univariate B-spline in terms of the $m^{th}$ marginal.  Thus, the metrics
 and methods of control polygon reduction can be applied.
 
 # Control Nets
 
-For multi-variable B-splines, a meaningful geometric relationship between the set
+For multivariate B-splines, a meaningful geometric relationship between the set
 of knot sequences, $\boldsymbol{\Xi},$ and regression coefficients,
 $\boldsymbol{\theta}_{\boldsymbol{\Xi}},$ is provided by a control net. A
 control net for $m = 2$ variables would be:

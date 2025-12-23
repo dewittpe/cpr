@@ -1,6 +1,6 @@
 #' Control Polygons
 #'
-#' Generate the control polygon for a uni-variable B-spline
+#' Generate the control polygon for a univariate B-spline
 #'
 #' \code{cp} generates the control polygon for the given B-spline function.
 #'
@@ -10,7 +10,7 @@
 #' @return a \code{cpr_cp} object, this is a list with the element \code{cp}, a
 #' data.frame reporting the x and y coordinates of the control polygon.
 #' Additional elements include the knot sequence, polynomial order, and other
-#' meta data regarding the construction of the control polygon.
+#' metadata regarding the construction of the control polygon.
 #'
 #' @examples
 #'
@@ -89,7 +89,7 @@ cp.cpr_bs <- function(x, theta, ...) {
 #' method.
 #' @param keep_fit (logical, default value is \code{TRUE}).  If \code{TRUE} the
 #' regression model fit is retained and returned in as the \code{fit} element.
-#' If \code{FALSE} the \code{fit} element with be \code{NA}.
+#' If \code{FALSE} the \code{fit} element will be \code{NA}.
 #' @param check_rank (logical, defaults to \code{TRUE}) if \code{TRUE} check
 #' that the design matrix is full rank.
 cp.formula <- function(formula, data, method = stats::lm, method.args = list(), keep_fit = TRUE, check_rank = TRUE, ...) {

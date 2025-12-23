@@ -10,9 +10,9 @@ get_spline(x, margin = 1, at, n = 100, se = FALSE, derivative = 0)
 \item{x}{a \code{cpr_cp} or \code{cpr_cn} object.}
 
 \item{margin}{an integer identifying the marginal of the control net to slice
-along.  Only used when working \code{x} is a \code{cpr_cn} object.}
+along.  Only used when working with \code{x} as a \code{cpr_cn} object.}
 
-\item{at}{point value for marginals not defined in the \code{margin}.  Only
+\item{at}{a point value for marginals not defined in the \code{margin}.  Only
 used when \code{x} is a \code{cpr_cn} object.  Expected input is a list of
 length \code{length(attr(x, "bspline_list"))}.  Entries for elements
 \code{marginal} are ignored.  If omitted, the midpoint between the boundary
@@ -37,16 +37,16 @@ function, given a \code{cpr_cp} or \code{cpr_cn} object.
 }
 \details{
 A control polygon, \code{cpr\_cp} object, has a spline function f(x).
-\code{get_spline} returns a list of two \code{data.frame}.  The \code{cp}
-element is a \code{data.frame} with the (x, y) coordinates control points and
+\code{get_spline} returns a list of two \code{data.frames}.  The \code{cp}
+element is a \code{data.frame} with the (x, y) coordinates of control points and
 the \code{spline} element is a \code{data.frame} with \code{n} rows for
 interpolating f(x).
 
 For a control net, \code{cpr\_cn} object, the return is the same as for a
-\code{cpr\_cp} object, but conceptually different.  Where a \code{cpr\_cp}
-objects have a uni-variable spline function, \code{cpr\_cn} have
-multi-variable spline surfaces.  \code{get_spline} returns a "slice" of the
-higher dimensional object.  For example, consider a three-dimensional control
+\code{cpr\_cp} object, but conceptually different.  Where \code{cpr\_cp}
+objects have a univariate spline function, \code{cpr\_cn} objects have
+multivariate spline surfaces.  \code{get_spline} returns a "slice" of the
+higher-dimensional object.  For example, consider a three-dimensional control
 net defined on the unit cube with marginals \code{x1}, \code{x2}, and
 \code{x3}.  The implied spline surface is the function f(x1, x2, x3).
 \code{get_spline(x, margin = 2, at = list(0.2, NA, 0.5))} would

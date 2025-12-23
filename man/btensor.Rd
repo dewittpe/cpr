@@ -20,7 +20,7 @@ both given, the \code{df} will take precedence.}
 
 \item{bknots}{a list of boundary knots for each x.  As with the iknots, if
 omitted the default will be to use the range of each x.  If specified, the
-use must specify the bknots for each x.}
+user must specify the bknots for each x.}
 
 \item{order}{a list of the order for each x; defaults to 4L for all x.}
 }
@@ -31,7 +31,7 @@ A matrix with a class \code{cpr_bt}
 Tensor products of B-splines.
 }
 \details{
-The return form this function is the tensor product of the B-splines
+The return from this function is the tensor product of the B-splines
 transformations for the given variables.  Say we have variables X, Y, and Z
 to build the tensor product of.  The columns of the returned matrix
 correspond to the column products of the three B-splines:
