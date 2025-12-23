@@ -37,6 +37,9 @@ plot(bmat, show_xi = TRUE,  show_x = FALSE)  ## Default
 plot(bmat, show_xi = FALSE, show_x = FALSE)
 plot(bmat, show_xi = FALSE, show_x = FALSE)
 plot(bmat, show_xi = FALSE, show_x = FALSE, color = FALSE)
+
+bmat <- bsplines(seq(0, 10, length.out = 1000), bknots = c(1, 9))
+plot(bmat)
 }
 \seealso{
 \code{\link{bsplines}}
