@@ -1,6 +1,6 @@
 # Control Polygons
 
-Generate the control polygon for a uni-variable B-spline
+Generate the control polygon for a univariate B-spline
 
 ## Usage
 
@@ -59,7 +59,7 @@ cp(
 
   (logical, default value is `TRUE`). If `TRUE` the regression model fit
   is retained and returned in as the `fit` element. If `FALSE` the `fit`
-  element with be `NA`.
+  element will be `NA`.
 
 - check_rank:
 
@@ -70,8 +70,8 @@ cp(
 
 a `cpr_cp` object, this is a list with the element `cp`, a data.frame
 reporting the x and y coordinates of the control polygon. Additional
-elements include the knot sequence, polynomial order, and other meta
-data regarding the construction of the control polygon.
+elements include the knot sequence, polynomial order, and other metadata
+regarding the construction of the control polygon.
 
 ## Details
 

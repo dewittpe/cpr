@@ -30,7 +30,7 @@ btensor(x, df = NULL, iknots = NULL, bknots, order)
 - bknots:
 
   a list of boundary knots for each x. As with the iknots, if omitted
-  the default will be to use the range of each x. If specified, the use
+  the default will be to use the range of each x. If specified, the user
   must specify the bknots for each x.
 
 - order:
@@ -43,7 +43,7 @@ A matrix with a class `cpr_bt`
 
 ## Details
 
-The return form this function is the tensor product of the B-splines
+The return from this function is the tensor product of the B-splines
 transformations for the given variables. Say we have variables X, Y, and
 Z to build the tensor product of. The columns of the returned matrix
 correspond to the column products of the three B-splines:

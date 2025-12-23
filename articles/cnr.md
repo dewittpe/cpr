@@ -3,20 +3,20 @@
 ``` r
 library(cpr)
 packageVersion("cpr")
-## [1] '0.4.0.9000'
+## [1] '0.4.1'
 ```
 
-The control polygon reduction methods for uni-variable functions can be
-extended to multi-variable functions by generalizing control polygons to
+The control polygon reduction methods for univariate functions can be
+extended to multivariate functions by generalizing control polygons to
 control nets.
 
 ## Tensor Products of B-Splines
 
-Where uni-variable functions of B-splines:
+For univariate B-splines:
 
 $$f(x) = \sum\limits_{j}\theta_{j}B_{j,k,{\mathbf{ξ}}}(x) = \mathbf{B}_{k,{\mathbf{ξ}}}(x){\mathbf{θ}}_{\mathbf{ξ}}$$
 
-we extend to multi-variable $m$-dimensional B-spline function, built on
+we extend to a multivariate $m$-dimensional B-spline function, built on
 $m$ B-spline basis matrices
 $\mathbf{B}_{k_{1},{\mathbf{ξ}}_{1}}\left( x_{1} \right),$$\mathbf{B}_{k_{2},{\mathbf{ξ}}_{2}}\left( x_{2} \right),\ldots,$$\mathbf{B}_{k_{m},{\mathbf{ξ}}_{m}}\left( x_{m} \right),$
 as
@@ -38,7 +38,7 @@ x_{12} & x_{22} & \cdots & x_{m2} \\
 x_{12} & x_{22} & \cdots & x_{mn}
 \end{pmatrix}.$$
 
-The basis for multi-variable B-splines is constructed by a recursive
+The basis for multivariate B-splines is constructed by a recursive
 algorithm. The base case for $m = 2$ is
 $$\mathcal{B}_{{\{ k_{1},k_{2}\}},{\{{\mathbf{ξ}}_{1},{\mathbf{ξ}}_{2}\}}}\left( \mathbf{x}_{1},\mathbf{x}_{2} \right) = \left( \mathbf{1}_{{|{\mathbf{ξ}}_{2}|} - k_{2}}^{T} \otimes \mathbf{B}_{k_{1},{\mathbf{ξ}}_{1}}\left( \mathbf{x}_{1} \right) \right) \odot \left( \mathbf{B}_{k_{2},{\mathbf{ξ}}_{2}}\left( \mathbf{x}_{2} \right) \otimes \mathbf{1}_{{|{\mathbf{ξ}}_{1}|} - k_{1}}^{T} \right),$$
 where $\odot$ is the element-wise product, $\otimes$ is a Kronecker
@@ -57,23 +57,26 @@ $$\begin{aligned}
  & {= \sum\limits_{j_{1} = 1}^{{|{\mathbf{ξ}}_{1}|} - k_{1}}\sum\limits_{j_{2} = 1}^{{|{\mathbf{ξ}}_{2}|} - k_{2}}\cdots\sum\limits_{j_{m} = 1}^{{|{\mathbf{ξ}}_{m}|} - k_{m}}\mathbf{B}_{k_{1},{\mathbf{ξ}}_{1}}\left( \mathbf{x}_{1} \right)\mathbf{B}_{k_{2},{\mathbf{ξ}}_{2}}\left( \mathbf{x}_{2} \right)\cdots\mathbf{B}_{k_{m},{\mathbf{ξ}}_{m}}\left( \mathbf{x}_{m} \right)\theta_{\mathbf{\Xi},j_{1},j_{2},\ldots,j_{m}}} \\
  & {= \sum\limits_{j_{1} = 1}^{{|{\mathbf{ξ}}_{1}|} - k_{1}}\mathbf{B}_{k_{1},{\mathbf{ξ}}_{1}}\left( \mathbf{x}_{1} \right)\underset{\text{polynomial coefficients}}{\underbrace{\sum\limits_{j_{2} = 1}^{{|{\mathbf{ξ}}_{2}|} - k_{2}}\cdots\sum\limits_{j_{m} = 1}^{{|{\mathbf{ξ}}_{m}|} - k_{m}}\mathbf{B}_{k_{2},{\mathbf{ξ}}_{2}}\left( \mathbf{x}_{2} \right)\cdots\mathbf{B}_{k_{m},{\mathbf{ξ}}_{m}}\left( \mathbf{x}_{m} \right)\theta_{\mathbf{\Xi},j_{1},j_{2},\ldots,j_{m}}}}} \\
  & {= \text{diag}\left( \mathbf{B}_{k_{1},{\mathbf{ξ}}_{1}}\left( \mathbf{x}_{1} \right){\mathbf{θ}}_{\mathbf{\Xi} \smallsetminus {\mathbf{ξ}}_{1}}\left( \mathbf{X} \smallsetminus \mathbf{x}_{1} \right) \right).}
-\end{aligned}$$ This is critical in the extension from the uni-variable
-control polygon reduction method to the multi-variable control polygon
-reduction method. By conditioning on $m - 1$ marginals, the
-multi-variable B-spline becomes a uni-variable B-spline in terms of the
-$m^{th}$ marginal. Thus, the metrics and methods of control polygon
-reduction can be applied.
+\end{aligned}$$ This is critical in the extension from the univariate
+control polygon reduction method to the multivariate control polygon
+reduction method. By conditioning on $m - 1$ marginals, the multivariate
+B-spline becomes a univariate B-spline in terms of the $m^{th}$
+marginal. Thus, the metrics and methods of control polygon reduction can
+be applied.
 
 ## Control Nets
 
-For multi-variable B-splines, a meaningful geometric relationship
-between the set of knot sequences, $\mathbf{\Xi},$ and regression
-coefficients, ${\mathbf{θ}}_{\mathbf{\Xi}},$ is provided by a control
-net. A control net for $m = 2$ variables would be:
+For multivariate B-splines, a meaningful geometric relationship between
+the set of knot sequences, $\mathbf{\Xi},$ and regression coefficients,
+${\mathbf{θ}}_{\mathbf{\Xi}},$ is provided by a control net. A control
+net for $m = 2$ variables would be:
 $${CN}_{\mathbf{K} = {\{ k_{1},k_{2}\}},\mathbf{\Xi} = {\{{\mathbf{ξ}}_{1},{\mathbf{ξ}}_{2}\}},{\mathbf{θ}}_{\mathbf{\Xi}}} = \left\{ \left( \xi_{1i}^{*},\xi_{2j}^{*},\theta_{ij} \right) \right\}_{i = 1,j = 1}^{{|{\mathbf{ξ}}_{1}|} - k_{1},{|{\mathbf{ξ}}_{2}|} - k_{2}},\quad\xi_{lj}^{*} = \frac{1}{k_{l} + 1}\sum\limits_{i = 1}^{k_{l} - 1}\xi_{l,j + i}.$$
 
-Building a control net in the cpr package is done by calling the `cn`
-function after defining a basis via the `btensor` method.
+Building a control net in the cpr package is done by calling the
+[`cn()`](http://www.peteredewitt.com/cpr/reference/cn.md) function after
+defining a basis via the
+[`btensor()`](http://www.peteredewitt.com/cpr/reference/btensor.md)
+method.
 
 Define a tensor product of B-splines by providing a list of vectors,
 iknots, bknots, and orders.
@@ -148,7 +151,7 @@ initial_cn <-
 influence_of_iknots(initial_cn)
 ## [[1]]
 ##         xi_4 
-## 4.010166e-32 
+## 5.282465e-32 
 ## 
 ## [[2]]
 ##        xi_5        xi_6        xi_7        xi_8 
@@ -175,7 +178,8 @@ plot(cn2,        rgl = FALSE, show_surface = TRUE, show_net = FALSE, colkey = FA
 
 ![](cnr_files/figure-html/unnamed-chunk-7-1.png)
 
-A call to `cnr` runs the full CNR algorithm on an initial control net.
+A call to [`cnr()`](http://www.peteredewitt.com/cpr/reference/cnr.md)
+runs the full CNR algorithm on an initial control net.
 
 ``` r
 cnr0 <- cnr(initial_cn)
@@ -244,23 +248,23 @@ sessionInfo()
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] cpr_0.4.0.9000 qwraps2_0.6.1 
+## [1] cpr_0.4.1     qwraps2_0.6.1
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] sass_0.4.10        generics_0.1.4     tcltk_4.5.2        lattice_0.22-7    
+##  [1] generics_0.1.4     sass_0.4.10        tcltk_4.5.2        lattice_0.22-7    
 ##  [5] lme4_1.1-38        digest_0.6.39      magrittr_2.0.4     rgl_1.3.31        
 ##  [9] evaluate_1.0.5     grid_4.5.2         RColorBrewer_1.1-3 fastmap_1.2.0     
 ## [13] jsonlite_2.0.0     Matrix_1.7-4       misc3d_0.9-1       scales_1.4.0      
 ## [17] textshaping_1.0.4  jquerylib_0.1.4    reformulas_0.4.3   Rdpack_2.6.4      
 ## [21] cli_3.6.5          rlang_1.1.6        rbibutils_2.4      splines_4.5.2     
 ## [25] withr_3.0.2        base64enc_0.1-3    cachem_1.1.0       yaml_2.3.12       
-## [29] tools_4.5.2        nloptr_2.2.1       minqa_1.2.8        dplyr_1.1.4       
-## [33] ggplot2_4.0.1      boot_1.3-32        vctrs_0.6.5        R6_2.6.1          
-## [37] lifecycle_1.0.4    plot3D_1.4.2       fs_1.6.6           htmlwidgets_1.6.4 
-## [41] MASS_7.3-65        ragg_1.5.0         pkgconfig_2.0.3    desc_1.4.3        
-## [45] pkgdown_2.2.0      bslib_0.9.0        pillar_1.11.1      gtable_0.3.6      
-## [49] glue_1.8.0         Rcpp_1.1.0         systemfonts_1.3.1  tidyselect_1.2.1  
-## [53] tibble_3.3.0       xfun_0.55          knitr_1.51         farver_2.1.2      
-## [57] htmltools_0.5.9    nlme_3.1-168       labeling_0.4.3     rmarkdown_2.30    
-## [61] compiler_4.5.2     S7_0.2.1
+## [29] otel_0.2.0         tools_4.5.2        nloptr_2.2.1       minqa_1.2.8       
+## [33] dplyr_1.1.4        ggplot2_4.0.1      boot_1.3-32        vctrs_0.6.5       
+## [37] R6_2.6.1           lifecycle_1.0.4    plot3D_1.4.2       fs_1.6.6          
+## [41] htmlwidgets_1.6.4  MASS_7.3-65        ragg_1.5.0         pkgconfig_2.0.3   
+## [45] desc_1.4.3         pillar_1.11.1      pkgdown_2.2.0      bslib_0.9.0       
+## [49] gtable_0.3.6       glue_1.8.0         Rcpp_1.1.0         systemfonts_1.3.1 
+## [53] tidyselect_1.2.1   tibble_3.3.0       xfun_0.55          knitr_1.51        
+## [57] farver_2.1.2       htmltools_0.5.9    nlme_3.1-168       labeling_0.4.3    
+## [61] rmarkdown_2.30     compiler_4.5.2     S7_0.2.1
 ```

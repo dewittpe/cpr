@@ -1,6 +1,6 @@
 # Control Nets
 
-Generate the control net for a uni-variable B-spline
+Generate the control net for a univariate B-spline
 
 ## Usage
 
@@ -58,8 +58,8 @@ cn(
 - keep_fit:
 
   (logical, defaults to `FALSE`). If `TRUE` the regression model fit is
-  retained and returned in the the `fit` element. If `FALSE` the
-  regression model is not saved and the `fit` element will be `NA`.
+  retained and returned in the `fit` element. If `FALSE` the regression
+  model is not saved and the `fit` element will be `NA`.
 
 - check_rank:
 
@@ -69,7 +69,7 @@ cn(
 ## Value
 
 a `cpr_cn` object. This is a list with the following elements. Some of
-the elements are omitted when the using the `cn.cpr_bt` method.
+the elements are omitted when using the `cn.cpr_bt` method.
 
 - cn:
 
@@ -86,7 +86,7 @@ the elements are omitted when the using the `cn.cpr_bt` method.
 
 - keep_fit:
 
-  logical, indicates if the regression models was retained
+  logical, indicates if the regression model was retained
 
 - fit:
 
@@ -107,7 +107,7 @@ the elements are omitted when the using the `cn.cpr_bt` method.
 
 - rse:
 
-  the residual standard error for the regression models
+  the residual standard error for the regression model
 
 ## Details
 

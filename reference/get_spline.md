@@ -18,12 +18,12 @@ get_spline(x, margin = 1, at, n = 100, se = FALSE, derivative = 0)
 - margin:
 
   an integer identifying the marginal of the control net to slice along.
-  Only used when working `x` is a `cpr_cn` object.
+  Only used when working with `x` as a `cpr_cn` object.
 
 - at:
 
-  point value for marginals not defined in the `margin`. Only used when
-  `x` is a `cpr_cn` object. Expected input is a list of length
+  a point value for marginals not defined in the `margin`. Only used
+  when `x` is a `cpr_cn` object. Expected input is a list of length
   `length(attr(x, "bspline_list"))`. Entries for elements `marginal` are
   ignored. If omitted, the midpoint between the boundary knots for each
   marginal is used.
@@ -50,17 +50,17 @@ spline. A third column with the standard error is returned if requested.
 ## Details
 
 A control polygon, `cpr\_cp` object, has a spline function f(x).
-`get_spline` returns a list of two `data.frame`. The `cp` element is a
-`data.frame` with the (x, y) coordinates control points and the `spline`
-element is a `data.frame` with `n` rows for interpolating f(x).
+`get_spline` returns a list of two `data.frames`. The `cp` element is a
+`data.frame` with the (x, y) coordinates of control points and the
+`spline` element is a `data.frame` with `n` rows for interpolating f(x).
 
 For a control net, `cpr\_cn` object, the return is the same as for a
-`cpr\_cp` object, but conceptually different. Where a `cpr\_cp` objects
-have a uni-variable spline function, `cpr\_cn` have multi-variable
-spline surfaces. `get_spline` returns a "slice" of the higher
-dimensional object. For example, consider a three-dimensional control
-net defined on the unit cube with marginals `x1`, `x2`, and `x3`. The
-implied spline surface is the function f(x1, x2, x3).
+`cpr\_cp` object, but conceptually different. Where `cpr\_cp` objects
+have a univariate spline function, `cpr\_cn` objects have multivariate
+spline surfaces. `get_spline` returns a "slice" of the
+higher-dimensional object. For example, consider a three-dimensional
+control net defined on the unit cube with marginals `x1`, `x2`, and
+`x3`. The implied spline surface is the function f(x1, x2, x3).
 `get_spline(x, margin = 2, at = list(0.2, NA, 0.5))` would return the
 control polygon and spline surface for f(0.2, x, 0.5).
 

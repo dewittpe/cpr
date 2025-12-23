@@ -66,4 +66,10 @@ plot(bmat, show_xi = FALSE, show_x = FALSE)
 plot(bmat, show_xi = FALSE, show_x = FALSE)
 
 plot(bmat, show_xi = FALSE, show_x = FALSE, color = FALSE)
+
+
+bmat <- bsplines(seq(0, 10, length.out = 1000), bknots = c(1, 9))
+#> Warning: At least one x value < min(bknots)
+#> Warning: At least one x value >= max(bknots)
+plot(bmat)
 ```

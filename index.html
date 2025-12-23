@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,21 +62,21 @@
 <div class="section level2">
 <h2 id="learn-more-about-cpr">Learn More About CPR.<a class="anchor" aria-label="anchor" href="#learn-more-about-cpr"></a>
 </h2>
-<p>This model selection method was developed as part of <a href="https://doi.org/10.25677/awnc-b795" class="external-link">Peter DeWitt’s PhD dissertation</a> work. It has been extended since.</p>
+<p>This model selection method was developed as part of <a href="https://doi.org/10.25677/awnc-b795" class="external-link">Peter DeWitt’s PhD dissertation</a> work. It has since been extended.</p>
 <div class="section level3">
 <h3 id="vignettes">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes"></a>
 </h3>
-<p>There are two vignettes within the package</p>
+<p>There are two vignettes within the package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">vignettes</span><span class="op">(</span>topic <span class="op">=</span> <span class="st">'cpr'</span>, package <span class="op">=</span> <span class="st">'cpr'</span><span class="op">)</span></span>
 <span><span class="fu">vignettes</span><span class="op">(</span>topic <span class="op">=</span> <span class="st">'cnr'</span>, package <span class="op">=</span> <span class="st">'cpr'</span><span class="op">)</span></span></code></pre></div>
-<p>You can also read these on package website</p>
+<p>You can also read these on the package website</p>
 </div>
 <div class="section level3">
 <h3 id="related-publications">Related Publications:<a class="anchor" aria-label="anchor" href="#related-publications"></a>
 </h3>
 <ul>
-<li>The CPR method was presented at the 28th International Biometric Conference held July 2016, in Victoria, British Columbia, Canada. The abstract, paper, and talk had the title: “Parsimonious B-splines Regression Models via Control Polygon Reduction.” A bibtex entry for the abstract:</li>
+<li>The CPR method was presented at the 28th International Biometric Conference held in July 2016 in Victoria, British Columbia, Canada. The abstract, paper, and talk had the title: “Parsimonious B-splines Regression Models via Control Polygon Reduction.” A BibTeX entry for the abstract:</li>
 </ul>
 <pre><code>@inproceedings{,
   author       = {DeWitt, Peter E. and Carlson, Nichole E. and Samantha MaWhinney},
@@ -111,7 +111,7 @@
 </h3>
 <p>If you are working on a Windows machine you will need to have <a href="https://cran.r-project.org/bin/windows/Rtools/" class="external-link">Rtools</a> installed.</p>
 <div class="section level4">
-<h4 id="from-github">From github<a class="anchor" aria-label="anchor" href="#from-github"></a>
+<h4 id="from-github">From GitHub<a class="anchor" aria-label="anchor" href="#from-github"></a>
 </h4>
 <p>This will require you to have <a href="https://cran.r-project.org/package=remotes" class="external-link">remotes</a> package installed.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -132,7 +132,7 @@
 <p>To check R dependencies before building, or after you get errors due to missing R packages run:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_dev_deps</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>To build the R package and install the dev version on you machine:</p>
+<p>To build the R package and install the dev version on your machine:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">make</span> install</span></code></pre></div>
 <p>Alternatively, you should be able to build and install without <code>make</code></p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="ex">R</span> CMD build <span class="op">&lt;</span>path to cloned repo<span class="op">&gt;</span></span>
@@ -143,7 +143,7 @@
 <div class="section level2">
 <h2 id="other-notes">Other Notes:<a class="anchor" aria-label="anchor" href="#other-notes"></a>
 </h2>
-<p>The <code>cpr</code> package provides 3D graphics via the <a href="https://CRAN.R-project.org/package=rgl" class="external-link"><code>rgl</code></a> package. If you are get an error, or rather message, of the form:</p>
+<p>The <code>cpr</code> package provides 3D graphics via the <a href="https://CRAN.R-project.org/package=rgl" class="external-link"><code>rgl</code></a> package. If you get an error (or message) of the form:</p>
 <pre><code>  font family "sans" not found, using "bitmap"</code></pre>
 <p>Then there is an easy fix. You need to get the <a href="https://freetype.org/" class="external-link">FreeType 2 font engine</a>.</p>
 <p>On Debian, you can get the library via:</p>

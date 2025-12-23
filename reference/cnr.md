@@ -54,7 +54,7 @@ control net,
 [`influence_weights`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
 for finding the influence of the internal knots,
 [`cpr`](http://www.peteredewitt.com/cpr/reference/cpr.md) for the
-uni-variable version, Control Polygon Reduction.
+univariate version, Control Polygon Reduction.
 
 [`vignette(topic = "cnr", package = "cpr")`](http://www.peteredewitt.com/cpr/articles/cnr.md)
 

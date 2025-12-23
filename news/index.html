@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cpr</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,51 +38,55 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.4.0.9000" id="version-0409000">Version 0.4.0.9000<a class="anchor" aria-label="anchor" href="#version-0409000"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.4.1" id="version-041">Version 0.4.1<a class="anchor" aria-label="anchor" href="#version-041"></a></h2>
 <div class="section level3">
-<h3 id="bug-fixes-0-4-0-9000">Bug fixes:<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-0-9000"></a></h3>
+<h3 id="bug-fixes-0-4-1">Bug fixes:<a class="anchor" aria-label="anchor" href="#bug-fixes-0-4-1"></a></h3>
 <ul><li>
-<code>plot_bs</code> builds the x-axis correctly for a basis built with values outside of the boundary knots.</li>
+<code>plot_bs()</code> builds the x-axis correctly for a basis built with values outside of the boundary knots.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="non-user-visible-changes-0-4-1">Non-User Visible Changes<a class="anchor" aria-label="anchor" href="#non-user-visible-changes-0-4-1"></a></h3>
+<ul><li>C++ error handling now uses <code>Rcpp::stop()</code> for consistent error signaling. (Thanks to <a href="https://github.com/Enchufa2" class="external-link">@Enchufa2</a>, re <a href="https://github.com/dewittpe/cpr/issues/63" class="external-link">#63</a>)</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.0" id="version-040">Version 0.4.0<a class="anchor" aria-label="anchor" href="#version-040"></a></h2><p class="text-muted">CRAN release: 2024-02-15</p>
 <div class="section level3">
 <h3 id="new-features-0-4-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-4-0"></a></h3>
-<ul><li><p><code>cpr</code>’s <code>progress</code> argument has been extended to control if a progress bar is used for just the cpr steps, or if a more detailed progress for of the influence weight calculations is reported.</p></li>
-<li><p><code>influence_of_iknots</code> gains parallel execution via <code>pbapply</code> (<a href="https://github.com/dewittpe/cpr/issues/17" class="external-link">#17</a>)</p></li>
-<li><p><code>plot.cpr_cp</code> gains the argument <code>comparitive</code> which, when set to <code>FALSE</code> and only one <code>cpr_cp</code> is passed in for plotting, the graphic will appear more like the <code>plot.cpr_bs</code> results. When <code>comparitive = TRUE</code> or more than one <code>cpr_cp</code> is present, the behavior from v0.3.0 is retained.</p></li>
-<li><p><code>cp.formula</code> gains the <code>methods.args</code> argument to pass arguments to the regression method instead of relying on <code>...</code>.</p></li>
-<li><p><code>d_order_statistic</code> and <code>p_order_statistic</code> were added. These functions allow you to get the density of distribution function for the jth order statistic from a sample of size n from a distribution with defined density and distribution functions within R.</p></li>
-<li><p><code>sign_changes</code> will count the number of sign changes of the first or second derivative of a spline function.</p></li>
-<li><p><code>get_spline</code> returns standard errors and derivatives (<a href="https://github.com/dewittpe/cpr/issues/60" class="external-link">#60</a>)</p></li>
+<ul><li><p><code><a href="../reference/cpr.html">cpr()</a></code>’s <code>progress</code> argument has been extended to control if a progress bar is used for just the cpr steps, or if a more detailed progress form of the influence weight calculations is reported.</p></li>
+<li><p><code><a href="../reference/influence_of_iknots.html">influence_of_iknots()</a></code> gains parallel execution via <code>pbapply()</code> (<a href="https://github.com/dewittpe/cpr/issues/17" class="external-link">#17</a>)</p></li>
+<li><p><code><a href="../reference/plot.cpr_cp.html">plot.cpr_cp()</a></code> gains the argument <code>comparative</code> which, when set to <code>FALSE</code> and only one <code>cpr_cp</code> is passed in for plotting, the graphic will appear more like the <code><a href="../reference/plot.cpr_bs.html">plot.cpr_bs()</a></code> results. When <code>comparative = TRUE</code> or more than one <code>cpr_cp</code> is present, the behavior from v0.3.0 is retained.</p></li>
+<li><p><code><a href="../reference/cp.html">cp.formula()</a></code> gains the <code>methods.args</code> argument to pass arguments to the regression method instead of relying on <code>...</code>.</p></li>
+<li><p><code><a href="../reference/order_statistics.html">d_order_statistic()</a></code> and <code><a href="../reference/order_statistics.html">p_order_statistic()</a></code> were added. These functions allow you to get the density or distribution function for the jth order statistic from a sample of size n from a distribution with defined density and distribution functions within R.</p></li>
+<li><p><code><a href="../reference/sign_changes.html">sign_changes()</a></code> will count the number of sign changes of the first or second derivative of a spline function.</p></li>
+<li><p><code><a href="../reference/get_spline.html">get_spline()</a></code> returns standard errors and derivatives (<a href="https://github.com/dewittpe/cpr/issues/60" class="external-link">#60</a>)</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="user-visible-changes-0-4-0">User Visible Changes<a class="anchor" aria-label="anchor" href="#user-visible-changes-0-4-0"></a></h3>
 <ul><li>
-<code>loglikelihood</code> is not exported in the namespace</li>
+<code><a href="../reference/loglikelihood.html">loglikelihood()</a></code> is not exported in the namespace</li>
 <li>
-<code>summary.cpr_cp</code> now calculates the “wiggle” of the function by default, that is, changes the default from <code>wiggle = FALSE</code> to <code>wiggle = TRUE</code>
+<code><a href="../reference/summary.cpr_cp.html">summary.cpr_cp()</a></code> now calculates the “wiggle” of the function by default, that is, changes the default from <code>wiggle = FALSE</code> to <code>wiggle = TRUE</code>
 </li>
 <li>
-<code>cp</code> and <code>cn</code> both have the default <code>keep_fit</code> argument set to TRUE. This change was made to simplify the prediction methods.</li>
+<code><a href="../reference/cp.html">cp()</a></code> and <code><a href="../reference/cn.html">cn()</a></code> both have the default <code>keep_fit</code> argument set to TRUE. This change was made to simplify the prediction methods.</li>
 <li>
-<code>print.cpr_bt</code> returns the object invisibly, it used to return a <code>str(x)</code>.</li>
+<code>print.cpr_bt()</code> returns the object invisibly, it used to return a <code>str(x)</code>.</li>
 <li>
-<code>print.cpr_cn</code> returns the object invisibly</li>
+<code>print.cpr_cn()</code> returns the object invisibly</li>
 <li>
-<code>print.cpr_cnr</code> returns the object invisibly</li>
+<code>print.cpr_cnr()</code> returns the object invisibly</li>
 <li>
-<code>print.cpr_cpr</code> returns the object invisibly</li>
+<code>print.cpr_cpr()</code> returns the object invisibly</li>
 </ul></div>
 <div class="section level3">
 <h3 id="non-user-visible-changes-0-4-0">Non-User Visible Changes<a class="anchor" aria-label="anchor" href="#non-user-visible-changes-0-4-0"></a></h3>
 <ul><li><p>Refactor of c++ defining basis functions, derivatives of basis functions, b-splines structures</p></li>
-<li><p><code>cp.formula</code> checks the <code>formula</code> and requires that <code>bsplines</code> is used once and is the first term on the right hand side of the formula.</p></li>
+<li><p><code><a href="../reference/cp.html">cp.formula()</a></code> checks the <code>formula</code> and requires that <code><a href="../reference/bsplines.html">bsplines()</a></code> is used once and is the first term on the right hand side of the formula.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="defunct-functions-0-4-0">Defunct Functions<a class="anchor" aria-label="anchor" href="#defunct-functions-0-4-0"></a></h3>
-<ul><li>A major refactor of the internal code as since v0.3.0 has resulted in several functions becoming defunct, see <code>help(cpr-defunct)</code> for details.</li>
+<ul><li>A major refactor of the internal code since v0.3.0 has resulted in several functions becoming defunct, see <code>help(cpr-defunct)</code> for details.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -90,7 +94,7 @@
 <div class="section level3">
 <h3 id="new-examples-0-3-0">New Examples<a class="anchor" aria-label="anchor" href="#new-examples-0-3-0"></a></h3>
 <ul><li>
-<code>cpr</code> has examples</li>
+<code><a href="../reference/cpr.html">cpr()</a></code> has examples</li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-changes-0-3-0">Other Changes<a class="anchor" aria-label="anchor" href="#other-changes-0-3-0"></a></h3>
@@ -102,7 +106,7 @@
 <li>Remove use of the tidyr, dplyr</li>
 <li>Improve documentation</li>
 <li>Minor bug fixes</li>
-<li>Replace use of now deprecated <code><a href="https://ggplot2.tidyverse.org/reference/aes_.html" class="external-link">ggplot2::aes_string</a></code>
+<li>Replace use of now deprecated <code><a href="https://ggplot2.tidyverse.org/reference/aes_.html" class="external-link">ggplot2::aes_string()</a></code>
 </li>
 </ul></div>
 </div>
@@ -112,7 +116,7 @@
 <div class="section level3">
 <h3 id="new-features-0-2-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-3"></a></h3>
 <ul><li>
-<code>plot.cpr_cn</code> supports <code>rgl</code> and <code>plot3D</code> graphics</li>
+<code><a href="../reference/plot.cpr_cn.html">plot.cpr_cn()</a></code> supports <code>rgl</code> and <code>plot3D</code> graphics</li>
 <li>start of a vignette.</li>
 </ul></div>
 </div>
@@ -121,13 +125,13 @@
 <div class="section level3">
 <h3 id="new-features-0-2-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-2"></a></h3>
 <ul><li>
-<code>get_spline</code> is an S3 method for getting a <code>data.frame</code> of interpolated values of a spline given a <code>cpr_cp</code> object. Later development will add methods for <code>cpr_cn</code> objects.</li>
+<code><a href="../reference/get_spline.html">get_spline()</a></code> is an S3 method for getting a <code>data.frame</code> of interpolated values of a spline given a <code>cpr_cp</code> object. Later development will add methods for <code>cpr_cn</code> objects.</li>
 <li>
-<code>predict.cpr_cp</code> and <code>predict.cpr_cn</code> methods added</li>
+<code><a href="../reference/predict.cpr_cp.html">predict.cpr_cp()</a></code> and <code>predict.cpr_cn()</code> methods added</li>
 <li>
-<code>matrix_rank</code> added</li>
+<code><a href="../reference/matrix_rank.html">matrix_rank()</a></code> added</li>
 <li>
-<code>update_bsplines</code> and <code>update_btensor</code> methods added (<a href="https://github.com/dewittpe/cpr/issues/27" class="external-link">#27</a>)</li>
+<code><a href="../reference/update_bsplines.html">update_bsplines()</a></code> and <code><a href="../reference/update_bsplines.html">update_btensor()</a></code> methods added (<a href="https://github.com/dewittpe/cpr/issues/27" class="external-link">#27</a>)</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -136,18 +140,18 @@
 <div class="section level3">
 <h3 id="new-features-0-2-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-1"></a></h3>
 <ul><li>
-<code>influence_of</code> and <code>plot.cpr_influence_of</code> provide a clean interface for users to explore the influence of a set of knots on a spline function. (<a href="https://github.com/dewittpe/cpr/issues/19" class="external-link">#19</a>)</li>
+<code><a href="../reference/cpr-defunct.html">influence_of()</a></code> and <code>plot.cpr_influence_of()</code> provide a clean interface for users to explore the influence of a set of knots on a spline function. (<a href="https://github.com/dewittpe/cpr/issues/19" class="external-link">#19</a>)</li>
 <li>
-<code>color</code> (<code>TRUE</code>/<code>FALSE</code>) option added to <code>plot.cpr_bs</code>.</li>
+<code>color</code> (<code>TRUE</code>/<code>FALSE</code>) option added to <code><a href="../reference/plot.cpr_bs.html">plot.cpr_bs()</a></code>.</li>
 <li>
-<code>plot.cpr_cn</code> lets the user plot 2D surfaces for tensor product surfaces. The plots are for the whole surface if the input is a 2D tensor product, and is a 2D slice evaluated at a given value for other margins for 3+ dimensional tensor products.</li>
+<code><a href="../reference/plot.cpr_cn.html">plot.cpr_cn()</a></code> lets the user plot 2D surfaces for tensor product surfaces. The plots are for the whole surface if the input is a 2D tensor product, and is a 2D slice evaluated at a given value for other margins for 3+ dimensional tensor products.</li>
 <li>
-<code>is.</code> a collection of <code>is.cpr_cp</code>, <code>is.cpr_bs</code>, … functions added.</li>
+<code>is.</code> a collection of <code>is.cpr_cp()</code>, <code>is.cpr_bs()</code>, … functions added.</li>
 <li>The dataset <code>spdg</code> has been added to the package.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="other-changes-0-2-1">Other Changes<a class="anchor" aria-label="anchor" href="#other-changes-0-2-1"></a></h3>
-<ul><li>removed a redundant <code>build_tensor</code> definition</li>
+<ul><li>removed a redundant <code><a href="../reference/build_tensor.html">build_tensor()</a></code> definition</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -159,32 +163,32 @@
 </ol><p>Continued development should be focused on bug fixes and minor enhancements.</p>
 <div class="section level3">
 <h3 id="new-features-0-2-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
-<ul><li>Option to save fits in <code>cnr</code> (<a href="https://github.com/dewittpe/cpr/issues/8" class="external-link">#8</a>)</li>
-<li>Option to define the number of polynomial coefficients to use in <code>cnr</code> (<a href="https://github.com/dewittpe/cpr/issues/10" class="external-link">#10</a>)</li>
+<ul><li>Option to save fits in <code><a href="../reference/cnr.html">cnr()</a></code> (<a href="https://github.com/dewittpe/cpr/issues/8" class="external-link">#8</a>)</li>
+<li>Option to define the number of polynomial coefficients to use in <code><a href="../reference/cnr.html">cnr()</a></code> (<a href="https://github.com/dewittpe/cpr/issues/10" class="external-link">#10</a>)</li>
 <li>x-axis tick label options for plotting b-splines (<a href="https://github.com/dewittpe/cpr/issues/12" class="external-link">#12</a>)</li>
-<li>added <code>show_xi</code> to <code>cpr:::plot.cp</code> and using <code><a href="https://ggplot2.tidyverse.org/reference/geom_rug.html" class="external-link">ggplot2::geom_rug</a></code> to show the location of the knots for each of the control polygons plotted.</li>
+<li>added <code>show_xi</code> to <code>cpr:::plot.cp()</code> and using <code><a href="https://ggplot2.tidyverse.org/reference/geom_rug.html" class="external-link">ggplot2::geom_rug()</a></code> to show the location of the knots for each of the control polygons plotted.</li>
 <li>
-<code>summary</code> for <code>cpr_cn</code> and <code>cpr_cnr</code> objects added.</li>
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> for <code>cpr_cn</code> and <code>cpr_cnr</code> objects added.</li>
 <li>
-<code>plot</code> method for <code>cpr_cnr</code> objects.</li>
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method for <code>cpr_cnr</code> objects.</li>
 <li>
-<code>margin</code> option in <code>cnr</code> allows the user to specify which marginals CNR will be applied to.</li>
-<li>Using <code>sec.axis</code> option from <code>ggplot2_2.2.0</code> for the plotting of the knot sequence and numeric values in <code>plot.cpr_bs</code> (<a href="https://github.com/dewittpe/cpr/issues/18" class="external-link">#18</a>)</li>
+<code>margin</code> option in <code><a href="../reference/cnr.html">cnr()</a></code> allows the user to specify which marginals CNR will be applied to.</li>
+<li>Using <code>sec.axis</code> option from <code>ggplot2_2.2.0</code> for the plotting of the knot sequence and numeric values in <code><a href="../reference/plot.cpr_bs.html">plot.cpr_bs()</a></code> (<a href="https://github.com/dewittpe/cpr/issues/18" class="external-link">#18</a>)</li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-2-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-0"></a></h3>
 <ul><li>
-<code>from</code> and <code>to</code> arguments for <code>plot.cpr_cpr</code> fixed (<a href="https://github.com/dewittpe/cpr/issues/14" class="external-link">#14</a>)</li>
-<li>correct construction of missing <code>iknots</code> argument in <code>btensor</code>
+<code>from</code> and <code>to</code> arguments for <code><a href="../reference/plot.cpr_cpr.html">plot.cpr_cpr()</a></code> fixed (<a href="https://github.com/dewittpe/cpr/issues/14" class="external-link">#14</a>)</li>
+<li>correct construction of missing <code>iknots</code> argument in <code><a href="../reference/btensor.html">btensor()</a></code>
 </li>
 <li>
-<code>keep</code> is correctly handled in the <code>cnr</code> call.</li>
+<code>keep</code> is correctly handled in the <code><a href="../reference/cnr.html">cnr()</a></code> call.</li>
 <li>
-<code>show_xi</code> correctly handled in the <code>plot.cpr_cp</code> call.</li>
+<code>show_xi</code> correctly handled in the <code><a href="../reference/plot.cpr_cp.html">plot.cpr_cp()</a></code> call.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="non-visible-changes-0-2-0">Non visible changes<a class="anchor" aria-label="anchor" href="#non-visible-changes-0-2-0"></a></h3>
-<ul><li>non-exported function <code>knot_expr</code> created to help with plotting the knot locations in <code>cpr:::plot.cpr_bs</code>.</li>
+<h3 id="non-visible-changes-0-2-0">Non-visible changes<a class="anchor" aria-label="anchor" href="#non-visible-changes-0-2-0"></a></h3>
+<ul><li>non-exported function <code><a href="../reference/knot_expr.html">knot_expr()</a></code> created to help with plotting the knot locations in <code>cpr:::plot.cpr_bs()</code>.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -192,10 +196,10 @@
 <div class="section level3">
 <h3 id="new-features-0-1-1">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-1-1"></a></h3>
 <ul><li>
-<code>plot.cpr_cp</code> allows the user to suppress the plotting of the control polygon. When plotting multiple control polygons and splines, this option will make it easier to view the spline functions.</li>
+<code><a href="../reference/plot.cpr_cp.html">plot.cpr_cp()</a></code> allows the user to suppress the plotting of the control polygon. When plotting multiple control polygons and splines, this option will make it easier to view the spline functions.</li>
 </ul></div>
 <div class="section level3">
-<h3 id="non-visible-changes-0-1-1">Non visible changes<a class="anchor" aria-label="anchor" href="#non-visible-changes-0-1-1"></a></h3>
+<h3 id="non-visible-changes-0-1-1">Non-visible changes<a class="anchor" aria-label="anchor" href="#non-visible-changes-0-1-1"></a></h3>
 <ul><li>Extended testing scripts.</li>
 </ul></div>
 </div>
@@ -204,27 +208,27 @@
 <p><strong>First version of univariable cpr methods ready for deployment</strong></p>
 <div class="section level3">
 <h3 id="big-picture-0-1-0">Big picture<a class="anchor" aria-label="anchor" href="#big-picture-0-1-0"></a></h3>
-<p><code><a href="../reference/cp.html">cpr::cp</a></code> and <code><a href="../reference/cpr.html">cpr::cpr</a></code> have been used for the simulations which are aimed to be part of the first manuscript. Modifications might be needed, but hopefully the univariable methods are stable.</p>
-<p>A lot of changes in the implementation and API have occurred from the 0.0.x series. The aim for version 0.2.0 will be to have a very similar API for <code><a href="../reference/cn.html">cpr::cn</a></code> and <code><a href="../reference/cnr.html">cpr::cnr</a></code> as provided for the <code><a href="../reference/cp.html">cpr::cp</a></code> and <code><a href="../reference/cpr.html">cpr::cpr</a></code> calls.</p>
+<p><code><a href="../reference/cp.html">cpr::cp()</a></code> and <code><a href="../reference/cpr.html">cpr::cpr()</a></code> have been used for the simulations which are aimed to be part of the first manuscript. Modifications might be needed, but hopefully the univariable methods are stable.</p>
+<p>A lot of changes in the implementation and API have occurred from the 0.0.x series. The aim for version 0.2.0 will be to have a very similar API for <code><a href="../reference/cn.html">cpr::cn()</a></code> and <code><a href="../reference/cnr.html">cpr::cnr()</a></code> as provided for the <code><a href="../reference/cp.html">cpr::cp()</a></code> and <code><a href="../reference/cpr.html">cpr::cpr()</a></code> calls.</p>
 </div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.5" id="version-005">version 0.0.5<a class="anchor" aria-label="anchor" href="#version-005"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-0-5">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-0-5"></a></h3>
-<ul><li>First and second derivatives of B-splines via <code>bsplineD</code>
+<ul><li>First and second derivatives of B-splines via <code><a href="../reference/bsplineD.html">bsplineD()</a></code>
 </li>
 </ul></div>
 <div class="section level3">
 <h3 id="extended-documentation-0-0-5">Extended Documentation<a class="anchor" aria-label="anchor" href="#extended-documentation-0-0-5"></a></h3>
-<ul><li>Examples added to <code>bsplines</code>
+<ul><li>Examples added to <code><a href="../reference/bsplines.html">bsplines()</a></code>
 </li>
 </ul></div>
 <div class="section level3">
 <h3 id="end-user-non-visible-changes-0-0-5">End User non-visible changes:<a class="anchor" aria-label="anchor" href="#end-user-non-visible-changes-0-0-5"></a></h3>
-<ul><li>Added the not-to-be-exported function <code>generate_cp_data</code>
+<ul><li>Added the not-to-be-exported function <code>generate_cp_data()</code>
 </li>
-<li>Redesign of the <code>deboor.cpp</code> file so that the <code>bsplines</code> are accessible. The prior design only allowed access to the basis, the current design allows access to the generic B-splines.</li>
+<li>Redesign of the <code>deboor.cpp</code> file so that the <code><a href="../reference/bsplines.html">bsplines()</a></code> are accessible. The prior design only allowed access to the basis, the current design allows access to the generic B-splines.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -232,38 +236,39 @@
 <p>Version 0.0.3 is the version of the package used to run the analysis and simulations presented in the paper submitted to the 28th International Biometrics Conference, Western North American Region (WNAR) of the Internal Biometric Society, Student paper competition. The conference will be held 10 - 16 July 2016 in Victoria, British Columbia, Canada.</p>
 <div class="section level3">
 <h3 id="bug-fixes-0-0-3">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-0-3"></a></h3>
-<ul><li><p>Corrected the attributes calls within <code>cpr</code> after adjusting the attributes being set on a <code>cpr_cp</code>.</p></li>
-<li><p><code>plot.cpr_bs</code> correctly displays the indices for the knot sequence.</p></li>
+<ul><li><p>Corrected the attributes calls within <code><a href="../reference/cpr.html">cpr()</a></code> after adjusting the attributes being set on a <code>cpr_cp</code>.</p></li>
+<li><p><code><a href="../reference/plot.cpr_bs.html">plot.cpr_bs()</a></code> correctly displays the indices for the knot sequence.</p></li>
 </ul></div>
 <div class="section level3">
-<h3 id="end-user-visible-changes-0-0-3">End User Visible changes:<a class="anchor" aria-label="anchor" href="#end-user-visible-changes-0-0-3"></a></h3>
-<ul><li>The knot insertion matrix <strong>W</strong> is accessible to the end user in a new way. Names of functions in <code>boehem.cpp</code> are cleaner.</li>
+<h3 id="end-user-visible-changes-0-0-3">End User Visible Changes:<a class="anchor" aria-label="anchor" href="#end-user-visible-changes-0-0-3"></a></h3>
+<ul><li>The knot insertion matrix <strong>W</strong> is accessible to end users in a new way. Names of functions in <code>boehem.cpp</code> are cleaner.</li>
 <li>
-<code>plot.cpr_cpr</code> allows user to select either control polygons or sums of squared residuals to be plotted.</li>
+<code><a href="../reference/plot.cpr_cpr.html">plot.cpr_cpr()</a></code> allows user to select either control polygons or sums of squared residuals to be plotted.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="vignettes-0-0-3">Vignettes<a class="anchor" aria-label="anchor" href="#vignettes-0-0-3"></a></h3>
-<ul><li>Removed the background vignette… to much detail right now, too much time required to build and install the package.</li>
+<ul><li>Removed the background vignette… too much detail right now, too much time required to build and install the package.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="end-user-non-visible-changes-0-0-3">End User non-visible changes:<a class="anchor" aria-label="anchor" href="#end-user-non-visible-changes-0-0-3"></a></h3>
-<ul><li>Redundant definition of <code>greville_sites</code> removed.</li>
+<ul><li>Redundant definition of <code>greville_sites()</code> removed.</li>
 </ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="version-002">version 0.0.2<a class="anchor" aria-label="anchor" href="#version-002"></a></h2>
 <div class="section level3">
-<h3 id="new-features-0-0-2">new features<a class="anchor" aria-label="anchor" href="#new-features-0-0-2"></a></h3>
-<ul><li>Added the function <code>tensor</code> for building tensor products of <code><a href="../reference/bsplines.html">cpr::bsplines</a></code>.</li>
-<li>Added the function <code>influence_weights</code> to get the influence weights for each internal knot on each marginal of a tensor product.</li>
+<h3 id="new-features-0-0-2">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-0-2"></a></h3>
+<ul><li>Added the function <code>tensor()</code> for building tensor products of <code><a href="../reference/bsplines.html">cpr::bsplines()</a></code>.</li>
+<li>Added the function <code><a href="../reference/cpr-defunct.html">influence_weights()</a></code> to get the influence weights for each internal knot on each marginal of a tensor product.</li>
 <li>
-<code>is.cpr_bs</code> added.</li>
-<li>S3 methods for <code>cp</code>
+<code>is.cpr_bs()</code> added.</li>
+<li>S3 methods for <code><a href="../reference/cp.html">cp()</a></code>
 </li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-0-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-0-2"></a></h3>
-<ul><li>trimmed quantile handles the <code>use_unique</code> option correctly</li>
+<ul><li>
+<code><a href="../reference/trimmed_quantile.html">trimmed_quantile()</a></code> handles the <code>use_unique</code> option correctly</li>
 <li>better handling of … in <code><a href="../reference/cp.html">cp()</a></code> and <code><a href="../reference/cpr.html">cpr()</a></code>
 </li>
 </ul></div>
