@@ -17,26 +17,26 @@ knots in a tensor product of B-splines.
 
 ## Learn More About CPR.
 This model selection method was developed as part of [Peter DeWitt's PhD
-dissertation](https://doi.org/10.25677/awnc-b795) work.  It has been extended
-since.
+dissertation](https://doi.org/10.25677/awnc-b795) work.  It has since been
+extended.
 
 ### Vignettes
-There are two vignettes within the package
+There are two vignettes within the package:
 ```r
 vignettes(topic = 'cpr', package = 'cpr')
 vignettes(topic = 'cnr', package = 'cpr')
 ```
 
-You can also read these on package website
+You can also read these on the package website
 
 
 ### Related Publications:
 
 * The CPR method was presented at the 28th International Biometric Conference
-  held July 2016, in Victoria, British Columbia, Canada.  The abstract, paper,
+  held in July 2016 in Victoria, British Columbia, Canada.  The abstract, paper,
   and talk had the title:
   "Parsimonious B-splines Regression Models via Control Polygon
-  Reduction."  A bibtex entry for the abstract:
+  Reduction."  A BibTeX entry for the abstract:
 
 ```
 @inproceedings{,
@@ -75,7 +75,7 @@ install.packages("cpr", repos = "https://cran.rstudio.com")
 If you are working on a Windows machine you will need to have
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
 
-#### From github
+#### From GitHub
 
 This will require you to have
 [remotes](https://cran.r-project.org/package=remotes) package installed.
@@ -104,7 +104,7 @@ R packages run:
 devtools::install_dev_deps()
 ```
 
-To build the R package and install the dev version on you machine:
+To build the R package and install the dev version on your machine:
 
 ```bash
 make install
@@ -118,8 +118,8 @@ R CMD INSTALL cpr_<version>.tar.gz
 
 ## Other Notes:
 The `cpr` package provides 3D graphics via the
-[`rgl`](https://CRAN.R-project.org/package=rgl) package.  If you are get an
-error, or rather message, of the form:
+[`rgl`](https://CRAN.R-project.org/package=rgl) package.  If you get an
+error (or message) of the form:
 ```
   font family "sans" not found, using "bitmap"
 ```

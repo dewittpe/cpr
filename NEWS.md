@@ -10,21 +10,21 @@
 ## New Features
 
 * `cpr`'s `progress` argument has been extended to control if a progress bar is
-  used for just the cpr steps, or if a more detailed progress for of the
+  used for just the cpr steps, or if a more detailed progress form of the
   influence weight calculations is reported.
 
 * `influence_of_iknots` gains parallel execution via `pbapply` (#17)
 
-* `plot.cpr_cp` gains the argument `comparitive` which, when set to `FALSE` and
+* `plot.cpr_cp` gains the argument `comparative` which, when set to `FALSE` and
   only one `cpr_cp` is passed in for plotting, the graphic will appear more like
-  the `plot.cpr_bs` results.  When `comparitive = TRUE` or more than one
+  the `plot.cpr_bs` results.  When `comparative = TRUE` or more than one
   `cpr_cp` is present, the behavior from v0.3.0 is retained.
 
 * `cp.formula` gains the `methods.args` argument to pass arguments to the
   regression method instead of relying on `...`.
 
 * `d_order_statistic` and `p_order_statistic` were added.  These functions allow
-  you to get the density of distribution function for the jth order statistic
+  you to get the density or distribution function for the jth order statistic
   from a sample of size n from a distribution with defined density and
   distribution functions within R.
 
@@ -52,7 +52,7 @@
   and is the first term on the right hand side of the formula.
 
 ## Defunct Functions
-* A major refactor of the internal code as since v0.3.0 has resulted in several
+* A major refactor of the internal code since v0.3.0 has resulted in several
   functions becoming defunct, see `help(cpr-defunct)` for details.
 
 # Version 0.3.0
@@ -136,7 +136,7 @@ Continued development should be focused on bug fixes and minor enhancements.
 * `keep` is correctly handled in the `cnr` call.
 * `show_xi` correctly handled in the `plot.cpr_cp` call.
 
-## Non visible changes
+## Non-visible changes
 * non-exported function `knot_expr` created to help with plotting the knot
   locations in `cpr:::plot.cpr_bs`.
 
@@ -147,7 +147,7 @@ Continued development should be focused on bug fixes and minor enhancements.
   When plotting multiple control polygons and splines, this option will make it
   easier to view the spline functions.
 
-## Non visible changes
+## Non-visible changes
 * Extended testing scripts.
 
 # Version 0.1.0
@@ -192,14 +192,14 @@ Biometric Society, Student paper competition.  The conference will be held 10 -
 
 * `plot.cpr_bs` correctly displays the indices for the knot sequence.
 
-## End User Visible changes:
-* The knot insertion matrix **W** is accessible to the end user in a new way.
+## End User Visible Changes:
+* The knot insertion matrix **W** is accessible to end users in a new way.
   Names of functions in `boehem.cpp` are cleaner.
 * `plot.cpr_cpr` allows user to select either control polygons or sums of
   squared residuals to be plotted.
 
 ## Vignettes
-* Removed the background vignette... to much detail right now, too much time
+* Removed the background vignette... too much detail right now, too much time
   required to build and install the package.
 
 ## End User non-visible changes:
@@ -207,7 +207,7 @@ Biometric Society, Student paper competition.  The conference will be held 10 -
 
 # version 0.0.2
 
-## new features
+## New Features
 * Added the function `tensor` for building tensor products of `cpr::bsplines`.
 * Added the function `influence_weights` to get the influence weights for each
   internal knot on each marginal of a tensor product.
