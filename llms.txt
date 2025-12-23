@@ -1,0 +1,250 @@
+# cpr: Control Polygon Reduction ![](reference/figures/logo120x139.png)
+
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](http://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![R-CMD-check](https://github.com/dewittpe/cpr/workflows/R-CMD-check/badge.svg)](https://github.com/dewittpe/cpr/actions)
+[![Coverage
+Status](https://img.shields.io/codecov/c/github/dewittpe/cpr/master.svg)](https://app.codecov.io/github/dewittpe/cpr?branch=master)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/cpr)](https://cran.r-project.org/package=cpr)
+[![CRAN RStudio mirror
+downloads](http://cranlogs.r-pkg.org/badges/cpr)](https://www.r-pkg.org/pkg/cpr)
+
+An R package for implementing the Control Polygon Reduction model
+selection method. When we are tasked with modeling the functional
+relationship between a response and a continuous predictor, i.e., y =
+f(x), CPR allows for quick and efficient searching of a large model
+space to find B-spline estimates of the function f(x).
+
+CPR extends to multiple dimensions and allows one to find good locations
+for knots in a tensor product of B-splines.
+
+## Learn More About CPR.
+
+This model selection method was developed as part of [Peter DeWitt’s PhD
+dissertation](https://doi.org/10.25677/awnc-b795) work. It has been
+extended since.
+
+### Vignettes
+
+There are two vignettes within the package
+
+``` r
+vignettes(topic = 'cpr', package = 'cpr')
+vignettes(topic = 'cnr', package = 'cpr')
+```
+
+You can also read these on package website
+
+### Related Publications:
+
+- The CPR method was presented at the 28th International Biometric
+  Conference held July 2016, in Victoria, British Columbia, Canada. The
+  abstract, paper, and talk had the title: “Parsimonious B-splines
+  Regression Models via Control Polygon Reduction.” A bibtex entry for
+  the abstract:
+
+&nbsp;
+
+    @inproceedings{,
+      author       = {DeWitt, Peter E. and Carlson, Nichole E. and Samantha MaWhinney},
+      title        = {Parsimonious B-spline Regression Models via Control Polygon Reduction},
+      booktitle    = {Abstracts for the XXVIIIth International Biometric Conference},
+      month        = {July},
+      year         = {2016},
+      organization = {International Biometric Society},
+      address      = {Victoria, British Columbia},
+      isbn         = {978-0-9821919-4-1}
+    }
+
+**Awards:** The presentation of the work earned Peter DeWitt two awards:
+
+1.  “Best Student Oral Presentation” from the International Biometric
+    Society (IBS).
+2.  “Distinguished Oral Presentation” as part of the student paper
+    competition hosted by the Western North American Region (WNAR) of
+    the IBS.
+
+## Installing CPR
+
+### Released Version
+
+Install from the Comprehensive R Archive Network (CRAN)
+
+``` r
+# within R
+install.packages("cpr", repos = "https://cran.rstudio.com")
+```
+
+### Developmental Version
+
+If you are working on a Windows machine you will need to have
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) installed.
+
+#### From github
+
+This will require you to have
+[remotes](https://cran.r-project.org/package=remotes) package installed.
+
+``` r
+# Just the package without the manual and without vignettes
+remotes::install_github(repo = "dewittpe/cpr")
+
+# Install with vignettes
+remotes::install_github(
+    repo = "dewittpe/cpr"
+  , dependbuild_vignettes = TRUE
+  , dependencies = TRUE
+)
+```
+
+#### From a cloned repository
+
+You’ll need to have the R package
+[devtools](https://cran.r-project.org/package=devtools) installed on
+your machine.
+
+To check R dependencies before building, or after you get errors due to
+missing R packages run:
+
+``` r
+devtools::install_dev_deps()
+```
+
+To build the R package and install the dev version on you machine:
+
+``` bash
+make install
+```
+
+Alternatively, you should be able to build and install without `make`
+
+``` bash
+R CMD build <path to cloned repo>
+R CMD INSTALL cpr_<version>.tar.gz
+```
+
+## Other Notes:
+
+The `cpr` package provides 3D graphics via the
+[`rgl`](https://CRAN.R-project.org/package=rgl) package. If you are get
+an error, or rather message, of the form:
+
+      font family "sans" not found, using "bitmap"
+
+Then there is an easy fix. You need to get the [FreeType 2 font
+engine](https://freetype.org/).
+
+On Debian, you can get the library via:
+
+``` bash
+apt-get install libfreetype6-dev
+```
+
+Once the FreeType 2 font engine has been installed on your computer you
+**must reinstall** the `rgl` package.
+
+# Package index
+
+## All functions
+
+- [`bsplineD()`](http://www.peteredewitt.com/cpr/reference/bsplineD.md)
+  : B-spline Derivatives
+- [`bsplines()`](http://www.peteredewitt.com/cpr/reference/bsplines.md)
+  : B-Splines
+- [`btensor()`](http://www.peteredewitt.com/cpr/reference/btensor.md) :
+  btensor
+- [`build_tensor()`](http://www.peteredewitt.com/cpr/reference/build_tensor.md)
+  : Build Tensor
+- [`cn()`](http://www.peteredewitt.com/cpr/reference/cn.md) : Control
+  Nets
+- [`cnr()`](http://www.peteredewitt.com/cpr/reference/cnr.md) : Control
+  Net Reduction
+- [`coef_vcov()`](http://www.peteredewitt.com/cpr/reference/coef_vcov.md)
+  : Extract Regression Coefficients for B-Splines and Tensor Products of
+  B-splines
+- [`cp()`](http://www.peteredewitt.com/cpr/reference/cp.md) : Control
+  Polygons
+- [`cp_diff()`](http://www.peteredewitt.com/cpr/reference/cp_diff.md) :
+  Vertical Difference between two Control Polygons
+- [`cp_value()`](http://www.peteredewitt.com/cpr/reference/cp_value.md)
+  : Control Polygon Value
+- [`refine_ordinate()`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
+  [`coarsen_ordinate()`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
+  [`hat_ordinate()`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
+  [`insertion_matrix()`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
+  [`wiegh_iknots()`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
+  [`influence_of()`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
+  [`influence_weights()`](http://www.peteredewitt.com/cpr/reference/cpr-defunct.md)
+  : Defunct Functions
+- [`cpr()`](http://www.peteredewitt.com/cpr/reference/cpr.md) : Control
+  Polygon Reduction
+- [`generate_cp_formula_data()`](http://www.peteredewitt.com/cpr/reference/generate_cp_formula_data.md)
+  : Generate Control Polygon Formula and Data
+- [`get_spline()`](http://www.peteredewitt.com/cpr/reference/get_spline.md)
+  : Get the Control Polygon and the Spline Function
+- [`get_surface()`](http://www.peteredewitt.com/cpr/reference/get_surface.md)
+  : Get Surface
+- [`iknots_or_df()`](http://www.peteredewitt.com/cpr/reference/iknots_or_df.md)
+  : Internal Knots or Degrees of Freedom
+- [`influence_of_iknots()`](http://www.peteredewitt.com/cpr/reference/influence_of_iknots.md)
+  : Determine the influence of the internal knots of a control polygon
+- [`insert_a_knot()`](http://www.peteredewitt.com/cpr/reference/insert_a_knot.md)
+  : Insert a Knot into a Control Polygon
+- [`knot_expr()`](http://www.peteredewitt.com/cpr/reference/knot_expr.md)
+  : Knot Expressions
+- [`loglikelihood()`](http://www.peteredewitt.com/cpr/reference/loglikelihood.md)
+  : Determine the (quasi) Log Likelihood for a regression object.
+- [`matrix_rank()`](http://www.peteredewitt.com/cpr/reference/matrix_rank.md)
+  : Rank of a Matrix
+- [`newknots()`](http://www.peteredewitt.com/cpr/reference/newknots.md)
+  : New Knots for CPs and CNs in CPR and CNR
+- [`d_order_statistic()`](http://www.peteredewitt.com/cpr/reference/order_statistics.md)
+  [`p_order_statistic()`](http://www.peteredewitt.com/cpr/reference/order_statistics.md)
+  : Distribution of Order Statistics
+- [`plot(`*`<cpr_bs>`*`)`](http://www.peteredewitt.com/cpr/reference/plot.cpr_bs.md)
+  : Plot B-spline Basis
+- [`plot(`*`<cpr_cn>`*`)`](http://www.peteredewitt.com/cpr/reference/plot.cpr_cn.md)
+  : Plotting Control Nets
+- [`plot(`*`<cpr_cnr>`*`)`](http://www.peteredewitt.com/cpr/reference/plot.cpr_cnr.md)
+  : Control Net Reduction Plots
+- [`plot(`*`<cpr_cp>`*`)`](http://www.peteredewitt.com/cpr/reference/plot.cpr_cp.md)
+  : Plotting Control Polygons
+- [`plot(`*`<cpr_cpr>`*`)`](http://www.peteredewitt.com/cpr/reference/plot.cpr_cpr.md)
+  : Control Polygon Reduction Plots
+- [`plot(`*`<cpr_summary_cpr_cpr>`*`)`](http://www.peteredewitt.com/cpr/reference/plot.cpr_summary_cpr_cpr.md)
+  : Plotting Summaries of Control Polygon Reductions
+- [`predict(`*`<cpr_cp>`*`)`](http://www.peteredewitt.com/cpr/reference/predict.cpr_cp.md)
+  : Model Prediction
+- [`print(`*`<cpr_bs>`*`)`](http://www.peteredewitt.com/cpr/reference/print.cpr_bs.md)
+  : Print bsplines
+- [`sign_changes()`](http://www.peteredewitt.com/cpr/reference/sign_changes.md)
+  : Sign Changes
+- [`spdg`](http://www.peteredewitt.com/cpr/reference/spdg.md) :
+  Simulated Pregnanediol glucuronide (PDG) Data
+- [`summary(`*`<cpr_cn>`*`)`](http://www.peteredewitt.com/cpr/reference/summary.cpr_cn.md)
+  : Summary of Control Net
+- [`summary(`*`<cpr_cnr>`*`)`](http://www.peteredewitt.com/cpr/reference/summary.cpr_cnr.md)
+  : Summarize Control Net Reduction Objects
+- [`summary(`*`<cpr_cp>`*`)`](http://www.peteredewitt.com/cpr/reference/summary.cpr_cp.md)
+  : Summarize a Control Polygon Object
+- [`summary(`*`<cpr_cpr>`*`)`](http://www.peteredewitt.com/cpr/reference/summary.cpr_cpr.md)
+  : Summarize a Control Polygon Reduction Object
+- [`trimmed_quantile()`](http://www.peteredewitt.com/cpr/reference/trimmed_quantile.md)
+  : Trimmed Quantiles
+- [`update_bsplines()`](http://www.peteredewitt.com/cpr/reference/update_bsplines.md)
+  [`update_btensor()`](http://www.peteredewitt.com/cpr/reference/update_bsplines.md)
+  : Update bsplines or btensor calls
+- [`us_covid_cases`](http://www.peteredewitt.com/cpr/reference/us_covid_cases.md)
+  : United States Laboratory Confirmed COVID-19 Cases
+- [`wiggle()`](http://www.peteredewitt.com/cpr/reference/wiggle.md) :
+  Wiggliness of a Spline function
+
+# Articles
+
+### All vignettes
+
+- [Tensor Products of B-Splines, Control Nets, and Control Net
+  Reduction](http://www.peteredewitt.com/cpr/articles/cnr.md):
+- [Control Polygon
+  Reduction](http://www.peteredewitt.com/cpr/articles/cpr.md):

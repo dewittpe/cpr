@@ -1,0 +1,121 @@
+# Plotting Control Polygons
+
+Plotting control polygon(s) and/or the associated spline(s) via ggplot2
+
+## Usage
+
+``` r
+# S3 method for class 'cpr_cp'
+plot(
+  x,
+  ...,
+  comparative,
+  show_cp = TRUE,
+  show_spline = FALSE,
+  show_xi = TRUE,
+  color = FALSE,
+  n = 100,
+  show_x = FALSE,
+  digits = 2
+)
+```
+
+## Arguments
+
+- x:
+
+  a `cpr_cp` object
+
+- ...:
+
+  additional `cpr_cp` objects
+
+- comparative:
+
+  when `TRUE` use `color` to distinguish one spline from another, when
+  `FALSE` `color` to highlight the control polygon and spline with
+  different colors, and plot the knots the way
+  [`plot.cpr_bs`](http://www.peteredewitt.com/cpr/reference/plot.cpr_bs.md)
+  does. When missing, the default if `TRUE` if more than one `cpr_cp`
+  object is passed in, and `FALSE` is only one `cpr_cp` object is
+  passed.
+
+- show_cp:
+
+  logical (default `TRUE`), show the control polygon(s)?
+
+- show_spline:
+
+  logical (default `FALSE`) to plot the spline function?
+
+- show_xi:
+
+  logical (default `TRUE`) use
+  [`geom_rug`](https://ggplot2.tidyverse.org/reference/geom_rug.html) to
+  show the location of the knots in the respective control polygons.
+
+- color:
+
+  Boolean (default FALSE) if more than one `cpr_cp` object is to be
+  plotted, set this value to TRUE to have the graphic in color (line
+  types will be used regardless of the color setting).
+
+- n:
+
+  the number of data points to use for plotting the spline
+
+- show_x:
+
+  boolean, so x-values
+
+- digits:
+
+  number of digits to the right of the decimal place to report for the
+  value of each knot. Only used when plotting on control polygon with
+  `comparative = FALSE`.
+
+## Value
+
+a ggplot object
+
+## Examples
+
+``` r
+x <- runif(n = 500, 0, 6)
+bmat <- bsplines(x, iknots = c(1, 1.5, 2.3, 4, 4.5), bknots = c(0, 6))
+theta1 <- matrix(c(1, 0, 3.5, 4.2, 3.7, -0.5, -0.7, 2, 1.5), ncol = 1)
+theta2 <- theta1 + c(-0.15, -1.01, 0.37, 0.19, -0.53, -0.84, -0.19, 1.15, 0.17)
+cp1 <- cp(bmat, theta1)
+cp2 <- cp(bmat, theta2)
+
+# compare two control polygons on one plot
+plot(cp1, cp2)
+#> Warning: Removed 26 rows containing missing values or values outside the scale range
+#> (`geom_rug()`).
+
+plot(cp1, cp2, color = TRUE)
+#> Warning: Removed 26 rows containing missing values or values outside the scale range
+#> (`geom_rug()`).
+
+plot(cp1, cp2, color = TRUE, show_spline = TRUE)
+#> Warning: Removed 26 rows containing missing values or values outside the scale range
+#> (`geom_rug()`).
+
+plot(cp1, cp2, color = TRUE, show_cp = FALSE, show_spline = TRUE)
+#> Warning: Removed 26 rows containing missing values or values outside the scale range
+#> (`geom_rug()`).
+
+
+# Show one control polygon with knots on the axis instead of the rug and
+# color/linetype for the control polygon and spline, instead of different
+# control polygons
+plot(cp1, comparative = FALSE)
+
+plot(cp1, comparative = FALSE, show_spline = TRUE)
+
+plot(cp1, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
+
+plot(cp2, comparative = FALSE, show_spline = TRUE, show_x = TRUE)
+
+
+```
