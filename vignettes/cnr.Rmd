@@ -162,9 +162,9 @@ control net for $m = 2$ variables would be:
 \end{equation}
 
 Building a control net in the cpr package is done by calling the
-`r  backtick(cn)  `
+`r  backtick("cn()", dequote = TRUE)  `
 function after defining a basis via the
-`r  backtick(btensor)  `
+`r  backtick("btensor()", dequote = TRUE)  `
 method.
 
 Define a tensor product of B-splines by providing a list of vectors, iknots,
@@ -258,7 +258,7 @@ plot(cn2,        rgl = FALSE, show_surface = TRUE, show_net = FALSE, colkey = FA
 
 
 A call to
-`r  backtick(cnr)  `
+`r  backtick("cnr()", dequote = TRUE)  `
 runs the full CNR algorithm on an initial control net.
 
 ```{r}

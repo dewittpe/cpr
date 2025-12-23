@@ -158,9 +158,9 @@ packageVersion("cpr")
 #' \end{equation}
 #'
 #' Building a control net in the cpr package is done by calling the
-{{ backtick(cn) }}
+{{ backtick("cn()", dequote = TRUE) }}
 #' function after defining a basis via the
-{{ backtick(btensor) }}
+{{ backtick("btensor()", dequote = TRUE) }}
 #' method.
 #'
 #' Define a tensor product of B-splines by providing a list of vectors, iknots,
@@ -242,7 +242,7 @@ plot(cn2,        rgl = FALSE, show_surface = TRUE, show_net = FALSE, colkey = FA
 
 #'
 #' A call to
-{{ backtick(cnr) }}
+{{ backtick("cnr()", dequote = TRUE) }}
 #' runs the full CNR algorithm on an initial control net.
 cnr0 <- cnr(initial_cn)
 summary(cnr0)
