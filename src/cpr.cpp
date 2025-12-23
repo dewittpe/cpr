@@ -32,7 +32,7 @@ bbasis::bbasis(arma::vec& x_, arma::vec & iknots_, arma::vec & bknots_, unsigned
   }
 
   if (!xi.is_sorted()) {
-    Rf_error("Knots are not sorted.");
+    Rcpp::stop("Knots are not sorted.");
   }
 
   // define xi_star

@@ -23,7 +23,7 @@ Rcpp::NumericMatrix cpp_bsplines(arma::vec x, arma::vec iknots, arma::vec bknots
 Rcpp::NumericMatrix cpp_bsplinesD1(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) {
 
   if ((order - 1) <= 0) {
-    Rf_error("(order - 1) <= 0");
+    Rcpp::stop("(order - 1) <= 0");
   }
 
   bbasis B0(x, iknots, bknots, order);
@@ -74,7 +74,7 @@ Rcpp::NumericMatrix cpp_bsplinesD1(arma::vec x, arma::vec iknots, arma::vec bkno
 Rcpp::NumericMatrix cpp_bsplinesD2(arma::vec x, arma::vec iknots, arma::vec bknots, unsigned int order) {
 
   if ((order - 2) <= 0) {
-    Rf_error("(order - 2) <= 0");
+    Rcpp::stop("(order - 2) <= 0");
   }
 
   bbasis B0(x, iknots, bknots, order);
