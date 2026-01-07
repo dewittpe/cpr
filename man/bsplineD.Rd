@@ -35,7 +35,7 @@ Generate the first and second derivatives of a B-spline Basis.
 }
 \examples{
 ################################################################################
-# Example 1 - pefectly fitting a cubic function
+# Example 1 - perfectly fitting a cubic function
 f <- function(x) {
   x^3 - 2 * x^2 - 5 * x + 6
 }

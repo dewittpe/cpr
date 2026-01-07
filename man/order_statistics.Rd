@@ -26,14 +26,14 @@ function}
 a numeric vector
 }
 \description{
-Density of distribution function for the jth order statistics from a sample
+Density or distribution function for the jth order statistic from a sample
 of size n from a known distribution function.
 }
 \details{
 For a known distribution with defined density and distribution functions,
 e.g., normal (\code{\link[stats]{dnorm}}, \code{\link[stats]{pnorm}}), or
 chisq (\code{\link[stats]{dchisq}}, \code{\link[stats]{pchisq}}), we define
-the density function of of the jth order statistic, from a sample of size n,
+the density function of the jth order statistic, from a sample of size n,
 to be
 \deqn{ \frac{n!}{(j-1)!(n-j)!} f(x) F(x)^{j-1} (1 - F(x))^{n-j}}{n!/((j-1)!(n-j)!) f(x) (F(x))^(j-1) (1-F(x))^(n-j)}.
 
@@ -65,7 +65,7 @@ plot(ecdf(mins))
 points(x, p_order_statistic(q = x,  n = 54, j = 1, distribution = "norm"), col = "red")
 
 # Example 2
-# Find the density and distrubition of the fourth order statistic from a
+# Find the density and distribution of the fourth order statistic from a
 # sample of size 12 from a chisq distribution with 3 degrees of freedom
 
 simulated_data <- matrix(rchisq(n = 12 * 5000, df = 3), ncol = 12)

@@ -5,6 +5,10 @@
 * `plot_bs()` builds the x-axis correctly for a basis built with values outside of
   the boundary knots.
 
+## Other fixes:
+
+* Spelling and gammar fixes in documentation and vignettes.
+
 ## Non-User Visible Changes
 * C++ error handling now uses `Rcpp::stop()` for consistent error signaling.
   (Thanks to @Enchufa2, re #63)
