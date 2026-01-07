@@ -14,13 +14,13 @@
 Source:
 [`DESCRIPTION`](https://github.com/dewittpe/cpr/blob/main/DESCRIPTION)
 
-DeWitt P (2025). *cpr: Control Polygon Reduction*. R package version
+DeWitt P (2026). *cpr: Control Polygon Reduction*. R package version
 0.4.1, <https://github.com/dewittpe/cpr/>.
 
     @Manual{,
       title = {cpr: Control Polygon Reduction},
       author = {Peter DeWitt},
-      year = {2025},
+      year = {2026},
       note = {R package version 0.4.1},
       url = {https://github.com/dewittpe/cpr/},
     }

@@ -8,13 +8,13 @@ packageVersion("cpr")
 
 The purpose of this vignette is to illustrate how the Control Polygon
 Reduction (CPR) method can be used to select a set of knots defining
-B-spline to get low degrees of freedom and a smooth fit to the data. We
-start with a primer on B-splines and control polygons then the
+B-splines to get low degrees of freedom and a smooth fit to the data. We
+start with a primer on B-splines and control polygons, then the
 development and use of CPR.
 
 ## B-splines and Control Polygons
 
-The term “spline” is likely derived from shipwright or draftsmen
+The term “spline” is likely derived from shipwrights’ or draftsmen’s
 splines, thin wood strips, held in place by weights, used to define
 curves. These splines naturally minimize strain energy and the use of
 additional weights at strategic locations on the spline is needed to
