@@ -2,6 +2,8 @@
 
 ## Version 0.4.1
 
+CRAN release: 2026-01-08
+
 ### Bug fixes:
 
 - `plot_bs()` builds the x-axis correctly for a basis built with values

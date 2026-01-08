@@ -55,7 +55,7 @@ str(bmat)
 #>  - attr(*, "xi")= num [1:8] 1 1 1 3.57 5.23 ...
 #>  - attr(*, "xi_star")= num [1:5] 1 2.28 4.4 7.62 10
 #>  - attr(*, "call")= language bsplines(x = runif(10, 1, 10), df = 5, bknots = c(1, 10), order = 3)
-#>  - attr(*, "environment")=<environment: 0x55fba89dbdc8> 
+#>  - attr(*, "environment")=<environment: 0x55fd486c5918> 
 
 # change the order
 str(update_bsplines(bmat, order = 4))
@@ -67,7 +67,7 @@ str(update_bsplines(bmat, order = 4))
 #>  - attr(*, "xi")= num [1:9] 1 1 1 1 5.91 ...
 #>  - attr(*, "xi_star")= num [1:5] 1 2.64 5.64 8.64 10
 #>  - attr(*, "call")= language bsplines(x = runif(10, 1, 10), df = 5, bknots = c(1, 10), order = 4)
-#>  - attr(*, "environment")=<environment: 0x55fba89dbdc8> 
+#>  - attr(*, "environment")=<environment: 0x55fd486c5918> 
 
 # change the order and the degrees of freedom
 str(update_bsplines(bmat, df = 12, order = 4))
@@ -79,7 +79,7 @@ str(update_bsplines(bmat, df = 12, order = 4))
 #>  - attr(*, "xi")= num [1:16] 1 1 1 1 2.21 ...
 #>  - attr(*, "xi_star")= num [1:12] 1 1.4 1.92 2.54 2.89 ...
 #>  - attr(*, "call")= language bsplines(x = runif(10, 1, 10), df = 12, bknots = c(1, 10), order = 4)
-#>  - attr(*, "environment")=<environment: 0x55fba89dbdc8> 
+#>  - attr(*, "environment")=<environment: 0x55fd486c5918> 
 
 ################################################################################
 ##                          Updating a cpr_bt object                          ##
@@ -107,11 +107,11 @@ f2 <- y ~ btensor(x = list(x1, x2), df = list(50, 31), order = list(3, 5))  + va
 
 update_bsplines(f1, df = 13, order = 5)
 #> y ~ bsplines(x, df = 13, order = 5) + var1 + var2
-#> <environment: 0x55fba89dbdc8>
+#> <environment: 0x55fd486c5918>
 update_btensor(f2, df = list(13, 24), order = list(3, 8))
 #> y ~ btensor(x = list(x1, x2), df = list(13, 24), order = list(3, 
 #>     8)) + var1 + var2
-#> <environment: 0x55fba89dbdc8>
+#> <environment: 0x55fd486c5918>
 
 ################################################################################
 ##                          Updating a cpr_cp object                          ##
